@@ -3,8 +3,6 @@
 
 #include <algorithm>
 
-using namespace dae;
-
 unsigned int Scene::m_idCounter = 0;
 
 Scene::Scene(const std::string& name) : m_name(name) {}
@@ -26,6 +24,14 @@ void Scene::RemoveAll()
 	m_objects.clear();
 }
 
+void Scene::Start()
+{
+	for (auto& object : m_objects)
+	{
+		object->Start();
+	}
+}
+
 void Scene::Update()
 {
 	for(auto& object : m_objects)
@@ -34,7 +40,7 @@ void Scene::Update()
 	}
 }
 
-void dae::Scene::FixedUpdate()
+void Scene::FixedUpdate()
 {
 	for (auto& object : m_objects)
 	{

@@ -2,22 +2,19 @@
 #include <string>
 #include <functional>
 
-namespace dae
+class Minigin
 {
-	class Minigin
-	{
-	public:
-		explicit Minigin(const std::string& dataPath);
-		~Minigin();
-		void Run(const std::function<void()>& load);
+public:
+	explicit Minigin(const std::string& dataPath);
+	~Minigin();
+	void Run(const std::function<void()>& load);
 
-		Minigin(const Minigin& other) = delete;
-		Minigin(Minigin&& other) = delete;
-		Minigin& operator=(const Minigin& other) = delete;
-		Minigin& operator=(Minigin&& other) = delete;
+	Minigin(const Minigin& other) = delete;
+	Minigin(Minigin&& other) = delete;
+	Minigin& operator=(const Minigin& other) = delete;
+	Minigin& operator=(Minigin&& other) = delete;
 
-	private:
-		float m_FixedTimeStep{0.01666f};
-		int m_MsPerFrame{16};
-	};
-}
+private:
+	float m_FixedTimeStep{ 0.01666f };
+	int m_MsPerFrame{ 1000 / 60 };
+};

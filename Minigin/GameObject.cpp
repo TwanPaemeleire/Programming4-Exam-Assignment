@@ -4,30 +4,62 @@
 #include "Renderer.h"
 
 #include "Time.h"
+#include "Component.h"
 
-dae::GameObject::~GameObject() = default;
-
-void dae::GameObject::Update()
+GameObject::GameObject()
 {
-	float test = Time::GetInstance().deltaTime;
-
-	printf("%f\n", test);
+	std::unique_ptr<Transform> transform = std::make_unique<Transform>();
+	m_Transform = transform.get();
+	AddComponent(std::move(transform));
 }
 
-void dae::GameObject::FixedUpdate(){}
-
-void dae::GameObject::Render() const
+void GameObject::Start()
 {
-	const auto& pos = m_transform.GetPosition();
-	Renderer::GetInstance().RenderTexture(*m_texture, pos.x, pos.y);
+	for (auto& component : m_Components)
+	{
+		component->Start();
+	}
 }
 
-void dae::GameObject::SetTexture(const std::string& filename)
+void GameObject::Update()
 {
-	m_texture = ResourceManager::GetInstance().LoadTexture(filename);
+	for (auto& component : m_Components)
+	{
+		component->Update();
+	}
 }
 
-void dae::GameObject::SetPosition(float x, float y)
+void GameObject::FixedUpdate()
 {
-	m_transform.SetPosition(x, y, 0.0f);
+	for (auto& component : m_Components)
+	{
+		component->FixedUpdate();
+	}
+}
+
+void GameObject::Render() const
+{
+	//const auto& pos = m_Transform->GetPosition();
+	//Renderer::GetInstance().RenderTexture(*m_texture, pos.x, pos.y);
+	for (auto& component : m_Components)
+	{
+		component->Render();
+	}
+}
+
+void GameObject::AddComponent(std::unique_ptr<Component> component)
+{
+	component->m_ParentGameObject = this;
+	component->m_Transform = m_Transform;
+	m_Components.emplace_back(std::move(component));
+}
+
+//void GameObject::SetTexture(const std::string& filename)
+//{
+//	m_texture = ResourceManager::GetInstance().LoadTexture(filename);
+//}
+
+void GameObject::SetPosition(float x, float y)
+{
+	m_Transform->SetPosition(x, y, 0.0f);
 }

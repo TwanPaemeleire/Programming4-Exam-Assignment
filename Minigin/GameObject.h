@@ -1,31 +1,51 @@
 #pragma once
 #include <memory>
+#include <vector>
 #include "Transform.h"
 
-namespace dae
+class Component;
+class Texture2D;
+
+class GameObject final
 {
-	class Texture2D;
+public:
+	virtual void Start();
+	virtual void Update();
+	virtual void FixedUpdate();
+	virtual void Render() const;
 
-	class GameObject
+	void SetPosition(float x, float y);
+
+	void AddComponent(std::unique_ptr<Component> component);
+	template <typename T>
+	T* GetComponent() const;
+
+	GameObject();
+	virtual ~GameObject() {};
+	GameObject(const GameObject& other) = delete;
+	GameObject(GameObject&& other) = delete;
+	GameObject& operator=(const GameObject& other) = delete;
+	GameObject& operator=(GameObject&& other) = delete;
+
+private:
+	Transform* m_Transform{};
+	// todo: mmm, every gameobject has a texture? Is that correct?
+	std::shared_ptr<Texture2D> m_texture{};
+
+	std::vector<std::unique_ptr<Component>> m_Components;
+};
+
+
+template <typename T>
+inline T* GameObject::GetComponent() const
+{
+	for (auto& component : m_Components)
 	{
-	public:
-		virtual void Update();
-		virtual void FixedUpdate();
-		virtual void Render() const;
-
-		void SetTexture(const std::string& filename);
-		void SetPosition(float x, float y);
-
-		GameObject() = default;
-		virtual ~GameObject();
-		GameObject(const GameObject& other) = delete;
-		GameObject(GameObject&& other) = delete;
-		GameObject& operator=(const GameObject& other) = delete;
-		GameObject& operator=(GameObject&& other) = delete;
-
-	private:
-		Transform m_transform{};
-		// todo: mmm, every gameobject has a texture? Is that correct?
-		std::shared_ptr<Texture2D> m_texture{};
-	};
+		T* tempComponent = dynamic_cast<T*>(component.get());
+		if (tempComponent != nullptr)
+		{
+			return tempComponent;
+		}
+	}
+	return nullptr;
 }
