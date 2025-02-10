@@ -9,6 +9,7 @@
 #include "SceneManager.h"
 #include "Renderer.h"
 #include "ResourceManager.h"
+#include "Time.h"
 
 #include <thread>
 
@@ -85,7 +86,9 @@ void dae::Minigin::Run(const std::function<void()>& load)
 	auto& sceneManager = SceneManager::GetInstance();
 	auto& input = InputManager::GetInstance();
 
-	// todo: this update loop could use some work.
+	//Time Singleton Instance
+	auto& time = Time::GetInstance();
+
 	bool doContinue = true;
 	auto lastTime = std::chrono::high_resolution_clock::now();
 	float lag = 0.f;
@@ -96,8 +99,10 @@ void dae::Minigin::Run(const std::function<void()>& load)
 		lastTime = currentTime;
 		lag += deltaTime;
 
+		// Set DeltaTime In The Singleton To Be Accessed By Anything That Needs It
+		time.deltaTime = deltaTime;
+
 		doContinue = input.ProcessInput();
-		//Make singleton for time and assign the new deltaTime here?
 		while (lag >= m_FixedTimeStep)
 		{
 			sceneManager.FixedUpdate();

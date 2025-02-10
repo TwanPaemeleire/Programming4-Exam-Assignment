@@ -3,9 +3,16 @@
 #include "ResourceManager.h"
 #include "Renderer.h"
 
+#include "Time.h"
+
 dae::GameObject::~GameObject() = default;
 
-void dae::GameObject::Update(){}
+void dae::GameObject::Update()
+{
+	float test = Time::GetInstance().deltaTime;
+
+	printf("%f\n", test);
+}
 
 void dae::GameObject::FixedUpdate(){}
 
