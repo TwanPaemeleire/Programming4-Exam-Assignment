@@ -6,7 +6,7 @@
 
 TextureRenderComponent::TextureRenderComponent(const std::string& imgPath)
 {
-	m_Texture = ResourceManager::GetInstance().LoadTexture(imgPath).get();
+	m_Texture = ResourceManager::GetInstance().LoadTexture(imgPath);
 }
 
 void TextureRenderComponent::Render() const

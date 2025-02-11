@@ -9,11 +9,11 @@ class TextComponent final : public Component
 {
 public:
 	virtual void Update() override;
-	void Render() const override;
+	virtual void Render() const override;
 
 	void SetText(const std::string& text);
 
-	TextComponent(const std::string& text, std::shared_ptr<Font> font);
+	TextComponent(const std::string& text, Font* font);
 	virtual ~TextComponent() = default;
 	TextComponent(const TextComponent& other) = delete;
 	TextComponent(TextComponent&& other) = delete;
@@ -22,6 +22,6 @@ public:
 private:
 	bool m_needsUpdate;
 	std::string m_text;
-	std::shared_ptr<Font> m_font;
-	std::shared_ptr<Texture2D> m_textTexture;
+	Font* m_font;
+	std::unique_ptr<Texture2D> m_textTexture;
 };

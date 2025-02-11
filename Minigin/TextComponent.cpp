@@ -5,9 +5,9 @@
 #include "Font.h"
 #include "Texture2D.h"
 
-#include "Transform.h"
+#include "TransformComponent.h"
 
-TextComponent::TextComponent(const std::string& text, std::shared_ptr<Font> font) 
+TextComponent::TextComponent(const std::string& text, Font* font)
 	: m_needsUpdate(true), m_text(text), m_font(std::move(font)), m_textTexture(nullptr)
 { }
 
@@ -27,7 +27,7 @@ void TextComponent::Update()
 			throw std::runtime_error(std::string("Create text texture from surface failed: ") + SDL_GetError());
 		}
 		SDL_FreeSurface(surf);
-		m_textTexture = std::make_shared<Texture2D>(texture);
+		m_textTexture = std::make_unique<Texture2D>(texture);
 		m_needsUpdate = false;
 	}
 }

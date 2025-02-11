@@ -1,7 +1,7 @@
 #pragma once
 #include <memory>
 #include <vector>
-#include "Transform.h"
+#include "TransformComponent.h"
 
 class Component;
 class Texture2D;
@@ -12,6 +12,7 @@ public:
 	virtual void Start();
 	virtual void Update();
 	virtual void FixedUpdate();
+	virtual void LateUpdate();
 	virtual void Render() const;
 
 	void SetPosition(float x, float y);
@@ -19,6 +20,9 @@ public:
 	void AddComponent(std::unique_ptr<Component> component);
 	template <typename T>
 	T* GetComponent() const;
+
+	void MarkForDestruction() { m_MarkedForDestruction = true; }
+	bool IsMarkedForDestruction() const { return m_MarkedForDestruction; }
 
 	GameObject();
 	virtual ~GameObject() {};
@@ -28,8 +32,9 @@ public:
 	GameObject& operator=(GameObject&& other) = delete;
 
 private:
-	Transform* m_Transform{};
+	bool m_MarkedForDestruction{ false };
 
+	TransformComponent* m_Transform{};
 	std::vector<std::unique_ptr<Component>> m_Components;
 };
 

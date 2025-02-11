@@ -8,7 +8,8 @@
 
 GameObject::GameObject()
 {
-	std::unique_ptr<Transform> transform = std::make_unique<Transform>();
+	// Make Sure Every Game Object Has A Transform
+	std::unique_ptr<TransformComponent> transform = std::make_unique<TransformComponent>();
 	m_Transform = transform.get();
 	AddComponent(std::move(transform));
 }
@@ -34,6 +35,20 @@ void GameObject::FixedUpdate()
 	for (auto& component : m_Components)
 	{
 		component->FixedUpdate();
+	}
+}
+
+void GameObject::LateUpdate()
+{
+	// Delete The Components Marked For Destruction
+	std::erase_if(m_Components, [](const auto& component)
+		{
+			return component->IsMarkedForDestruction();
+		});
+
+	for (auto& component : m_Components)
+	{
+		component->LateUpdate();
 	}
 }
 

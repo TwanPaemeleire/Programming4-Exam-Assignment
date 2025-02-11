@@ -15,6 +15,6 @@ public:
 	Minigin& operator=(Minigin&& other) = delete;
 
 private:
-	float m_FixedTimeStep{ 0.01666f };
-	int m_MsPerFrame{ 1000 / 60 };
+	const float m_FixedTimeStep{ 0.01666f };
+	const int m_MsPerFrame{ 1000 / 60 };
 };

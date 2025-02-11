@@ -13,6 +13,7 @@ public:
 	void Start();
 	void Update();
 	void FixedUpdate();
+	void LateUpdate();
 	void Render();
 private:
 	friend class Singleton<SceneManager>;
