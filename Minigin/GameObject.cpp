@@ -39,8 +39,6 @@ void GameObject::FixedUpdate()
 
 void GameObject::Render() const
 {
-	//const auto& pos = m_Transform->GetPosition();
-	//Renderer::GetInstance().RenderTexture(*m_texture, pos.x, pos.y);
 	for (auto& component : m_Components)
 	{
 		component->Render();
@@ -53,11 +51,6 @@ void GameObject::AddComponent(std::unique_ptr<Component> component)
 	component->m_Transform = m_Transform;
 	m_Components.emplace_back(std::move(component));
 }
-
-//void GameObject::SetTexture(const std::string& filename)
-//{
-//	m_texture = ResourceManager::GetInstance().LoadTexture(filename);
-//}
 
 void GameObject::SetPosition(float x, float y)
 {

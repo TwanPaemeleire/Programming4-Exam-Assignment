@@ -29,8 +29,6 @@ public:
 
 private:
 	Transform* m_Transform{};
-	// todo: mmm, every gameobject has a texture? Is that correct?
-	std::shared_ptr<Texture2D> m_texture{};
 
 	std::vector<std::unique_ptr<Component>> m_Components;
 };
