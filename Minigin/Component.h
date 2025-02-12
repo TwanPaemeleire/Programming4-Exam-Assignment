@@ -7,7 +7,7 @@ class Component
 public:
 	Component() = default;
 	virtual ~Component() = default;
-
+	//Will Deleting The Beneath Here Also Delete Them In Deriving Classes?
 	Component(const Component& other) = delete;
 	Component(Component&& other) = delete;
 	Component& operator=(const Component& other) = delete;

@@ -9,6 +9,13 @@ class Texture2D;
 class GameObject final
 {
 public:
+	GameObject();
+	virtual ~GameObject() {};
+	GameObject(const GameObject& other) = delete;
+	GameObject(GameObject&& other) = delete;
+	GameObject& operator=(const GameObject& other) = delete;
+	GameObject& operator=(GameObject&& other) = delete;
+
 	void Start();
 	void Update();
 	void FixedUpdate();
@@ -20,16 +27,11 @@ public:
 	void AddComponent(std::unique_ptr<Component> component);
 	template <typename T>
 	T* GetComponent() const;
+	template <typename T>
+	bool HasComponent() const;
 
 	void MarkForDestruction() { m_MarkedForDestruction = true; }
 	bool IsMarkedForDestruction() const { return m_MarkedForDestruction; }
-
-	GameObject();
-	virtual ~GameObject() {};
-	GameObject(const GameObject& other) = delete;
-	GameObject(GameObject&& other) = delete;
-	GameObject& operator=(const GameObject& other) = delete;
-	GameObject& operator=(GameObject&& other) = delete;
 
 private:
 	bool m_MarkedForDestruction{ false };
@@ -50,4 +52,18 @@ inline T* GameObject::GetComponent() const
 		}
 	}
 	return nullptr;
+}
+
+template<typename T>
+inline bool GameObject::HasComponent() const
+{
+	for (auto& component : m_Components)
+	{
+		T* tempComponent = dynamic_cast<T*>(component.get());
+		if (tempComponent != nullptr)
+		{
+			return true;
+		}
+	}
+	return false;
 }

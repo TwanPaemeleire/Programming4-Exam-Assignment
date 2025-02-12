@@ -9,6 +9,7 @@
 void FPSComponent::Start()
 {
 	m_TextComponent = GetParentGameObject()->GetComponent<TextComponent>();
+	m_TextComponent->SetColor(255, 0, 0, 255);
 }
 
 void FPSComponent::Update()

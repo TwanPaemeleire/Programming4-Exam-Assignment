@@ -1,22 +1,21 @@
 #include <stdexcept>
-#include <SDL_ttf.h>
 #include "TextComponent.h"
 #include "Renderer.h"
 #include "Font.h"
 #include "Texture2D.h"
+#include <algorithm>
 
 #include "TransformComponent.h"
 
 TextComponent::TextComponent(const std::string& text, Font* font)
-	: m_NeedsUpdate(true), m_Text(text), m_Font(std::move(font)), m_TextTexture(nullptr)
+	: m_NeedsUpdate(true), m_Text(text), m_Font(std::move(font)), m_TextTexture(nullptr), m_TextColor{255, 255, 255, 255}
 { }
 
 void TextComponent::Update()
 {
 	if (m_NeedsUpdate)
 	{
-		const SDL_Color color = { 255,255,255,255 }; // only white text is supported now
-		const auto surf = TTF_RenderText_Blended(m_Font->GetFont(), m_Text.c_str(), color);
+		const auto surf = TTF_RenderText_Blended(m_Font->GetFont(), m_Text.c_str(), m_TextColor);
 		if (surf == nullptr) 
 		{
 			throw std::runtime_error(std::string("Render text failed: ") + SDL_GetError());
@@ -45,6 +44,16 @@ void TextComponent::Render() const
 void TextComponent::SetText(const std::string& text)
 {
 	m_Text = text;
+	m_NeedsUpdate = true;
+}
+
+void TextComponent::SetColor(int r, int g, int b, int a)
+{
+	Uint8 red = Uint8(std::clamp(r, 0, 255));
+	Uint8 green = Uint8(std::clamp(g, 0, 255));
+	Uint8 blue = Uint8(std::clamp(b, 0, 255));
+	Uint8 alpha = Uint8(std::clamp(a, 0, 255));
+	m_TextColor = SDL_Color(red, green, blue, alpha);
 	m_NeedsUpdate = true;
 }
 
