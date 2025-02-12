@@ -22,13 +22,13 @@ public:
 	void MarkForDestruction() { m_MarkedForDestruction = true; }
 	bool IsMarkedForDestruction() const { return m_MarkedForDestruction; }
 
+	void SetParentGameObject(GameObject* parentObject) { m_ParentGameObject = parentObject; }
 	GameObject* GetParentGameObject() const { return m_ParentGameObject; }
+	void SetTransform(TransformComponent* transform) { m_Transform = transform; }
 	TransformComponent* GetTransform() const { return m_Transform; }
 
 private:
 	bool m_MarkedForDestruction{ false };
-
-	friend class GameObject;
 	GameObject* m_ParentGameObject = nullptr;
 	TransformComponent* m_Transform = nullptr;
 };

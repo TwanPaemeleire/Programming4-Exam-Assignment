@@ -8,9 +8,6 @@ class Texture2D;
  */
 class Renderer final : public Singleton<Renderer>
 {
-	SDL_Renderer* m_renderer{};
-	SDL_Window* m_window{};
-	SDL_Color m_clearColor{};
 public:
 	void Init(SDL_Window* window);
 	void Render() const;
@@ -21,8 +18,12 @@ public:
 
 	SDL_Renderer* GetSDLRenderer() const;
 
-	const SDL_Color& GetBackgroundColor() const { return m_clearColor; }
-	void SetBackgroundColor(const SDL_Color& color) { m_clearColor = color; }
+	const SDL_Color& GetBackgroundColor() const { return m_ClearColor; }
+	void SetBackgroundColor(const SDL_Color& color) { m_ClearColor = color; }
+private:
+	SDL_Renderer* m_Renderer{};
+	SDL_Window* m_Window{};
+	SDL_Color m_ClearColor{};
 };
 
 

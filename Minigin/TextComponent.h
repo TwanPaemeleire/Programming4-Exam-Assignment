@@ -20,8 +20,8 @@ public:
 	TextComponent& operator=(const TextComponent& other) = delete;
 	TextComponent& operator=(TextComponent&& other) = delete;
 private:
-	bool m_needsUpdate;
-	std::string m_text;
-	Font* m_font;
-	std::unique_ptr<Texture2D> m_textTexture;
+	bool m_NeedsUpdate;
+	std::string m_Text;
+	Font* m_Font;
+	std::unique_ptr<Texture2D> m_TextTexture;
 };

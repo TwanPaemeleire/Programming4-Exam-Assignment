@@ -62,8 +62,8 @@ void GameObject::Render() const
 
 void GameObject::AddComponent(std::unique_ptr<Component> component)
 {
-	component->m_ParentGameObject = this;
-	component->m_Transform = m_Transform;
+	component->SetParentGameObject(this);
+	component->SetTransform(m_Transform);
 	m_Components.emplace_back(std::move(component));
 }
 

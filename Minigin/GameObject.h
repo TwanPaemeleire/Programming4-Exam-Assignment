@@ -9,11 +9,11 @@ class Texture2D;
 class GameObject final
 {
 public:
-	virtual void Start();
-	virtual void Update();
-	virtual void FixedUpdate();
-	virtual void LateUpdate();
-	virtual void Render() const;
+	void Start();
+	void Update();
+	void FixedUpdate();
+	void LateUpdate();
+	void Render() const;
 
 	void SetPosition(float x, float y);
 
@@ -33,7 +33,6 @@ public:
 
 private:
 	bool m_MarkedForDestruction{ false };
-
 	TransformComponent* m_Transform{};
 	std::vector<std::unique_ptr<Component>> m_Components;
 };
