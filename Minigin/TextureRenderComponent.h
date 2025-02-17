@@ -15,6 +15,7 @@ public:
 	TextureRenderComponent& operator=(const TextureRenderComponent& other) = delete;
 	TextureRenderComponent& operator=(TextureRenderComponent&& other) = delete;
 
+	virtual void Update() override {};
 	virtual void Render() const override;
 
 	void SetTexture(const std::string& imgPath);

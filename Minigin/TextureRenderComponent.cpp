@@ -11,7 +11,7 @@ TextureRenderComponent::TextureRenderComponent(GameObject* owner, TransformCompo
 
 void TextureRenderComponent::Render() const
 {
-	auto& pos = GetTransform()->GetPosition();
+	auto& pos = GetParentGameObject()->GetWorldPosition();
 	Renderer::GetInstance().RenderTexture(*m_Texture, pos.x, pos.y);
 }
 

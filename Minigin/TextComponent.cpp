@@ -5,6 +5,7 @@
 #include "Texture2D.h"
 #include <algorithm>
 #include "TransformComponent.h"
+#include "GameObject.h"
 
 TextComponent::TextComponent(GameObject* owner, TransformComponent* transform)
 	: Component(owner, transform),
@@ -37,7 +38,7 @@ void TextComponent::Render() const
 {
 	if (m_TextTexture != nullptr)
 	{
-		const auto& pos = GetTransform()->GetPosition();
+		const auto& pos = GetParentGameObject()->GetWorldPosition();
 		Renderer::GetInstance().RenderTexture(*m_TextTexture, pos.x, pos.y);
 	}
 }

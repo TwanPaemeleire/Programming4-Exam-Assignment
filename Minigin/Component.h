@@ -14,7 +14,7 @@ public:
 	Component& operator=(Component&& other) = delete;
 
 	virtual void Start() {};
-	virtual void Update() {};
+	virtual void Update() = 0;
 	virtual void FixedUpdate() {};
 	virtual void LateUpdate() {};
 	virtual void Render() const {};
@@ -22,6 +22,7 @@ public:
 	void MarkForDestruction() { m_MarkedForDestruction = true; }
 	bool IsMarkedForDestruction() const { return m_MarkedForDestruction; }
 
+protected:
 	GameObject* GetParentGameObject() const { return m_Owner; }
 	TransformComponent* GetTransform() const { return m_Transform; }
 

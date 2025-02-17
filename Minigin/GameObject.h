@@ -23,6 +23,8 @@ public:
 	void Render() const;
 
 	void SetPosition(float x, float y);
+	void SetLocalPosition(const glm::vec3& localPos);
+	const glm::vec3& GetWorldPosition();
 
 	template <typename T>
 	T* AddComponent();
@@ -34,10 +36,28 @@ public:
 	void MarkForDestruction() { m_MarkedForDestruction = true; }
 	bool IsMarkedForDestruction() const { return m_MarkedForDestruction; }
 
+	void SetParent(GameObject* parent, bool keepWorldPosition);
+	GameObject* GetParent() const { return m_Parent; }
+	size_t GetChildCount() const { return m_Children.size(); }
+	GameObject* GetChildAt(int index) const { return m_Children[index]; };
+
 private:
+	void AddChild(GameObject* child);
+	void RemoveChild(GameObject* child);
+	bool IsChild(GameObject* objectToCheck);
+	void SetPositionDirty();
+	void UpdateWorldPosition();
+
 	bool m_MarkedForDestruction{ false };
+
 	TransformComponent* m_Transform{};
+	bool m_PositionIsDirty{ false };
+	glm::vec3 m_WorldPosition{};
+	glm::vec3 m_LocalPosition{};
+
 	std::vector<std::unique_ptr<Component>> m_Components;
+	GameObject* m_Parent;
+	std::vector<GameObject*> m_Children;
 };
 
 

@@ -13,6 +13,8 @@ public:
 	TransformComponent& operator=(const TransformComponent& other) = delete;
 	TransformComponent& operator=(TransformComponent&& other) = delete;
 
+	virtual void Update() override {};
+
 	const glm::vec3& GetPosition() const { return m_Position; }
 	void SetPosition(float x, float y, float z);
 private:
