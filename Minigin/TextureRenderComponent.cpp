@@ -4,13 +4,18 @@
 #include "GameObject.h"
 #include "ResourceManager.h"
 
-TextureRenderComponent::TextureRenderComponent(const std::string& imgPath)
+TextureRenderComponent::TextureRenderComponent(GameObject* owner, TransformComponent* transform)
+	: Component(owner, transform), m_Texture{}
 {
-	m_Texture = ResourceManager::GetInstance().LoadTexture(imgPath);
 }
 
 void TextureRenderComponent::Render() const
 {
 	auto& pos = GetTransform()->GetPosition();
 	Renderer::GetInstance().RenderTexture(*m_Texture, pos.x, pos.y);
+}
+
+void TextureRenderComponent::SetTexture(const std::string& imgPath)
+{
+	m_Texture = ResourceManager::GetInstance().LoadTexture(imgPath);
 }

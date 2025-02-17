@@ -10,7 +10,7 @@ class Texture2D;
 class TextComponent final : public Component
 {
 public:
-	TextComponent(const std::string& text, Font* font);
+	TextComponent(GameObject* owner, TransformComponent* transform);
 	virtual ~TextComponent() = default;
 	TextComponent(const TextComponent& other) = delete;
 	TextComponent(TextComponent&& other) = delete;
@@ -21,6 +21,7 @@ public:
 	virtual void Render() const override;
 
 	void SetText(const std::string& text);
+	void SetFont(Font* font);
 	void SetColor(int r, int g, int b, int a = 255);
 
 private:

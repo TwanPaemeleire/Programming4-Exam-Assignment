@@ -8,7 +8,7 @@ class Texture2D;
 class TextureRenderComponent final : public Component
 {
 public:
-	TextureRenderComponent(const std::string& imgPath);
+	TextureRenderComponent(GameObject* owner, TransformComponent* transform);
 	virtual ~TextureRenderComponent() override = default;
 	TextureRenderComponent(const TextureRenderComponent& other) = delete;
 	TextureRenderComponent(TextureRenderComponent&& other) = delete;
@@ -16,6 +16,8 @@ public:
 	TextureRenderComponent& operator=(TextureRenderComponent&& other) = delete;
 
 	virtual void Render() const override;
+
+	void SetTexture(const std::string& imgPath);
 
 private:
 	Texture2D* m_Texture;

@@ -4,12 +4,14 @@
 #include "Font.h"
 #include "Texture2D.h"
 #include <algorithm>
-
 #include "TransformComponent.h"
 
-TextComponent::TextComponent(const std::string& text, Font* font)
-	: m_NeedsUpdate(true), m_Text(text), m_Font(std::move(font)), m_TextTexture(nullptr), m_TextColor{255, 255, 255, 255}
-{ }
+TextComponent::TextComponent(GameObject* owner, TransformComponent* transform)
+	: Component(owner, transform),
+	m_NeedsUpdate(true), m_Text{"NO TEXT"}, m_Font{}, m_TextTexture(nullptr), m_TextColor{255, 255, 255, 255}
+{ 
+
+}
 
 void TextComponent::Update()
 {
@@ -45,6 +47,11 @@ void TextComponent::SetText(const std::string& text)
 {
 	m_Text = text;
 	m_NeedsUpdate = true;
+}
+
+void TextComponent::SetFont(Font* font)
+{
+	m_Font = font;
 }
 
 void TextComponent::SetColor(int r, int g, int b, int a)

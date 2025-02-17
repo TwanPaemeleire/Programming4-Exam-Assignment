@@ -24,7 +24,8 @@ public:
 
 	void SetPosition(float x, float y);
 
-	void AddComponent(std::unique_ptr<Component> component);
+	template <typename T>
+	T* AddComponent();
 	template <typename T>
 	T* GetComponent() const;
 	template <typename T>
@@ -39,6 +40,16 @@ private:
 	std::vector<std::unique_ptr<Component>> m_Components;
 };
 
+
+template<typename T>
+inline T* GameObject::AddComponent()
+{
+	static_assert(std::is_base_of<Component, T>::value, "T passed to AddComponent<>() does NOT inherit from Component");
+	std::unique_ptr<T> component = std::make_unique<T>(this, m_Transform);
+	T* rawPtr = component.get();
+	m_Components.emplace_back(std::move(component));
+	return rawPtr;
+}
 
 template <typename T>
 inline T* GameObject::GetComponent() const

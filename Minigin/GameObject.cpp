@@ -8,10 +8,8 @@
 
 GameObject::GameObject()
 {
-	// Make Sure Every Game Object Has A Transform
-	std::unique_ptr<TransformComponent> transform = std::make_unique<TransformComponent>();
-	m_Transform = transform.get();
-	AddComponent(std::move(transform));
+	m_Transform = AddComponent<TransformComponent>();
+
 }
 
 void GameObject::Start()
@@ -58,13 +56,6 @@ void GameObject::Render() const
 	{
 		component->Render();
 	}
-}
-
-void GameObject::AddComponent(std::unique_ptr<Component> component)
-{
-	component->SetParentGameObject(this);
-	component->SetTransform(m_Transform);
-	m_Components.emplace_back(std::move(component));
 }
 
 void GameObject::SetPosition(float x, float y)

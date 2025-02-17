@@ -5,7 +5,7 @@ class TransformComponent;
 class Component
 {
 public:
-	Component() = default;
+	Component(GameObject* owner, TransformComponent* transform) :m_Owner{ owner }, m_Transform{transform} {};
 	virtual ~Component() = default;
 	//Will Deleting The Beneath Here Also Delete Them In Deriving Classes?
 	Component(const Component& other) = delete;
@@ -22,14 +22,13 @@ public:
 	void MarkForDestruction() { m_MarkedForDestruction = true; }
 	bool IsMarkedForDestruction() const { return m_MarkedForDestruction; }
 
-	void SetParentGameObject(GameObject* parentObject) { m_ParentGameObject = parentObject; }
-	GameObject* GetParentGameObject() const { return m_ParentGameObject; }
-	void SetTransform(TransformComponent* transform) { m_Transform = transform; }
+	GameObject* GetParentGameObject() const { return m_Owner; }
 	TransformComponent* GetTransform() const { return m_Transform; }
 
 private:
 	bool m_MarkedForDestruction{ false };
-	GameObject* m_ParentGameObject = nullptr;
+	GameObject* m_Owner = nullptr;
+	// For Easy Access To The Owner's Transform
 	TransformComponent* m_Transform = nullptr;
 };
 
