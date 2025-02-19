@@ -37,16 +37,17 @@ void GameObject::FixedUpdate()
 
 void GameObject::LateUpdate()
 {
+	for (auto& component : m_Components)
+	{
+		component->LateUpdate();
+	}
+
 	// Delete The Components Marked For Destruction
 	std::erase_if(m_Components, [](const auto& component)
 		{
 			return component->IsMarkedForDestruction();
 		});
 
-	for (auto& component : m_Components)
-	{
-		component->LateUpdate();
-	}
 }
 
 void GameObject::Render() const
@@ -57,39 +58,19 @@ void GameObject::Render() const
 	}
 }
 
-void GameObject::SetPosition(float x, float y)
-{
-	m_Transform->SetPosition(x, y, 0.0f);
-}
-
-void GameObject::SetLocalPosition(const glm::vec3& localPos)
-{
-	m_LocalPosition = localPos;
-	SetPositionDirty();
-}
-
-const glm::vec3& GameObject::GetWorldPosition()
-{
-	if (m_PositionIsDirty)
-	{
-		UpdateWorldPosition();
-	}
-	return m_WorldPosition;
-}
-
 void GameObject::SetParent(GameObject* parent, bool keepWorldPosition)
 {
 	if (IsChild(parent) || parent == this || m_Parent == parent)
 		return;
 	if (parent == nullptr)
-		SetLocalPosition(GetWorldPosition());
+		m_Transform->SetLocalPosition(m_Transform->GetWorldPosition());
 	else
 	{
 		if (keepWorldPosition)
 		{
-			SetLocalPosition(GetWorldPosition() - parent->GetWorldPosition());
+			m_Transform->SetLocalPosition(m_Transform->GetWorldPosition() - parent->GetTransform()->GetWorldPosition());
 		}
-		SetPositionDirty();
+		m_Transform->SetPositionDirty();
 	}
 	if (m_Parent) m_Parent->RemoveChild(this);
 	m_Parent = parent;
@@ -112,31 +93,5 @@ bool GameObject::IsChild(GameObject* objectToCheck)
 	{
 		if (child == objectToCheck) return true;
 	}
-
 	return false;
-}
-
-void GameObject::SetPositionDirty()
-{
-	m_PositionIsDirty = true;
-	for (auto& child : m_Children)
-	{
-		child->SetPositionDirty();
-	}
-}
-
-void GameObject::UpdateWorldPosition()
-{
-	if (m_PositionIsDirty)
-	{
-		if (m_Parent == nullptr)
-		{
-			m_WorldPosition = m_LocalPosition;
-		}
-		else
-		{
-			m_WorldPosition = m_Parent->GetWorldPosition() + m_LocalPosition;
-		}
-	}
-	m_PositionIsDirty = false;
 }

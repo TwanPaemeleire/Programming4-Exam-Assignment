@@ -50,16 +50,17 @@ void Scene::FixedUpdate()
 
 void Scene::LateUpdate()
 {
+	for (auto& object : m_Objects)
+	{
+		object->LateUpdate();
+	}
+
 	// Delete The Objects Marked For Destruction
 	std::erase_if(m_Objects, [](const auto& object)
 		{
 			return object->IsMarkedForDestruction();
 		});
 
-	for (auto& object : m_Objects)
-	{
-		object->LateUpdate();
-	}
 }
 
 void Scene::Render() const

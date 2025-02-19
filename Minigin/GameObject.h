@@ -22,9 +22,7 @@ public:
 	void LateUpdate();
 	void Render() const;
 
-	void SetPosition(float x, float y);
-	void SetLocalPosition(const glm::vec3& localPos);
-	const glm::vec3& GetWorldPosition();
+	TransformComponent* GetTransform() { return m_Transform; }
 
 	template <typename T>
 	T* AddComponent();
@@ -45,15 +43,10 @@ private:
 	void AddChild(GameObject* child);
 	void RemoveChild(GameObject* child);
 	bool IsChild(GameObject* objectToCheck);
-	void SetPositionDirty();
-	void UpdateWorldPosition();
 
 	bool m_MarkedForDestruction{ false };
 
 	TransformComponent* m_Transform{};
-	bool m_PositionIsDirty{ false };
-	glm::vec3 m_WorldPosition{};
-	glm::vec3 m_LocalPosition{};
 
 	std::vector<std::unique_ptr<Component>> m_Components;
 	GameObject* m_Parent;
@@ -65,7 +58,7 @@ template<typename T>
 inline T* GameObject::AddComponent()
 {
 	static_assert(std::is_base_of<Component, T>::value, "T passed to AddComponent<>() does NOT inherit from Component");
-	std::unique_ptr<T> component = std::make_unique<T>(this, m_Transform);
+	std::unique_ptr<T> component = std::make_unique<T>(this);
 	T* rawPtr = component.get();
 	m_Components.emplace_back(std::move(component));
 	return rawPtr;

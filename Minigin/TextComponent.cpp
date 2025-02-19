@@ -7,11 +7,10 @@
 #include "TransformComponent.h"
 #include "GameObject.h"
 
-TextComponent::TextComponent(GameObject* owner, TransformComponent* transform)
-	: Component(owner, transform),
+TextComponent::TextComponent(GameObject* owner)
+	: Component(owner),
 	m_NeedsUpdate(true), m_Text{"NO TEXT"}, m_Font{}, m_TextTexture(nullptr), m_TextColor{255, 255, 255, 255}
-{ 
-
+{
 }
 
 void TextComponent::Update()
@@ -38,12 +37,11 @@ void TextComponent::Render() const
 {
 	if (m_TextTexture != nullptr)
 	{
-		const auto& pos = GetParentGameObject()->GetWorldPosition();
+		const auto& pos = m_Transform->GetWorldPosition();
 		Renderer::GetInstance().RenderTexture(*m_TextTexture, pos.x, pos.y);
 	}
 }
 
-// This implementation uses the "dirty flag" pattern
 void TextComponent::SetText(const std::string& text)
 {
 	m_Text = text;

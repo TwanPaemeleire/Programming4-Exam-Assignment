@@ -6,14 +6,14 @@
 #include <sstream>
 #include <iomanip> // Needed To Set The Precision
 
-FPSComponent::FPSComponent(GameObject* owner, TransformComponent* transform)
-	:Component(owner, transform)
+FPSComponent::FPSComponent(GameObject* owner)
+	:Component(owner)
 {
 }
 
 void FPSComponent::Start()
 {
-	m_TextComponent = GetParentGameObject()->GetComponent<TextComponent>();
+	m_TextComponent = GetOwner()->GetComponent<TextComponent>();
 	//m_TextComponent->SetColor(255, 0, 0, 255);
 }
 

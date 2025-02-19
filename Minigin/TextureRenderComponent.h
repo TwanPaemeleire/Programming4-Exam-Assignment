@@ -8,7 +8,7 @@ class Texture2D;
 class TextureRenderComponent final : public Component
 {
 public:
-	TextureRenderComponent(GameObject* owner, TransformComponent* transform);
+	TextureRenderComponent(GameObject* owner);
 	virtual ~TextureRenderComponent() override = default;
 	TextureRenderComponent(const TextureRenderComponent& other) = delete;
 	TextureRenderComponent(TextureRenderComponent&& other) = delete;

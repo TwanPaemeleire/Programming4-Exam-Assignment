@@ -6,7 +6,7 @@ class TextComponent;
 class FPSComponent final : public Component
 {
 public:
-	FPSComponent(GameObject* owner, TransformComponent* transform);
+	FPSComponent(GameObject* owner);
 	virtual ~FPSComponent() override = default;
 	FPSComponent(const FPSComponent& other) = delete;
 	FPSComponent(FPSComponent&& other) = delete;

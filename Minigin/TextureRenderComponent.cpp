@@ -4,14 +4,14 @@
 #include "GameObject.h"
 #include "ResourceManager.h"
 
-TextureRenderComponent::TextureRenderComponent(GameObject* owner, TransformComponent* transform)
-	: Component(owner, transform), m_Texture{}
+TextureRenderComponent::TextureRenderComponent(GameObject* owner)
+	: Component(owner), m_Texture{}
 {
 }
 
 void TextureRenderComponent::Render() const
 {
-	auto& pos = GetParentGameObject()->GetWorldPosition();
+	auto& pos = m_Transform->GetWorldPosition();
 	Renderer::GetInstance().RenderTexture(*m_Texture, pos.x, pos.y);
 }
 

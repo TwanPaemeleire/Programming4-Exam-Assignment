@@ -5,14 +5,13 @@
 class RotationAroundPointComponent final : public Component
 {
 public:
-	RotationAroundPointComponent(GameObject* owner, TransformComponent* transform);
+	RotationAroundPointComponent(GameObject* owner);
 	virtual ~RotationAroundPointComponent() = default;
 	RotationAroundPointComponent(const RotationAroundPointComponent& other) = delete;
 	RotationAroundPointComponent(RotationAroundPointComponent&& other) = delete;
 	RotationAroundPointComponent& operator=(const RotationAroundPointComponent& other) = delete;
 	RotationAroundPointComponent& operator=(RotationAroundPointComponent&& other) = delete;
 
-	virtual void Start() override;
 	virtual void Update() override;
 
 	void SetRotationPoint(const glm::vec3& point) { m_RotationPoint = point; }
@@ -20,7 +19,6 @@ public:
 	void SetSpeed(float speed) { m_Speed = speed; }
 
 private:
-	TransformComponent* m_OwnerTransform{};
 	glm::vec3 m_RotationPoint{};
 	float m_Radius{};
 	float m_Speed{};

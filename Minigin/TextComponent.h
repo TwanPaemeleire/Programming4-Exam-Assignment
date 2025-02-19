@@ -10,7 +10,7 @@ class Texture2D;
 class TextComponent final : public Component
 {
 public:
-	TextComponent(GameObject* owner, TransformComponent* transform);
+	TextComponent(GameObject* owner);
 	virtual ~TextComponent() = default;
 	TextComponent(const TextComponent& other) = delete;
 	TextComponent(TextComponent&& other) = delete;

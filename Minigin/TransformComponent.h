@@ -1,12 +1,11 @@
 #pragma once
 #include <glm.hpp>
-
 #include "Component.h"
 
 class TransformComponent final : public Component
 {
 public:
-	TransformComponent(GameObject* owner, TransformComponent* transform);
+	TransformComponent(GameObject* owner);
 	virtual ~TransformComponent() override = default;
 	TransformComponent(const TransformComponent& other) = delete;
 	TransformComponent(TransformComponent&& other) = delete;
@@ -15,8 +14,14 @@ public:
 
 	virtual void Update() override {};
 
-	const glm::vec3& GetPosition() const { return m_Position; }
-	void SetPosition(float x, float y, float z);
+	void SetLocalPosition(const glm::vec3& localPos);
+	const glm::vec3& GetWorldPosition();
+	void SetPositionDirty();
+
 private:
-	glm::vec3 m_Position;
+	void UpdateWorldPosition();
+
+	bool m_PositionIsDirty{ false };
+	glm::vec3 m_WorldPosition{};
+	glm::vec3 m_LocalPosition{};
 };
