@@ -14,12 +14,10 @@ public:
 
 	virtual void Update() override;
 
-	void SetRotationPoint(const glm::vec3& point) { m_RotationPoint = point; }
 	void SetRadius(float radius) { m_Radius = radius; }
 	void SetSpeed(float speed) { m_Speed = speed; }
 
 private:
-	glm::vec3 m_RotationPoint{};
 	float m_Radius{};
 	float m_Speed{};
 	float m_Angle{};

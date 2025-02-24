@@ -11,13 +11,13 @@ RotationAroundPointComponent::RotationAroundPointComponent(GameObject* owner)
 
 void RotationAroundPointComponent::Update()
 {
+    static constexpr float twoPi = 2.f * static_cast<float>(M_PI);
     m_Angle += m_Speed * Time::GetInstance().deltaTime;
 
-    if (m_Angle > 2.f * static_cast<float>(M_PI))
+    if (m_Angle > twoPi)
     {
-        m_Angle -= 2.f * static_cast<float>(M_PI);
+        m_Angle -= twoPi;
     }
 
-    glm::vec3 pos{ m_RotationPoint.x + m_Radius * cos(m_Angle), m_RotationPoint.y + m_Radius * sin(m_Angle), 0};
-    m_Transform->SetLocalPosition(pos);
+    m_Transform->SetLocalPosition(m_Radius * cos(m_Angle), m_Radius * sin(m_Angle));
 }

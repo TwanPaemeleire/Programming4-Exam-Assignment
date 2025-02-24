@@ -12,6 +12,11 @@ void TransformComponent::SetLocalPosition(const glm::vec3& localPos)
 	SetPositionDirty();
 }
 
+void TransformComponent::SetLocalPosition(float x, float y)
+{
+	SetLocalPosition(glm::vec3(x, y, 0));
+}
+
 const glm::vec3& TransformComponent::GetWorldPosition()
 {
 	if (m_PositionIsDirty)
@@ -41,7 +46,6 @@ void TransformComponent::UpdateWorldPosition()
 		}
 		else
 		{
-			//m_WorldPosition = GetParentGameObject()->GetParent()->GetWorldPosition() + m_LocalPosition;
 			m_WorldPosition = GetOwner()->GetParent()->GetTransform()->GetWorldPosition() + m_LocalPosition;
 		}
 	}
