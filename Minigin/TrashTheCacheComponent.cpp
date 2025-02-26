@@ -1,97 +1,121 @@
 #include "TrashTheCacheComponent.h"
 #include <algorithm>
-#include <string>
 #include <chrono>
 #include <numeric>
 #include "imgui.h"
 #include "backends/imgui_impl_sdl2.h"
 #include "backends/imgui_impl_opengl3.h"
 #include "imgui_plot.h"
-#include <iostream>
 
 TrashTheCacheComponent::TrashTheCacheComponent(GameObject* owner)
-	: Component(owner), m_SizeIntArray{ int(pow(2, 26)) }, m_SizeGameObject3DArray{int(pow(2, 23))}
+	: Component(owner), m_SizeIntArray{ int(pow(2, 26)) }, m_SizeGameObject3DArray{int(pow(2, 23))}, m_IntGraphColor{ImColor(255, 0, 0)}
 {
     m_IntArray = new int[m_SizeIntArray]{};
-    m_StepSizes = new float[m_AmountOfSteps] { 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024 };
-    m_StepTimingsInt = new float[m_AmountOfSteps] {};
-    m_StepTimingsGameObject3D = new float[m_AmountOfSteps] {};
-    m_StepTimingsGameObject3DAlt = new float[m_AmountOfSteps] {};;
     m_GameObject3DArray = new GameObject3D[m_SizeGameObject3DArray]{};
     m_GameObject3DAltArray = new GameObject3DAlt[m_SizeGameObject3DArray]{};
+    m_GameObjectColors[0] = ImColor(0, 255, 0);
+    m_GameObjectColors[1] = ImColor(0, 0, 255);
 }
 
 TrashTheCacheComponent::~TrashTheCacheComponent()
 {
     delete[] m_IntArray;
-    delete[] m_StepSizes;
-    delete[] m_StepTimingsInt;
     delete[] m_GameObject3DArray;
-    delete[] m_StepTimingsGameObject3D;
     delete[] m_GameObject3DAltArray;
-    delete[] m_StepTimingsGameObject3DAlt;
-}
-
-void TrashTheCacheComponent::Start()
-{
 }
 
 void TrashTheCacheComponent::Update()
-{
-}
-
-void TrashTheCacheComponent::Render() const
 {
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplSDL2_NewFrame();
     ImGui::NewFrame();
     
+    // ----- EXERCISE 1 -----
     if (ImGui::Begin("Exercise 1"))
     {
         ImGui::PushItemWidth(100);
-        ImGui::InputInt("# samples", &m_SampleCount);
+        ImGui::InputInt("# samples", &m_SampleCountInt);
         ImGui::PopItemWidth();
     
-        if (ImGui::Button("Trash The Cache"))
+        if (m_IntButtonClicked)
         {
-            Exercise1();
+            CalculateIntTimings();
         }
-        DrawExercise1Graph();
+        if (!m_IntButtonClicked && ImGui::Button("Trash The Cache"))
+        {
+            m_IntButtonClicked = true;
+            m_ShowIntGraph = false;
+            ImGui::Text("Wait For It...");
+        } 
+        if (m_ShowIntGraph)
+        {
+            DrawExercise1Graph();
+        }
+        
         ImGui::End();
     }
 
+    // ----- EXERCISE 2 -----
     if (ImGui::Begin("Exercise 2"))
     {
         ImGui::PushItemWidth(100);
-        ImGui::InputInt("# samples", &m_SampleCount);
+        ImGui::InputInt("# samples", &m_SampleCountGameObject3D);
         ImGui::PopItemWidth();
 
-        if (ImGui::Button("Trash The Cache With GameObject3D"))
+        // ----- GameObject3D -----
+        if (m_GameObject3DButtonClicked)
         {
-            Exercise2GameObject3D();
+            CalculateGameObject3DTimings();
         }
-        DrawExercise2GameObject3DGraph();
-        if (ImGui::Button("Trash The Cache With GameObject3DAlt"))
+
+        if (!m_GameObject3DButtonClicked && ImGui::Button("Trash The Cache With GameObject3D"))
         {
-            Exercise2GameObject3DAlt();
+            m_GameObject3DButtonClicked = true;
+            m_ShowGameObject3DGraph = false;
+            ImGui::Text("Wait For It...");
         }
-        DrawExercise2GameObject3DAltGraph();
-        ImGui::Text("Combined: ");
-        DrawExercise2Combined();
+        if (m_ShowGameObject3DGraph)
+        {
+            DrawGameObject3DGraph();
+        }
+        
+        // ----- GameObject3DAlt -----
+        if (m_GameObject3DAltButtonClicked)
+        {
+            CalculateGameObject3DAltTimings();
+        }
+
+        if (!m_GameObject3DAltButtonClicked && ImGui::Button("Trash The Cache With GameObject3DAlt"))
+        {
+            m_GameObject3DAltButtonClicked = true;
+            m_ShowGameObject3DAltGraph = false;
+            ImGui::Text("Wait For It...");
+        }
+        if (m_ShowGameObject3DAltGraph)
+        {
+            DrawGameObject3DAltGraph();
+        }
+
+        // ----- Combined -----
+        if (m_ShowGameObject3DGraph && m_ShowGameObject3DAltGraph)
+        {
+            ImGui::Text("Combined: ");
+            DrawExercise2CombinedGraph();
+        }
+
         ImGui::End();
     }
-    
-    ImGui::Render();
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
-void TrashTheCacheComponent::Exercise1() const
+void TrashTheCacheComponent::CalculateIntTimings()
 {
+    if (m_SampleCountInt == 0) return; // Avoid Zero-Division
     std::vector<std::chrono::milliseconds> sampleTimings{};
     int currentStepIndex = 0;
+
     for (int stepSize{ 1 }; stepSize <= 1024; stepSize *= 2)
     {
-        for (int sampleIndex{ 0 }; sampleIndex < m_SampleCount; ++sampleIndex)
+        for (int sampleIndex{ 0 }; sampleIndex < m_SampleCountInt; ++sampleIndex)
         {
             auto start = std::chrono::high_resolution_clock::now();
             for (int i{ 0 }; i < m_SizeIntArray; i += stepSize)
@@ -102,15 +126,21 @@ void TrashTheCacheComponent::Exercise1() const
             auto elapsedTime = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
             sampleTimings.emplace_back(elapsedTime);
         }
-        auto smallest = std::min_element(sampleTimings.begin(), sampleTimings.end());
-        sampleTimings.erase(smallest);
-        auto biggest = std::max_element(sampleTimings.begin(), sampleTimings.end());
-        sampleTimings.erase(biggest);
+        if (m_SampleCountInt > 2) // Avoid Zero-Division
+        {
+            auto smallest = std::min_element(sampleTimings.begin(), sampleTimings.end());
+            sampleTimings.erase(smallest);
+            auto biggest = std::max_element(sampleTimings.begin(), sampleTimings.end());
+            sampleTimings.erase(biggest);
+        }
         auto average = std::accumulate(sampleTimings.begin(), sampleTimings.end(), std::chrono::milliseconds(0)).count() / sampleTimings.size();
         m_StepTimingsInt[currentStepIndex] = float(average);
+        
         ++currentStepIndex;
         sampleTimings.clear();
     }
+    m_IntButtonClicked = false;
+    m_ShowIntGraph = true;
 }
 
 void TrashTheCacheComponent::DrawExercise1Graph() const
@@ -132,17 +162,19 @@ void TrashTheCacheComponent::DrawExercise1Graph() const
     plotConfig.grid_y.size = plotConfig.scale.max / 10;
 
     plotConfig.line_thickness = 2.f;
+    plotConfig.values.color = m_IntGraphColor;
 
     ImGui::Plot("Int Array", plotConfig);
 }
 
-void TrashTheCacheComponent::Exercise2GameObject3D() const
+void TrashTheCacheComponent::CalculateGameObject3DTimings()
 {
+    if (m_SampleCountGameObject3D == 0) return; // Avoid Zero-Division
     std::vector<std::chrono::milliseconds> sampleTimings{};
     int currentStepIndex = 0;
     for (int stepSize{ 1 }; stepSize <= 1024; stepSize *= 2)
     {
-        for (int sampleIndex{ 0 }; sampleIndex < m_SampleCount; ++sampleIndex)
+        for (int sampleIndex{ 0 }; sampleIndex < m_SampleCountGameObject3D; ++sampleIndex)
         {
             auto start = std::chrono::high_resolution_clock::now();
             for (int i{ 0 }; i < m_SizeGameObject3DArray; i += stepSize)
@@ -153,19 +185,26 @@ void TrashTheCacheComponent::Exercise2GameObject3D() const
             auto elapsedTime = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
             sampleTimings.emplace_back(elapsedTime);
         }
-        auto smallest = std::min_element(sampleTimings.begin(), sampleTimings.end());
-        sampleTimings.erase(smallest);
-        auto biggest = std::max_element(sampleTimings.begin(), sampleTimings.end());
-        sampleTimings.erase(biggest);
+        if (m_SampleCountGameObject3D > 2) // Avoid Zero-Division
+        {
+            auto smallest = std::min_element(sampleTimings.begin(), sampleTimings.end());
+            sampleTimings.erase(smallest);
+            auto biggest = std::max_element(sampleTimings.begin(), sampleTimings.end());
+            sampleTimings.erase(biggest);
+        }
         auto average = std::accumulate(sampleTimings.begin(), sampleTimings.end(), std::chrono::milliseconds(0)).count() / sampleTimings.size();
         m_StepTimingsGameObject3D[currentStepIndex] = float(average);
         ++currentStepIndex;
         sampleTimings.clear();
     }
+
+    m_GameObject3DButtonClicked = false;
+    m_ShowGameObject3DGraph = true;
 }
 
-void TrashTheCacheComponent::DrawExercise2GameObject3DGraph() const
+void TrashTheCacheComponent::DrawGameObject3DGraph() const
 {
+    if (!m_ShowGameObject3DGraph) return;
     ImGui::PlotConfig plotConfig;
     plotConfig.values.xs = m_StepSizes;
     plotConfig.values.ys = m_StepTimingsGameObject3D;
@@ -183,17 +222,19 @@ void TrashTheCacheComponent::DrawExercise2GameObject3DGraph() const
     plotConfig.grid_y.size = plotConfig.scale.max / 10;
 
     plotConfig.line_thickness = 2.f;
+    plotConfig.values.color = m_GameObjectColors[0];
 
     ImGui::Plot("GameObject3D", plotConfig);
 }
 
-void TrashTheCacheComponent::Exercise2GameObject3DAlt() const
+void TrashTheCacheComponent::CalculateGameObject3DAltTimings()
 {
+    if (m_SampleCountGameObject3D == 0) return; // Avoid Zero-Division
     std::vector<std::chrono::milliseconds> sampleTimings{};
     int currentStepIndex = 0;
     for (int stepSize{ 1 }; stepSize <= 1024; stepSize *= 2)
     {
-        for (int sampleIndex{ 0 }; sampleIndex < m_SampleCount; ++sampleIndex)
+        for (int sampleIndex{ 0 }; sampleIndex < m_SampleCountGameObject3D; ++sampleIndex)
         {
             auto start = std::chrono::high_resolution_clock::now();
             for (int i{ 0 }; i < m_SizeGameObject3DArray; i += stepSize)
@@ -204,19 +245,25 @@ void TrashTheCacheComponent::Exercise2GameObject3DAlt() const
             auto elapsedTime = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
             sampleTimings.emplace_back(elapsedTime);
         }
-        auto smallest = std::min_element(sampleTimings.begin(), sampleTimings.end());
-        sampleTimings.erase(smallest);
-        auto biggest = std::max_element(sampleTimings.begin(), sampleTimings.end());
-        sampleTimings.erase(biggest);
+        if (m_SampleCountGameObject3D > 2) // Avoid Zero-Division
+        {
+            auto smallest = std::min_element(sampleTimings.begin(), sampleTimings.end());
+            sampleTimings.erase(smallest);
+            auto biggest = std::max_element(sampleTimings.begin(), sampleTimings.end());
+            sampleTimings.erase(biggest);
+        }
         auto average = std::accumulate(sampleTimings.begin(), sampleTimings.end(), std::chrono::milliseconds(0)).count() / sampleTimings.size();
         m_StepTimingsGameObject3DAlt[currentStepIndex] = float(average);
         ++currentStepIndex;
         sampleTimings.clear();
     }
+    m_GameObject3DAltButtonClicked = false;
+    m_ShowGameObject3DAltGraph = true;
 }
 
-void TrashTheCacheComponent::DrawExercise2GameObject3DAltGraph() const
+void TrashTheCacheComponent::DrawGameObject3DAltGraph() const
 {
+    if (!m_ShowGameObject3DAltGraph) return;
     ImGui::PlotConfig plotConfig;
     plotConfig.values.xs = m_StepSizes;
     plotConfig.values.ys = m_StepTimingsGameObject3DAlt;
@@ -234,25 +281,19 @@ void TrashTheCacheComponent::DrawExercise2GameObject3DAltGraph() const
     plotConfig.grid_y.size = plotConfig.scale.max / 10;
 
     plotConfig.line_thickness = 2.f;
+    plotConfig.values.color = m_GameObjectColors[1];
 
     ImGui::Plot("GameObject3DAlt", plotConfig);
 }
 
-void TrashTheCacheComponent::DrawExercise2Combined() const
+void TrashTheCacheComponent::DrawExercise2CombinedGraph() const
 {
+    if (!(m_ShowGameObject3DGraph && m_ShowGameObject3DAltGraph)) return;
     ImGui::PlotConfig plotConfig;
     plotConfig.values.xs = m_StepSizes;
-    float gameObject3DTimings[11];
-    float gameObject3DAltTimings[11];
-    for (int index{0}; index < m_AmountOfSteps; ++index)
-    {
-        gameObject3DTimings[index] = m_StepTimingsGameObject3D[index];
-        gameObject3DAltTimings[index] = m_StepTimingsGameObject3DAlt[index];
-    }
-    const float* data_y[] = {gameObject3DTimings , gameObject3DAltTimings};
+    const float* data_y[] = { m_StepTimingsGameObject3D , m_StepTimingsGameObject3DAlt };
     plotConfig.values.ys_list = data_y;
 
-    plotConfig.values.ys_count = 2;
     plotConfig.values.ys_count = 2;
     plotConfig.values.count = m_AmountOfSteps;
 
@@ -270,6 +311,7 @@ void TrashTheCacheComponent::DrawExercise2Combined() const
     plotConfig.grid_y.size = plotConfig.scale.max / 10;
 
     plotConfig.line_thickness = 2.f;
+    plotConfig.values.colors = m_GameObjectColors;
 
     ImGui::Plot("CombinedPlot", plotConfig);
 }
