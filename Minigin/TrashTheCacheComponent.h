@@ -52,7 +52,7 @@ private:
 	int m_SampleCountGameObject3D{ 10 };
 
 	int m_SizeIntArray;
-	int m_SizeGameObject3DArray; // Needs Different Size, As Otherwise Too Much Memory Gets Allocated And An Error Will Occur
+	int m_SizeGameObject3DArray;
 	int* m_IntArray;
 	GameObject3D* m_GameObject3DArray;
 	GameObject3DAlt* m_GameObject3DAltArray;
