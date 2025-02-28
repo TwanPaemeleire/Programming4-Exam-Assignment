@@ -152,9 +152,6 @@
     <ClCompile Include="RotationAroundPointComponent.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
-    <ClCompile Include="Component.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\3rdParty\imgui\imgui.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
@@ -180,6 +177,9 @@
       <Filter>imgui</Filter>
     </ClCompile>
     <ClCompile Include="TrashTheCacheComponent.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Component.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
   </ItemGroup>

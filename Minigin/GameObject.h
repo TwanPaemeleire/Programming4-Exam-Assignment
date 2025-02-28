@@ -10,7 +10,7 @@ class GameObject final
 {
 public:
 	GameObject();
-	virtual ~GameObject() {};
+	~GameObject();
 	GameObject(const GameObject& other) = delete;
 	GameObject(GameObject&& other) = delete;
 	GameObject& operator=(const GameObject& other) = delete;
@@ -31,7 +31,7 @@ public:
 	template <typename T>
 	bool HasComponent() const;
 
-	void MarkForDestruction() { m_MarkedForDestruction = true; }
+	void MarkForDestruction();
 	bool IsMarkedForDestruction() const { return m_MarkedForDestruction; }
 
 	void SetParent(GameObject* parent, bool keepWorldPosition);

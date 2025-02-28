@@ -11,6 +11,16 @@ GameObject::GameObject()
 	m_Transform = AddComponent<TransformComponent>();
 }
 
+GameObject::~GameObject()
+{
+	// "Notify" Parent That You're Getting Destroyed, And Remove Yourself As Parent From Your Children
+	SetParent(nullptr, false);
+	for (auto& child : m_Children)
+	{
+		child->SetParent(nullptr, false);
+	}
+}
+
 void GameObject::Start()
 {
 	for (auto& component : m_Components)
@@ -55,6 +65,16 @@ void GameObject::Render() const
 	for (auto& component : m_Components)
 	{
 		component->Render();
+	}
+}
+
+void GameObject::MarkForDestruction()
+{
+	// Mark All The Children (And As Such, Also Their Children) For Destruction As Well, As I Want Parent To Own Children
+	m_MarkedForDestruction = true;
+	for (auto& child : m_Children)
+	{
+		child->MarkForDestruction();
 	}
 }
 
