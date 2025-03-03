@@ -68,6 +68,9 @@ Minigin::Minigin(const std::string &dataPath)
 	Renderer::GetInstance().Init(g_window);
 
 	ResourceManager::GetInstance().Init(dataPath);
+
+	// Initialize The Controllers
+	InputManager::GetInstance().Init();
 }
 
 Minigin::~Minigin()

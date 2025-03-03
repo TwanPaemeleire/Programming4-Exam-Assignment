@@ -4,20 +4,24 @@
 
 #include <iostream>
 
+void InputManager::Init()
+{
+	for (int controllerIdx{ 0 }; controllerIdx < 2; ++controllerIdx)
+	{
+		m_Controllers.emplace_back(std::make_unique<Controller>(controllerIdx));
+	}
+}
+
 bool InputManager::ProcessInput()
 {
-	CopyMemory(&m_PreviousState, &m_CurrentState, sizeof(XINPUT_STATE));
-	ZeroMemory(&m_CurrentState, sizeof(XINPUT_STATE));
-	XInputGetState(0, &m_CurrentState);
-
-	auto buttonChanges = m_CurrentState.Gamepad.wButtons ^ m_PreviousState.Gamepad.wButtons;
-	m_ButtonsPressedThisFrame = buttonChanges & m_CurrentState.Gamepad.wButtons;
-	m_ButtonsReleasedThisFrame = buttonChanges & (~m_CurrentState.Gamepad.wButtons);
-
-	if (IsDownThisFrame(XINPUT_GAMEPAD_A))
+	// Make All The Controllers Process Input
+	for (const auto& controller : m_Controllers)
 	{
-		std::cout << "A DOWN" << std::endl;
+		controller->ProcessInput();
+		bool isDown = controller->IsDownThisFrame(XINPUT_GAMEPAD_A);
+		if (isDown) std::cout << "A DOWN FOR CONTROLLER: " << controller->m_ControllerIndex << std::endl;
 	}
+
 
 	SDL_Event e;
 	while (SDL_PollEvent(&e)) 
@@ -38,16 +42,3 @@ bool InputManager::ProcessInput()
 
 	return true;
 }
-bool InputManager::IsDownThisFrame(unsigned int button) const
-{
-	return m_ButtonsPressedThisFrame & button;
-}
-bool InputManager::IsUpThisFrame(unsigned int button) const
-{
-	return m_ButtonsReleasedThisFrame & button;
-}
-bool InputManager::IsPressed(unsigned int button) const
-{
-	return m_CurrentState.Gamepad.wButtons & button;
-}
-// DeadZone as a var as it'll have to be in setings of game. default -> 10-15%
