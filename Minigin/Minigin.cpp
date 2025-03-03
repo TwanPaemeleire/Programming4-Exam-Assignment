@@ -105,12 +105,13 @@ void Minigin::Run(const std::function<void()>& load)
 		time.deltaTime = deltaTime;
 
 		doContinue = input.ProcessInput();
+
+
 		while (lag >= m_FixedTimeStep)
 		{
 			sceneManager.FixedUpdate();
 			lag -= m_FixedTimeStep;
 		}
-
 		sceneManager.Update();
 		sceneManager.LateUpdate();
 		renderer.Render();
