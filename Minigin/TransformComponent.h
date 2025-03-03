@@ -17,6 +17,7 @@ public:
 	void SetLocalPosition(const glm::vec3& localPos);
 	void SetLocalPosition(float x, float y);
 	const glm::vec3& GetWorldPosition();
+	const glm::vec3& GetLocalPosition() { return m_LocalPosition; }
 	void SetPositionDirty();
 
 private:

@@ -225,7 +225,7 @@
     <ClCompile Include="FPSComponent.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameObjectCommand.cpp" />
-    <ClCompile Include="MoveCommand.cpp" />
+    <ClCompile Include="MoveCommands.cpp" />
     <ClCompile Include="RotationAroundPointComponent.cpp" />
     <ClCompile Include="TextureRenderComponent.cpp" />
     <ClCompile Include="InputManager.cpp" />
