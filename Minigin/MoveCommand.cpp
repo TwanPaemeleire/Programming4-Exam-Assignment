@@ -1,12 +1,13 @@
-#include "MoveCommand.h"
+#include "MoveCommands.h"
 #include <iostream>
+#include "GameObject.h"
 
-MoveCommand::MoveCommand(GameObject* gameObject, int speed)
-	:GameObjectCommand(gameObject), m_Speed{speed}
+MoveUpCommand::MoveUpCommand(GameObject* gameObject)
+	:GameObjectCommand(gameObject)
 {
 }
 
-void MoveCommand::Execute()
+void MoveUpCommand::Execute()
 {
 	std::cout << "MOVE" << std::endl;
 }

@@ -120,7 +120,7 @@
     <ClInclude Include="GameObjectCommand.h">
       <Filter>Header Files\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="MoveCommand.h">
+    <ClInclude Include="MoveCommands.h">
       <Filter>Header Files\Commands</Filter>
     </ClInclude>
   </ItemGroup>

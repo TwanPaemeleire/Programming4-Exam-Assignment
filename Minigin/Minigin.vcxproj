@@ -193,7 +193,7 @@
     <ClInclude Include="FPSComponent.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameObjectCommand.h" />
-    <ClInclude Include="MoveCommand.h" />
+    <ClInclude Include="MoveCommands.h" />
     <ClInclude Include="RotationAroundPointComponent.h" />
     <ClInclude Include="TextureRenderComponent.h" />
     <ClInclude Include="InputManager.h" />
