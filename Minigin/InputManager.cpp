@@ -4,6 +4,7 @@
 
 #include <iostream>
 
+
 void InputManager::Init()
 {
 	for (int controllerIdx{ 0 }; controllerIdx < 2; ++controllerIdx)
@@ -18,8 +19,8 @@ bool InputManager::ProcessInput()
 	for (const auto& controller : m_Controllers)
 	{
 		controller->ProcessInput();
-		bool isDown = controller->IsDownThisFrame(XINPUT_GAMEPAD_A);
-		if (isDown) std::cout << "A DOWN FOR CONTROLLER: " << controller->m_ControllerIndex << std::endl;
+		bool isDown = controller->IsDownThisFrame(0x1000); // A BUTTON
+		if (isDown) std::cout << "A DOWN FOR CONTROLLER: " << controller->GetControllerIndex() << std::endl;
 	}
 
 

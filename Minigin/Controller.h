@@ -1,21 +1,21 @@
 #pragma once
 
-#include "Windows.h"
-#include "Xinput.h"
-class Controller
+class Controller final
 {
 public:
 	Controller(int controllerIndex);
-	void ProcessInput();
+	~Controller();
 
+	void ProcessInput();
 	bool IsDownThisFrame(unsigned int button) const;
 	bool IsUpThisFrame(unsigned int button) const;
 	bool IsPressed(unsigned int button) const;
-	int m_ControllerIndex{};
+
+	int GetControllerIndex() const;
 private:
-	XINPUT_STATE m_PreviousState{};
-	XINPUT_STATE m_CurrentState{};
-	WORD m_ButtonsPressedThisFrame{};
-	WORD m_ButtonsReleasedThisFrame{};
+	int m_ControllerIndex;
+
+	class XInputImpl;
+	XInputImpl* m_Impl;
 };
 
