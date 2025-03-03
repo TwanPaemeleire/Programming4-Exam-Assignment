@@ -55,9 +55,7 @@ void InputManager::HandleControllerInput()
 }
 
 bool InputManager::HandleKeyBoardInput()
-{
-	const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL); // This Stores The Current State Of All Keys
-	
+{	
 	SDL_Event e;
 	while (SDL_PollEvent(&e))
 	{
