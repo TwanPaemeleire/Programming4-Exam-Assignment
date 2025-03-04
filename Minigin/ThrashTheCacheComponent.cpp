@@ -1,4 +1,4 @@
-#include "TrashTheCacheComponent.h"
+#include "ThrashTheCacheComponent.h"
 #include <algorithm>
 #include <chrono>
 #include <numeric>
@@ -7,7 +7,7 @@
 #include "backends/imgui_impl_opengl3.h"
 #include "imgui_plot.h"
 
-TrashTheCacheComponent::TrashTheCacheComponent(GameObject* owner)
+ThrashTheCacheComponent::ThrashTheCacheComponent(GameObject* owner)
 	: Component(owner), m_SizeIntArray{ int(pow(2, 26)) }, m_SizeGameObject3DArray{int(pow(2, 23))}, m_IntGraphColor{ImColor(255, 0, 0)}
 {
     m_IntArray = new int[m_SizeIntArray]{};
@@ -17,26 +17,22 @@ TrashTheCacheComponent::TrashTheCacheComponent(GameObject* owner)
     m_GameObjectColors[1] = ImColor(0, 0, 255);
 }
 
-TrashTheCacheComponent::~TrashTheCacheComponent()
+ThrashTheCacheComponent::~ThrashTheCacheComponent()
 {
     delete[] m_IntArray;
     delete[] m_GameObject3DArray;
     delete[] m_GameObject3DAltArray;
 }
 
-void TrashTheCacheComponent::Update()
+void ThrashTheCacheComponent::RenderUI()
 {
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplSDL2_NewFrame();
-    ImGui::NewFrame();
-    
     // ----- EXERCISE 1 -----
     if (ImGui::Begin("Exercise 1"))
     {
         ImGui::PushItemWidth(100);
         ImGui::InputInt("# samples", &m_SampleCountInt);
         ImGui::PopItemWidth();
-    
+
         if (m_IntButtonClicked)
         {
             CalculateIntTimings();
@@ -46,12 +42,12 @@ void TrashTheCacheComponent::Update()
             m_IntButtonClicked = true;
             m_ShowIntGraph = false;
             ImGui::Text("Wait For It...");
-        } 
+        }
         if (m_ShowIntGraph)
         {
             DrawExercise1Graph();
         }
-        
+
         ImGui::End();
     }
 
@@ -78,7 +74,7 @@ void TrashTheCacheComponent::Update()
         {
             DrawGameObject3DGraph();
         }
-        
+
         // ----- GameObject3DAlt -----
         if (m_GameObject3DAltButtonClicked)
         {
@@ -107,7 +103,7 @@ void TrashTheCacheComponent::Update()
     }
 }
 
-void TrashTheCacheComponent::CalculateIntTimings()
+void ThrashTheCacheComponent::CalculateIntTimings()
 {
     if (m_SampleCountInt == 0) return; // Avoid Zero-Division
     std::vector<std::chrono::milliseconds> sampleTimings{};
@@ -143,7 +139,7 @@ void TrashTheCacheComponent::CalculateIntTimings()
     m_ShowIntGraph = true;
 }
 
-void TrashTheCacheComponent::DrawExercise1Graph() const
+void ThrashTheCacheComponent::DrawExercise1Graph() const
 {
     ImGui::PlotConfig plotConfig;
     plotConfig.values.xs = m_StepSizes;
@@ -167,7 +163,7 @@ void TrashTheCacheComponent::DrawExercise1Graph() const
     ImGui::Plot("Int Array", plotConfig);
 }
 
-void TrashTheCacheComponent::CalculateGameObject3DTimings()
+void ThrashTheCacheComponent::CalculateGameObject3DTimings()
 {
     if (m_SampleCountGameObject3D == 0) return; // Avoid Zero-Division
     std::vector<std::chrono::milliseconds> sampleTimings{};
@@ -202,7 +198,7 @@ void TrashTheCacheComponent::CalculateGameObject3DTimings()
     m_ShowGameObject3DGraph = true;
 }
 
-void TrashTheCacheComponent::DrawGameObject3DGraph() const
+void ThrashTheCacheComponent::DrawGameObject3DGraph() const
 {
     if (!m_ShowGameObject3DGraph) return;
     ImGui::PlotConfig plotConfig;
@@ -227,7 +223,7 @@ void TrashTheCacheComponent::DrawGameObject3DGraph() const
     ImGui::Plot("GameObject3D", plotConfig);
 }
 
-void TrashTheCacheComponent::CalculateGameObject3DAltTimings()
+void ThrashTheCacheComponent::CalculateGameObject3DAltTimings()
 {
     if (m_SampleCountGameObject3D == 0) return; // Avoid Zero-Division
     std::vector<std::chrono::milliseconds> sampleTimings{};
@@ -261,7 +257,7 @@ void TrashTheCacheComponent::CalculateGameObject3DAltTimings()
     m_ShowGameObject3DAltGraph = true;
 }
 
-void TrashTheCacheComponent::DrawGameObject3DAltGraph() const
+void ThrashTheCacheComponent::DrawGameObject3DAltGraph() const
 {
     if (!m_ShowGameObject3DAltGraph) return;
     ImGui::PlotConfig plotConfig;
@@ -286,7 +282,7 @@ void TrashTheCacheComponent::DrawGameObject3DAltGraph() const
     ImGui::Plot("GameObject3DAlt", plotConfig);
 }
 
-void TrashTheCacheComponent::DrawExercise2CombinedGraph() const
+void ThrashTheCacheComponent::DrawExercise2CombinedGraph() const
 {
     if (!(m_ShowGameObject3DGraph && m_ShowGameObject3DAltGraph)) return;
     ImGui::PlotConfig plotConfig;

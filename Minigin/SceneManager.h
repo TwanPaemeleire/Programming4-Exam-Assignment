@@ -14,7 +14,8 @@ public:
 	void Update();
 	void FixedUpdate();
 	void LateUpdate();
-	void Render();
+	void Render() const;
+	void RenderUI();
 private:
 	friend class Singleton<SceneManager>;
 	SceneManager() = default;

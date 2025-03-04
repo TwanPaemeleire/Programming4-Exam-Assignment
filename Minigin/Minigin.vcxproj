@@ -207,7 +207,7 @@
     <ClInclude Include="Texture2D.h" />
     <ClInclude Include="Time.h" />
     <ClInclude Include="TransformComponent.h" />
-    <ClInclude Include="TrashTheCacheComponent.h" />
+    <ClInclude Include="ThrashTheCacheComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rdParty\imgui\backends\imgui_impl_opengl3.cpp" />
@@ -238,7 +238,7 @@
     <ClCompile Include="TextComponent.cpp" />
     <ClCompile Include="Texture2D.cpp" />
     <ClCompile Include="TransformComponent.cpp" />
-    <ClCompile Include="TrashTheCacheComponent.cpp" />
+    <ClCompile Include="ThrashTheCacheComponent.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

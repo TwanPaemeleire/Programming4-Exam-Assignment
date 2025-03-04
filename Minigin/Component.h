@@ -18,6 +18,7 @@ public:
 	virtual void FixedUpdate() {};
 	virtual void LateUpdate() {};
 	virtual void Render() const {};
+	virtual void RenderUI() {};
 
 	void MarkForDestruction() { m_MarkedForDestruction = true; }
 	bool IsMarkedForDestruction() const { return m_MarkedForDestruction; }

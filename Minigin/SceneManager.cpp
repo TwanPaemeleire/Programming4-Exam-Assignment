@@ -33,11 +33,20 @@ void SceneManager::LateUpdate()
 	}
 }
 
-void SceneManager::Render()
+
+void SceneManager::Render() const
 {
 	for (const auto& scene : m_Scenes)
 	{
 		scene->Render();
+	}
+}
+
+void SceneManager::RenderUI()
+{
+	for (const auto& scene : m_Scenes)
+	{
+		scene->RenderUI();
 	}
 }
 

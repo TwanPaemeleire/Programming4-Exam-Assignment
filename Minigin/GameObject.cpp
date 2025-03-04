@@ -68,6 +68,14 @@ void GameObject::Render() const
 	}
 }
 
+void GameObject::RenderUI()
+{
+	for (auto& component : m_Components)
+	{
+		component->RenderUI();
+	}
+}
+
 void GameObject::MarkForDestruction()
 {
 	// Mark All The Children (And As Such, Also Their Children) For Destruction As Well, As I Want Parent To Own Children

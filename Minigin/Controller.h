@@ -16,6 +16,6 @@ private:
 	int m_ControllerIndex;
 
 	class XInputImpl;
-	XInputImpl* m_Impl;
+	XInputImpl* m_pImpl;
 };
 

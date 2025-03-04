@@ -21,6 +21,7 @@ public:
 	void FixedUpdate();
 	void LateUpdate();
 	void Render() const;
+	void RenderUI();
 
 
 private:

@@ -25,18 +25,19 @@ public:
 	int ID{};
 };
 
-class TrashTheCacheComponent: public Component
+class ThrashTheCacheComponent: public Component
 {
 public:
 
-	TrashTheCacheComponent(GameObject* owner);
-	virtual ~TrashTheCacheComponent() override;
-	TrashTheCacheComponent(const TrashTheCacheComponent& other) = delete;
-	TrashTheCacheComponent(TrashTheCacheComponent&& other) = delete;
-	TrashTheCacheComponent& operator=(const TrashTheCacheComponent& other) = delete;
-	TrashTheCacheComponent& operator=(TrashTheCacheComponent&& other) = delete;
+	ThrashTheCacheComponent(GameObject* owner);
+	virtual ~ThrashTheCacheComponent() override;
+	ThrashTheCacheComponent(const ThrashTheCacheComponent& other) = delete;
+	ThrashTheCacheComponent(ThrashTheCacheComponent&& other) = delete;
+	ThrashTheCacheComponent& operator=(const ThrashTheCacheComponent& other) = delete;
+	ThrashTheCacheComponent& operator=(ThrashTheCacheComponent&& other) = delete;
 
-	virtual void Update() override;
+	virtual void Update() override {};
+	virtual void RenderUI() override;
 private:
 	void CalculateIntTimings();
 	void DrawExercise1Graph() const;

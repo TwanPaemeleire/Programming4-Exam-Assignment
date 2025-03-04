@@ -24,32 +24,32 @@ private:
 };
 
 Controller::Controller(int controllerIndex)
-	:m_ControllerIndex{controllerIndex}, m_Impl{new XInputImpl(this)}
+	:m_ControllerIndex{controllerIndex}, m_pImpl{new XInputImpl(this)}
 {
 	
 }
 
 Controller::~Controller()
 {
-	delete m_Impl;
+	delete m_pImpl;
 }
 
 void Controller::ProcessInput()
 {
-	m_Impl->ProcessInput();
+	m_pImpl->ProcessInput();
 }
 
 bool Controller::IsDownThisFrame(unsigned int button) const
 {
-	return m_Impl->IsDownThisFrame(button);
+	return m_pImpl->IsDownThisFrame(button);
 }
 bool Controller::IsUpThisFrame(unsigned int button) const
 {
-	return m_Impl->IsUpThisFrame(button);
+	return m_pImpl->IsUpThisFrame(button);
 }
 bool Controller::IsPressed(unsigned int button) const
 {
-	return m_Impl->IsPressed(button);
+	return m_pImpl->IsPressed(button);
 }
 
 int Controller::GetControllerIndex() const
