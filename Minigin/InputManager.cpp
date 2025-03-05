@@ -63,44 +63,52 @@ bool InputManager::HandleKeyBoardInput()
 		{
 			return false;
 		}
-	
-		for (const auto& command : m_BindedCommands)
+
+		if (e.type == SDL_KEYUP || e.type == SDL_KEYDOWN)
 		{
-			if (command->controllerIndex != -1) // If Index Is Not -1 Then This Command Is Binded To A Controller
-				continue;
-			if (e.key.keysym.sym != static_cast<SDL_Keycode>(command->button)) // Check If Command Key Is The Same As The Key We're Currently Checking
-				continue;
-	
-			bool executeCommand = false;
-	
-			switch (command->interactionState)  // Check If Correct InteractionState Is Achieved
+			for (const auto& command : m_BindedCommands)
 			{
-			case InteractionStates::down:
-				if (e.type == SDL_KEYDOWN && e.key.repeat == 0)
+				if (command->controllerIndex != -1) // If Index Is Not -1 Then This Command Is Binded To A Controller
+					continue;
+				if (e.key.keysym.sym != static_cast<SDL_Keycode>(command->button)) // Check If Command Key Is The Same As The Key We're Currently Checking
+					continue;
+
+				switch (command->interactionState)
 				{
-					executeCommand = true;
+				case InteractionStates::down:
+					if (e.type == SDL_KEYDOWN && e.key.repeat == 0)
+					{
+						command->command->Execute();
+					}
+					break;
+
+				case InteractionStates::up:
+					if (e.type == SDL_KEYUP)
+					{
+						command->command->Execute();
+					}
+					break;
+
+				default:
+					break;
 				}
-				break;
-			case InteractionStates::up:
-				if (e.type == SDL_KEYUP)
-				{
-					executeCommand = true;
-				}
-				break;
-			case InteractionStates::pressed:
-				if (e.type == SDL_KEYDOWN)
-				{
-					executeCommand = true;
-				}
-				break;
-			}
-	
-			if (executeCommand) // Execute The Command If InteractionState Was Achieved
-			{
-				command->command->Execute();
 			}
 		}
 		ImGui_ImplSDL2_ProcessEvent(&e);
+	}
+
+
+	const Uint8* keyStates = SDL_GetKeyboardState(NULL);
+
+	for (const auto& command : m_BindedCommands)
+	{
+		if (command->controllerIndex != -1) continue;  // If Index Is Not -1 Then This Command Is Binded To A Controller
+		if (command->interactionState != InteractionStates::pressed) continue; // Check If This Command Has The "Pressed" Interaction State
+
+		if (keyStates[SDL_GetScancodeFromKey(command->button)]) // Check If Command Key Is Currently Being Pressed Down
+		{
+			command->command->Execute();
+		}
 	}
 	return true;
 }
