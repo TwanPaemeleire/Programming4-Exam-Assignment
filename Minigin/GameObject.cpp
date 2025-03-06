@@ -120,6 +120,7 @@ bool GameObject::IsChild(GameObject* objectToCheck)
 	for (auto& child : m_Children)
 	{
 		if (child == objectToCheck) return true;
+		if (child->IsChild(objectToCheck)) return true;
 	}
 	return false;
 }

@@ -29,6 +29,8 @@ public:
 
 	template <typename command>
 	command* BindCommandToInput(unsigned int button ,InteractionStates interactionState, GameObject* gameObject, int controllerIndex);
+	template <typename command>
+	void RemoveBindedCommand(int controllerIndex);
 
 private:
 	void HandleControllerInput();
@@ -38,20 +40,34 @@ private:
 	std::vector<std::unique_ptr<BindedCommand>> m_BindedCommands;
 };
 
-template<typename command>
-inline command* InputManager::BindCommandToInput(unsigned int button, InteractionStates interactionState, GameObject* gameObject, int controllerIndex)
+template<typename T>
+inline T* InputManager::BindCommandToInput(unsigned int button, InteractionStates interactionState, GameObject* gameObject, int controllerIndex)
 {
-	static_assert(std::is_base_of<GameObjectCommand, command>::value, "Type passed to BindCommandToInput<>() does NOT inherit from Command");
+	static_assert(std::is_base_of<GameObjectCommand, T>::value, "Type passed to BindCommandToInput<>() does NOT inherit from Command");
 
 	std::unique_ptr<BindedCommand> newBindedCommand = std::make_unique<BindedCommand>();
 	newBindedCommand->button = button;
 
-	std::unique_ptr<command> tempCommandUPtr = std::make_unique<command>(gameObject);
-	command* tempRawPointer = tempCommandUPtr.get();
+	std::unique_ptr<T> tempCommandUPtr = std::make_unique<T>(gameObject);
+	T* tempRawPointer = tempCommandUPtr.get();
 	newBindedCommand->command = std::move(tempCommandUPtr);
 
 	newBindedCommand->interactionState = interactionState;
 	newBindedCommand->controllerIndex = controllerIndex;
 	m_BindedCommands.emplace_back(std::move(newBindedCommand));
 	return tempRawPointer;
+}
+
+template<typename T>
+inline void InputManager::RemoveBindedCommand(int controllerIndex)
+{
+	for (const auto& command : m_BindedCommands)
+	{
+		if (command->controllerIndex != controllerIndex) continue;
+		T* tempCommand = dynamic_cast<T*>(command->command.get());
+		if (tempCommand != nullptr) // If This Goes Through, This Is The Command That Should Be Removed
+		{
+			m_BindedCommands.erase(std::remove(m_BindedCommands.begin(), m_BindedCommands.end(), command), m_BindedCommands.end());
+		}
+	}	
 }
