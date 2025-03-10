@@ -1,5 +1,7 @@
 #pragma once
 #include "Component.h"
+#include <memory>
+class Subject;
 
 class HealthComponent: public Component
 {
@@ -24,5 +26,7 @@ private:
 	int m_MaxLives{};
 	int m_Lives{};
 	bool m_IsAlive{true};
+
+	std::unique_ptr<Subject> m_ObjectDiedEvent;
 };
 

@@ -1,9 +1,9 @@
 #pragma once
 #include <vector>
+#include "GameEvents.h"
 
 class Observer;
 class GameObject;
-struct Event;
 
 class Subject
 {
@@ -11,7 +11,7 @@ public:
 	void AddObserver(Observer* observer);
 	void RemoveObserver(Observer* observer);
 
-	void NotifyObservers(Event event, GameObject observedObject);
+	void NotifyObservers(GameEvent event, GameObject* observedObject);
 
 private:
 	std::vector<Observer*> m_Observers;

@@ -1,12 +1,12 @@
 #pragma once
 
 class GameObject;
-struct Event;
+#include "GameEvents.h"
 
 class Observer
 {
 public:
 	virtual ~Observer() = default;
-	virtual void Notify(Event event, GameObject* observedObject) = 0;
+	virtual void Notify(GameEvent event, GameObject* observedObject) = 0;
 };
 
