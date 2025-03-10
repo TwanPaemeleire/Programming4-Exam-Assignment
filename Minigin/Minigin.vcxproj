@@ -193,7 +193,7 @@
     <ClInclude Include="FPSComponent.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameObjectCommand.h" />
-    <ClInclude Include="MoveCommands.h" />
+    <ClInclude Include="MoveCommand.h" />
     <ClInclude Include="RotationAroundPointComponent.h" />
     <ClInclude Include="TextureRenderComponent.h" />
     <ClInclude Include="InputManager.h" />
@@ -225,7 +225,7 @@
     <ClCompile Include="FPSComponent.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameObjectCommand.cpp" />
-    <ClCompile Include="MoveCommands.cpp" />
+    <ClCompile Include="MoveCommand.cpp" />
     <ClCompile Include="RotationAroundPointComponent.cpp" />
     <ClCompile Include="TextureRenderComponent.cpp" />
     <ClCompile Include="InputManager.cpp" />

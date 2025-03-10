@@ -43,7 +43,7 @@ private:
 template<typename T>
 inline T* InputManager::BindCommandToInput(unsigned int button, InteractionStates interactionState, GameObject* gameObject, int controllerIndex)
 {
-	static_assert(std::is_base_of<GameObjectCommand, T>::value, "Type passed to BindCommandToInput<>() does NOT inherit from Command");
+	static_assert(std::is_base_of<GameObjectCommand, T>::value, "Type passed to BindCommandToInput<>() does NOT inherit from GameObjectCommand");
 
 	std::unique_ptr<BindedCommand> newBindedCommand = std::make_unique<BindedCommand>();
 	newBindedCommand->button = button;
