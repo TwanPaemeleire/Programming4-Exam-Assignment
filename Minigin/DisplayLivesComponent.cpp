@@ -1,6 +1,7 @@
 #include "DisplayLivesComponent.h"
 #include "GameObject.h"
 #include "TextComponent.h"
+#include "HealthComponent.h"
 
 DisplayLivesComponent::DisplayLivesComponent(GameObject* owner)
 	:Component(owner)
@@ -12,7 +13,10 @@ void DisplayLivesComponent::Start()
 	m_TextComponent = GetOwner()->GetComponent<TextComponent>();
 }
 
-void DisplayLivesComponent::OnPlayerDeath()
+void DisplayLivesComponent::Notify(GameEvent event, GameObject* observedObject)
 {
-	m_TextComponent->SetText("# Lives: ");
+	if (event == GameEvent::PlayerDied)
+	{
+		m_TextComponent->SetText("# Lives: " + std::to_string(observedObject->GetComponent<HealthComponent>()->GetLives()));
+	}
 }

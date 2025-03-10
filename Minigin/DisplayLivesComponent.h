@@ -15,7 +15,7 @@ public:
 	DisplayLivesComponent& operator=(DisplayLivesComponent&& other) = delete;
 
 	virtual void Start() override;
-	void OnPlayerDeath();
+	virtual void Notify(GameEvent event, GameObject* observedObject) override;
 
 private:
 	TextComponent* m_TextComponent{};

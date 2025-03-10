@@ -13,7 +13,7 @@ void HealthComponent::TakeDamage(int amount)
 	if (m_CurrentHealth <= 0) // Has Died
 	{
 		m_CurrentHealth = 0;
-		m_IsAlive = false;
+		--m_Lives;
 		m_ObjectDiedEvent->NotifyObservers(GameEvent::PlayerDied, GetOwner());
 	}
 }
