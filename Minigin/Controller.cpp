@@ -1,5 +1,4 @@
 #include "Controller.h"
-#include <iostream>
 
 #include "Windows.h"
 #include "Xinput.h"
@@ -7,12 +6,14 @@
 class Controller::XInputImpl
 {
 public:
-	XInputImpl(Controller* controller) :m_Controller{ controller } {};
+	XInputImpl(int controllerIndex) :m_ControllerIndex{ controllerIndex } {};
 
 	void ProcessInput();
 	bool IsDownThisFrame(unsigned int button) const;
 	bool IsUpThisFrame(unsigned int button) const;
 	bool IsPressed(unsigned int button) const;
+
+	int GetControllerIndex() const;
 
 private:
 	XINPUT_STATE m_PreviousState{};
@@ -20,13 +21,13 @@ private:
 	WORD m_ButtonsPressedThisFrame{};
 	WORD m_ButtonsReleasedThisFrame{};
 
-	Controller* m_Controller;
+	int m_ControllerIndex{};
 };
 
 Controller::Controller(int controllerIndex)
-	:m_ControllerIndex{controllerIndex}, m_pImpl{new XInputImpl(this)}
+	:m_pImpl{new XInputImpl(controllerIndex)}
 {
-	
+
 }
 
 Controller::~Controller()
@@ -54,14 +55,14 @@ bool Controller::IsPressed(unsigned int button) const
 
 int Controller::GetControllerIndex() const
 {
-	return m_ControllerIndex;
+	return m_pImpl->GetControllerIndex();;
 }
 
 void Controller::XInputImpl::ProcessInput()
 {
 	CopyMemory(&m_PreviousState, &m_CurrentState, sizeof(XINPUT_STATE));
 	ZeroMemory(&m_CurrentState, sizeof(XINPUT_STATE));
-	XInputGetState(m_Controller->GetControllerIndex(), &m_CurrentState);
+	XInputGetState(m_ControllerIndex, &m_CurrentState);
 
 	auto buttonChanges = m_CurrentState.Gamepad.wButtons ^ m_PreviousState.Gamepad.wButtons;
 	m_ButtonsPressedThisFrame = buttonChanges & m_CurrentState.Gamepad.wButtons;
@@ -81,4 +82,9 @@ bool Controller::XInputImpl::IsUpThisFrame(unsigned int button) const
 bool Controller::XInputImpl::IsPressed(unsigned int button) const
 {
 	return m_CurrentState.Gamepad.wButtons & button;
+}
+
+int Controller::XInputImpl::GetControllerIndex() const
+{
+	return m_ControllerIndex;
 }

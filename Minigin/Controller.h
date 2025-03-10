@@ -1,10 +1,15 @@
 #pragma once
+#include <memory>
 
 class Controller final
 {
 public:
 	Controller(int controllerIndex);
 	~Controller();
+	Controller(const Controller& other) = delete;
+	Controller(Controller&& other) = delete;
+	Controller& operator=(const Controller& other) = delete;
+	Controller& operator=(Controller&& other) = delete;
 
 	void ProcessInput();
 	bool IsDownThisFrame(unsigned int button) const;
@@ -13,8 +18,6 @@ public:
 
 	int GetControllerIndex() const;
 private:
-	int m_ControllerIndex;
-
 	class XInputImpl;
 	XInputImpl* m_pImpl;
 };
