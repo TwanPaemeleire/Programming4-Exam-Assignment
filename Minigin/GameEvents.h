@@ -1,5 +1,5 @@
 #pragma once
 enum class GameEvent
 {
-	PlayerDied
+	PlayerDied, PointsChanged
 };

@@ -9,8 +9,9 @@ HealthComponent::HealthComponent(GameObject* owner)
 
 void HealthComponent::TakeDamage(int amount)
 {
+	if (m_Lives <= 0) return; // Object Is Out Of Lives
 	m_CurrentHealth -= amount;
-	if (m_CurrentHealth <= 0) // Has Died
+	if (m_CurrentHealth <= 0) // Object Has Died
 	{
 		m_CurrentHealth = 0;
 		--m_Lives;
