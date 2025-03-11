@@ -151,7 +151,10 @@
       <Filter>Header Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="DisplayPointsComponent.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="IncreaseScoreCommand.h">
+      <Filter>Header Files\Commands</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -261,7 +264,10 @@
       <Filter>Source Files\Components</Filter>
     </ClCompile>
     <ClCompile Include="DisplayPointsComponent.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="IncreaseScoreCommand.cpp">
+      <Filter>Source Files\Commands</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

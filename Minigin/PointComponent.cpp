@@ -4,6 +4,7 @@
 PointComponent::PointComponent(GameObject* owner)
 	:Component(owner)
 {
+	m_ScoreChangedEvent = std::make_unique<Subject>();
 }
 
 void PointComponent::ChangePoints(int amount)

@@ -16,6 +16,8 @@ public:
 	void ChangePoints(int amount);
 	void SetPoints(int points);
 	int GetPoints() const { return m_Points; }
+
+	Subject* GetScoreChangedEvent() const { return m_ScoreChangedEvent.get(); }
 private:
 	int m_Points{};
 	std::unique_ptr<Subject> m_ScoreChangedEvent;

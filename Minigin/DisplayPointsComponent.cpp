@@ -15,7 +15,7 @@ void DisplayPointsComponent::Start()
 
 void DisplayPointsComponent::Notify(GameEvent event, GameObject* observedObject)
 {
-	if (event == GameEvent::PlayerDied)
+	if (event == GameEvent::PointsChanged)
 	{
 		m_TextComponent->SetText("Score: " + std::to_string(observedObject->GetComponent<PointComponent>()->GetPoints()));
 	}

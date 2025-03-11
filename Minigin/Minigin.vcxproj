@@ -197,6 +197,7 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameObjectCommand.h" />
     <ClInclude Include="HealthComponent.h" />
+    <ClInclude Include="IncreaseScoreCommand.h" />
     <ClInclude Include="KillObjectCommand.h" />
     <ClInclude Include="MoveCommand.h" />
     <ClInclude Include="Observer.h" />
@@ -236,6 +237,7 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameObjectCommand.cpp" />
     <ClCompile Include="HealthComponent.cpp" />
+    <ClCompile Include="IncreaseScoreCommand.cpp" />
     <ClCompile Include="KillObjectCommand.cpp" />
     <ClCompile Include="MoveCommand.cpp" />
     <ClCompile Include="Observer.cpp" />
