@@ -11,6 +11,7 @@ DisplayPointsComponent::DisplayPointsComponent(GameObject* owner)
 void DisplayPointsComponent::Start()
 {
 	m_TextComponent = GetOwner()->GetComponent<TextComponent>();
+	m_TextComponent->SetText("Score: 0");
 }
 
 void DisplayPointsComponent::Notify(GameEvent event, GameObject* observedObject)

@@ -11,6 +11,7 @@ DisplayLivesComponent::DisplayLivesComponent(GameObject* owner)
 void DisplayLivesComponent::Start()
 {
 	m_TextComponent = GetOwner()->GetComponent<TextComponent>();
+	m_TextComponent->SetText("# Lives: 3");
 }
 
 void DisplayLivesComponent::Notify(GameEvent event, GameObject* observedObject)
