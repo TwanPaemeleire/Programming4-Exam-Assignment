@@ -9,4 +9,3 @@ public:
 	virtual ~Observer() = default;
 	virtual void Notify(GameEvent event, GameObject* observedObject) = 0;
 };
-

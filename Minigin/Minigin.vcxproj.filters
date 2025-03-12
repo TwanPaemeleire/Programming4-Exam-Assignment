@@ -28,11 +28,11 @@
     <Filter Include="Source Files\Commands">
       <UniqueIdentifier>{96a790c6-2558-4372-87f4-2473317cd533}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Observer">
-      <UniqueIdentifier>{69f1c678-f083-4a8a-bb66-18dd1dd41533}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Observer">
       <UniqueIdentifier>{b378cc58-08cb-4558-aba0-7784a62530a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Observer">
+      <UniqueIdentifier>{69f1c678-f083-4a8a-bb66-18dd1dd41533}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
