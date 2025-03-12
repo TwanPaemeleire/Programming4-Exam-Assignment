@@ -1,10 +1,10 @@
 #include "PointComponent.h"
-#include "Subject.h"
+#include "Event.h"
 
 PointComponent::PointComponent(GameObject* owner)
 	:Component(owner)
 {
-	m_ScoreChangedEvent = std::make_unique<Subject>();
+	m_ScoreChangedEvent = std::make_unique<Event>();
 }
 
 void PointComponent::ChangePoints(int amount)

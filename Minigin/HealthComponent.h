@@ -1,7 +1,7 @@
 #pragma once
 #include "Component.h"
 #include <memory>
-class Subject;
+class Event;
 
 class HealthComponent: public Component
 {
@@ -20,7 +20,7 @@ public:
 	void TakeDamage(int amount);
 	void Kill();
 
-	Subject* GetObjectDiedEvent() const { return m_ObjectDiedEvent.get(); }
+	Event* GetObjectDiedEvent() const { return m_ObjectDiedEvent.get(); }
 
 private:
 	int m_MaxHealth{};
@@ -28,6 +28,6 @@ private:
 	int m_MaxLives{};
 	int m_Lives{};
 
-	std::unique_ptr<Subject> m_ObjectDiedEvent;
+	std::unique_ptr<Event> m_ObjectDiedEvent;
 };
 

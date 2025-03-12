@@ -1,7 +1,7 @@
 #pragma once
 #include "Component.h"
 #include <memory>
-class Subject;
+class Event;
 
 class PointComponent : public Component
 {
@@ -17,9 +17,9 @@ public:
 	void SetPoints(int points);
 	int GetPoints() const { return m_Points; }
 
-	Subject* GetScoreChangedEvent() const { return m_ScoreChangedEvent.get(); }
+	Event* GetScoreChangedEvent() const { return m_ScoreChangedEvent.get(); }
 private:
 	int m_Points{};
-	std::unique_ptr<Subject> m_ScoreChangedEvent;
+	std::unique_ptr<Event> m_ScoreChangedEvent;
 };
 

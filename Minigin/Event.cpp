@@ -1,18 +1,18 @@
-#include "Subject.h"
+#include "Event.h"
 #include "GameObject.h"
 #include "Observer.h"
 
-void Subject::AddObserver(Observer* observer)
+void Event::AddObserver(Observer* observer)
 {
 	m_Observers.push_back(observer);
 }
 
-void Subject::RemoveObserver(Observer* observer)
+void Event::RemoveObserver(Observer* observer)
 {
 	m_Observers.erase(std::remove(m_Observers.begin(), m_Observers.end(), observer), m_Observers.end());
 }
 
-void Subject::NotifyObservers(GameEvent event, GameObject* observedObject)
+void Event::NotifyObservers(GameEvent event, GameObject* observedObject)
 {
 	for (auto observer : m_Observers)
 	{

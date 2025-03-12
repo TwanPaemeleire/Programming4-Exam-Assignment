@@ -203,7 +203,7 @@
     <ClInclude Include="Observer.h" />
     <ClInclude Include="PointComponent.h" />
     <ClInclude Include="RotationAroundPointComponent.h" />
-    <ClInclude Include="Subject.h" />
+    <ClInclude Include="Event.h" />
     <ClInclude Include="TextureRenderComponent.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Minigin.h" />
@@ -243,7 +243,7 @@
     <ClCompile Include="Observer.cpp" />
     <ClCompile Include="PointComponent.cpp" />
     <ClCompile Include="RotationAroundPointComponent.cpp" />
-    <ClCompile Include="Subject.cpp" />
+    <ClCompile Include="Event.cpp" />
     <ClCompile Include="TextureRenderComponent.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Main.cpp" />

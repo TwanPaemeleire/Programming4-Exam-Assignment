@@ -5,7 +5,7 @@
 class Observer;
 class GameObject;
 
-class Subject
+class Event
 {
 public:
 	void AddObserver(Observer* observer);

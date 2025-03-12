@@ -129,7 +129,7 @@
     <ClInclude Include="MoveCommand.h">
       <Filter>Header Files\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="Subject.h">
+    <ClInclude Include="Event.h">
       <Filter>Header Files\Observer</Filter>
     </ClInclude>
     <ClInclude Include="HealthComponent.h">
@@ -245,7 +245,7 @@
     <ClCompile Include="MoveCommand.cpp">
       <Filter>Source Files\Commands</Filter>
     </ClCompile>
-    <ClCompile Include="Subject.cpp">
+    <ClCompile Include="Event.cpp">
       <Filter>Source Files\Observer</Filter>
     </ClCompile>
     <ClCompile Include="HealthComponent.cpp">
