@@ -4,7 +4,7 @@
 
 class TextComponent;
 
-class DisplayLivesComponent : public Component, public Observer
+class DisplayLivesComponent final : public Component, public Observer
 {
 public:
 	DisplayLivesComponent(GameObject* owner);

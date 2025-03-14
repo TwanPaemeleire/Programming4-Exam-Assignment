@@ -4,7 +4,7 @@
 
 class TextComponent;
 
-class DisplayPointsComponent : public Component, public Observer
+class DisplayPointsComponent final : public Component, public Observer
 {
 public:
 	DisplayPointsComponent(GameObject* owner);

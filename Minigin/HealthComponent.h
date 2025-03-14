@@ -3,7 +3,7 @@
 #include <memory>
 class Event;
 
-class HealthComponent: public Component
+class HealthComponent final: public Component
 {
 public:
 	HealthComponent(GameObject* owner);

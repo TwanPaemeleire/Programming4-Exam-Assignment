@@ -202,7 +202,7 @@ copy "$(SolutionDir)3rdParty\steamworks\steam_appid.txt" "$(TargetDir)"</Command
     <ClInclude Include="..\3rdParty\imgui\imstb_rectpack.h" />
     <ClInclude Include="..\3rdParty\imgui\imstb_textedit.h" />
     <ClInclude Include="..\3rdParty\imgui\imstb_truetype.h" />
-    <ClInclude Include="AchievementComponent.h" />
+    <ClInclude Include="AchievementTracker.h" />
     <ClInclude Include="Command.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="Controller.h" />
@@ -244,7 +244,7 @@ copy "$(SolutionDir)3rdParty\steamworks\steam_appid.txt" "$(TargetDir)"</Command
     <ClCompile Include="..\3rdParty\imgui\imgui_plot.cpp" />
     <ClCompile Include="..\3rdParty\imgui\imgui_tables.cpp" />
     <ClCompile Include="..\3rdParty\imgui\imgui_widgets.cpp" />
-    <ClCompile Include="AchievementComponent.cpp" />
+    <ClCompile Include="AchievementTracker.cpp" />
     <ClCompile Include="Command.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="Controller.cpp" />
