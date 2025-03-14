@@ -3,7 +3,7 @@
 #include <memory>
 class Event;
 
-class PointComponent : public Component
+class PointComponent final: public Component
 {
 public:
 	PointComponent(GameObject* owner);
