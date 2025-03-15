@@ -156,8 +156,8 @@
     <ClInclude Include="IncreaseScoreCommand.h">
       <Filter>Header Files\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="AchievementComponent.h">
-      <Filter>Header Files\Components</Filter>
+    <ClInclude Include="AchievementTracker.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -272,8 +272,8 @@
     <ClCompile Include="IncreaseScoreCommand.cpp">
       <Filter>Source Files\Commands</Filter>
     </ClCompile>
-    <ClCompile Include="AchievementComponent.cpp">
-      <Filter>Source Files\Components</Filter>
+    <ClCompile Include="AchievementTracker.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
