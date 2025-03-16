@@ -71,21 +71,36 @@ void Renderer::Destroy()
 
 void Renderer::RenderTexture(const Texture2D& texture, const float x, const float y) const
 {
-	SDL_Rect dst{};
-	dst.x = static_cast<int>(x);
-	dst.y = static_cast<int>(y);
-	SDL_QueryTexture(texture.GetSDLTexture(), nullptr, nullptr, &dst.w, &dst.h);
-	SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst);
+	SDL_Rect dstRect{};
+	dstRect.x = static_cast<int>(x);
+	dstRect.y = static_cast<int>(y);
+	SDL_QueryTexture(texture.GetSDLTexture(), nullptr, nullptr, &dstRect.w, &dstRect.h);
+	SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dstRect);
 }
 
-void Renderer::RenderTexture(const Texture2D& texture, const float x, const float y, const float width, const float height) const
+void Renderer::RenderTexture(const Texture2D& texture, const float x, const float y, const float dstWidth, const float dstHeight) const
 {
-	SDL_Rect dst{};
-	dst.x = static_cast<int>(x);
-	dst.y = static_cast<int>(y);
-	dst.w = static_cast<int>(width);
-	dst.h = static_cast<int>(height);
-	SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst);
+	SDL_Rect dstRect{};
+	dstRect.x = static_cast<int>(x);
+	dstRect.y = static_cast<int>(y);
+	dstRect.w = static_cast<int>(dstWidth);
+	dstRect.h = static_cast<int>(dstHeight);
+	SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dstRect);
+}
+
+void Renderer::RenderTextureRect(const Texture2D& texture, float x, float y, float srcX, float srcY, float srcWidth, float srcHeight)
+{
+	SDL_Rect srcRect{};
+	srcRect.x = static_cast<int>(srcX);
+	srcRect.y = static_cast<int>(srcY);
+	srcRect.w = static_cast<int>(srcWidth);
+	srcRect.h = static_cast<int>(srcHeight);
+	SDL_Rect dstRect{};
+	dstRect.x = static_cast<int>(x);
+	dstRect.y = static_cast<int>(y);
+	dstRect.w = static_cast<int>(srcWidth);
+	dstRect.h = static_cast<int>(srcHeight);
+	SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), &srcRect, &dstRect);
 }
 
 SDL_Renderer* Renderer::GetSDLRenderer() const { return m_Renderer; }
