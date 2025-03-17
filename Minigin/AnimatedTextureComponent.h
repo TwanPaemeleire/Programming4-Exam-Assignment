@@ -2,10 +2,10 @@
 #include "Component.h"
 #include <string>
 
-
 namespace Twengine
 {
 	class Texture2D;
+
 	class AnimatedTextureComponent : public Component
 	{
 	public:
@@ -23,7 +23,7 @@ namespace Twengine
 		void PlayAnimation(int row, int amountOfFrames, float frameDelay = 0.2f, int repeatStartColumn = 0);
 
 	private:
-		Twengine::Texture2D* m_SpriteSheet{};
+		Texture2D* m_SpriteSheet{};
 
 		// Spritesheet General
 		float m_FrameWidth{};

@@ -2,10 +2,10 @@
 #include <SDL.h>
 #include "Singleton.h"
 
-
 namespace Twengine
 {
 	class Texture2D;
+
 	class Renderer final : public Singleton<Renderer>
 	{
 	public:

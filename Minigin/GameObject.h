@@ -3,9 +3,6 @@
 #include <vector>
 #include "TransformComponent.h"
 
-class Component;
-class Texture2D;
-
 namespace Twengine
 {
 	class GameObject final

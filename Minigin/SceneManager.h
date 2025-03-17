@@ -4,14 +4,13 @@
 #include <memory>
 #include "Singleton.h"
 
-
 namespace Twengine
 {
 	class Scene;
 	class SceneManager final : public Singleton<SceneManager>
 	{
 	public:
-		Twengine::Scene& CreateScene(const std::string& name);
+		Scene& CreateScene(const std::string& name);
 
 		void Start();
 		void Update();

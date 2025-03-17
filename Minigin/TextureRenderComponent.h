@@ -6,6 +6,7 @@
 namespace Twengine
 {
 	class Texture2D;
+
 	class TextureRenderComponent final : public Component
 	{
 	public:

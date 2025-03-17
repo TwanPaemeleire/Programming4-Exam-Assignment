@@ -1,14 +1,14 @@
 #pragma once
-
-class GameObject;
 #include "GameEvents.h"
 
 namespace Twengine
 {
+	class GameObject;
+
 	class Observer
 	{
 	public:
 		virtual ~Observer() = default;
-		virtual void Notify(GameEvent event, Twengine::GameObject* observedObject) = 0;
+		virtual void Notify(GameEvent event, GameObject* observedObject) = 0;
 	};
 }

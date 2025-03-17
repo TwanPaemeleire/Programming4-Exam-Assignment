@@ -12,7 +12,7 @@ RotationAroundPointComponent::RotationAroundPointComponent(Twengine::GameObject*
 void RotationAroundPointComponent::Update()
 {
     static constexpr float twoPi = 2.f * static_cast<float>(M_PI);
-    m_Angle += m_Speed * Time::GetInstance().deltaTime;
+    m_Angle += m_Speed * Twengine::Time::GetInstance().deltaTime;
 
     if (m_Angle > twoPi)
     {

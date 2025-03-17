@@ -4,6 +4,7 @@ namespace Twengine
 {
 	class GameObject;
 	class TransformComponent;
+
 	class Component
 	{
 	public:

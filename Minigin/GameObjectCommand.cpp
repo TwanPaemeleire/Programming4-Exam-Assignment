@@ -4,7 +4,3 @@ Twengine::GameObjectCommand::GameObjectCommand(GameObject* gameObject)
 	:m_GameObject{gameObject}
 {
 }
-
-Twengine::GameObjectCommand::~GameObjectCommand()
-{
-}

@@ -6,7 +6,7 @@
 #include <sstream>
 #include <iomanip> // Needed To Set The Precision
 
-Twengine::FPSComponent::FPSComponent(Twengine::GameObject* owner)
+Twengine::FPSComponent::FPSComponent(GameObject* owner)
 	:Component(owner)
 {
 }

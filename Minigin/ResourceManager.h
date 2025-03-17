@@ -14,7 +14,7 @@ namespace Twengine
 	{
 	public:
 		void Init(const std::filesystem::path& data);
-		Twengine::Texture2D* LoadTexture(const std::string& file);
+		Texture2D* LoadTexture(const std::string& file);
 		Font* LoadFont(const std::string& file, uint8_t size);
 	private:
 		friend class Singleton<ResourceManager>;

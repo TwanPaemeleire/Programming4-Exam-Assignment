@@ -9,7 +9,7 @@ namespace Twengine
 	{
 	public:
 		GameObjectCommand(GameObject* gameObject);
-		virtual ~GameObjectCommand();
+		virtual ~GameObjectCommand() = default;
 	protected:
 		GameObject* GetGameObject() const { return m_GameObject; }
 	private:

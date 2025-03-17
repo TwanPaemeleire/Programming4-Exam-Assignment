@@ -53,9 +53,9 @@ inline T* Twengine::InputManager::BindCommandToInput(unsigned int button, Twengi
 	std::unique_ptr<BindedCommand> newBindedCommand = std::make_unique<BindedCommand>();
 	newBindedCommand->button = button;
 
-	std::unique_ptr<T> tempCommandUPtr = std::make_unique<T>(gameObject);
-	T* tempRawPointer = tempCommandUPtr.get();
-	newBindedCommand->command = std::move(tempCommandUPtr);
+	std::unique_ptr<T> tempCommandUptr = std::make_unique<T>(gameObject);
+	T* tempRawPointer = tempCommandUptr.get();
+	newBindedCommand->command = std::move(tempCommandUptr);
 
 	newBindedCommand->interactionState = interactionState;
 	newBindedCommand->controllerIndex = controllerIndex;

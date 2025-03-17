@@ -21,6 +21,5 @@ private:
 	float m_Radius{};
 	float m_Speed{};
 	float m_Angle{};
-
 };
 

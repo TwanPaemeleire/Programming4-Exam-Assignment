@@ -4,15 +4,15 @@
 #include "Component.h"
 #include <SDL_ttf.h>
 
-
 namespace Twengine
 {
 	class Font;
 	class Texture2D;
-	class TextComponent final : public Twengine::Component
+
+	class TextComponent final : public Component
 	{
 	public:
-		TextComponent(Twengine::GameObject* owner);
+		TextComponent(GameObject* owner);
 		virtual ~TextComponent() = default;
 		TextComponent(const TextComponent& other) = delete;
 		TextComponent(TextComponent&& other) = delete;
@@ -23,14 +23,14 @@ namespace Twengine
 		virtual void Render() const override;
 
 		void SetText(const std::string& text);
-		void SetFont(Twengine::Font* font);
+		void SetFont(Font* font);
 		void SetColor(int r, int g, int b, int a = 255);
 
 	private:
 		bool m_NeedsUpdate;
 		std::string m_Text;
 		Font* m_Font;
-		std::unique_ptr<Twengine::Texture2D> m_TextTexture;
+		std::unique_ptr<Texture2D> m_TextTexture;
 		SDL_Color m_TextColor;
 	};
 }

@@ -6,7 +6,7 @@ namespace Twengine
 {
 	class Scene final
 	{
-		friend Twengine::Scene& Twengine::SceneManager::CreateScene(const std::string& name);
+		friend Scene& SceneManager::CreateScene(const std::string& name);
 	public:
 		~Scene();
 		Scene(const Scene& other) = delete;

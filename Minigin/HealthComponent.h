@@ -6,6 +6,7 @@ namespace Twengine
 { 
 	class Event; 
 }
+
 class HealthComponent final: public Twengine::Component
 {
 public:
