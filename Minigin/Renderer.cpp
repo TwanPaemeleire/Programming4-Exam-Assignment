@@ -20,7 +20,7 @@ int GetOpenGLDriverIndex()
 	return openglIndex;
 }
 
-void Renderer::Init(SDL_Window* window)
+void Twengine::Renderer::Init(SDL_Window* window)
 {
 	m_Window = window;
 	m_Renderer = SDL_CreateRenderer(window, GetOpenGLDriverIndex(), SDL_RENDERER_ACCELERATED);
@@ -35,7 +35,7 @@ void Renderer::Init(SDL_Window* window)
 	ImGui_ImplOpenGL3_Init();
 }
 
-void Renderer::Render() const
+void Twengine::Renderer::Render() const
 {
 	const auto& color = GetBackgroundColor();
 	SDL_SetRenderDrawColor(m_Renderer, color.r, color.g, color.b, color.a);
@@ -55,7 +55,7 @@ void Renderer::Render() const
 	SDL_RenderPresent(m_Renderer);
 }
 
-void Renderer::Destroy()
+void Twengine::Renderer::Destroy()
 {
 	// TEMP
 	ImGui_ImplOpenGL3_Shutdown();
@@ -69,7 +69,7 @@ void Renderer::Destroy()
 	}
 }
 
-void Renderer::RenderTexture(const Texture2D& texture, const float x, const float y) const
+void Twengine::Renderer::RenderTexture(const Texture2D& texture, const float x, const float y) const
 {
 	SDL_Rect dstRect{};
 	dstRect.x = static_cast<int>(x);
@@ -78,7 +78,7 @@ void Renderer::RenderTexture(const Texture2D& texture, const float x, const floa
 	SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dstRect);
 }
 
-void Renderer::RenderTexture(const Texture2D& texture, const float x, const float y, const float dstWidth, const float dstHeight) const
+void Twengine::Renderer::RenderTexture(const Texture2D& texture, const float x, const float y, const float dstWidth, const float dstHeight) const
 {
 	SDL_Rect dstRect{};
 	dstRect.x = static_cast<int>(x);
@@ -88,7 +88,7 @@ void Renderer::RenderTexture(const Texture2D& texture, const float x, const floa
 	SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dstRect);
 }
 
-void Renderer::RenderTextureRect(const Texture2D& texture, float x, float y, float srcX, float srcY, float srcWidth, float srcHeight)
+void Twengine::Renderer::RenderTextureRect(const Texture2D& texture, float x, float y, float srcX, float srcY, float srcWidth, float srcHeight)
 {
 	SDL_Rect srcRect{};
 	srcRect.x = static_cast<int>(srcX);
@@ -103,4 +103,4 @@ void Renderer::RenderTextureRect(const Texture2D& texture, float x, float y, flo
 	SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), &srcRect, &dstRect);
 }
 
-SDL_Renderer* Renderer::GetSDLRenderer() const { return m_Renderer; }
+SDL_Renderer* Twengine::Renderer::GetSDLRenderer() const { return m_Renderer; }

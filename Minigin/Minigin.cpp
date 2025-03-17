@@ -43,7 +43,7 @@ void PrintSDLVersion()
 		version.major, version.minor, version.patch);
 }
 
-Minigin::Minigin(const std::string &dataPath)
+Twengine::Minigin::Minigin(const std::string &dataPath)
 {
 	PrintSDLVersion();
 	
@@ -73,7 +73,7 @@ Minigin::Minigin(const std::string &dataPath)
 	InputManager::GetInstance().Init();
 }
 
-Minigin::~Minigin()
+Twengine::Minigin::~Minigin()
 {
 	Renderer::GetInstance().Destroy();
 	SDL_DestroyWindow(g_window);
@@ -81,7 +81,7 @@ Minigin::~Minigin()
 	SDL_Quit();
 }
 
-void Minigin::Run(const std::function<void()>& load)
+void Twengine::Minigin::Run(const std::function<void()>& load)
 {
 	load();
 

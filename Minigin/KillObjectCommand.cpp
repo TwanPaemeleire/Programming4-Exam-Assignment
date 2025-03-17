@@ -2,7 +2,7 @@
 #include "GameObject.h"
 #include "HealthComponent.h"
 
-KillObjectCommand::KillObjectCommand(GameObject* gameObject)
+KillObjectCommand::KillObjectCommand(Twengine::GameObject* gameObject)
 	:GameObjectCommand(gameObject)
 {
 	m_HealthComponent = gameObject->GetComponent<HealthComponent>();

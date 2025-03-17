@@ -1,12 +1,15 @@
 #pragma once
 #include "Component.h"
 #include <memory>
-class Event;
 
-class HealthComponent final: public Component
+namespace Twengine 
+{ 
+	class Event; 
+}
+class HealthComponent final: public Twengine::Component
 {
 public:
-	HealthComponent(GameObject* owner);
+	HealthComponent(Twengine::GameObject* owner);
 	virtual ~HealthComponent() = default;
 	HealthComponent(const HealthComponent& other) = delete;
 	HealthComponent(HealthComponent&& other) = delete;
@@ -20,7 +23,7 @@ public:
 	void TakeDamage(int amount);
 	void Kill();
 
-	Event* GetObjectDiedEvent() const { return m_ObjectDiedEvent.get(); }
+	Twengine::Event* GetObjectDiedEvent() const { return m_ObjectDiedEvent.get(); }
 
 private:
 	int m_MaxHealth{};
@@ -28,6 +31,6 @@ private:
 	int m_MaxLives{};
 	int m_Lives{};
 
-	std::unique_ptr<Event> m_ObjectDiedEvent;
+	std::unique_ptr<Twengine::Event> m_ObjectDiedEvent;
 };
 

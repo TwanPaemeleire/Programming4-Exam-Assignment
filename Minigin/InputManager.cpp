@@ -2,7 +2,7 @@
 #include "InputManager.h"
 #include "backends/imgui_impl_sdl2.h"
 
-void InputManager::Init()
+void Twengine::InputManager::Init()
 {
 	for (int controllerIdx{ 0 }; controllerIdx < 4; ++controllerIdx)
 	{
@@ -10,13 +10,13 @@ void InputManager::Init()
 	}
 }
 
-bool InputManager::ProcessInput()
+bool Twengine::InputManager::ProcessInput()
 {
 	HandleControllerInput();
 	return HandleKeyBoardInput();
 }
 
-void InputManager::HandleControllerInput()
+void Twengine::InputManager::HandleControllerInput()
 {
 	for (const auto& controller : m_Controllers)
 	{
@@ -54,7 +54,7 @@ void InputManager::HandleControllerInput()
 	}
 }
 
-bool InputManager::HandleKeyBoardInput()
+bool Twengine::InputManager::HandleKeyBoardInput()
 {	
 	SDL_Event e;
 	while (SDL_PollEvent(&e))

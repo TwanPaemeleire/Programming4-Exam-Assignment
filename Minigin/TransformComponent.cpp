@@ -1,23 +1,23 @@
 #include "TransformComponent.h"
 #include "GameObject.h"
 
-TransformComponent::TransformComponent(GameObject* owner)
+Twengine::TransformComponent::TransformComponent(GameObject* owner)
 	:Component(owner)
 {
 }
 
-void TransformComponent::SetLocalPosition(const glm::vec3& localPos)
+void Twengine::TransformComponent::SetLocalPosition(const glm::vec3& localPos)
 {
 	m_LocalPosition = localPos;
 	SetPositionDirty();
 }
 
-void TransformComponent::SetLocalPosition(float x, float y)
+void Twengine::TransformComponent::SetLocalPosition(float x, float y)
 {
 	SetLocalPosition(glm::vec3(x, y, 0));
 }
 
-const glm::vec3& TransformComponent::GetWorldPosition()
+const glm::vec3& Twengine::TransformComponent::GetWorldPosition()
 {
 	if (m_PositionIsDirty)
 	{
@@ -26,7 +26,7 @@ const glm::vec3& TransformComponent::GetWorldPosition()
 	return m_WorldPosition;
 }
 
-void TransformComponent::SetPositionDirty()
+void Twengine::TransformComponent::SetPositionDirty()
 {
 	m_PositionIsDirty = true;
 	const size_t amountOfChildren = GetOwner()->GetChildCount();
@@ -36,7 +36,7 @@ void TransformComponent::SetPositionDirty()
 	}
 }
 
-void TransformComponent::UpdateWorldPosition()
+void Twengine::TransformComponent::UpdateWorldPosition()
 {
 	if (m_PositionIsDirty)
 	{

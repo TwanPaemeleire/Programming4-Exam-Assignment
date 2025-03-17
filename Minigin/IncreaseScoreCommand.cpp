@@ -2,7 +2,7 @@
 #include "GameObject.h"
 #include "PointComponent.h"
 
-IncreaseScoreCommand::IncreaseScoreCommand(GameObject* gameObject)
+IncreaseScoreCommand::IncreaseScoreCommand(Twengine::GameObject* gameObject)
 	:GameObjectCommand(gameObject)
 {
 	m_PointComponent = gameObject->GetComponent<PointComponent>();

@@ -228,7 +228,6 @@
     <ClCompile Include="..\3rdParty\imgui\imgui_tables.cpp" />
     <ClCompile Include="..\3rdParty\imgui\imgui_widgets.cpp" />
     <ClCompile Include="AnimatedTextureComponent.cpp" />
-    <ClCompile Include="Command.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="Controller.cpp" />
     <ClCompile Include="DisplayLivesComponent.cpp" />
@@ -241,7 +240,6 @@
     <ClCompile Include="IncreaseScoreCommand.cpp" />
     <ClCompile Include="KillObjectCommand.cpp" />
     <ClCompile Include="MoveCommand.cpp" />
-    <ClCompile Include="Observer.cpp" />
     <ClCompile Include="PointComponent.cpp" />
     <ClCompile Include="RotationAroundPointComponent.cpp" />
     <ClCompile Include="Event.cpp" />

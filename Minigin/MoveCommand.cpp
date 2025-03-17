@@ -3,7 +3,7 @@
 #include "GameObject.h"
 #include "Time.h"
 
-MoveCommand::MoveCommand(GameObject* gameObject)
+MoveCommand::MoveCommand(Twengine::GameObject* gameObject)
 	:GameObjectCommand(gameObject)
 {
 }

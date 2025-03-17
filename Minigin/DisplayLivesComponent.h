@@ -2,12 +2,15 @@
 #include "Component.h"
 #include "Observer.h"
 
-class TextComponent;
+namespace Twengine
+{
+	class TextComponent;
+}
 
-class DisplayLivesComponent final: public Component, public Observer
+class DisplayLivesComponent final: public Twengine::Component, public Twengine::Observer
 {
 public:
-	DisplayLivesComponent(GameObject* owner);
+	DisplayLivesComponent(Twengine::GameObject* owner);
 	virtual ~DisplayLivesComponent() override = default;
 	DisplayLivesComponent(const DisplayLivesComponent& other) = delete;
 	DisplayLivesComponent(DisplayLivesComponent&& other) = delete;
@@ -15,9 +18,9 @@ public:
 	DisplayLivesComponent& operator=(DisplayLivesComponent&& other) = delete;
 
 	virtual void Start() override;
-	virtual void Notify(GameEvent event, GameObject* observedObject) override;
+	virtual void Notify(GameEvent event, Twengine::GameObject* observedObject) override;
 
 private:
-	TextComponent* m_TextComponent{};
+	Twengine::TextComponent* m_TextComponent{};
 };
 

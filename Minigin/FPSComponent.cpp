@@ -6,18 +6,18 @@
 #include <sstream>
 #include <iomanip> // Needed To Set The Precision
 
-FPSComponent::FPSComponent(GameObject* owner)
+Twengine::FPSComponent::FPSComponent(Twengine::GameObject* owner)
 	:Component(owner)
 {
 }
 
-void FPSComponent::Start()
+void Twengine::FPSComponent::Start()
 {
 	m_TextComponent = GetOwner()->GetComponent<TextComponent>();
 	//m_TextComponent->SetColor(255, 0, 0, 255);
 }
 
-void FPSComponent::Update()
+void Twengine::FPSComponent::Update()
 {
 	std::stringstream stream;
 	stream << std::fixed << std::setprecision(1) << 1.f / Time::GetInstance().deltaTime <<" FPS";

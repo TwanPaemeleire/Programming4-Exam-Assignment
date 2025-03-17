@@ -3,28 +3,28 @@
 
 #include <algorithm>
 
-unsigned int Scene::m_idCounter = 0;
+unsigned int Twengine::Scene::m_idCounter = 0;
 
-Scene::Scene(const std::string& name) : m_Name(name) {}
+Twengine::Scene::Scene(const std::string& name) : m_Name(name) {}
 
-Scene::~Scene() = default;
+Twengine::Scene::~Scene() = default;
 
-void Scene::Add(std::unique_ptr<GameObject> object)
+void Twengine::Scene::Add(std::unique_ptr<GameObject> object)
 {
 	m_Objects.emplace_back(std::move(object));
 }
 
-void Scene::Remove(std::unique_ptr<GameObject> object)
+void Twengine::Scene::Remove(std::unique_ptr<GameObject> object)
 {
 	m_Objects.erase(std::remove(m_Objects.begin(), m_Objects.end(), object), m_Objects.end());
 }
 
-void Scene::RemoveAll()
+void Twengine::Scene::RemoveAll()
 {
 	m_Objects.clear();
 }
 
-void Scene::Start()
+void Twengine::Scene::Start()
 {
 	for (auto& object : m_Objects)
 	{
@@ -32,7 +32,7 @@ void Scene::Start()
 	}
 }
 
-void Scene::Update()
+void Twengine::Scene::Update()
 {
 	for(auto& object : m_Objects)
 	{
@@ -40,7 +40,7 @@ void Scene::Update()
 	}
 }
 
-void Scene::FixedUpdate()
+void Twengine::Scene::FixedUpdate()
 {
 	for (auto& object : m_Objects)
 	{
@@ -48,7 +48,7 @@ void Scene::FixedUpdate()
 	}
 }
 
-void Scene::LateUpdate()
+void Twengine::Scene::LateUpdate()
 {
 	for (auto& object : m_Objects)
 	{
@@ -63,7 +63,7 @@ void Scene::LateUpdate()
 
 }
 
-void Scene::Render() const
+void Twengine::Scene::Render() const
 {
 	for (const auto& object : m_Objects)
 	{
@@ -71,7 +71,7 @@ void Scene::Render() const
 	}
 }
 
-void Scene::RenderUI()
+void Twengine::Scene::RenderUI()
 {
 	for (const auto& object : m_Objects)
 	{

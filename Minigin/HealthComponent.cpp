@@ -1,10 +1,10 @@
 #include "HealthComponent.h"
 #include "Event.h"
 
-HealthComponent::HealthComponent(GameObject* owner)
+HealthComponent::HealthComponent(Twengine::GameObject* owner)
 	:Component(owner)
 {
-	m_ObjectDiedEvent = std::make_unique<Event>();
+	m_ObjectDiedEvent = std::make_unique<Twengine::Event>();
 }
 
 void HealthComponent::TakeDamage(int amount)

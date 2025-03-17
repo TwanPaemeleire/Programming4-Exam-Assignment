@@ -3,9 +3,12 @@
 class GameObject;
 #include "GameEvents.h"
 
-class Observer
+namespace Twengine
 {
-public:
-	virtual ~Observer() = default;
-	virtual void Notify(GameEvent event, GameObject* observedObject) = 0;
-};
+	class Observer
+	{
+	public:
+		virtual ~Observer() = default;
+		virtual void Notify(GameEvent event, Twengine::GameObject* observedObject) = 0;
+	};
+}

@@ -8,40 +8,45 @@ class GameObject;
 #include "Controller.h"
 #include "GameObjectCommand.h"
 
-enum class InteractionStates
+namespace Twengine
 {
-	down, up, pressed
-};
+	enum class InteractionStates
+	{
+		down, up, pressed
+	};
 
-struct BindedCommand
-{
-	std::unique_ptr<GameObjectCommand> command{};
-	InteractionStates interactionState{};
-	int controllerIndex{}; // An Index Of -1 Will Mean That It's Binded To Keyboard
-	unsigned int button{};
-};
+	struct BindedCommand
+	{
+		std::unique_ptr<GameObjectCommand> command{};
+		InteractionStates interactionState{};
+		int controllerIndex{}; // An Index Of -1 Will Mean That It's Binded To Keyboard
+		unsigned int button{};
+	};
 
-class InputManager final : public Singleton<InputManager>
-{
-public:
-	void Init();
-	bool ProcessInput();
+	class InputManager final : public Singleton<InputManager>
+	{
+	public:
+		void Init();
+		bool ProcessInput();
 
-	template <typename command>
-	command* BindCommandToInput(unsigned int button ,InteractionStates interactionState, GameObject* gameObject, int controllerIndex);
-	template <typename command>
-	void RemoveBindedCommand(int controllerIndex);
+		template <typename command>
+		command* BindCommandToInput(unsigned int button, InteractionStates interactionState, GameObject* gameObject, int controllerIndex);
+		template <typename command>
+		void RemoveBindedCommand(int controllerIndex);
 
-private:
-	void HandleControllerInput();
-	bool HandleKeyBoardInput();
+	private:
+		void HandleControllerInput();
+		bool HandleKeyBoardInput();
 
-	std::vector<std::unique_ptr<Controller>> m_Controllers;
-	std::vector<std::unique_ptr<BindedCommand>> m_BindedCommands;
-};
+		std::vector<std::unique_ptr<Controller>> m_Controllers;
+		std::vector<std::unique_ptr<BindedCommand>> m_BindedCommands;
+	};
+}
+
+
 
 template<typename T>
-inline T* InputManager::BindCommandToInput(unsigned int button, InteractionStates interactionState, GameObject* gameObject, int controllerIndex)
+inline T* Twengine::InputManager::BindCommandToInput(unsigned int button, Twengine::InteractionStates interactionState, GameObject* gameObject, int controllerIndex)
 {
 	static_assert(std::is_base_of<GameObjectCommand, T>::value, "Type passed to BindCommandToInput<>() does NOT inherit from GameObjectCommand");
 
@@ -59,7 +64,7 @@ inline T* InputManager::BindCommandToInput(unsigned int button, InteractionState
 }
 
 template<typename T>
-inline void InputManager::RemoveBindedCommand(int controllerIndex)
+inline void Twengine::InputManager::RemoveBindedCommand(int controllerIndex)
 {
 	for (const auto& command : m_BindedCommands)
 	{

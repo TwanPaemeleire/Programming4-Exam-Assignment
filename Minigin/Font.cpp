@@ -2,11 +2,11 @@
 #include <SDL_ttf.h>
 #include "Font.h"
 
-TTF_Font* Font::GetFont() const {
+TTF_Font* Twengine::Font::GetFont() const {
 	return m_Font;
 }
 
-Font::Font(const std::string& fullPath, unsigned int size) : m_Font(nullptr)
+Twengine::Font::Font(const std::string& fullPath, unsigned int size) : m_Font(nullptr)
 {
 	m_Font = TTF_OpenFont(fullPath.c_str(), size);
 	if (m_Font == nullptr) 
@@ -15,7 +15,7 @@ Font::Font(const std::string& fullPath, unsigned int size) : m_Font(nullptr)
 	}
 }
 
-Font::~Font()
+Twengine::Font::~Font()
 {
 	TTF_CloseFont(m_Font);
 }

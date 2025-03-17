@@ -3,24 +3,25 @@
 #include <memory>
 #include <string>
 
-class Texture2D;
-
-class TextureRenderComponent final : public Component
+namespace Twengine
 {
-public:
-	TextureRenderComponent(GameObject* owner);
-	virtual ~TextureRenderComponent() override = default;
-	TextureRenderComponent(const TextureRenderComponent& other) = delete;
-	TextureRenderComponent(TextureRenderComponent&& other) = delete;
-	TextureRenderComponent& operator=(const TextureRenderComponent& other) = delete;
-	TextureRenderComponent& operator=(TextureRenderComponent&& other) = delete;
+	class Texture2D;
+	class TextureRenderComponent final : public Component
+	{
+	public:
+		TextureRenderComponent(GameObject* owner);
+		virtual ~TextureRenderComponent() override = default;
+		TextureRenderComponent(const TextureRenderComponent& other) = delete;
+		TextureRenderComponent(TextureRenderComponent&& other) = delete;
+		TextureRenderComponent& operator=(const TextureRenderComponent& other) = delete;
+		TextureRenderComponent& operator=(TextureRenderComponent&& other) = delete;
 
-	virtual void Update() override {};
-	virtual void Render() const override;
+		virtual void Update() override {};
+		virtual void Render() const override;
 
-	void SetTexture(const std::string& imgPath);
+		void SetTexture(const std::string& imgPath);
 
-private:
-	Texture2D* m_Texture;
-};
-
+	private:
+		Texture2D* m_Texture;
+	};
+}

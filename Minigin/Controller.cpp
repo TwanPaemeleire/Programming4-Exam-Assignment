@@ -4,7 +4,7 @@
 #include "Windows.h"
 #include "Xinput.h"
 
-class Controller::XInputImpl
+class Twengine::Controller::XInputImpl
 {
 public:
 	XInputImpl(int controllerIndex) :m_ControllerIndex{ controllerIndex } {};
@@ -25,41 +25,41 @@ private:
 	int m_ControllerIndex{};
 };
 
-Controller::Controller(int controllerIndex)
+Twengine::Controller::Controller(int controllerIndex)
 	:m_pImpl{new XInputImpl(controllerIndex)}
 {
 
 }
 
-Controller::~Controller()
+Twengine::Controller::~Controller()
 {
 	delete m_pImpl;
 }
 
-void Controller::ProcessInput()
+void Twengine::Controller::ProcessInput()
 {
 	m_pImpl->ProcessInput();
 }
 
-bool Controller::IsDownThisFrame(unsigned int button) const
+bool Twengine::Controller::IsDownThisFrame(unsigned int button) const
 {
 	return m_pImpl->IsDownThisFrame(button);
 }
-bool Controller::IsUpThisFrame(unsigned int button) const
+bool Twengine::Controller::IsUpThisFrame(unsigned int button) const
 {
 	return m_pImpl->IsUpThisFrame(button);
 }
-bool Controller::IsPressed(unsigned int button) const
+bool Twengine::Controller::IsPressed(unsigned int button) const
 {
 	return m_pImpl->IsPressed(button);
 }
 
-int Controller::GetControllerIndex() const
+int Twengine::Controller::GetControllerIndex() const
 {
 	return m_pImpl->GetControllerIndex();;
 }
 
-void Controller::XInputImpl::ProcessInput()
+void Twengine::Controller::XInputImpl::ProcessInput()
 {
 	CopyMemory(&m_PreviousState, &m_CurrentState, sizeof(XINPUT_STATE));
 	ZeroMemory(&m_CurrentState, sizeof(XINPUT_STATE));
@@ -70,22 +70,22 @@ void Controller::XInputImpl::ProcessInput()
 	m_ButtonsReleasedThisFrame = buttonChanges & (~m_CurrentState.Gamepad.wButtons);
 }
 
-bool Controller::XInputImpl::IsDownThisFrame(unsigned int button) const
+bool Twengine::Controller::XInputImpl::IsDownThisFrame(unsigned int button) const
 {
 	return m_ButtonsPressedThisFrame & button;
 }
 
-bool Controller::XInputImpl::IsUpThisFrame(unsigned int button) const
+bool Twengine::Controller::XInputImpl::IsUpThisFrame(unsigned int button) const
 {
 	return m_ButtonsReleasedThisFrame & button;
 }
 
-bool Controller::XInputImpl::IsPressed(unsigned int button) const
+bool Twengine::Controller::XInputImpl::IsPressed(unsigned int button) const
 {
 	return m_CurrentState.Gamepad.wButtons & button;
 }
 
-int Controller::XInputImpl::GetControllerIndex() const
+int Twengine::Controller::XInputImpl::GetControllerIndex() const
 {
 	return m_ControllerIndex;
 }

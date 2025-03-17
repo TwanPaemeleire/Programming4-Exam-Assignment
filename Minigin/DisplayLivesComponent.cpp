@@ -3,18 +3,18 @@
 #include "TextComponent.h"
 #include "HealthComponent.h"
 
-DisplayLivesComponent::DisplayLivesComponent(GameObject* owner)
+DisplayLivesComponent::DisplayLivesComponent(Twengine::GameObject* owner)
 	:Component(owner)
 {
 }
 
 void DisplayLivesComponent::Start()
 {
-	m_TextComponent = GetOwner()->GetComponent<TextComponent>();
+	m_TextComponent = GetOwner()->GetComponent<Twengine::TextComponent>();
 	m_TextComponent->SetText("# Lives: 3");
 }
 
-void DisplayLivesComponent::Notify(GameEvent event, GameObject* observedObject)
+void DisplayLivesComponent::Notify(GameEvent event, Twengine::GameObject* observedObject)
 {
 	if (event == GameEvent::PlayerDied)
 	{

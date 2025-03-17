@@ -2,10 +2,10 @@
 #include "Component.h"
 #include "glm.hpp"
 
-class RotationAroundPointComponent final : public Component
+class RotationAroundPointComponent final : public Twengine::Component
 {
 public:
-	RotationAroundPointComponent(GameObject* owner);
+	RotationAroundPointComponent(Twengine::GameObject* owner);
 	virtual ~RotationAroundPointComponent() = default;
 	RotationAroundPointComponent(const RotationAroundPointComponent& other) = delete;
 	RotationAroundPointComponent(RotationAroundPointComponent&& other) = delete;

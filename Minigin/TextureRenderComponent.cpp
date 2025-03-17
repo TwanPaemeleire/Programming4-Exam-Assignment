@@ -4,18 +4,18 @@
 #include "GameObject.h"
 #include "ResourceManager.h"
 
-TextureRenderComponent::TextureRenderComponent(GameObject* owner)
+Twengine::TextureRenderComponent::TextureRenderComponent(GameObject* owner)
 	: Component(owner), m_Texture{}
 {
 }
 
-void TextureRenderComponent::Render() const
+void Twengine::TextureRenderComponent::Render() const
 {
 	auto& pos = m_Transform->GetWorldPosition();
 	Renderer::GetInstance().RenderTexture(*m_Texture, pos.x, pos.y);
 }
 
-void TextureRenderComponent::SetTexture(const std::string& imgPath)
+void Twengine::TextureRenderComponent::SetTexture(const std::string& imgPath)
 {
 	m_Texture = ResourceManager::GetInstance().LoadTexture(imgPath);
 }

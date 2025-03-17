@@ -114,9 +114,6 @@
     <ClInclude Include="..\3rdParty\imgui\imgui_plot.h">
       <Filter>imgui</Filter>
     </ClInclude>
-    <ClInclude Include="ThrashTheCacheComponent.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
     <ClInclude Include="Command.h">
       <Filter>Header Files\Commands</Filter>
     </ClInclude>
@@ -155,6 +152,9 @@
     </ClInclude>
     <ClInclude Include="IncreaseScoreCommand.h">
       <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimatedTextureComponent.h">
+      <Filter>Header Files\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -227,14 +227,8 @@
     <ClCompile Include="..\3rdParty\imgui\imgui_plot.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
-    <ClCompile Include="ThrashTheCacheComponent.cpp">
-      <Filter>Source Files\Components</Filter>
-    </ClCompile>
     <ClCompile Include="Component.cpp">
       <Filter>Source Files\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Command.cpp">
-      <Filter>Source Files\Commands</Filter>
     </ClCompile>
     <ClCompile Include="Controller.cpp">
       <Filter>Source Files</Filter>
@@ -254,9 +248,6 @@
     <ClCompile Include="DisplayLivesComponent.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
-    <ClCompile Include="Observer.cpp">
-      <Filter>Source Files\Observer</Filter>
-    </ClCompile>
     <ClCompile Include="KillObjectCommand.cpp">
       <Filter>Source Files\Commands</Filter>
     </ClCompile>
@@ -268,6 +259,9 @@
     </ClCompile>
     <ClCompile Include="IncreaseScoreCommand.cpp">
       <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimatedTextureComponent.cpp">
+      <Filter>Source Files\Components</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

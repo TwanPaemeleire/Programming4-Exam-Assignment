@@ -7,13 +7,13 @@
 #include "TransformComponent.h"
 #include "GameObject.h"
 
-TextComponent::TextComponent(GameObject* owner)
+Twengine::TextComponent::TextComponent(Twengine::GameObject* owner)
 	: Component(owner),
 	m_NeedsUpdate(true), m_Text{"NO TEXT"}, m_Font{}, m_TextTexture(nullptr), m_TextColor{255, 255, 255, 255}
 {
 }
 
-void TextComponent::Update()
+void Twengine::TextComponent::Update()
 {
 	if (m_NeedsUpdate)
 	{
@@ -22,38 +22,38 @@ void TextComponent::Update()
 		{
 			throw std::runtime_error(std::string("Render text failed: ") + SDL_GetError());
 		}
-		auto texture = SDL_CreateTextureFromSurface(Renderer::GetInstance().GetSDLRenderer(), surf);
+		auto texture = SDL_CreateTextureFromSurface(Twengine::Renderer::GetInstance().GetSDLRenderer(), surf);
 		if (texture == nullptr) 
 		{
 			throw std::runtime_error(std::string("Create text texture from surface failed: ") + SDL_GetError());
 		}
 		SDL_FreeSurface(surf);
-		m_TextTexture = std::make_unique<Texture2D>(texture);
+		m_TextTexture = std::make_unique<Twengine::Texture2D>(texture);
 		m_NeedsUpdate = false;
 	}
 }
 
-void TextComponent::Render() const
+void Twengine::TextComponent::Render() const
 {
 	if (m_TextTexture != nullptr)
 	{
 		const auto& pos = m_Transform->GetWorldPosition();
-		Renderer::GetInstance().RenderTexture(*m_TextTexture, pos.x, pos.y);
+		Twengine::Renderer::GetInstance().RenderTexture(*m_TextTexture, pos.x, pos.y);
 	}
 }
 
-void TextComponent::SetText(const std::string& text)
+void Twengine::TextComponent::SetText(const std::string& text)
 {
 	m_Text = text;
 	m_NeedsUpdate = true;
 }
 
-void TextComponent::SetFont(Font* font)
+void Twengine::TextComponent::SetFont(Twengine::Font* font)
 {
 	m_Font = font;
 }
 
-void TextComponent::SetColor(int r, int g, int b, int a)
+void Twengine::TextComponent::SetColor(int r, int g, int b, int a)
 {
 	Uint8 red = Uint8(std::clamp(r, 0, 255));
 	Uint8 green = Uint8(std::clamp(g, 0, 255));

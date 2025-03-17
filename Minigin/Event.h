@@ -2,18 +2,20 @@
 #include <vector>
 #include "GameEvents.h"
 
-class Observer;
-class GameObject;
 
-class Event final
+namespace Twengine
 {
-public:
-	void AddObserver(Observer* observer);
-	void RemoveObserver(Observer* observer);
+	class Observer;
+	class GameObject;
+	class Event final
+	{
+	public:
+		void AddObserver(Twengine::Observer* observer);
+		void RemoveObserver(Twengine::Observer* observer);
 
-	void NotifyObservers(GameEvent event, GameObject* observedObject);
+		void NotifyObservers(GameEvent event, Twengine::GameObject* observedObject);
 
-private:
-	std::vector<Observer*> m_Observers;
-};
-
+	private:
+		std::vector<Twengine::Observer*> m_Observers;
+	};
+}

@@ -2,28 +2,31 @@
 #include <glm.hpp>
 #include "Component.h"
 
-class TransformComponent final : public Component
+namespace Twengine
 {
-public:
-	TransformComponent(GameObject* owner);
-	virtual ~TransformComponent() override = default;
-	TransformComponent(const TransformComponent& other) = delete;
-	TransformComponent(TransformComponent&& other) = delete;
-	TransformComponent& operator=(const TransformComponent& other) = delete;
-	TransformComponent& operator=(TransformComponent&& other) = delete;
+	class TransformComponent final : public Component
+	{
+	public:
+		TransformComponent(GameObject* owner);
+		virtual ~TransformComponent() override = default;
+		TransformComponent(const TransformComponent& other) = delete;
+		TransformComponent(TransformComponent&& other) = delete;
+		TransformComponent& operator=(const TransformComponent& other) = delete;
+		TransformComponent& operator=(TransformComponent&& other) = delete;
 
-	virtual void Update() override {};
+		virtual void Update() override {};
 
-	void SetLocalPosition(const glm::vec3& localPos);
-	void SetLocalPosition(float x, float y);
-	const glm::vec3& GetWorldPosition();
-	const glm::vec3& GetLocalPosition() { return m_LocalPosition; }
-	void SetPositionDirty();
+		void SetLocalPosition(const glm::vec3& localPos);
+		void SetLocalPosition(float x, float y);
+		const glm::vec3& GetWorldPosition();
+		const glm::vec3& GetLocalPosition() { return m_LocalPosition; }
+		void SetPositionDirty();
 
-private:
-	void UpdateWorldPosition();
+	private:
+		void UpdateWorldPosition();
 
-	bool m_PositionIsDirty{ false };
-	glm::vec3 m_WorldPosition{};
-	glm::vec3 m_LocalPosition{};
-};
+		bool m_PositionIsDirty{ false };
+		glm::vec3 m_WorldPosition{};
+		glm::vec3 m_LocalPosition{};
+	};
+}

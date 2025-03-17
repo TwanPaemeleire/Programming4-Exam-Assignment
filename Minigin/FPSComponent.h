@@ -1,22 +1,24 @@
 #pragma once
 #include "Component.h"
 
-class TextComponent;
 
-class FPSComponent final : public Component
+namespace Twengine
 {
-public:
-	FPSComponent(GameObject* owner);
-	virtual ~FPSComponent() override = default;
-	FPSComponent(const FPSComponent& other) = delete;
-	FPSComponent(FPSComponent&& other) = delete;
-	FPSComponent& operator=(const FPSComponent& other) = delete;
-	FPSComponent& operator=(FPSComponent&& other) = delete;
+	class TextComponent;
+	class FPSComponent final : public Twengine::Component
+	{
+	public:
+		FPSComponent(Twengine::GameObject* owner);
+		virtual ~FPSComponent() override = default;
+		FPSComponent(const FPSComponent& other) = delete;
+		FPSComponent(FPSComponent&& other) = delete;
+		FPSComponent& operator=(const FPSComponent& other) = delete;
+		FPSComponent& operator=(FPSComponent&& other) = delete;
 
-	virtual void Start() override;
-	virtual void Update() override;
+		virtual void Start() override;
+		virtual void Update() override;
 
-private:
-	TextComponent* m_TextComponent{};
-};
-
+	private:
+		Twengine::TextComponent* m_TextComponent{};
+	};
+}

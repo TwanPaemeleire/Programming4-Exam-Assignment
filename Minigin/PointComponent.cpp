@@ -1,10 +1,10 @@
 #include "PointComponent.h"
 #include "Event.h"
 
-PointComponent::PointComponent(GameObject* owner)
-	:Component(owner)
+PointComponent::PointComponent(Twengine::GameObject* owner)
+	:Twengine::Component(owner)
 {
-	m_ScoreChangedEvent = std::make_unique<Event>();
+	m_ScoreChangedEvent = std::make_unique<Twengine::Event>();
 }
 
 void PointComponent::ChangePoints(int amount)

@@ -4,7 +4,7 @@
 #include "math.h"
 #include "GameObject.h"
 
-RotationAroundPointComponent::RotationAroundPointComponent(GameObject* owner)
+RotationAroundPointComponent::RotationAroundPointComponent(Twengine::GameObject* owner)
 	:Component(owner)
 {
 }

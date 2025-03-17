@@ -2,10 +2,10 @@
 #include "GameObjectCommand.h"
 #include "glm.hpp"
 
-class MoveCommand : public GameObjectCommand
+class MoveCommand : public Twengine::GameObjectCommand
 {
 public:
-	MoveCommand(GameObject* gameObject);
+	MoveCommand(Twengine::GameObject* gameObject);
 	virtual void Execute() override;
 
 	void SetDirection(glm::vec2 direction) { m_Direction = direction; }

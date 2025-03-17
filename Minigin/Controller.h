@@ -1,24 +1,27 @@
 #pragma once
 #include <memory>
 
-class Controller final
+
+namespace Twengine
 {
-public:
-	Controller(int controllerIndex);
-	~Controller();
-	Controller(const Controller& other) = delete;
-	Controller(Controller&& other) = delete;
-	Controller& operator=(const Controller& other) = delete;
-	Controller& operator=(Controller&& other) = delete;
+	class Controller final
+	{
+	public:
+		Controller(int controllerIndex);
+		~Controller();
+		Controller(const Controller& other) = delete;
+		Controller(Controller&& other) = delete;
+		Controller& operator=(const Controller& other) = delete;
+		Controller& operator=(Controller&& other) = delete;
 
-	void ProcessInput();
-	bool IsDownThisFrame(unsigned int button) const;
-	bool IsUpThisFrame(unsigned int button) const;
-	bool IsPressed(unsigned int button) const;
+		void ProcessInput();
+		bool IsDownThisFrame(unsigned int button) const;
+		bool IsUpThisFrame(unsigned int button) const;
+		bool IsPressed(unsigned int button) const;
 
-	int GetControllerIndex() const;
-private:
-	class XInputImpl;
-	XInputImpl* m_pImpl;
-};
-
+		int GetControllerIndex() const;
+	private:
+		class XInputImpl;
+		XInputImpl* m_pImpl;
+	};
+}

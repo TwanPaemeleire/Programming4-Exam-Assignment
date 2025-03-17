@@ -1,7 +1,7 @@
 #include "SceneManager.h"
 #include "Scene.h"
 
-void SceneManager::Start()
+void Twengine::SceneManager::Start()
 {
 	for (auto& scene : m_Scenes)
 	{
@@ -9,7 +9,7 @@ void SceneManager::Start()
 	}
 }
 
-void SceneManager::Update()
+void Twengine::SceneManager::Update()
 {
 	for(auto& scene : m_Scenes)
 	{
@@ -17,7 +17,7 @@ void SceneManager::Update()
 	}
 }
 
-void SceneManager::FixedUpdate()
+void Twengine::SceneManager::FixedUpdate()
 {
 	for (auto& scene : m_Scenes)
 	{
@@ -25,7 +25,7 @@ void SceneManager::FixedUpdate()
 	}
 }
 
-void SceneManager::LateUpdate()
+void Twengine::SceneManager::LateUpdate()
 {
 	for (auto& scene : m_Scenes)
 	{
@@ -34,7 +34,7 @@ void SceneManager::LateUpdate()
 }
 
 
-void SceneManager::Render() const
+void Twengine::SceneManager::Render() const
 {
 	for (const auto& scene : m_Scenes)
 	{
@@ -42,7 +42,7 @@ void SceneManager::Render() const
 	}
 }
 
-void SceneManager::RenderUI()
+void Twengine::SceneManager::RenderUI()
 {
 	for (const auto& scene : m_Scenes)
 	{
@@ -50,7 +50,7 @@ void SceneManager::RenderUI()
 	}
 }
 
-Scene& SceneManager::CreateScene(const std::string& name)
+Twengine::Scene& Twengine::SceneManager::CreateScene(const std::string& name)
 {
 	const auto& scene = std::shared_ptr<Scene>(new Scene(name));
 	m_Scenes.push_back(scene);

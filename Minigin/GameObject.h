@@ -6,57 +6,59 @@
 class Component;
 class Texture2D;
 
-class GameObject final
+namespace Twengine
 {
-public:
-	GameObject();
-	~GameObject();
-	GameObject(const GameObject& other) = delete;
-	GameObject(GameObject&& other) = delete;
-	GameObject& operator=(const GameObject& other) = delete;
-	GameObject& operator=(GameObject&& other) = delete;
+	class GameObject final
+	{
+	public:
+		GameObject();
+		~GameObject();
+		GameObject(const GameObject& other) = delete;
+		GameObject(GameObject&& other) = delete;
+		GameObject& operator=(const GameObject& other) = delete;
+		GameObject& operator=(GameObject&& other) = delete;
 
-	void Start();
-	void Update();
-	void FixedUpdate();
-	void LateUpdate();
-	void Render() const;
-	void RenderUI();
+		void Start();
+		void Update();
+		void FixedUpdate();
+		void LateUpdate();
+		void Render() const;
+		void RenderUI();
 
-	TransformComponent* GetTransform() { return m_Transform; }
+		TransformComponent* GetTransform() { return m_Transform; }
 
-	template <typename T>
-	T* AddComponent();
-	template <typename T>
-	T* GetComponent() const;
-	template <typename T>
-	bool HasComponent() const;
+		template <typename T>
+		T* AddComponent();
+		template <typename T>
+		T* GetComponent() const;
+		template <typename T>
+		bool HasComponent() const;
 
-	void MarkForDestruction();
-	bool IsMarkedForDestruction() const { return m_MarkedForDestruction; }
+		void MarkForDestruction();
+		bool IsMarkedForDestruction() const { return m_MarkedForDestruction; }
 
-	void SetParent(GameObject* parent, bool keepWorldPosition);
-	GameObject* GetParent() const { return m_Parent; }
-	size_t GetChildCount() const { return m_Children.size(); }
-	GameObject* GetChildAt(int index) const { return m_Children[index]; };
+		void SetParent(GameObject* parent, bool keepWorldPosition);
+		GameObject* GetParent() const { return m_Parent; }
+		size_t GetChildCount() const { return m_Children.size(); }
+		GameObject* GetChildAt(int index) const { return m_Children[index]; };
 
-private:
-	void AddChild(GameObject* child);
-	void RemoveChild(GameObject* child);
-	bool IsChild(GameObject* objectToCheck);
+	private:
+		void AddChild(GameObject* child);
+		void RemoveChild(GameObject* child);
+		bool IsChild(GameObject* objectToCheck);
 
-	bool m_MarkedForDestruction{ false };
+		bool m_MarkedForDestruction{ false };
 
-	TransformComponent* m_Transform{};
+		TransformComponent* m_Transform{};
 
-	std::vector<std::unique_ptr<Component>> m_Components;
-	GameObject* m_Parent;
-	std::vector<GameObject*> m_Children;
-};
-
+		std::vector<std::unique_ptr<Component>> m_Components;
+		GameObject* m_Parent;
+		std::vector<GameObject*> m_Children;
+	};
+}
 
 template<typename T>
-inline T* GameObject::AddComponent()
+inline T* Twengine::GameObject::AddComponent()
 {
 	static_assert(std::is_base_of<Component, T>::value, "T passed to AddComponent<>() does NOT inherit from Component");
 	std::unique_ptr<T> component = std::make_unique<T>(this);
@@ -66,7 +68,7 @@ inline T* GameObject::AddComponent()
 }
 
 template <typename T>
-inline T* GameObject::GetComponent() const
+inline T* Twengine::GameObject::GetComponent() const
 {
 	for (auto& component : m_Components)
 	{
@@ -80,7 +82,7 @@ inline T* GameObject::GetComponent() const
 }
 
 template<typename T>
-inline bool GameObject::HasComponent() const
+inline bool Twengine::GameObject::HasComponent() const
 {
 	for (auto& component : m_Components)
 	{
