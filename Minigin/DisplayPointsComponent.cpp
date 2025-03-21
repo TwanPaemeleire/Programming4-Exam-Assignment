@@ -1,7 +1,7 @@
 #include "DisplayPointsComponent.h"
 #include "GameObject.h"
 #include "TextComponent.h"
-#include "PointComponent.h"
+#include "ScoreComponent.h"
 
 DisplayPointsComponent::DisplayPointsComponent(Twengine::GameObject* owner)
 	:Component(owner)
@@ -16,8 +16,8 @@ void DisplayPointsComponent::Start()
 
 void DisplayPointsComponent::Notify(GameEvent event, Twengine::GameObject* observedObject)
 {
-	if (event == GameEvent::PointsChanged)
+	if (event == GameEvent::ScoreChanged)
 	{
-		m_TextComponent->SetText("Score: " + std::to_string(observedObject->GetComponent<PointComponent>()->GetPoints()));
+		m_TextComponent->SetText("Score: " + std::to_string(observedObject->GetComponent<ScoreComponent>()->GetScore()));
 	}
 }

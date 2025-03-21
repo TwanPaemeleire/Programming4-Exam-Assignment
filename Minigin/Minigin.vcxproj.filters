@@ -144,13 +144,13 @@
     <ClInclude Include="KillObjectCommand.h">
       <Filter>Header Files\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="PointComponent.h">
+    <ClInclude Include="ScoreComponent.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="DisplayPointsComponent.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="IncreaseScoreCommand.h">
+    <ClInclude Include="KillEnemyCommand.h">
       <Filter>Header Files\Commands</Filter>
     </ClInclude>
     <ClInclude Include="AnimatedTextureComponent.h">
@@ -251,13 +251,13 @@
     <ClCompile Include="KillObjectCommand.cpp">
       <Filter>Source Files\Commands</Filter>
     </ClCompile>
-    <ClCompile Include="PointComponent.cpp">
+    <ClCompile Include="ScoreComponent.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
     <ClCompile Include="DisplayPointsComponent.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
-    <ClCompile Include="IncreaseScoreCommand.cpp">
+    <ClCompile Include="KillEnemyCommand.cpp">
       <Filter>Source Files\Commands</Filter>
     </ClCompile>
     <ClCompile Include="AnimatedTextureComponent.cpp">
