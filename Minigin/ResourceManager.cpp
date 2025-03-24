@@ -2,7 +2,7 @@
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 #include "ResourceManager.h"
-#include "Renderer.h"
+//#include "Renderer.h"
 
 namespace fs = std::filesystem;
 

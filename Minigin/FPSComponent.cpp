@@ -1,7 +1,7 @@
 #include "FPSComponent.h"
 #include "GameObject.h"
 #include "TextComponent.h"
-#include "Time.h"
+#include "MyTime.h"
 
 #include <sstream>
 #include <iomanip> // Needed To Set The Precision

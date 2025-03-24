@@ -1,5 +1,5 @@
 #include "RotationAroundPointComponent.h"
-#include "Time.h"
+#include "MyTime.h"
 #define _USE_MATH_DEFINES
 #include "math.h"
 #include "GameObject.h"

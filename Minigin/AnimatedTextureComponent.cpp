@@ -2,7 +2,7 @@
 #include "GameObject.h"
 #include "Renderer.h"
 #include "ResourceManager.h"
-#include "Time.h"
+#include "MyTime.h"
 #include "Texture2D.h"
 
 Twengine::AnimatedTextureComponent::AnimatedTextureComponent(GameObject* owner)

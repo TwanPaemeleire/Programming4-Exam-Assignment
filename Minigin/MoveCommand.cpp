@@ -1,7 +1,7 @@
 #include "MoveCommand.h"
 #include <iostream>
 #include "GameObject.h"
-#include "Time.h"
+#include "MyTime.h"
 
 MoveCommand::MoveCommand(Twengine::GameObject* gameObject)
 	:GameObjectCommand(gameObject)
