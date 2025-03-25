@@ -18,7 +18,7 @@ public:
 	DisplayPointsComponent& operator=(DisplayPointsComponent&& other) = delete;
 
 	virtual void Start() override;
-	virtual void Notify(GameEvent event, Twengine::GameObject* observedObject) override;
+	virtual void Notify(const GameEvent& event, Twengine::GameObject* observedObject) override;
 
 private:
 	Twengine::TextComponent* m_TextComponent{};

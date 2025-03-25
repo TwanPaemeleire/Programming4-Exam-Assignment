@@ -10,5 +10,5 @@ KillEnemyCommand::KillEnemyCommand(Twengine::GameObject* gameObject)
 
 void KillEnemyCommand::Execute()
 {
-	m_EnemyKilledEvent->NotifyObservers(GameEvent::EnemyKilled, GetGameObject());
+	m_EnemyKilledEvent->NotifyObservers(GameEvent(make_sdbm_hash("EnemyKilled")), GetGameObject());
 }

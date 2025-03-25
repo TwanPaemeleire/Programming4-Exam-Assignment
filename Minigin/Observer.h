@@ -1,5 +1,5 @@
 #pragma once
-#include "GameEvents.h"
+#include "GameEvent.h"
 
 namespace Twengine
 {
@@ -9,6 +9,6 @@ namespace Twengine
 	{
 	public:
 		virtual ~Observer() = default;
-		virtual void Notify(GameEvent event, GameObject* observedObject) = 0;
+		virtual void Notify(const GameEvent& event, GameObject* observedObject) = 0;
 	};
 }

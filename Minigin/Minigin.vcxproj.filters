@@ -126,7 +126,7 @@
     <ClInclude Include="HealthComponent.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="GameEvents.h">
+    <ClInclude Include="GameEvent.h">
       <Filter>Header Files\Observer</Filter>
     </ClInclude>
     <ClInclude Include="DisplayLivesComponent.h">

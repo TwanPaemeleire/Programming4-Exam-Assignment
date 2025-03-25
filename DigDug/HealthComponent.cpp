@@ -15,7 +15,7 @@ void HealthComponent::TakeDamage(int amount)
 	{
 		m_CurrentHealth = 0;
 		--m_Lives;
-		m_ObjectDiedEvent->NotifyObservers(GameEvent::PlayerDied, GetOwner());
+		m_ObjectDiedEvent->NotifyObservers(GameEvent(make_sdbm_hash("PlayerDied")), GetOwner());
 	}
 }
 

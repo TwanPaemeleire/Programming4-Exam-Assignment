@@ -22,7 +22,7 @@ public:
 	void SetScore(int points);
 	int GetScore() const { return m_Score; }
 
-	virtual void Notify(GameEvent event, Twengine::GameObject* observedObject) override;
+	virtual void Notify(const GameEvent& event, Twengine::GameObject* observedObject) override;
 
 	Twengine::Event* GetScoreChangedEvent() const { return m_ScoreChangedEvent.get(); }
 private:

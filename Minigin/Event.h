@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include "GameEvents.h"
+#include "GameEvent.h"
 
 namespace Twengine
 {
@@ -13,7 +13,7 @@ namespace Twengine
 		void AddObserver(Observer* observer);
 		void RemoveObserver(Observer* observer);
 
-		void NotifyObservers(GameEvent event, GameObject* observedObject);
+		void NotifyObservers(const GameEvent& event, GameObject* observedObject);
 
 	private:
 		std::vector<Observer*> m_Observers;

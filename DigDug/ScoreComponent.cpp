@@ -10,26 +10,26 @@ ScoreComponent::ScoreComponent(Twengine::GameObject* owner)
 void ScoreComponent::SetScore(int points)
 {
 	m_Score = points;
-	m_ScoreChangedEvent->NotifyObservers(GameEvent::ScoreChanged, GetOwner());
+	m_ScoreChangedEvent->NotifyObservers(GameEvent(make_sdbm_hash("ScoreChanged")), GetOwner());
 }
 
-void ScoreComponent::Notify(GameEvent event, Twengine::GameObject* observedObject)
+void ScoreComponent::Notify(const GameEvent& event, Twengine::GameObject* observedObject)
 {
 	// Use observed object to get it's layer or something?
 	observedObject;
-	if (event == GameEvent::PlayerDied)
+	if (event.id == make_sdbm_hash("PlayerDied"))
 	{
 		m_Score -= 200;
-		m_ScoreChangedEvent->NotifyObservers(GameEvent::ScoreChanged, GetOwner());
+		m_ScoreChangedEvent->NotifyObservers(GameEvent(make_sdbm_hash("ScoreChanged")), GetOwner());
 	}
-	else if (event == GameEvent::EnemyKilled)
+	else if (event.id == make_sdbm_hash("EnemyKilled"))
 	{
 		m_Score += 250;
-		m_ScoreChangedEvent->NotifyObservers(GameEvent::ScoreChanged, GetOwner());
+		m_ScoreChangedEvent->NotifyObservers(GameEvent(make_sdbm_hash("ScoreChanged")), GetOwner());
 	}
-	else if (event == GameEvent::Pickup)
+	else if (event.id == make_sdbm_hash("Pickup"))
 	{
 		m_Score += 50;
-		m_ScoreChangedEvent->NotifyObservers(GameEvent::ScoreChanged, GetOwner());
+		m_ScoreChangedEvent->NotifyObservers(GameEvent(make_sdbm_hash("ScoreChanged")), GetOwner());
 	}
 }
