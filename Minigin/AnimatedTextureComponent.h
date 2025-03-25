@@ -22,6 +22,9 @@ namespace Twengine
 		void InitializeSpriteSheet(const std::string& filePath, int rows, int columns);
 		void PlayAnimation(int row, int amountOfFrames, float frameDelay = 0.2f, int repeatStartColumn = 0);
 
+		void SetFlipHorizontal(bool flipped) { m_FlipHorizontal = flipped; }
+		void SetFlipVertical(bool flipped) { m_FlipVertical = flipped; }
+
 	private:
 		Texture2D* m_SpriteSheet{};
 
@@ -30,6 +33,8 @@ namespace Twengine
 		float m_FrameHeight{};
 		int m_Rows{};
 		int m_Columns{};
+		bool m_FlipHorizontal{ false };
+		bool m_FlipVertical{ false };
 
 		// Animation Specific
 		int m_CurrentRow{};

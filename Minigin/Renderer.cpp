@@ -88,7 +88,7 @@ void Twengine::Renderer::RenderTexture(const Texture2D& texture, const float x, 
 	SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dstRect);
 }
 
-void Twengine::Renderer::RenderTextureRect(const Texture2D& texture, float x, float y, float srcX, float srcY, float srcWidth, float srcHeight)
+void Twengine::Renderer::RenderTextureRect(const Texture2D& texture, float x, float y, float srcX, float srcY, float srcWidth, float srcHeight, bool flipHorizontal, bool flipVertical)
 {
 	SDL_Rect srcRect{};
 	srcRect.x = static_cast<int>(srcX);
@@ -100,7 +100,12 @@ void Twengine::Renderer::RenderTextureRect(const Texture2D& texture, float x, fl
 	dstRect.y = static_cast<int>(y);
 	dstRect.w = static_cast<int>(srcWidth);
 	dstRect.h = static_cast<int>(srcHeight);
-	SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), &srcRect, &dstRect);
+
+	SDL_RendererFlip flip = SDL_FLIP_NONE;
+	if (flipHorizontal) flip = SDL_FLIP_HORIZONTAL;
+	if (flipVertical) flip = static_cast<SDL_RendererFlip>(flip | SDL_FLIP_VERTICAL);
+	//SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), &srcRect, &dstRect);
+	SDL_RenderCopyEx(GetSDLRenderer(), texture.GetSDLTexture(), &srcRect, &dstRect, 0, nullptr, flip);
 }
 
 SDL_Renderer* Twengine::Renderer::GetSDLRenderer() const { return m_Renderer; }

@@ -24,6 +24,8 @@
 #include "KillObjectCommand.h"
 #include "KillEnemyCommand.h"
 
+#include "DigDugComponent.h"
+
 #include "Event.h"
 
 void load()
@@ -149,6 +151,7 @@ void load()
 	scene.Add(std::move(enemyScoreText));
 	
 	auto animatedObject = std::make_unique<Twengine::GameObject>();
+	animatedObject->AddComponent<DigDugComponent>();
 	animatedObject->GetTransform()->SetLocalPosition(300, 400);
 	Twengine::AnimatedTextureComponent* animator = animatedObject->AddComponent<Twengine::AnimatedTextureComponent>();
 	animator->InitializeSpriteSheet("playerSheet.png", 11, 11);

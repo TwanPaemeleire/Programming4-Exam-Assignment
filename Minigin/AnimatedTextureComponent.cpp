@@ -34,7 +34,7 @@ void Twengine::AnimatedTextureComponent::Render() const
 	const auto& pos = m_Transform->GetWorldPosition();
 	const float srcX = m_FrameWidth * m_CurrentColumn;
 	const float srcY = m_FrameHeight * m_CurrentRow;
-	Renderer::GetInstance().RenderTextureRect(*m_SpriteSheet, pos.x, pos.y, srcX, srcY, m_FrameWidth, m_FrameHeight);
+	Renderer::GetInstance().RenderTextureRect(*m_SpriteSheet, pos.x, pos.y, srcX, srcY, m_FrameWidth, m_FrameHeight, m_FlipHorizontal, m_FlipVertical);
 }
 
 void Twengine::AnimatedTextureComponent::InitializeSpriteSheet(const std::string& filePath, int rows, int columns)
