@@ -43,7 +43,7 @@ void PrintSDLVersion()
 		version.major, version.minor, version.patch);
 }
 
-Twengine::Minigin::Minigin(const std::string &dataPath)
+Twengine::Minigin::Minigin()
 {
 	PrintSDLVersion();
 	
@@ -67,7 +67,7 @@ Twengine::Minigin::Minigin(const std::string &dataPath)
 
 	Renderer::GetInstance().Init(g_window);
 
-	ResourceManager::GetInstance().Init(dataPath);
+	ResourceManager::GetInstance().Init();
 
 	// Initialize The Controllers
 	InputManager::GetInstance().Init();
