@@ -160,6 +160,22 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="DigDug.cpp" />
+    <ClCompile Include="DisplayLivesComponent.cpp" />
+    <ClCompile Include="DisplayPointsComponent.cpp" />
+    <ClCompile Include="HealthComponent.cpp" />
+    <ClCompile Include="KillEnemyCommand.cpp" />
+    <ClCompile Include="KillObjectCommand.cpp" />
+    <ClCompile Include="MoveCommand.cpp" />
+    <ClCompile Include="ScoreComponent.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DisplayLivesComponent.h" />
+    <ClInclude Include="DisplayPointsComponent.h" />
+    <ClInclude Include="HealthComponent.h" />
+    <ClInclude Include="KillEnemyCommand.h" />
+    <ClInclude Include="KillObjectCommand.h" />
+    <ClInclude Include="MoveCommand.h" />
+    <ClInclude Include="ScoreComponent.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

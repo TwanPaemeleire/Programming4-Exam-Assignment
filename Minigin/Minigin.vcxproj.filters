@@ -84,9 +84,6 @@
     <ClInclude Include="TransformComponent.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="RotationAroundPointComponent.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
     <ClInclude Include="..\3rdParty\imgui\imconfig.h">
       <Filter>imgui</Filter>
     </ClInclude>
@@ -123,9 +120,6 @@
     <ClInclude Include="GameObjectCommand.h">
       <Filter>Header Files\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="MoveCommand.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
     <ClInclude Include="Event.h">
       <Filter>Header Files\Observer</Filter>
     </ClInclude>
@@ -141,17 +135,11 @@
     <ClInclude Include="Observer.h">
       <Filter>Header Files\Observer</Filter>
     </ClInclude>
-    <ClInclude Include="KillObjectCommand.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
     <ClInclude Include="ScoreComponent.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="DisplayPointsComponent.h">
       <Filter>Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="KillEnemyCommand.h">
-      <Filter>Header Files\Commands</Filter>
     </ClInclude>
     <ClInclude Include="AnimatedTextureComponent.h">
       <Filter>Header Files\Components</Filter>
@@ -197,9 +185,6 @@
     <ClCompile Include="TransformComponent.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
-    <ClCompile Include="RotationAroundPointComponent.cpp">
-      <Filter>Source Files\Components</Filter>
-    </ClCompile>
     <ClCompile Include="..\3rdParty\imgui\imgui.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
@@ -233,29 +218,8 @@
     <ClCompile Include="GameObjectCommand.cpp">
       <Filter>Source Files\Commands</Filter>
     </ClCompile>
-    <ClCompile Include="MoveCommand.cpp">
-      <Filter>Source Files\Commands</Filter>
-    </ClCompile>
     <ClCompile Include="Event.cpp">
       <Filter>Source Files\Observer</Filter>
-    </ClCompile>
-    <ClCompile Include="HealthComponent.cpp">
-      <Filter>Source Files\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="DisplayLivesComponent.cpp">
-      <Filter>Source Files\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="KillObjectCommand.cpp">
-      <Filter>Source Files\Commands</Filter>
-    </ClCompile>
-    <ClCompile Include="ScoreComponent.cpp">
-      <Filter>Source Files\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="DisplayPointsComponent.cpp">
-      <Filter>Source Files\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="KillEnemyCommand.cpp">
-      <Filter>Source Files\Commands</Filter>
     </ClCompile>
     <ClCompile Include="AnimatedTextureComponent.cpp">
       <Filter>Source Files\Components</Filter>
