@@ -9,7 +9,7 @@
 DisplayLivesComponent::DisplayLivesComponent(Twengine::GameObject* owner)
 	:Component(owner)
 {
-	m_LifeTexture = Twengine::ResourceManager::GetInstance().LoadTexture("LivesDisplay.png");
+	m_LifeTexture = Twengine::ResourceManager::GetInstance().LoadTexture("DigDug/LivesDisplay.png");
 }
 
 void DisplayLivesComponent::Render() const
