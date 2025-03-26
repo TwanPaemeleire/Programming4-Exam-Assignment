@@ -13,7 +13,8 @@ namespace Twengine
 		void Render() const;
 		void Destroy();
 
-		void RenderTexture(const Texture2D& texture, float x, float y) const;
+		void DrawRectangle(float x, float y, float width, float height, const SDL_Color& color) const;
+		void RenderTexture(const Texture2D& texture, float x, float y, float scaling = 1.f) const;
 		void RenderTexture(const Texture2D& texture, float x, float y, float width, float height) const;
 		void RenderTextureRect(const Texture2D& texture, float x, float y, float srcX, float srcY, float srcWidth, float srcHeight, bool flipHorizontal = false, bool flipVertical = false, double angle = 0);
 
@@ -21,10 +22,16 @@ namespace Twengine
 
 		const SDL_Color& GetBackgroundColor() const { return m_ClearColor; }
 		void SetBackgroundColor(const SDL_Color& color) { m_ClearColor = color; }
+
+		int GetWindowWidth() const { return m_WindowWidth; }
+		int GetWindowHeight() const { return m_WindowHeight; }
 	private:
 		SDL_Renderer* m_Renderer{};
 		SDL_Window* m_Window{};
 		SDL_Color m_ClearColor{};
+
+		int m_WindowWidth{};
+		int m_WindowHeight{};
 	};
 }
 

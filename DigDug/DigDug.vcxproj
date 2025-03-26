@@ -163,6 +163,7 @@
     <ClCompile Include="DigDugComponent.cpp" />
     <ClCompile Include="DisplayLivesComponent.cpp" />
     <ClCompile Include="DisplayPointsComponent.cpp" />
+    <ClCompile Include="GridComponent.cpp" />
     <ClCompile Include="HealthComponent.cpp" />
     <ClCompile Include="KillEnemyCommand.cpp" />
     <ClCompile Include="KillObjectCommand.cpp" />
@@ -173,6 +174,7 @@
     <ClInclude Include="DigDugComponent.h" />
     <ClInclude Include="DisplayLivesComponent.h" />
     <ClInclude Include="DisplayPointsComponent.h" />
+    <ClInclude Include="GridComponent.h" />
     <ClInclude Include="HealthComponent.h" />
     <ClInclude Include="KillEnemyCommand.h" />
     <ClInclude Include="KillObjectCommand.h" />

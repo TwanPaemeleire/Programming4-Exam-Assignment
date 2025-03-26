@@ -28,6 +28,7 @@ void Twengine::Renderer::Init(SDL_Window* window)
 	{
 		throw std::runtime_error(std::string("SDL_CreateRenderer Error: ") + SDL_GetError());
 	}
+	SDL_GetWindowSizeInPixels(m_Window, &m_WindowWidth, &m_WindowHeight);
 
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -57,7 +58,6 @@ void Twengine::Renderer::Render() const
 
 void Twengine::Renderer::Destroy()
 {
-	// TEMP
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplSDL2_Shutdown();
 	ImGui::DestroyContext();
@@ -69,12 +69,26 @@ void Twengine::Renderer::Destroy()
 	}
 }
 
-void Twengine::Renderer::RenderTexture(const Texture2D& texture, const float x, const float y) const
+void Twengine::Renderer::DrawRectangle(float x, float y, float width, float height, const SDL_Color& color) const
+{
+	SDL_SetRenderDrawColor(m_Renderer, color.r, color.g, color.b, color.a);
+
+	SDL_Rect rect{};
+	rect.x = static_cast<int>(x);
+	rect.y = static_cast<int>(y);
+	rect.w = static_cast<int>(width);
+	rect.h = static_cast<int>(height);
+
+	SDL_RenderDrawRect(m_Renderer, &rect);
+}
+
+void Twengine::Renderer::RenderTexture(const Texture2D& texture, const float x, const float y, float scaling) const
 {
 	SDL_Rect dstRect{};
 	dstRect.x = static_cast<int>(x);
 	dstRect.y = static_cast<int>(y);
-	SDL_QueryTexture(texture.GetSDLTexture(), nullptr, nullptr, &dstRect.w, &dstRect.h);
+	dstRect.w = static_cast<int>(texture.GetSize().x * scaling);
+	dstRect.h = static_cast<int>(texture.GetSize().y * scaling);
 	SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dstRect);
 }
 
@@ -104,7 +118,6 @@ void Twengine::Renderer::RenderTextureRect(const Texture2D& texture, float x, fl
 	SDL_RendererFlip flip = SDL_FLIP_NONE;
 	if (flipHorizontal) flip = SDL_FLIP_HORIZONTAL;
 	if (flipVertical) flip = static_cast<SDL_RendererFlip>(flip | SDL_FLIP_VERTICAL);
-	//SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), &srcRect, &dstRect);
 	SDL_RenderCopyEx(GetSDLRenderer(), texture.GetSDLTexture(), &srcRect, &dstRect, angle, nullptr, flip);
 }
 

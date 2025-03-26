@@ -33,11 +33,6 @@ void Twengine::AnimatedTextureComponent::Update()
 
 void Twengine::AnimatedTextureComponent::Render() const
 {
-	if (m_CurrentColumn == 1)
-	{
-		int i = 0;
-		i;
-	}
 	const auto& pos = m_Transform->GetWorldPosition();
 	const float srcX = m_FrameWidth * m_CurrentColumn;
 	const float srcY = 0;
@@ -53,8 +48,8 @@ void Twengine::AnimatedTextureComponent::AddAnimation(const std::string& filePat
 	tempAnimation->spriteSheet = ResourceManager::GetInstance().LoadTexture(filePath);
 	tempAnimation->columns = columns;
 	tempAnimation->repeatStartColumn = repeatStartColumn;
-	tempAnimation->frameWidth = tempAnimation->spriteSheet->GetSize().x / static_cast<float>(columns);
-	tempAnimation->frameHeight = static_cast<float>(tempAnimation->spriteSheet->GetSize().y);
+	tempAnimation->frameWidth = (tempAnimation->spriteSheet->GetSize().x / static_cast<float>(columns)) * 2;
+	tempAnimation->frameHeight = static_cast<float>(tempAnimation->spriteSheet->GetSize().y) * 2;
 
 	// Extract Just The FileName Which Can Be Used As A Key		"Enemies/Pooka/PookaMove.png" => "PookaMove"
 	std::string key = std::filesystem::path(filePath).stem().string();
