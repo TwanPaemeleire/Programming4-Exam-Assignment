@@ -4,6 +4,8 @@
 #include "ResourceManager.h"
 #include "MyTime.h"
 #include "Texture2D.h"
+#include <filesystem>
+#include <iostream>
 
 Twengine::AnimatedTextureComponent::AnimatedTextureComponent(GameObject* owner)
 	:Component(owner)
@@ -15,7 +17,7 @@ void Twengine::AnimatedTextureComponent::Update()
 	m_DelayCounter += Time::GetInstance().deltaTime;
 	if (m_DelayCounter >= m_FrameDelay) // New Frame Should Be Triggered
 	{
-		if (m_CurrentColumn >= m_AmountOfFrames - 1) // Animation Reached The End Frame
+		if (m_CurrentColumn >= m_MaxColumnIndex) // Animation Reached The End Frame
 		{
 			m_CurrentColumn = m_RepeatStartFrame;
 			m_HasFinishedPlayingOnce = true;
@@ -31,28 +33,42 @@ void Twengine::AnimatedTextureComponent::Update()
 
 void Twengine::AnimatedTextureComponent::Render() const
 {
+	if (m_CurrentColumn == 1)
+	{
+		int i = 0;
+		i;
+	}
 	const auto& pos = m_Transform->GetWorldPosition();
 	const float srcX = m_FrameWidth * m_CurrentColumn;
-	const float srcY = m_FrameHeight * m_CurrentRow;
-	Renderer::GetInstance().RenderTextureRect(*m_SpriteSheet, pos.x, pos.y, srcX, srcY, m_FrameWidth, m_FrameHeight, m_FlipHorizontal, m_FlipVertical);
+	const float srcY = 0;
+	Renderer::GetInstance().RenderTextureRect(*m_CurrentAnimation->spriteSheet, 
+											  pos.x, pos.y, srcX, srcY, 
+											  m_FrameWidth, m_FrameHeight, 
+											  m_FlipHorizontal, m_FlipVertical, m_RotationAngle);
 }
 
-void Twengine::AnimatedTextureComponent::InitializeSpriteSheet(const std::string& filePath, int rows, int columns)
+void Twengine::AnimatedTextureComponent::AddAnimation(const std::string& filePath, int columns, int repeatStartColumn)
 {
-	m_SpriteSheet = ResourceManager::GetInstance().LoadTexture(filePath);
-	m_Rows = rows;
-	m_Columns = columns;
-	m_FrameWidth = m_SpriteSheet->GetSize().x / static_cast<float>(columns);
-	m_FrameHeight = m_SpriteSheet->GetSize().y / static_cast<float>(m_Rows);
+	std::unique_ptr<Animation> tempAnimation = std::make_unique<Animation>();
+	tempAnimation->spriteSheet = ResourceManager::GetInstance().LoadTexture(filePath);
+	tempAnimation->columns = columns;
+	tempAnimation->repeatStartColumn = repeatStartColumn;
+	tempAnimation->frameWidth = tempAnimation->spriteSheet->GetSize().x / static_cast<float>(columns);
+	tempAnimation->frameHeight = static_cast<float>(tempAnimation->spriteSheet->GetSize().y);
+
+	// Extract Just The FileName Which Can Be Used As A Key		"Enemies/Pooka/PookaMove.png" => "PookaMove"
+	std::string key = std::filesystem::path(filePath).stem().string();
+	m_Animations.emplace(key, std::move(tempAnimation));
 }
 
-void Twengine::AnimatedTextureComponent::PlayAnimation(int row, int amountOfFrames, float frameDelay, int repeatStartColumn)
+void Twengine::AnimatedTextureComponent::PlayAnimation(const std::string& key, float frameDelay)
 {
-	m_CurrentRow = row;
 	m_CurrentColumn = 0;
-	m_AmountOfFrames = amountOfFrames;
-	m_FrameDelay = frameDelay;
-	m_RepeatStartFrame = repeatStartColumn;
-	m_HasFinishedPlayingOnce = false;
 	m_DelayCounter = 0.f;
+	m_FrameDelay = frameDelay;
+	m_CurrentAnimation = m_Animations.find(key)->second.get();
+	m_MaxColumnIndex = m_CurrentAnimation->columns - 1;
+	m_FrameWidth = m_CurrentAnimation->frameWidth;
+	m_FrameHeight = m_CurrentAnimation->frameHeight;
+	m_HasFinishedPlayingOnce = false;
 }

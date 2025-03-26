@@ -153,9 +153,9 @@ void load()
 	auto animatedObject = std::make_unique<Twengine::GameObject>();
 	animatedObject->AddComponent<DigDugComponent>();
 	animatedObject->GetTransform()->SetLocalPosition(300, 400);
-	Twengine::AnimatedTextureComponent* animator = animatedObject->AddComponent<Twengine::AnimatedTextureComponent>();
-	animator->InitializeSpriteSheet("playerSheet.png", 11, 11);
-	animator->PlayAnimation(3, 11, 0.2f, 2);
+	animatedObject->AddComponent<Twengine::AnimatedTextureComponent>();
+	//animator->InitializeSpriteSheet("playerSheet.png", 11, 11);
+	//animator->PlayAnimation(3, 11, 0.2f, 2);
 	scene.Add(std::move(animatedObject));
 }
 

@@ -15,7 +15,7 @@ namespace Twengine
 
 		void RenderTexture(const Texture2D& texture, float x, float y) const;
 		void RenderTexture(const Texture2D& texture, float x, float y, float width, float height) const;
-		void RenderTextureRect(const Texture2D& texture, float x, float y, float srcX, float srcY, float srcWidth, float srcHeight, bool flipHorizontal = false, bool flipVertical = false);
+		void RenderTextureRect(const Texture2D& texture, float x, float y, float srcX, float srcY, float srcWidth, float srcHeight, bool flipHorizontal = false, bool flipVertical = false, double angle = 0);
 
 		SDL_Renderer* GetSDLRenderer() const;
 

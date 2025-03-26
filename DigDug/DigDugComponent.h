@@ -1,6 +1,11 @@
 #pragma once
 #include "Component.h"
 
+namespace Twengine
+{
+	class AnimatedTextureComponent;
+};
+
 class DigDugComponent : public Twengine::Component
 {
 public:
@@ -11,11 +16,12 @@ public:
 	DigDugComponent& operator=(const DigDugComponent& other) = delete;
 	DigDugComponent& operator=(DigDugComponent&& other) = delete;
 
+	virtual void Start() override;
 	virtual void Update() override;
 
 private:
-	float m_FlipCounter{ 0.f };
-	float m_FlipDelay{ 2.f };
-	bool m_FlipHorizontal{ false };
+	double m_Angle{};
+
+	Twengine::AnimatedTextureComponent* m_AnimationComponent{};
 };
 
