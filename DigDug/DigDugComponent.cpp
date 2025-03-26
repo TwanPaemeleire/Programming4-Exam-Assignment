@@ -12,15 +12,15 @@ DigDugComponent::DigDugComponent(Twengine::GameObject* owner)
 void DigDugComponent::Start()
 {
 	m_AnimationComponent = GetOwner()->GetComponent<Twengine::AnimatedTextureComponent>();
-	m_AnimationComponent->AddAnimation("Pooka/PookaMove.png", 2);
-	m_AnimationComponent->AddAnimation("Pooka/PookaPump.png", 4);
-	m_AnimationComponent->AddAnimation("Pooka/PookaGhost.png", 2);
-	m_AnimationComponent->AddAnimation("Pooka/PookaCrushed.png", 1);
-	m_AnimationComponent->PlayAnimation("PookaCrushed");
+	m_AnimationComponent->AddAnimation("DigDug/DigDugMove.png", 2);
+	m_AnimationComponent->AddAnimation("DigDug/DigDugDigging.png", 4);
+	m_AnimationComponent->AddAnimation("DigDug/DigDugIdle.png", 1);
+
+	m_AnimationComponent->PlayAnimation("DigDugMove");
 }
 
 void DigDugComponent::Update()
 {
-	m_Angle += 20 * Twengine::Time::GetInstance().deltaTime;
-	m_AnimationComponent->SetRotationAngle(m_Angle);
+	//m_Angle += 20 * Twengine::Time::GetInstance().deltaTime;
+	//m_AnimationComponent->SetRotationAngle(m_Angle);
 }

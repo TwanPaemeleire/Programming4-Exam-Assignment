@@ -17,7 +17,7 @@ void DisplayLivesComponent::Render() const
 	for (int liveIndex{}; liveIndex < m_LivesLeft; ++liveIndex)
 	{
 		auto& pos = GetOwner()->GetTransform()->GetWorldPosition();
-		Twengine::Renderer::GetInstance().RenderTexture(*m_LifeTexture, pos.x + m_LifeDrawOffset * liveIndex, pos.y, 2.f);
+		Twengine::Renderer::GetInstance().RenderTexture(*m_LifeTexture, pos.x + m_LifeDrawOffset * liveIndex, pos.y);
 	}
 }
 

@@ -32,7 +32,7 @@
 void load()
 {
 	auto& scene = Twengine::SceneManager::GetInstance().CreateScene("Demo");
-	
+
 	auto* font = Twengine::ResourceManager::GetInstance().LoadFont("GameFont.otf", 12);
 
 	auto fpsDisplayer = std::make_unique<Twengine::GameObject>();
@@ -40,7 +40,7 @@ void load()
 	fpsText->SetFont(font);
 	fpsDisplayer->AddComponent<Twengine::FPSComponent>();
 	scene.Add(std::move(fpsDisplayer));
-		
+
 	auto* smallFont = Twengine::ResourceManager::GetInstance().LoadFont("GameFont.otf", 8);
 	// Tutorial 
 	auto enemyTutorial = std::make_unique<Twengine::GameObject>();
@@ -49,37 +49,39 @@ void load()
 	enemyTutorialText->SetFont(smallFont);
 	enemyTutorial->GetTransform()->SetLocalPosition(5, 100);
 	scene.Add(std::move(enemyTutorial));
-	
+
 	auto digDugTutorial = std::make_unique<Twengine::GameObject>();
 	auto* digDugTutorialText = digDugTutorial->AddComponent<Twengine::TextComponent>();
 	digDugTutorialText->SetText("Use WASD To Move DigDug, C To Inflict Damage, Z & X To Increase Your Score");
 	digDugTutorialText->SetFont(smallFont);
 	digDugTutorial->GetTransform()->SetLocalPosition(5, 120);
 	scene.Add(std::move(digDugTutorial));
-	
-	
+
+
 	// Display DigDug Lives
 	auto digdugLivesText = std::make_unique<Twengine::GameObject>();
 	auto* digDugLivesDisplayComp = digdugLivesText->AddComponent<DisplayLivesComponent>();
-	
+
 	// Display DigDug Score
 	auto digdugScoreText = std::make_unique<Twengine::GameObject>();
 	digdugScoreText->AddComponent<Twengine::TextComponent>()->SetFont(smallFont);
 	auto* digdugPointsDisplayComp = digdugScoreText->AddComponent<DisplayPointsComponent>();
 	digdugScoreText->GetTransform()->SetLocalPosition(5, 190);
-	
+
 	// DIGDUG
 	auto digdug = std::make_unique<Twengine::GameObject>();
 	digdug->GetTransform()->SetLocalPosition(200, 350);
-	digdug->AddComponent<Twengine::TextureRenderComponent>()->SetTexture("digdug.png");
-	
+
 	auto* diDugHealth = digdug->AddComponent<HealthComponent>();
 	diDugHealth->GetObjectDiedEvent()->AddObserver(digDugLivesDisplayComp);
 	diDugHealth->SetMaxLives(3);
-	
+
 	auto* digDugScore = digdug->AddComponent<ScoreComponent>();
 	digDugScore->GetScoreChangedEvent()->AddObserver(digdugPointsDisplayComp);
-	
+
+	digdug->AddComponent<DigDugComponent>();
+	digdug->AddComponent<Twengine::AnimatedTextureComponent>();
+
 	// Bindings For Keyboard
 	Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_w, Twengine::InteractionStates::pressed, digdug.get(), -1)->SetDirection(0, -100);
 	Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_s, Twengine::InteractionStates::pressed, digdug.get(), -1)->SetDirection(0, 100);
@@ -88,12 +90,6 @@ void load()
 	Twengine::InputManager::GetInstance().BindCommandToInput<KillObjectCommand>(SDLK_c, Twengine::InteractionStates::up, digdug.get(), -1);
 	Twengine::InputManager::GetInstance().BindCommandToInput<KillEnemyCommand>(SDLK_z, Twengine::InteractionStates::up, digdug.get(), -1)->GetEnemyKilledEvent()->AddObserver(digDugScore);
 	Twengine::InputManager::GetInstance().BindCommandToInput<KillEnemyCommand>(SDLK_x, Twengine::InteractionStates::up, digdug.get(), -1);
-	
-	auto animatedObject = std::make_unique<Twengine::GameObject>();
-	animatedObject->AddComponent<DigDugComponent>();
-	animatedObject->GetTransform()->SetLocalPosition(300, 400);
-	animatedObject->AddComponent<Twengine::AnimatedTextureComponent>();
-	scene.Add(std::move(animatedObject));
 
 	auto gridObject = std::make_unique<Twengine::GameObject>();
 	auto* grid = gridObject->AddComponent<GridComponent>();

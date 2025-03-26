@@ -2,6 +2,12 @@
 #include "GameObjectCommand.h"
 #include "glm.hpp"
 
+namespace Twengine
+{
+	class AnimatedTextureComponent;
+
+}
+
 class MoveCommand : public Twengine::GameObjectCommand
 {
 public:
@@ -13,5 +19,6 @@ public:
 
 private:
 	glm::vec2 m_Direction{};
+	Twengine::AnimatedTextureComponent* m_AnimationComponent;
 };
 
