@@ -1,6 +1,7 @@
 #include <SDL.h>
 #include "InputManager.h"
 #include "backends/imgui_impl_sdl2.h"
+#include <iostream>
 
 void Twengine::InputManager::Init()
 {
@@ -22,6 +23,22 @@ void Twengine::InputManager::HandleControllerInput()
 	{
 		controller->ProcessInput(); // Process Input For Every Controller
 		int controllerIndex = controller->GetControllerIndex();
+
+		// JoyStick Input
+		float leftX = controller->GetLeftStickX();
+		float leftY = controller->GetLeftStickY();
+
+		if (fabs(leftX) >= 0.1f || fabs(leftY) >= 0.1f)
+		{
+			for (const auto& joystickCommand : m_BindedJoystickCommands)
+			{
+				if (joystickCommand->controllerIndex == controllerIndex)
+				{
+					joystickCommand->command->Execute(leftX, leftY);
+				}
+			}
+		}
+
 
 		for (const auto& command : m_BindedCommands)
 		{
@@ -49,6 +66,7 @@ void Twengine::InputManager::HandleControllerInput()
 				{
 					command->command->Execute();
 				}
+
 			}
 		}
 	}

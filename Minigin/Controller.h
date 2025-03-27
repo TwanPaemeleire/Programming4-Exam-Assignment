@@ -19,6 +19,8 @@ namespace Twengine
 		bool IsPressed(unsigned int button) const;
 
 		int GetControllerIndex() const;
+		float GetLeftStickX() const;
+		float GetLeftStickY() const;
 	private:
 		class XInputImpl;
 		XInputImpl* m_pImpl;

@@ -165,6 +165,7 @@
     <ClCompile Include="DisplayPointsComponent.cpp" />
     <ClCompile Include="GridComponent.cpp" />
     <ClCompile Include="HealthComponent.cpp" />
+    <ClCompile Include="JoystickMoveCommand.cpp" />
     <ClCompile Include="KillEnemyCommand.cpp" />
     <ClCompile Include="KillObjectCommand.cpp" />
     <ClCompile Include="MoveCommand.cpp" />
@@ -176,6 +177,7 @@
     <ClInclude Include="DisplayPointsComponent.h" />
     <ClInclude Include="GridComponent.h" />
     <ClInclude Include="HealthComponent.h" />
+    <ClInclude Include="JoystickMoveCommand.h" />
     <ClInclude Include="KillEnemyCommand.h" />
     <ClInclude Include="KillObjectCommand.h" />
     <ClInclude Include="MoveCommand.h" />

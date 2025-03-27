@@ -210,6 +210,7 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameObjectCommand.h" />
     <ClInclude Include="HealthComponent.h" />
+    <ClInclude Include="JoystickCommand.h" />
     <ClInclude Include="Observer.h" />
     <ClInclude Include="ScoreComponent.h" />
     <ClInclude Include="Event.h" />
@@ -243,6 +244,7 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameObjectCommand.cpp" />
     <ClCompile Include="Event.cpp" />
+    <ClCompile Include="JoystickCommand.cpp" />
     <ClCompile Include="TextureRenderComponent.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Minigin.cpp" />

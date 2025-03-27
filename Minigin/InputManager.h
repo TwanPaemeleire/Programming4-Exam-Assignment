@@ -7,6 +7,7 @@
 class GameObject;
 #include "Controller.h"
 #include "GameObjectCommand.h"
+#include "JoystickCommand.h"
 
 namespace Twengine
 {
@@ -23,6 +24,13 @@ namespace Twengine
 		unsigned int button{};
 	};
 
+	struct BindedJoystickCommand
+	{
+		std::unique_ptr<JoystickCommand> command{};
+		InteractionStates interactionState{};
+		int controllerIndex{}; // An Index Of -1 Will Mean That It's Binded To Keyboard
+	};
+
 	class InputManager final : public Singleton<InputManager>
 	{
 	public:
@@ -32,6 +40,8 @@ namespace Twengine
 		template <typename command>
 		command* BindCommandToInput(unsigned int button, InteractionStates interactionState, GameObject* gameObject, int controllerIndex);
 		template <typename command>
+		command* BindJoystickCommandToInput(InteractionStates interactionState, GameObject* gameObject, int controllerIndex);
+		template <typename command>
 		void RemoveBindedCommand(int controllerIndex);
 
 	private:
@@ -40,6 +50,7 @@ namespace Twengine
 
 		std::vector<std::unique_ptr<Controller>> m_Controllers;
 		std::vector<std::unique_ptr<BindedCommand>> m_BindedCommands;
+		std::vector<std::unique_ptr<BindedJoystickCommand>> m_BindedJoystickCommands;
 	};
 }
 
@@ -60,6 +71,22 @@ inline T* Twengine::InputManager::BindCommandToInput(unsigned int button, Twengi
 	newBindedCommand->interactionState = interactionState;
 	newBindedCommand->controllerIndex = controllerIndex;
 	m_BindedCommands.emplace_back(std::move(newBindedCommand));
+	return tempRawPointer;
+}
+
+template<typename command>
+inline command* Twengine::InputManager::BindJoystickCommandToInput(InteractionStates interactionState, GameObject* gameObject, int controllerIndex)
+{
+	static_assert(std::is_base_of<JoystickCommand, command>::value, "Type passed to BindJoyStickCommandToInput<>() does NOT inherit from JoystickCommand");
+
+	std::unique_ptr<BindedJoystickCommand> newBindedCommand = std::make_unique<BindedJoystickCommand>();
+	std::unique_ptr<command> tempCommandUptr = std::make_unique<command>(gameObject);
+	command* tempRawPointer = tempCommandUptr.get();
+	newBindedCommand->command = std::move(tempCommandUptr);
+
+	newBindedCommand->interactionState = interactionState;
+	newBindedCommand->controllerIndex = controllerIndex;
+	m_BindedJoystickCommands.emplace_back(std::move(newBindedCommand));
 	return tempRawPointer;
 }
 

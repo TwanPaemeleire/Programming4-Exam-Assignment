@@ -23,6 +23,7 @@
 #include "MoveCommand.h"
 #include "KillObjectCommand.h"
 #include "KillEnemyCommand.h"
+#include "JoystickMoveCommand.h"
 
 #include "DigDugComponent.h"
 #include "GridComponent.h"
@@ -83,6 +84,7 @@ void load()
 	digdug->AddComponent<Twengine::AnimatedTextureComponent>();
 
 	// Bindings For Keyboard
+	Twengine::InputManager::GetInstance().BindJoystickCommandToInput<JoystickMoveCommand>(Twengine::InteractionStates::pressed, digdug.get(), 0);
 	Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_w, Twengine::InteractionStates::pressed, digdug.get(), -1)->SetDirection(0, -100);
 	Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_s, Twengine::InteractionStates::pressed, digdug.get(), -1)->SetDirection(0, 100);
 	Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_a, Twengine::InteractionStates::pressed, digdug.get(), -1)->SetDirection(-100, 0);
