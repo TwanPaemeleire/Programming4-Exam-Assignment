@@ -27,7 +27,7 @@ void Twengine::RectColliderComponent::Render() const
 void Twengine::RectColliderComponent::FixedUpdate()
 {
 	if (!m_Enabled) return;
-	for (int colliderIdx{ 0 }; colliderIdx < Colliders.size(); ++colliderIdx)
+	for (std::size_t colliderIdx{ 0 }; colliderIdx < Colliders.size(); ++colliderIdx)
 	{
 		if (this == Colliders[colliderIdx] || !Colliders[colliderIdx]->GetEnabled()) continue;
 
