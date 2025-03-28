@@ -3,7 +3,7 @@
 
 namespace Twengine
 {
-	class AnimatedTextureComponent;
+	class AnimationComponent;
 }
 
 class JoystickMoveCommand final : public Twengine::JoystickCommand
@@ -13,7 +13,7 @@ public:
 	virtual void Execute(float x, float y) override;
 
 private:
-	Twengine::AnimatedTextureComponent* m_AnimationComponent;
+	Twengine::AnimationComponent* m_AnimationComponent;
 	float m_Speed{ 20.f };
 };
 

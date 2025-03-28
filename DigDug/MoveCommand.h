@@ -4,7 +4,7 @@
 
 namespace Twengine
 {
-	class AnimatedTextureComponent;
+	class AnimationComponent;
 
 }
 
@@ -19,6 +19,6 @@ public:
 
 private:
 	glm::vec2 m_Direction{};
-	Twengine::AnimatedTextureComponent* m_AnimationComponent;
+	Twengine::AnimationComponent* m_AnimationComponent;
 };
 

@@ -2,13 +2,13 @@
 #include <iostream>
 #include "glm.hpp"
 #include "GameObject.h"
-#include "AnimatedTextureComponent.h"
+#include "AnimationComponent.h"
 #include "MyTime.h"
 
 JoystickMoveCommand::JoystickMoveCommand(Twengine::GameObject* gameObject)
 	:Twengine::JoystickCommand(gameObject)
 {
-	m_AnimationComponent = gameObject->GetComponent<Twengine::AnimatedTextureComponent>();
+	m_AnimationComponent = gameObject->GetComponent<Twengine::AnimationComponent>();
 }
 
 void JoystickMoveCommand::Execute(float x, float y)

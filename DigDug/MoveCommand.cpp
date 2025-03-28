@@ -2,12 +2,12 @@
 #include <iostream>
 #include "GameObject.h"
 #include "MyTime.h"
-#include "AnimatedTextureComponent.h"
+#include "AnimationComponent.h"
 
 MoveCommand::MoveCommand(Twengine::GameObject* gameObject)
 	:GameObjectCommand(gameObject)
 {
-	m_AnimationComponent = gameObject->GetComponent<Twengine::AnimatedTextureComponent>();
+	m_AnimationComponent = gameObject->GetComponent<Twengine::AnimationComponent>();
 }
 
 void MoveCommand::Execute()

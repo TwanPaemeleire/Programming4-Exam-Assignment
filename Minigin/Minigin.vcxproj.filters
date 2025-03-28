@@ -141,7 +141,7 @@
     <ClInclude Include="DisplayPointsComponent.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="AnimatedTextureComponent.h">
+    <ClInclude Include="AnimationComponent.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="JoystickCommand.h">
@@ -224,7 +224,7 @@
     <ClCompile Include="Event.cpp">
       <Filter>Source Files\Observer</Filter>
     </ClCompile>
-    <ClCompile Include="AnimatedTextureComponent.cpp">
+    <ClCompile Include="AnimationComponent.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
     <ClCompile Include="JoystickCommand.cpp">

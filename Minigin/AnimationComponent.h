@@ -8,7 +8,7 @@ namespace Twengine
 {
 	class Texture2D;
 
-	struct Animation
+	struct AnimationData
 	{
 		Texture2D* spriteSheet{};
 		int columns{};
@@ -17,21 +17,25 @@ namespace Twengine
 		int repeatStartColumn{};
 	};
 
-	class AnimatedTextureComponent : public Component
+	class AnimationComponent : public Component
 	{
 	public:
-		AnimatedTextureComponent(GameObject* owner);
-		virtual ~AnimatedTextureComponent() override = default;
-		AnimatedTextureComponent(const AnimatedTextureComponent& other) = delete;
-		AnimatedTextureComponent(AnimatedTextureComponent&& other) = delete;
-		AnimatedTextureComponent& operator=(const AnimatedTextureComponent& other) = delete;
-		AnimatedTextureComponent& operator=(AnimatedTextureComponent&& other) = delete;
+		AnimationComponent(GameObject* owner);
+		virtual ~AnimationComponent() override = default;
+		AnimationComponent(const AnimationComponent& other) = delete;
+		AnimationComponent(AnimationComponent&& other) = delete;
+		AnimationComponent& operator=(const AnimationComponent& other) = delete;
+		AnimationComponent& operator=(AnimationComponent&& other) = delete;
 
 		virtual void Update() override;
 		virtual void Render() const override;
 
 		void AddAnimation(const std::string& filePath, int columns, int repeatStartColumn = 0);
 		void PlayAnimation(const std::string& key, float frameDelay = 0.2f);
+
+		float GetAnimationFrameWidth() const { return m_FrameWidth; }
+		float GetAnimationFrameHeight() const { return m_FrameHeight; }
+		bool HasFinishedPLayingOnce() const { return m_HasFinishedPlayingOnce; }
 
 		void SetFlipHorizontal(bool flipped) { m_FlipHorizontal = flipped; }
 		void SetFlipVertical(bool flipped) { m_FlipVertical = flipped; }
@@ -40,13 +44,13 @@ namespace Twengine
 	private:
 
 		// General
-		std::unordered_map<std::string, std::unique_ptr<Animation>> m_Animations;
+		std::unordered_map<std::string, std::unique_ptr<AnimationData>> m_Animations;
 		bool m_FlipHorizontal{ false };
 		bool m_FlipVertical{ false };
 		double m_RotationAngle{};
 
 		// Animation Specific
-		Animation* m_CurrentAnimation{};
+		AnimationData* m_CurrentAnimation{};
 		float m_FrameWidth{};
 		float m_FrameHeight{};
 		int m_CurrentColumn{};

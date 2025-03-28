@@ -1,7 +1,7 @@
 #include "DigDugComponent.h"
 #include "MyTime.h"
 #include "GameObject.h"
-#include "AnimatedTextureComponent.h"
+#include "AnimationComponent.h"
 
 DigDugComponent::DigDugComponent(Twengine::GameObject* owner)
 	:Component(owner)
@@ -11,7 +11,7 @@ DigDugComponent::DigDugComponent(Twengine::GameObject* owner)
 
 void DigDugComponent::Start()
 {
-	m_AnimationComponent = GetOwner()->GetComponent<Twengine::AnimatedTextureComponent>();
+	m_AnimationComponent = GetOwner()->GetComponent<Twengine::AnimationComponent>();
 	m_AnimationComponent->AddAnimation("DigDug/DigDugMove.png", 2);
 	m_AnimationComponent->AddAnimation("DigDug/DigDugDigging.png", 4);
 	m_AnimationComponent->AddAnimation("DigDug/DigDugIdle.png", 1);

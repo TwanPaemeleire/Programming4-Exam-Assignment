@@ -1,4 +1,4 @@
-#include "AnimatedTextureComponent.h"
+#include "AnimationComponent.h"
 #include "GameObject.h"
 #include "Renderer.h"
 #include "ResourceManager.h"
@@ -7,12 +7,12 @@
 #include <filesystem>
 #include <iostream>
 
-Twengine::AnimatedTextureComponent::AnimatedTextureComponent(GameObject* owner)
+Twengine::AnimationComponent::AnimationComponent(GameObject* owner)
 	:Component(owner)
 {
 }
 
-void Twengine::AnimatedTextureComponent::Update()
+void Twengine::AnimationComponent::Update()
 {
 	m_DelayCounter += Time::GetInstance().deltaTime;
 	if (m_DelayCounter >= m_FrameDelay) // New Frame Should Be Triggered
@@ -31,7 +31,7 @@ void Twengine::AnimatedTextureComponent::Update()
 	}
 }
 
-void Twengine::AnimatedTextureComponent::Render() const
+void Twengine::AnimationComponent::Render() const
 {
 	const auto& pos = m_Transform->GetWorldPosition();
 	const float srcX = m_FrameWidth * m_CurrentColumn;
@@ -42,9 +42,9 @@ void Twengine::AnimatedTextureComponent::Render() const
 		m_FlipHorizontal, m_FlipVertical, m_RotationAngle);
 }
 
-void Twengine::AnimatedTextureComponent::AddAnimation(const std::string& filePath, int columns, int repeatStartColumn)
+void Twengine::AnimationComponent::AddAnimation(const std::string& filePath, int columns, int repeatStartColumn)
 {
-	std::unique_ptr<Animation> tempAnimation = std::make_unique<Animation>();
+	std::unique_ptr<AnimationData> tempAnimation = std::make_unique<AnimationData>();
 	tempAnimation->spriteSheet = ResourceManager::GetInstance().LoadTexture(filePath);
 	tempAnimation->columns = columns;
 	tempAnimation->repeatStartColumn = repeatStartColumn;
@@ -56,7 +56,7 @@ void Twengine::AnimatedTextureComponent::AddAnimation(const std::string& filePat
 	m_Animations.emplace(key, std::move(tempAnimation));
 }
 
-void Twengine::AnimatedTextureComponent::PlayAnimation(const std::string& key, float frameDelay)
+void Twengine::AnimationComponent::PlayAnimation(const std::string& key, float frameDelay)
 {
 	m_CurrentColumn = 0;
 	m_DelayCounter = 0.f;

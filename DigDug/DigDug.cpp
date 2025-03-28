@@ -15,7 +15,7 @@
 #include "DisplayLivesComponent.h"
 #include "ScoreComponent.h"
 #include "DisplayPointsComponent.h"
-#include "AnimatedTextureComponent.h"
+#include "AnimationComponent.h"
 #include "GameObject.h"
 #include "Scene.h"
 
@@ -81,7 +81,7 @@ void load()
 	digDugScore->GetScoreChangedEvent()->AddObserver(digdugPointsDisplayComp);
 
 	digdug->AddComponent<DigDugComponent>();
-	digdug->AddComponent<Twengine::AnimatedTextureComponent>();
+	digdug->AddComponent<Twengine::AnimationComponent>();
 
 	// Bindings For Keyboard
 	Twengine::InputManager::GetInstance().BindJoystickCommandToInput<JoystickMoveCommand>(Twengine::InteractionStates::pressed, digdug.get(), 0);

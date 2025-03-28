@@ -3,7 +3,7 @@
 
 namespace Twengine
 {
-	class AnimatedTextureComponent;
+	class AnimationComponent;
 };
 
 class DigDugComponent : public Twengine::Component
@@ -22,6 +22,6 @@ public:
 private:
 	double m_Angle{};
 
-	Twengine::AnimatedTextureComponent* m_AnimationComponent{};
+	Twengine::AnimationComponent* m_AnimationComponent{};
 };
 
