@@ -91,8 +91,8 @@ void load()
 	animationColl->PlayAnimation("DigDugMove");
 	auto* collider = collisionCheck->AddComponent<Twengine::RectColliderComponent>();
 	collider->SetHitBox(collisionCheck->GetTransform()->GetWorldPosition(), animationColl->GetAnimationFrameWidth(), animationColl->GetAnimationFrameHeight());
-	//collisionCheck->AddComponent<Twengine::TextureRenderComponent>()->SetTexture("DigDug/DigDugMove.png");
 	collisionCheck->SetParent(emptyCheck.get(), true);
+	collisionCheck->SetTag(make_sdbm_hash("CollisionTest"));
 
 	// Bindings For Keyboard
 	Twengine::InputManager::GetInstance().BindJoystickCommandToInput<JoystickMoveCommand>(Twengine::InteractionStates::pressed, digdug.get(), 0);

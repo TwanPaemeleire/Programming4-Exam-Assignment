@@ -33,7 +33,7 @@ void DigDugComponent::Update()
 
 void DigDugComponent::Notify(const GameEvent& event, Twengine::GameObject* observedObject)
 {
-	if (event.id == make_sdbm_hash("OnCollision"))
+	if (event.id == make_sdbm_hash("OnCollision") && observedObject->GetTag() == make_sdbm_hash("CollisionTest"))
 	{
 		std::cout << "COLLISION DETECTED IN PLAYER CLASS :3" << std::endl;
 		observedObject;

@@ -211,6 +211,7 @@
     <ClInclude Include="Observer.h" />
     <ClInclude Include="RectColliderComponent.h" />
     <ClInclude Include="Event.h" />
+    <ClInclude Include="SdbmHash.h" />
     <ClInclude Include="TextureRenderComponent.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Minigin.h" />

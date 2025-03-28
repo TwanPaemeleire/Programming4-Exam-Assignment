@@ -9,6 +9,7 @@
 Twengine::GameObject::GameObject()
 {
 	m_Transform = AddComponent<TransformComponent>();
+	m_TagId = make_sdbm_hash("Default");
 }
 
 Twengine::GameObject::~GameObject()

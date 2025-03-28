@@ -2,6 +2,9 @@
 #include <memory>
 #include <vector>
 #include "TransformComponent.h"
+#include "SdbmHash.h"
+
+using TagId = unsigned int;
 
 namespace Twengine
 {
@@ -39,6 +42,9 @@ namespace Twengine
 		size_t GetChildCount() const { return m_Children.size(); }
 		GameObject* GetChildAt(int index) const { return m_Children[index]; };
 
+		void SetTag(TagId newTag) {m_TagId = newTag; }
+		TagId GetTag() const { return m_TagId; }
+
 	private:
 		void AddChild(GameObject* child);
 		void RemoveChild(GameObject* child);
@@ -51,6 +57,8 @@ namespace Twengine
 		std::vector<std::unique_ptr<Component>> m_Components;
 		GameObject* m_Parent;
 		std::vector<GameObject*> m_Children;
+
+		TagId m_TagId{};
 	};
 }
 
