@@ -202,17 +202,14 @@
     <ClInclude Include="Command.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="Controller.h" />
-    <ClInclude Include="DisplayLivesComponent.h" />
-    <ClInclude Include="DisplayPointsComponent.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="FPSComponent.h" />
     <ClInclude Include="GameEvent.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameObjectCommand.h" />
-    <ClInclude Include="HealthComponent.h" />
     <ClInclude Include="JoystickCommand.h" />
     <ClInclude Include="Observer.h" />
-    <ClInclude Include="ScoreComponent.h" />
+    <ClInclude Include="RectColliderComponent.h" />
     <ClInclude Include="Event.h" />
     <ClInclude Include="TextureRenderComponent.h" />
     <ClInclude Include="InputManager.h" />
@@ -245,6 +242,7 @@
     <ClCompile Include="GameObjectCommand.cpp" />
     <ClCompile Include="Event.cpp" />
     <ClCompile Include="JoystickCommand.cpp" />
+    <ClCompile Include="RectColliderComponent.cpp" />
     <ClCompile Include="TextureRenderComponent.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Minigin.cpp" />

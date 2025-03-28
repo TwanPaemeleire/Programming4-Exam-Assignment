@@ -24,6 +24,7 @@
 #include "KillObjectCommand.h"
 #include "KillEnemyCommand.h"
 #include "JoystickMoveCommand.h"
+#include "RectColliderComponent.h"
 
 #include "DigDugComponent.h"
 #include "GridComponent.h"
@@ -81,17 +82,28 @@ void load()
 	digDugScore->GetScoreChangedEvent()->AddObserver(digdugPointsDisplayComp);
 
 	digdug->AddComponent<DigDugComponent>();
-	digdug->AddComponent<Twengine::AnimationComponent>();
+	//digdug->AddComponent<Twengine::AnimationComponent>();
+
+	auto emptyCheck = std::make_unique<Twengine::GameObject>();
+	auto collisionCheck = std::make_unique<Twengine::GameObject>();
+	auto* animationColl = collisionCheck->AddComponent<Twengine::AnimationComponent>();
+	animationColl->AddAnimation("DigDug/DigDugMove.png", 2);
+	animationColl->PlayAnimation("DigDugMove");
+	auto* collider = collisionCheck->AddComponent<Twengine::RectColliderComponent>();
+	collider->SetHitBox(collisionCheck->GetTransform()->GetWorldPosition(), animationColl->GetAnimationFrameWidth(), animationColl->GetAnimationFrameHeight());
+	//collisionCheck->AddComponent<Twengine::TextureRenderComponent>()->SetTexture("DigDug/DigDugMove.png");
+	collisionCheck->SetParent(emptyCheck.get(), true);
 
 	// Bindings For Keyboard
 	Twengine::InputManager::GetInstance().BindJoystickCommandToInput<JoystickMoveCommand>(Twengine::InteractionStates::pressed, digdug.get(), 0);
-	Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_w, Twengine::InteractionStates::pressed, digdug.get(), -1)->SetDirection(0, -100);
-	Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_s, Twengine::InteractionStates::pressed, digdug.get(), -1)->SetDirection(0, 100);
-	Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_a, Twengine::InteractionStates::pressed, digdug.get(), -1)->SetDirection(-100, 0);
-	Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_d, Twengine::InteractionStates::pressed, digdug.get(), -1)->SetDirection(100, 0);
+	Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_w, Twengine::InteractionStates::pressed, collisionCheck.get(), -1)->SetDirection(0, -100);
+	Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_s, Twengine::InteractionStates::pressed, collisionCheck.get(), -1)->SetDirection(0, 100);
+	Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_a, Twengine::InteractionStates::pressed, collisionCheck.get(), -1)->SetDirection(-100, 0);
+	Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_d, Twengine::InteractionStates::pressed, collisionCheck.get(), -1)->SetDirection(100, 0);
 	Twengine::InputManager::GetInstance().BindCommandToInput<KillObjectCommand>(SDLK_c, Twengine::InteractionStates::up, digdug.get(), -1);
 	Twengine::InputManager::GetInstance().BindCommandToInput<KillEnemyCommand>(SDLK_z, Twengine::InteractionStates::up, digdug.get(), -1)->GetEnemyKilledEvent()->AddObserver(digDugScore);
 	Twengine::InputManager::GetInstance().BindCommandToInput<KillEnemyCommand>(SDLK_x, Twengine::InteractionStates::up, digdug.get(), -1);
+	scene.Add(std::move(collisionCheck));
 
 	auto gridObject = std::make_unique<Twengine::GameObject>();
 	auto* grid = gridObject->AddComponent<GridComponent>();

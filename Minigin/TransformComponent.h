@@ -1,6 +1,8 @@
 #pragma once
 #include <glm.hpp>
 #include "Component.h"
+#include <memory>
+#include "Event.h"
 
 namespace Twengine
 {
@@ -22,11 +24,15 @@ namespace Twengine
 		const glm::vec3& GetLocalPosition() { return m_LocalPosition; }
 		void SetPositionDirty();
 
+		Event* GetOnPositionChangedEvent() const { return m_OnPositionChangedEvent.get(); }
+
 	private:
 		void UpdateWorldPosition();
 
 		bool m_PositionIsDirty{ false };
 		glm::vec3 m_WorldPosition{};
 		glm::vec3 m_LocalPosition{};
+
+		std::unique_ptr<Event> m_OnPositionChangedEvent;
 	};
 }

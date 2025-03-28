@@ -15,6 +15,7 @@ void MoveCommand::Execute()
 	glm::vec3 movement = glm::vec3(m_Direction * Twengine::Time::GetInstance().deltaTime, 0);
 	GetGameObject()->GetTransform()->SetLocalPosition(GetGameObject()->GetTransform()->GetLocalPosition() + movement);
 
+	if (m_AnimationComponent == nullptr) return;
 	if (movement.x > 0) // Moving Right
 	{
 		m_AnimationComponent->SetRotationAngle(0);

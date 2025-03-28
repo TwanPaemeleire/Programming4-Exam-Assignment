@@ -33,6 +33,7 @@ void Twengine::AnimationComponent::Update()
 
 void Twengine::AnimationComponent::Render() const
 {
+	if (m_CurrentAnimation == nullptr) return;
 	const auto& pos = m_Transform->GetWorldPosition();
 	const float srcX = m_FrameWidth * m_CurrentColumn;
 	const float srcY = 0;

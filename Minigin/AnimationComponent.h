@@ -50,7 +50,7 @@ namespace Twengine
 		double m_RotationAngle{};
 
 		// Animation Specific
-		AnimationData* m_CurrentAnimation{};
+		AnimationData* m_CurrentAnimation{nullptr};
 		float m_FrameWidth{};
 		float m_FrameHeight{};
 		int m_CurrentColumn{};
