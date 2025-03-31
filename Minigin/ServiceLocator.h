@@ -12,6 +12,7 @@ namespace Twengine
 		{
 			s_SoundSystem = std::move(soundSystem);
 		}
+
 	private:
 		static std::unique_ptr<SoundSystem> s_SoundSystem;
 	};

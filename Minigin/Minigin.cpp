@@ -10,6 +10,7 @@
 #include "Renderer.h"
 #include "ResourceManager.h"
 #include "MyTime.h"
+#include "ServiceLocator.h"
 
 #include <thread>
 

@@ -29,6 +29,9 @@
 #include "DigDugComponent.h"
 #include "GridComponent.h"
 
+#include "ServiceLocator.h"
+#include "SDLSoundSystem.h"
+
 #include "Event.h"
 
 void load()
@@ -114,6 +117,9 @@ void load()
 	scene.Add(std::move(digdugLivesText));
 	scene.Add(std::move(digdug));
 	scene.Add(std::move(digdugScoreText));
+
+	std::unique_ptr<Twengine::SDLSoundSystem> soundSystem = std::make_unique<Twengine::SDLSoundSystem>();;
+	Twengine::ServiceLocator::register_sound_system(std::move(soundSystem));
 }
 
 int main(int, char* [])

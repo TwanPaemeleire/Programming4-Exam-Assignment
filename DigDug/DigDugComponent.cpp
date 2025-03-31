@@ -4,6 +4,8 @@
 #include "AnimationComponent.h"
 #include "RectColliderComponent.h"
 #include <iostream>
+#include "ServiceLocator.h"
+#include "SoundSystem.h"
 
 DigDugComponent::DigDugComponent(Twengine::GameObject* owner)
 	:Component(owner)
@@ -15,7 +17,6 @@ DigDugComponent::DigDugComponent(Twengine::GameObject* owner)
 
 void DigDugComponent::Start()
 {
-	//m_AnimationComponent = GetOwner()->GetComponent<Twengine::AnimationComponent>();
 	m_AnimationComponent->AddAnimation("DigDug/DigDugMove.png", 2);
 	m_AnimationComponent->AddAnimation("DigDug/DigDugDigging.png", 4);
 	m_AnimationComponent->AddAnimation("DigDug/DigDugIdle.png", 1);
@@ -23,6 +24,8 @@ void DigDugComponent::Start()
 	m_AnimationComponent->PlayAnimation("DigDugMove");
 	glm::vec2 pos = GetOwner()->GetTransform()->GetLocalPosition();
 	m_RectColliderComponent->SetHitBox(pos, m_AnimationComponent->GetAnimationFrameWidth(), m_AnimationComponent->GetAnimationFrameHeight());
+
+	Twengine::ServiceLocator::get_sound_system().Play(0, 0.9f);
 }
 
 void DigDugComponent::Update()
