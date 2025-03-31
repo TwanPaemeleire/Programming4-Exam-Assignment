@@ -1,6 +1,5 @@
 #pragma once
 #include "SoundSystem.h"
-#include "SDL_mixer.h"
 #include <unordered_map>
 #include <memory>
 
@@ -10,16 +9,6 @@ namespace Twengine
 	{
 	public:
 		SDLSoundSystem();
-		virtual void Play(const SoundId id, const float volume) override;
-	private:
-		struct MixMusicDeleter
-		{
-			void operator()(Mix_Music* music) const
-			{
-				Mix_FreeMusic(music);
-			}
-		};
-
-		std::unordered_map<SoundId, std::unique_ptr<Mix_Music, MixMusicDeleter>> m_MusicMixs;
+		virtual void Play(const std::string& file, const float volume) override;
 	};
 }
