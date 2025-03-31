@@ -7,6 +7,7 @@ namespace Twengine
 	{
 	public:
 		virtual ~SoundSystem() = default;
-		virtual void Play(const std::string& file, const float volume) = 0;
+		virtual void PlayMusic(const std::string& file, const float volume) = 0;
+		virtual void PlaySound(const std::string& file, const float volume) = 0;
 	};
 }

@@ -33,6 +33,12 @@ Mix_Music* Twengine::ResourceManager::LoadMusic(const std::string& file)
 {
 	if (m_LoadedMusic.find(file) == m_LoadedMusic.end())
 		m_LoadedMusic.insert(std::pair(file, Mix_LoadMUS(file.c_str())));
-		//m_LoadedMusic.insert(std::pair(file, std::make_unique<Mix_Music>(file)));
 	return m_LoadedMusic.at(file).get();
+}
+
+Mix_Chunk* Twengine::ResourceManager::LoadChunk(const std::string& file)
+{
+	if (m_LoadedChunks.find(file) == m_LoadedChunks.end())
+		m_LoadedChunks.insert(std::pair(file, Mix_LoadWAV(file.c_str())));
+	return m_LoadedChunks.at(file).get();
 }

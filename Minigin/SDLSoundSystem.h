@@ -9,6 +9,7 @@ namespace Twengine
 	{
 	public:
 		SDLSoundSystem();
-		virtual void Play(const std::string& file, const float volume) override;
+		virtual void PlayMusic(const std::string& file, const float volume) override;
+		virtual void PlaySound(const std::string& file, const float volume) override;
 	};
 }

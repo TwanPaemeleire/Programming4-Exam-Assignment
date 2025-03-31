@@ -9,9 +9,16 @@ Twengine::SDLSoundSystem::SDLSoundSystem()
 	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
 }
 
-void Twengine::SDLSoundSystem::Play(const std::string& file, const float volume)
+void Twengine::SDLSoundSystem::PlayMusic(const std::string& file, const float volume)
 {
 	Mix_Music* music = ResourceManager::GetInstance().LoadMusic(file);
 	Mix_VolumeMusic(static_cast<int>(volume * MIX_MAX_VOLUME));
 	Mix_PlayMusic(music, -1);
+}
+
+void Twengine::SDLSoundSystem::PlaySound(const std::string& file, const float volume)
+{
+	Mix_Chunk* chunk = ResourceManager::GetInstance().LoadChunk(file);
+	Mix_VolumeChunk(chunk, static_cast<int>(volume * MIX_MAX_VOLUME));
+	Mix_PlayChannel(-1, chunk, 0);
 }
