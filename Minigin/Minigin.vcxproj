@@ -212,6 +212,9 @@
     <ClInclude Include="RectColliderComponent.h" />
     <ClInclude Include="Event.h" />
     <ClInclude Include="SdbmHash.h" />
+    <ClInclude Include="SDLSoundSystem.h" />
+    <ClInclude Include="ServiceLocator.h" />
+    <ClInclude Include="SoundSystem.h" />
     <ClInclude Include="TextureRenderComponent.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Minigin.h" />
@@ -244,6 +247,9 @@
     <ClCompile Include="Event.cpp" />
     <ClCompile Include="JoystickCommand.cpp" />
     <ClCompile Include="RectColliderComponent.cpp" />
+    <ClCompile Include="SDLSoundSystem.cpp" />
+    <ClCompile Include="ServiceLocator.cpp" />
+    <ClCompile Include="SoundSystem.cpp" />
     <ClCompile Include="TextureRenderComponent.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Minigin.cpp" />

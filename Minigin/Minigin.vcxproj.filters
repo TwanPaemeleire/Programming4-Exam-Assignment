@@ -34,6 +34,12 @@
     <Filter Include="Header Files\Observer">
       <UniqueIdentifier>{69f1c678-f083-4a8a-bb66-18dd1dd41533}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Services">
+      <UniqueIdentifier>{0e554c0a-51df-490c-8eef-8150f139a60b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Services">
+      <UniqueIdentifier>{7ef70144-4b16-44c5-bac5-d1e57ba3dbbd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Singleton.h">
@@ -135,10 +141,19 @@
     <ClInclude Include="JoystickCommand.h">
       <Filter>Header Files\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="RectColliderComponent.h">
+    <ClInclude Include="SdbmHash.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SdbmHash.h">
+    <ClInclude Include="RectColliderComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ServiceLocator.h">
+      <Filter>Header Files\Services</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundSystem.h">
+      <Filter>Header Files\Services</Filter>
+    </ClInclude>
+    <ClInclude Include="SDLSoundSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -225,6 +240,15 @@
       <Filter>Source Files\Commands</Filter>
     </ClCompile>
     <ClCompile Include="RectColliderComponent.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ServiceLocator.cpp">
+      <Filter>Source Files\Services</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundSystem.cpp">
+      <Filter>Source Files\Services</Filter>
+    </ClCompile>
+    <ClCompile Include="SDLSoundSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

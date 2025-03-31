@@ -2,7 +2,7 @@
 #include "Renderer.h"
 #include "GameObject.h"
 
-std::vector<Twengine::RectColliderComponent*> Twengine::RectColliderComponent::Colliders = {};
+std::vector<Twengine::RectColliderComponent*> Twengine::RectColliderComponent::s_Colliders = {};
 
 Twengine::RectColliderComponent::RectColliderComponent(GameObject* owner)
 	:Component(owner)
@@ -10,12 +10,12 @@ Twengine::RectColliderComponent::RectColliderComponent(GameObject* owner)
 	m_HitBox = std::make_unique<RectHitbox>();
 	m_OnCollisionEvent = std::make_unique<Event>();
 	owner->GetComponent<TransformComponent>()->GetOnPositionChangedEvent()->AddObserver(this);
-	Colliders.push_back(this);
+	s_Colliders.push_back(this);
 }
 
 Twengine::RectColliderComponent::~RectColliderComponent()
 {
-	Colliders.erase(std::remove(Colliders.begin(), Colliders.end(), this), Colliders.end());
+	s_Colliders.erase(std::remove(s_Colliders.begin(), s_Colliders.end(), this), s_Colliders.end());
 }
 
 void Twengine::RectColliderComponent::Render() const
@@ -27,14 +27,14 @@ void Twengine::RectColliderComponent::Render() const
 void Twengine::RectColliderComponent::FixedUpdate()
 {
 	if (!m_Enabled) return;
-	for (std::size_t colliderIdx{ 0 }; colliderIdx < Colliders.size(); ++colliderIdx)
+	for (std::size_t colliderIdx{ 0 }; colliderIdx < s_Colliders.size(); ++colliderIdx)
 	{
-		if (this == Colliders[colliderIdx] || !Colliders[colliderIdx]->GetEnabled()) continue;
+		if (this == s_Colliders[colliderIdx] || !s_Colliders[colliderIdx]->GetEnabled()) continue;
 
-		if (IsOverlapping(Colliders[colliderIdx]))
+		if (IsOverlapping(s_Colliders[colliderIdx]))
 		{
-			m_OnCollisionEvent->NotifyObservers(GameEvent(make_sdbm_hash("OnCollision")), Colliders[colliderIdx]->GetOwner());
-			Colliders[colliderIdx]->GetOnCollisionEvent()->NotifyObservers(GameEvent(make_sdbm_hash("OnCollision")), GetOwner());
+			m_OnCollisionEvent->NotifyObservers(GameEvent(make_sdbm_hash("OnCollision")), s_Colliders[colliderIdx]->GetOwner());
+			s_Colliders[colliderIdx]->GetOnCollisionEvent()->NotifyObservers(GameEvent(make_sdbm_hash("OnCollision")), GetOwner());
 		}
 	}
 }

@@ -47,14 +47,14 @@ void load()
 	// Tutorial 
 	auto enemyTutorial = std::make_unique<Twengine::GameObject>();
 	auto* enemyTutorialText = enemyTutorial->AddComponent<Twengine::TextComponent>();
-	enemyTutorialText->SetText("Use The D-Pad To Move Enemy, X To Inflict Damage, A & B To Increase Your Score");
+	enemyTutorialText->SetText("Use The Left Joystick To Move The Second DigDug");
 	enemyTutorialText->SetFont(smallFont);
 	enemyTutorial->GetTransform()->SetLocalPosition(5, 100);
 	scene.Add(std::move(enemyTutorial));
 
 	auto digDugTutorial = std::make_unique<Twengine::GameObject>();
 	auto* digDugTutorialText = digDugTutorial->AddComponent<Twengine::TextComponent>();
-	digDugTutorialText->SetText("Use WASD To Move DigDug, C To Inflict Damage, Z & X To Increase Your Score");
+	digDugTutorialText->SetText("Use WASD To Move DigDug");
 	digDugTutorialText->SetFont(smallFont);
 	digDugTutorial->GetTransform()->SetLocalPosition(5, 120);
 	scene.Add(std::move(digDugTutorial));

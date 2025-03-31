@@ -40,7 +40,7 @@ namespace Twengine
 		Event* GetOnCollisionEvent() const { return m_OnCollisionEvent.get(); }
 
 	private:
-		static std::vector<RectColliderComponent*> Colliders;
+		static std::vector<RectColliderComponent*> s_Colliders;
 
 		std::unique_ptr<RectHitbox> m_HitBox;
 		std::unique_ptr<Twengine::Event> m_OnCollisionEvent;
