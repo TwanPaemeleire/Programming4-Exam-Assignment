@@ -1,58 +1,50 @@
 #include "SceneManager.h"
-#include "Scene.h"
 
 void Twengine::SceneManager::Start()
 {
-	for (auto& scene : m_Scenes)
-	{
-		scene->Start();
-	}
+	if (m_CurrentScene != nullptr) m_CurrentScene->Start();
 }
 
 void Twengine::SceneManager::Update()
 {
-	for(auto& scene : m_Scenes)
-	{
-		scene->Update();
-	}
+	if (m_CurrentScene != nullptr) m_CurrentScene->Update();
 }
 
 void Twengine::SceneManager::FixedUpdate()
 {
-	for (auto& scene : m_Scenes)
-	{
-		scene->FixedUpdate();
-	}
+	if (m_CurrentScene != nullptr) m_CurrentScene->FixedUpdate();
 }
 
 void Twengine::SceneManager::LateUpdate()
 {
-	for (auto& scene : m_Scenes)
-	{
-		scene->LateUpdate();
-	}
+	if (m_CurrentScene != nullptr) m_CurrentScene->LateUpdate();
 }
 
 
 void Twengine::SceneManager::Render() const
 {
-	for (const auto& scene : m_Scenes)
-	{
-		scene->Render();
-	}
+	if (m_CurrentScene != nullptr) m_CurrentScene->Render();
 }
 
 void Twengine::SceneManager::RenderUI()
 {
+	if (m_CurrentScene != nullptr) m_CurrentScene->RenderUI();
+}
+
+void Twengine::SceneManager::SetCurrentScene(const std::string& name)
+{
 	for (const auto& scene : m_Scenes)
 	{
-		scene->RenderUI();
+		if (scene->GetName() == name)
+		{
+			m_CurrentScene = scene.get();
+			return;
+		}
 	}
 }
 
 Twengine::Scene& Twengine::SceneManager::CreateScene(const std::string& name)
 {
-	const auto& scene = std::shared_ptr<Scene>(new Scene(name));
-	m_Scenes.push_back(scene);
-	return *scene;
+	m_Scenes.emplace_back(std::make_unique<Scene>(name));
+	return *m_Scenes.back().get();
 }

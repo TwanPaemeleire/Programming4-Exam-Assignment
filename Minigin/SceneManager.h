@@ -3,14 +3,13 @@
 #include <string>
 #include <memory>
 #include "Singleton.h"
+#include "Scene.h"
 
 namespace Twengine
 {
-	class Scene;
 	class SceneManager final : public Singleton<SceneManager>
 	{
 	public:
-		Scene& CreateScene(const std::string& name);
 
 		void Start();
 		void Update();
@@ -18,9 +17,13 @@ namespace Twengine
 		void LateUpdate();
 		void Render() const;
 		void RenderUI();
+
+		void SetCurrentScene(const std::string& name);
+		Scene& CreateScene(const std::string& name);
 	private:
+		Scene* m_CurrentScene{ nullptr };
 		friend class Singleton<SceneManager>;
 		SceneManager() = default;
-		std::vector<std::shared_ptr<Scene>> m_Scenes;
+		std::vector<std::unique_ptr<Scene>> m_Scenes;
 	};
 }

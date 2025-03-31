@@ -36,7 +36,7 @@
 
 void load()
 {
-	auto& scene = Twengine::SceneManager::GetInstance().CreateScene("Demo");
+	auto& scene = Twengine::SceneManager::GetInstance().CreateScene("Game");
 
 	auto* font = Twengine::ResourceManager::GetInstance().LoadFont("GameFont.otf", 12);
 
@@ -120,6 +120,8 @@ void load()
 
 	std::unique_ptr<Twengine::SDLSoundSystem> soundSystem = std::make_unique<Twengine::SDLSoundSystem>();;
 	Twengine::ServiceLocator::register_sound_system(std::move(soundSystem));
+
+	Twengine::SceneManager::GetInstance().SetCurrentScene("Game");
 }
 
 int main(int, char* [])
