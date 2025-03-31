@@ -31,6 +31,7 @@
 
 #include "ServiceLocator.h"
 #include "SDLSoundSystem.h"
+#include "LevelFactory.h"
 
 #include "Event.h"
 
@@ -85,7 +86,6 @@ void load()
 	digDugScore->GetScoreChangedEvent()->AddObserver(digdugPointsDisplayComp);
 
 	digdug->AddComponent<DigDugComponent>();
-	//digdug->AddComponent<Twengine::AnimationComponent>();
 
 	auto emptyCheck = std::make_unique<Twengine::GameObject>();
 	auto collisionCheck = std::make_unique<Twengine::GameObject>();

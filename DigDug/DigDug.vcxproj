@@ -168,6 +168,7 @@
     <ClCompile Include="JoystickMoveCommand.cpp" />
     <ClCompile Include="KillEnemyCommand.cpp" />
     <ClCompile Include="KillObjectCommand.cpp" />
+    <ClCompile Include="LevelFactory.cpp" />
     <ClCompile Include="MoveCommand.cpp" />
     <ClCompile Include="ScoreComponent.cpp" />
   </ItemGroup>
@@ -180,6 +181,7 @@
     <ClInclude Include="JoystickMoveCommand.h" />
     <ClInclude Include="KillEnemyCommand.h" />
     <ClInclude Include="KillObjectCommand.h" />
+    <ClInclude Include="LevelFactory.h" />
     <ClInclude Include="MoveCommand.h" />
     <ClInclude Include="ScoreComponent.h" />
   </ItemGroup>
