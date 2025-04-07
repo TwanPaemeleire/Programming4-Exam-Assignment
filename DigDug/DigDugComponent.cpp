@@ -25,7 +25,7 @@ void DigDugComponent::Start()
 	glm::vec2 pos = GetOwner()->GetTransform()->GetLocalPosition();
 	m_RectColliderComponent->SetHitBox(pos, m_AnimationComponent->GetAnimationFrameWidth(), m_AnimationComponent->GetAnimationFrameHeight());
 
-	Twengine::ServiceLocator::get_sound_system().PlayMusic("Level/LevelMusic.wav", 0.9f);
+	Twengine::ServiceLocator::get_sound_system().RequestPlayMusic("Level/LevelMusic.wav", 0.9f);
 }
 
 void DigDugComponent::Update()
@@ -39,7 +39,7 @@ void DigDugComponent::Notify(const GameEvent& event, Twengine::GameObject* obser
 	if (event.id == make_sdbm_hash("OnCollision") && observedObject->GetTag() == make_sdbm_hash("CollisionTest"))
 	{
 		std::cout << "COLLISION DETECTED IN PLAYER COMPONENT" << std::endl;
-		Twengine::ServiceLocator::get_sound_system().PlaySound("DigDug/DigDugShot.wav", 0.9f);
+		Twengine::ServiceLocator::get_sound_system().RequestPlaySound("DigDug/DigDugShot.wav", 0.9f);
 		observedObject;
 	}
 }
