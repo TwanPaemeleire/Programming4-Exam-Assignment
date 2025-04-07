@@ -1,13 +1,12 @@
 #pragma once
 #include "Component.h"
 #include "glm.hpp"
-
+#include <utility>
 
 struct Cell
 {
 	glm::vec2 topLeft{};
 	int layer{};
-	bool destroyed{false};
 };
 
 class GridComponent : public Twengine::Component
@@ -26,6 +25,9 @@ public:
 	int GetRows() const { return m_Rows; }
 	int GetColumns() const { return m_Columns; }
 	float GetCellSize() const { return m_CellSize; }
+
+	std::pair<int, int> GetIndexFromPosition(glm::vec2 pos) const;
+	glm::vec2 GetPositionFromIndex(int row, int column) const { return m_Grid[row][column].topLeft; }
 
 private:
 	static constexpr int m_Rows{18};

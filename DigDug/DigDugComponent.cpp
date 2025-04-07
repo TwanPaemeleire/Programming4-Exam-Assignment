@@ -6,6 +6,8 @@
 #include <iostream>
 #include "ServiceLocator.h"
 #include "SoundSystem.h"
+#include "GameManager.h"
+#include "GridComponent.h"
 
 DigDugComponent::DigDugComponent(Twengine::GameObject* owner)
 	:Component(owner)
@@ -17,6 +19,8 @@ DigDugComponent::DigDugComponent(Twengine::GameObject* owner)
 
 void DigDugComponent::Start()
 {
+	m_Transform->SetLocalPosition(GameManager::GetInstance().GetGrid()->GetPositionFromIndex(5, 5));
+
 	m_AnimationComponent->AddAnimation("DigDug/DigDugMove.png", 2);
 	m_AnimationComponent->AddAnimation("DigDug/DigDugDigging.png", 4);
 	m_AnimationComponent->AddAnimation("DigDug/DigDugIdle.png", 1);

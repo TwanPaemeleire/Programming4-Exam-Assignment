@@ -1,5 +1,6 @@
 #include "GridComponent.h"
 #include "Renderer.h"
+#include <algorithm>
 
 GridComponent::GridComponent(Twengine::GameObject* owner)
 	:Component(owner)
@@ -25,4 +26,15 @@ void GridComponent::Render() const
 			Twengine::Renderer::GetInstance().DrawRectangle(pos.x, pos.y, m_CellSize, m_CellSize, SDL_Color(255, 0, 0, 255));
 		}
 	}
+}
+
+std::pair<int, int> GridComponent::GetIndexFromPosition(glm::vec2 pos) const
+{
+	int row = static_cast<int>(std::floor(pos.y / m_CellSize));
+	int column = static_cast<int>(std::floor(pos.x / m_CellSize));
+
+	column = std::clamp(column, 0, m_Columns - 1);
+	row = std::clamp(row, 0, m_Rows - 1);
+
+	return std::pair<int, int>(row, column);
 }

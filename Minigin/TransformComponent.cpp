@@ -15,9 +15,14 @@ void Twengine::TransformComponent::SetLocalPosition(const glm::vec3& localPos)
 	m_OnPositionChangedEvent->NotifyObservers(GameEvent(make_sdbm_hash("TransformPositionChanged")), GetOwner());
 }
 
+void Twengine::TransformComponent::SetLocalPosition(const glm::vec2& localPos)
+{
+	SetLocalPosition(glm::vec3(localPos, 0.f));
+}
+
 void Twengine::TransformComponent::SetLocalPosition(float x, float y)
 {
-	SetLocalPosition(glm::vec3(x, y, 0));
+	SetLocalPosition(glm::vec3(x, y, 0.f));
 }
 
 const glm::vec3& Twengine::TransformComponent::GetWorldPosition()

@@ -1,6 +1,7 @@
 #pragma once
 #include "Component.h"
 #include <glm.hpp>
+#include <utility>
 
 class GridComponent;
 
@@ -16,13 +17,25 @@ public:
 
 	virtual void Start() override;
 	virtual void Update() override;
+	virtual void RenderUI() override;
 
 	void SetXDirection(float x);
 	void SetYDirection(float y);
 private:
-	glm::vec2 m_DesiredDirection{};
-	glm::vec2 m_Direction{};
+	void CalculateNextTarget();
+
 	float m_MovementSpeed{20.f};
-	GridComponent* m_GridComponent;
+	GridComponent* m_GridComponent{};
+	
+	glm::vec2 m_Direction = { 0.f, 0.f }; 
+	glm::vec2 m_TargetPosition = { -1.f, -1.f };
+	glm::vec2 m_CurrentInputDirection = { 0.f, 0.f };
+	float m_DistanceToTarget{};
+	float m_DistanceTracker{};
+	std::pair<int, int> m_CurrentIndex{};
+	std::pair<int, int> m_NextIndex{};
+	bool m_IsMoving = false;
+	bool m_MovingHorizontally{ true };
+	bool m_CanSwitchDirection{ true };
 };
 

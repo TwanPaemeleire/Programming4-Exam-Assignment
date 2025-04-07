@@ -28,8 +28,8 @@ void Twengine::InputManager::HandleControllerInput()
 		float leftX = controller->GetLeftStickX();
 		float leftY = controller->GetLeftStickY();
 
-		if (fabs(leftX) >= 0.1f || fabs(leftY) >= 0.1f)
-		{
+		//if (fabs(leftX) >= 0.1f || fabs(leftY) >= 0.1f)
+		//{
 			for (const auto& joystickCommand : m_BindedJoystickCommands)
 			{
 				if (joystickCommand->controllerIndex == controllerIndex)
@@ -37,7 +37,7 @@ void Twengine::InputManager::HandleControllerInput()
 					joystickCommand->command->Execute(leftX, leftY);
 				}
 			}
-		}
+		//}
 
 
 		for (const auto& command : m_BindedCommands)

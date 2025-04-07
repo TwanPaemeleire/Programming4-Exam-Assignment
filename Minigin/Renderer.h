@@ -13,6 +13,7 @@ namespace Twengine
 		void Render() const;
 		void Destroy();
 
+		void DrawPoint(float x, float y, const SDL_Color& color, int size) const;
 		void DrawRectangle(float x, float y, float width, float height, const SDL_Color& color) const;
 		void RenderTexture(const Texture2D& texture, float x, float y, float scaling = 1.f) const;
 		void RenderTexture(const Texture2D& texture, float x, float y, float width, float height) const;

@@ -69,6 +69,18 @@ void Twengine::Renderer::Destroy()
 	}
 }
 
+void Twengine::Renderer::DrawPoint(float x, float y, const SDL_Color& color, int size) const
+{
+	SDL_SetRenderDrawColor(m_Renderer, color.r, color.g, color.b, color.a);
+
+	// Calculate the top-left corner of the rectangle to center it on (x, y)
+	int half_size = size / 2;
+	SDL_Rect rect = { static_cast<int>(x) - half_size, static_cast<int>(y) - half_size, size, size };
+
+	// Draw the rectangle
+	SDL_RenderFillRect(m_Renderer, &rect);
+}
+
 void Twengine::Renderer::DrawRectangle(float x, float y, float width, float height, const SDL_Color& color) const
 {
 	SDL_SetRenderDrawColor(m_Renderer, color.r, color.g, color.b, color.a);
