@@ -28,17 +28,3 @@ Twengine::Font* Twengine::ResourceManager::LoadFont(const std::string& file, uin
 		m_LoadedFonts.insert(std::pair(key,std::make_unique<Font>(file, size)));
 	return m_LoadedFonts.at(key).get();
 }
-
-Mix_Music* Twengine::ResourceManager::LoadMusic(const std::string& file)
-{
-	if (m_LoadedMusic.find(file) == m_LoadedMusic.end())
-		m_LoadedMusic.insert(std::pair(file, Mix_LoadMUS(file.c_str())));
-	return m_LoadedMusic.at(file).get();
-}
-
-Mix_Chunk* Twengine::ResourceManager::LoadChunk(const std::string& file)
-{
-	if (m_LoadedChunks.find(file) == m_LoadedChunks.end())
-		m_LoadedChunks.insert(std::pair(file, Mix_LoadWAV(file.c_str())));
-	return m_LoadedChunks.at(file).get();
-}
