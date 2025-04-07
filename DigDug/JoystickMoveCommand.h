@@ -6,6 +6,8 @@ namespace Twengine
 	class AnimationComponent;
 }
 
+class DigDugMovementComponent;
+
 class JoystickMoveCommand final : public Twengine::JoystickCommand
 {
 public:
@@ -14,6 +16,7 @@ public:
 
 private:
 	Twengine::AnimationComponent* m_AnimationComponent;
+	DigDugMovementComponent* m_MovementComp;
 	float m_Speed{ 20.f };
 };
 

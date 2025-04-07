@@ -3,17 +3,21 @@
 #include "GameObject.h"
 #include "MyTime.h"
 #include "AnimationComponent.h"
+#include "DigDugMovementComponent.h"
 
 MoveCommand::MoveCommand(Twengine::GameObject* gameObject)
 	:GameObjectCommand(gameObject)
 {
 	m_AnimationComponent = gameObject->GetComponent<Twengine::AnimationComponent>();
+	m_MovementComp = gameObject->GetComponent<DigDugMovementComponent>();
 }
 
 void MoveCommand::Execute()
 {
 	glm::vec3 movement = glm::vec3(m_Direction * Twengine::Time::GetInstance().deltaTime, 0);
-	GetGameObject()->GetTransform()->SetLocalPosition(GetGameObject()->GetTransform()->GetLocalPosition() + movement);
+	//GetGameObject()->GetTransform()->SetLocalPosition(GetGameObject()->GetTransform()->GetLocalPosition() + movement);
+	m_MovementComp->SetXDirection(m_Direction.x);
+	m_MovementComp->SetYDirection(m_Direction.y);
 
 	if (m_AnimationComponent == nullptr) return;
 	if (movement.x > 0) // Moving Right

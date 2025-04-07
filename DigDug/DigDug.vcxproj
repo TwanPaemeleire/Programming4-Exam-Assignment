@@ -161,8 +161,10 @@
   <ItemGroup>
     <ClCompile Include="DigDug.cpp" />
     <ClCompile Include="DigDugComponent.cpp" />
+    <ClCompile Include="DigDugMovementComponent.cpp" />
     <ClCompile Include="DisplayLivesComponent.cpp" />
     <ClCompile Include="DisplayPointsComponent.cpp" />
+    <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="GridComponent.cpp" />
     <ClCompile Include="HealthComponent.cpp" />
     <ClCompile Include="JoystickMoveCommand.cpp" />
@@ -174,8 +176,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DigDugComponent.h" />
+    <ClInclude Include="DigDugMovementComponent.h" />
     <ClInclude Include="DisplayLivesComponent.h" />
     <ClInclude Include="DisplayPointsComponent.h" />
+    <ClInclude Include="GameManager.h" />
     <ClInclude Include="GridComponent.h" />
     <ClInclude Include="HealthComponent.h" />
     <ClInclude Include="JoystickMoveCommand.h" />
