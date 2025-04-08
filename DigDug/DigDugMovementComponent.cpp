@@ -6,6 +6,7 @@
 #include <iostream>
 #include <algorithm>
 #include "Renderer.h"
+#include "GroundComponent.h"
 
 DigDugMovementComponent::DigDugMovementComponent(Twengine::GameObject* owner)
 	:Component(owner)
@@ -20,6 +21,12 @@ void DigDugMovementComponent::Start()
 
 void DigDugMovementComponent::Update()
 {
+	SDL_Rect playerRect;
+	playerRect.x = static_cast<int>(m_Transform->GetWorldPosition().x);
+	playerRect.y = static_cast<int>(m_Transform->GetWorldPosition().y);
+	playerRect.w = 28;
+	playerRect.h = 28;
+	GameManager::GetInstance().GetGround()->ErasePlayerTrail(playerRect);
 	// Not Moving And No Input
 	if (m_CurrentInputDirection == glm::vec2(0.f, 0.f) && !m_IsMoving)
 	{

@@ -48,8 +48,8 @@ void load()
 	GameManager::GetInstance().SetGrid(grid);
 
 	auto levelDrawObject = std::make_unique<Twengine::GameObject>();
-	levelDrawObject->AddComponent<GroundComponent>();
-	levelDrawObject->AddComponent<Twengine::TextureRenderComponent>()->SetTexture("Level/FullLevel.png");
+	auto* ground = levelDrawObject->AddComponent<GroundComponent>();
+	GameManager::GetInstance().SetGround(ground);
 	scene.Add(std::move(levelDrawObject));
 
 	auto* font = Twengine::ResourceManager::GetInstance().LoadFont("GameFont.otf", 12);
