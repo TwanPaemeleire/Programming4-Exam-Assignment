@@ -68,7 +68,7 @@ void DigDugMovementComponent::SetXDirection(float x)
 	if (x == 0.f && m_CurrentInputDirection.y == 0.f)
 	{
 		m_IsMoving = false;
-		SetIdleAnim();
+		SetIdleAnimation();
 	}
 	if (x == 0.f) return;
 	// Switch Orientations Left -> Right Or Right -> Left
@@ -84,7 +84,7 @@ void DigDugMovementComponent::SetYDirection(float y)
 	if (y == 0.f && m_CurrentInputDirection.x == 0.f)
 	{
 		m_IsMoving = false;
-		SetIdleAnim();
+		SetIdleAnimation();
 	}
 	if (y == 0.f) return;
 	// Switch Orientations Up -> Down Or Down -> Up
@@ -123,8 +123,6 @@ void DigDugMovementComponent::CalculateNextTarget()
 		// Closer To Top Left Of Current Cell Than Top Left Of Next Cell
 		if (distanceToCurrentCell < distanceToNextCell)
 		{
-			// TODO: check the bellow instead with a multiplication and check if signs of distance(?) and direction are the same to check if you should go to current or if it's the wrong direction
-
 			// Closer To Current Cell, But Check If Current Cell Is Actually In The Direction We Want To Move Towards
 			if ((m_CurrentInputDirection.x < 0 && currentPosition.x < currentCellPos.x) ||
 				(m_CurrentInputDirection.x > 0 && currentPosition.x > currentCellPos.x) ||
@@ -158,10 +156,11 @@ void DigDugMovementComponent::CalculateNextTarget()
 	}
 
 	m_Direction = m_CurrentInputDirection;
+	UpdateFlipAndRotation();
 	m_DistanceTracker = 0.f;
 }
 
-void DigDugMovementComponent::SetIdleAnim()
+void DigDugMovementComponent::SetIdleAnimation()
 {
 	if (!m_HasStartedIdleAnimation)
 	{
@@ -220,4 +219,28 @@ void DigDugMovementComponent::UpdateGroundAndAnimation()
 		}
 	}
 	m_GroundComponent->ErasePlayerTrail(playerRect);
+}
+
+void DigDugMovementComponent::UpdateFlipAndRotation()
+{
+	if (m_Direction.x > 0) // Moving Right
+	{
+		m_AnimationComponent->SetRotationAngle(0);
+		m_AnimationComponent->SetFlipHorizontal(false);
+	}
+	else if (m_Direction.x < 0) // Moving Left
+	{
+		m_AnimationComponent->SetRotationAngle(0);
+		m_AnimationComponent->SetFlipHorizontal(true);
+	}
+	else if (m_Direction.y > 0) // Moving Up
+	{
+		m_AnimationComponent->SetRotationAngle(90);
+		m_AnimationComponent->SetFlipHorizontal(false);
+	}
+	else if (m_Direction.y < 0) // Moving Down
+	{
+		m_AnimationComponent->SetRotationAngle(90);
+		m_AnimationComponent->SetFlipHorizontal(true);
+	}
 }

@@ -2,10 +2,6 @@
 #include "GameObjectCommand.h"
 #include "glm.hpp"
 
-namespace Twengine
-{
-	class AnimationComponent;
-}
 class DigDugMovementComponent;
 
 class MoveCommand : public Twengine::GameObjectCommand
@@ -19,7 +15,6 @@ public:
 
 private:
 	glm::vec2 m_Direction{};
-	Twengine::AnimationComponent* m_AnimationComponent;
 	DigDugMovementComponent* m_MovementComp;
 };
 

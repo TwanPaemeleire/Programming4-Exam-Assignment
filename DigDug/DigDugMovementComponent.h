@@ -29,8 +29,9 @@ public:
 	void SetYDirection(float y);
 private:
 	void CalculateNextTarget();
-	void SetIdleAnim();
+	void SetIdleAnimation();
 	void UpdateGroundAndAnimation();
+	void UpdateFlipAndRotation();
 
 	float m_MovementSpeed{20.f};
 	GridComponent* m_GridComponent{};
