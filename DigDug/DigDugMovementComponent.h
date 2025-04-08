@@ -30,6 +30,7 @@ public:
 private:
 	void CalculateNextTarget();
 	void SetIdleAnim();
+	void UpdateGroundAndAnimation();
 
 	float m_MovementSpeed{20.f};
 	GridComponent* m_GridComponent{};
@@ -45,7 +46,7 @@ private:
 	bool m_IsMoving = false;
 
 	bool m_HasStartedDiggingAnimation{false};
-	bool m_HasStartedWalkingAnimation{ false };
-	bool m_HasStartedIdleAnimation{ false };
+	bool m_HasStartedWalkingAnimation{false};
+	bool m_HasStartedIdleAnimation{false};
 };
 

@@ -24,13 +24,6 @@ void DigDugMovementComponent::Start()
 
 void DigDugMovementComponent::Update()
 {
-	//SDL_Rect playerRect;
-	//playerRect.x = static_cast<int>(m_Transform->GetWorldPosition().x);
-	//playerRect.y = static_cast<int>(m_Transform->GetWorldPosition().y);
-	//playerRect.w = static_cast<int>(m_AnimationComponent->GetAnimationFrameWidth());
-	//playerRect.h = static_cast<int>(m_AnimationComponent->GetAnimationFrameHeight());
-	//
-	//m_GroundComponent->ErasePlayerTrail(playerRect);
 	// Not Moving And No Input
 	if (m_CurrentInputDirection == glm::vec2(0.f, 0.f) && !m_IsMoving)
 	{
@@ -53,41 +46,7 @@ void DigDugMovementComponent::Update()
 		newPos += moveDelta;
 		m_Transform->SetLocalPosition(newPos);
 
-
-
-		SDL_Rect playerRect;
-		playerRect.x = static_cast<int>(m_Transform->GetWorldPosition().x);
-		playerRect.y = static_cast<int>(m_Transform->GetWorldPosition().y);
-		playerRect.w = static_cast<int>(m_AnimationComponent->GetAnimationFrameWidth());
-		playerRect.h = static_cast<int>(m_AnimationComponent->GetAnimationFrameHeight());
-
-		m_GroundComponent->ErasePlayerTrail(playerRect);
-		// Check if new pos is transparent -> if so go back to normal anim if not already playing
-		// if it's not transparent, go to digging anim if not already playing
-		// pos to check -> newPos + player width
-		glm::vec2 posToCheck = newPos;
-		posToCheck.x += playerRect.w + 1;
-		posToCheck.y += playerRect.h / 2;
-		if (m_GroundComponent->PositionIsDugOut(posToCheck)) // Next Is Already Dug Out
-		{
-			if (!m_HasStartedWalkingAnimation)
-			{
-				m_HasStartedWalkingAnimation = true;
-				m_HasStartedDiggingAnimation = false;
-				m_HasStartedIdleAnimation = false;
-				m_AnimationComponent->PlayAnimation(make_sdbm_hash("DigDugMove"));
-			}
-		}
-		else // Next Is Not Dug Out Yet
-		{
-			if (!m_HasStartedDiggingAnimation)
-			{
-				m_HasStartedDiggingAnimation = true;
-				m_HasStartedWalkingAnimation = false;
-				m_HasStartedIdleAnimation = false;
-				m_AnimationComponent->PlayAnimation(make_sdbm_hash("DigDugDigging"));
-			}
-		}
+		UpdateGroundAndAnimation();
 
 		// Target Reached, Allow Switching Of Directions
 		if (abs(m_DistanceTracker) >= abs(m_DistanceToTarget))
@@ -211,4 +170,54 @@ void DigDugMovementComponent::SetIdleAnim()
 		m_HasStartedWalkingAnimation = false;
 		m_AnimationComponent->PlayAnimation(make_sdbm_hash("DigDugIdle"));
 	}
+}
+
+void DigDugMovementComponent::UpdateGroundAndAnimation()
+{
+	SDL_Rect playerRect{};
+	playerRect.x = static_cast<int>(m_Transform->GetWorldPosition().x);
+	playerRect.y = static_cast<int>(m_Transform->GetWorldPosition().y);
+	playerRect.w = static_cast<int>(m_AnimationComponent->GetAnimationFrameWidth());
+	playerRect.h = static_cast<int>(m_AnimationComponent->GetAnimationFrameHeight());
+
+	glm::vec2 posToCheck = m_Transform->GetWorldPosition();
+	// Depending On Direction, We Need To Check A Different Position
+	if (m_Direction == glm::vec2(1.f, 0.f)) // Moving Right
+	{
+		posToCheck.x += playerRect.w + 1.f;
+	}
+	else if (m_Direction == glm::vec2(-1.f, 0.f)) // Moving Left
+	{
+		posToCheck.x -= 1.f;
+	}
+	else if (m_Direction == glm::vec2(0.f, -1.f)) // Moving Up
+	{
+		posToCheck.y -= 1.f;
+	}
+	else if (m_Direction == glm::vec2(0.f, 1.f)) // Moving Down
+	{
+		posToCheck.y += playerRect.h + 1.f;
+	}
+
+	if (m_GroundComponent->PositionIsDugOut(posToCheck)) // Next Is Already Dug Out
+	{
+		if (!m_HasStartedWalkingAnimation)
+		{
+			m_HasStartedWalkingAnimation = true;
+			m_HasStartedDiggingAnimation = false;
+			m_HasStartedIdleAnimation = false;
+			m_AnimationComponent->PlayAnimation(make_sdbm_hash("DigDugMove"));
+		}
+	}
+	else // Next Is Not Dug Out Yet
+	{
+		if (!m_HasStartedDiggingAnimation)
+		{
+			m_HasStartedDiggingAnimation = true;
+			m_HasStartedWalkingAnimation = false;
+			m_HasStartedIdleAnimation = false;
+			m_AnimationComponent->PlayAnimation(make_sdbm_hash("DigDugDigging"));
+		}
+	}
+	m_GroundComponent->ErasePlayerTrail(playerRect);
 }
