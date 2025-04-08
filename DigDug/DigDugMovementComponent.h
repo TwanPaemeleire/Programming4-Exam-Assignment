@@ -4,6 +4,12 @@
 #include <utility>
 
 class GridComponent;
+class GroundComponent;
+
+namespace Twengine
+{
+	class AnimationComponent;
+}
 
 class DigDugMovementComponent final : public Twengine::Component
 {
@@ -23,9 +29,12 @@ public:
 	void SetYDirection(float y);
 private:
 	void CalculateNextTarget();
+	void SetIdleAnim();
 
 	float m_MovementSpeed{20.f};
 	GridComponent* m_GridComponent{};
+	GroundComponent* m_GroundComponent{};
+	Twengine::AnimationComponent* m_AnimationComponent{};
 	
 	glm::vec2 m_Direction = { 0.f, 0.f }; 
 	glm::vec2 m_TargetPosition = { -1.f, -1.f };
@@ -33,9 +42,10 @@ private:
 	float m_DistanceToTarget{};
 	float m_DistanceTracker{};
 	std::pair<int, int> m_CurrentIndex{};
-	std::pair<int, int> m_NextIndex{};
 	bool m_IsMoving = false;
-	bool m_MovingHorizontally{ true };
-	bool m_CanSwitchDirection{ true };
+
+	bool m_HasStartedDiggingAnimation{false};
+	bool m_HasStartedWalkingAnimation{ false };
+	bool m_HasStartedIdleAnimation{ false };
 };
 

@@ -7,6 +7,7 @@
 #include <algorithm>
 #include "Renderer.h"
 #include "GroundComponent.h"
+#include "AnimationComponent.h"
 
 DigDugMovementComponent::DigDugMovementComponent(Twengine::GameObject* owner)
 	:Component(owner)
@@ -17,16 +18,19 @@ void DigDugMovementComponent::Start()
 {
 	m_GridComponent = GameManager::GetInstance().GetGrid();
 	m_CurrentIndex = m_GridComponent->GetIndexFromPosition(m_Transform->GetWorldPosition());
+	m_GroundComponent = GameManager::GetInstance().GetGround();
+	m_AnimationComponent = GetOwner()->GetComponent<Twengine::AnimationComponent>();
 }
 
 void DigDugMovementComponent::Update()
 {
-	SDL_Rect playerRect;
-	playerRect.x = static_cast<int>(m_Transform->GetWorldPosition().x);
-	playerRect.y = static_cast<int>(m_Transform->GetWorldPosition().y);
-	playerRect.w = 28;
-	playerRect.h = 28;
-	GameManager::GetInstance().GetGround()->ErasePlayerTrail(playerRect);
+	//SDL_Rect playerRect;
+	//playerRect.x = static_cast<int>(m_Transform->GetWorldPosition().x);
+	//playerRect.y = static_cast<int>(m_Transform->GetWorldPosition().y);
+	//playerRect.w = static_cast<int>(m_AnimationComponent->GetAnimationFrameWidth());
+	//playerRect.h = static_cast<int>(m_AnimationComponent->GetAnimationFrameHeight());
+	//
+	//m_GroundComponent->ErasePlayerTrail(playerRect);
 	// Not Moving And No Input
 	if (m_CurrentInputDirection == glm::vec2(0.f, 0.f) && !m_IsMoving)
 	{
@@ -37,7 +41,6 @@ void DigDugMovementComponent::Update()
 	if (m_CurrentInputDirection != glm::vec2(0.f, 0.f) && m_TargetPosition == glm::vec2(-1.f, -1.f))
 	{
 		CalculateNextTarget();
-		m_CanSwitchDirection = false;
 	}
 
 	// Move To Target
@@ -49,6 +52,42 @@ void DigDugMovementComponent::Update()
 		m_DistanceTracker += (moveDelta.x + moveDelta.y);
 		newPos += moveDelta;
 		m_Transform->SetLocalPosition(newPos);
+
+
+
+		SDL_Rect playerRect;
+		playerRect.x = static_cast<int>(m_Transform->GetWorldPosition().x);
+		playerRect.y = static_cast<int>(m_Transform->GetWorldPosition().y);
+		playerRect.w = static_cast<int>(m_AnimationComponent->GetAnimationFrameWidth());
+		playerRect.h = static_cast<int>(m_AnimationComponent->GetAnimationFrameHeight());
+
+		m_GroundComponent->ErasePlayerTrail(playerRect);
+		// Check if new pos is transparent -> if so go back to normal anim if not already playing
+		// if it's not transparent, go to digging anim if not already playing
+		// pos to check -> newPos + player width
+		glm::vec2 posToCheck = newPos;
+		posToCheck.x += playerRect.w + 1;
+		posToCheck.y += playerRect.h / 2;
+		if (m_GroundComponent->PositionIsDugOut(posToCheck)) // Next Is Already Dug Out
+		{
+			if (!m_HasStartedWalkingAnimation)
+			{
+				m_HasStartedWalkingAnimation = true;
+				m_HasStartedDiggingAnimation = false;
+				m_HasStartedIdleAnimation = false;
+				m_AnimationComponent->PlayAnimation(make_sdbm_hash("DigDugMove"));
+			}
+		}
+		else // Next Is Not Dug Out Yet
+		{
+			if (!m_HasStartedDiggingAnimation)
+			{
+				m_HasStartedDiggingAnimation = true;
+				m_HasStartedWalkingAnimation = false;
+				m_HasStartedIdleAnimation = false;
+				m_AnimationComponent->PlayAnimation(make_sdbm_hash("DigDugDigging"));
+			}
+		}
 
 		// Target Reached, Allow Switching Of Directions
 		if (abs(m_DistanceTracker) >= abs(m_DistanceToTarget))
@@ -70,6 +109,7 @@ void DigDugMovementComponent::SetXDirection(float x)
 	if (x == 0.f && m_CurrentInputDirection.y == 0.f)
 	{
 		m_IsMoving = false;
+		SetIdleAnim();
 	}
 	if (x == 0.f) return;
 	// Switch Orientations Left -> Right Or Right -> Left
@@ -81,11 +121,11 @@ void DigDugMovementComponent::SetXDirection(float x)
 
 void DigDugMovementComponent::SetYDirection(float y)
 {
-
 	// No Input Detected At All
 	if (y == 0.f && m_CurrentInputDirection.x == 0.f)
 	{
 		m_IsMoving = false;
+		SetIdleAnim();
 	}
 	if (y == 0.f) return;
 	// Switch Orientations Up -> Down Or Down -> Up
@@ -160,4 +200,15 @@ void DigDugMovementComponent::CalculateNextTarget()
 
 	m_Direction = m_CurrentInputDirection;
 	m_DistanceTracker = 0.f;
+}
+
+void DigDugMovementComponent::SetIdleAnim()
+{
+	if (!m_HasStartedIdleAnimation)
+	{
+		m_HasStartedIdleAnimation = true;
+		m_HasStartedDiggingAnimation = false;
+		m_HasStartedWalkingAnimation = false;
+		m_AnimationComponent->PlayAnimation(make_sdbm_hash("DigDugIdle"));
+	}
 }

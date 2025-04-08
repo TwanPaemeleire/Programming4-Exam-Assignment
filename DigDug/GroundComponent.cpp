@@ -68,12 +68,21 @@ void GroundComponent::ErasePlayerTrail(SDL_Rect playerRect)
 
 bool GroundComponent::PositionIsDugOut(const glm::vec2& pos)
 {
+	// Calculate Position Relative To Where The Ground Starts, As This Won't Be The Same As Player World Position
+	glm::vec2 relativePos = pos - glm::vec2(m_Transform->GetWorldPosition());
+	int x = static_cast<int>(relativePos.x);
+	int y = static_cast<int>(relativePos.y);
+
+	// Make Sure We Don't Go Out Of Bounds
+	if (x < 0 || x >= m_Surface->w || y < 0 || y >= m_Surface->h)
+		return false;
+
 	// Gives The Number Of Bytes In A Single Row Of Pixel Data On This Surface
 	int pitchInBytes = m_Surface->pitch;
 	// / 4 Because Each Pixel Is 4 Bytes And We Want To Work In The 1D "pixels" Array, So This Way We Get The Number Of Pixels Per Row, Not Number Of Bytes
 	int pitch = pitchInBytes / 4;
 
 	Uint32* pixels = (Uint32*)m_Surface->pixels;
-	return (pixels[static_cast<int>(pos.y) * pitch + static_cast<int>(pos.x)] == m_TransparentValue);
+	return pixels[y * pitch + x] == m_TransparentValue;
 }
 
