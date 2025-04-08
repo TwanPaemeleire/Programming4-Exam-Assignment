@@ -43,7 +43,7 @@ void Twengine::AnimationComponent::Render() const
 		m_FlipHorizontal, m_FlipVertical, m_RotationAngle);
 }
 
-void Twengine::AnimationComponent::AddAnimation(const std::string& filePath, int columns, int repeatStartColumn)
+void Twengine::AnimationComponent::AddAnimation(const std::string& filePath, AnimationId id, int columns, int repeatStartColumn)
 {
 	std::unique_ptr<AnimationData> tempAnimation = std::make_unique<AnimationData>();
 	tempAnimation->spriteSheet = ResourceManager::GetInstance().LoadTexture(filePath);
@@ -53,16 +53,16 @@ void Twengine::AnimationComponent::AddAnimation(const std::string& filePath, int
 	tempAnimation->frameHeight = static_cast<float>(tempAnimation->spriteSheet->GetSize().y);
 
 	// Extract Just The FileName Which Can Be Used As A Key		"Enemies/Pooka/PookaMove.png" => "PookaMove"
-	std::string key = std::filesystem::path(filePath).stem().string();
-	m_Animations.emplace(key, std::move(tempAnimation));
+	//std::string fileName = std::filesystem::path(filePath).stem().string();
+	m_Animations.emplace(id, std::move(tempAnimation));
 }
 
-void Twengine::AnimationComponent::PlayAnimation(const std::string& key, float frameDelay)
+void Twengine::AnimationComponent::PlayAnimation(AnimationId id, float frameDelay)
 {
 	m_CurrentColumn = 0;
 	m_DelayCounter = 0.f;
 	m_FrameDelay = frameDelay;
-	m_CurrentAnimation = m_Animations.find(key)->second.get();
+	m_CurrentAnimation = m_Animations.find(id)->second.get();
 	m_MaxColumnIndex = m_CurrentAnimation->columns - 1;
 	m_FrameWidth = m_CurrentAnimation->frameWidth;
 	m_FrameHeight = m_CurrentAnimation->frameHeight;

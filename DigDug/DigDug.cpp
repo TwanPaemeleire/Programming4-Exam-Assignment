@@ -104,8 +104,8 @@ void load()
 	auto emptyCheck = std::make_unique<Twengine::GameObject>();
 	auto collisionCheck = std::make_unique<Twengine::GameObject>();
 	auto* animationColl = collisionCheck->AddComponent<Twengine::AnimationComponent>();
-	animationColl->AddAnimation("DigDug/DigDugMove.png", 2);
-	animationColl->PlayAnimation("DigDugMove");
+	//animationColl->AddAnimation("DigDug/DigDugMove.png", 2);
+	//animationColl->PlayAnimation("DigDugMove");
 	auto* collider = collisionCheck->AddComponent<Twengine::RectColliderComponent>();
 	collider->SetHitBox(collisionCheck->GetTransform()->GetWorldPosition(), animationColl->GetAnimationFrameWidth(), animationColl->GetAnimationFrameHeight());
 	collisionCheck->SetParent(emptyCheck.get(), true);

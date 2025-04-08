@@ -14,6 +14,8 @@ GroundComponent::GroundComponent(Twengine::GameObject* owner)
 	SDL_SetSurfaceBlendMode(m_Surface, SDL_BLENDMODE_BLEND);
 	m_Texture = SDL_CreateTextureFromSurface(Twengine::Renderer::GetInstance().GetSDLRenderer(), m_Surface);
 	SDL_SetTextureBlendMode(m_Texture, SDL_BLENDMODE_BLEND);
+
+	m_TransparentValue = SDL_MapRGBA(m_Surface->format, 0, 0, 0, 0);
 }
 
 void GroundComponent::Render() const
@@ -45,8 +47,6 @@ void GroundComponent::ErasePlayerTrail(SDL_Rect playerRect)
 	// / 4 Because Each Pixel Is 4 Bytes And We Want To Work In The 1D "pixels" Array, So This Way We Get The Number Of Pixels Per Row, Not Number Of Bytes
 	int pitch = pitchInBytes / 4;
 
-	Uint32 transparent = SDL_MapRGBA(m_Surface->format, 0, 0, 0, 0);
-
 	// Set All Of The Calculated Rect's Pixels To TransParent
 	for (int y = rectRelativeToPos.y; y < rectRelativeToPos.y + rectRelativeToPos.h; y++)
 	{
@@ -55,7 +55,7 @@ void GroundComponent::ErasePlayerTrail(SDL_Rect playerRect)
 			// Make Sure We Don't Go Out Of Bounds
 			if (x >= 0 && x < m_Surface->w && y >= 0 && y < m_Surface->h)
 			{
-				pixels[y * pitch + x] = transparent;
+				pixels[y * pitch + x] = m_TransparentValue;
 			}
 		}
 	}
@@ -64,5 +64,16 @@ void GroundComponent::ErasePlayerTrail(SDL_Rect playerRect)
 	SDL_DestroyTexture(m_Texture);
 	m_Texture = SDL_CreateTextureFromSurface(Twengine::Renderer::GetInstance().GetSDLRenderer(), m_Surface);
 	SDL_SetTextureBlendMode(m_Texture, SDL_BLENDMODE_BLEND);
+}
+
+bool GroundComponent::PositionIsDugOut(const glm::vec2& pos)
+{
+	// Gives The Number Of Bytes In A Single Row Of Pixel Data On This Surface
+	int pitchInBytes = m_Surface->pitch;
+	// / 4 Because Each Pixel Is 4 Bytes And We Want To Work In The 1D "pixels" Array, So This Way We Get The Number Of Pixels Per Row, Not Number Of Bytes
+	int pitch = pitchInBytes / 4;
+
+	Uint32* pixels = (Uint32*)m_Surface->pixels;
+	return (pixels[static_cast<int>(pos.y) * pitch + static_cast<int>(pos.x)] == m_TransparentValue);
 }
 

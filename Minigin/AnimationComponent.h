@@ -3,6 +3,9 @@
 #include <string>
 #include <memory>
 #include <unordered_map>
+#include "SdbmHash.h"
+
+using AnimationId = unsigned int;
 
 namespace Twengine
 {
@@ -30,8 +33,8 @@ namespace Twengine
 		virtual void Update() override;
 		virtual void Render() const override;
 
-		void AddAnimation(const std::string& filePath, int columns, int repeatStartColumn = 0);
-		void PlayAnimation(const std::string& key, float frameDelay = 0.2f);
+		void AddAnimation(const std::string& filePath, AnimationId id, int columns, int repeatStartColumn = 0);
+		void PlayAnimation(AnimationId id, float frameDelay = 0.2f);
 
 		float GetAnimationFrameWidth() const { return m_FrameWidth; }
 		float GetAnimationFrameHeight() const { return m_FrameHeight; }
@@ -44,7 +47,7 @@ namespace Twengine
 	private:
 
 		// General
-		std::unordered_map<std::string, std::unique_ptr<AnimationData>> m_Animations;
+		std::unordered_map<AnimationId, std::unique_ptr<AnimationData>> m_Animations;
 		bool m_FlipHorizontal{ false };
 		bool m_FlipVertical{ false };
 		double m_RotationAngle{};
