@@ -34,12 +34,23 @@
 #include "SDLSoundSystem.h"
 #include "LevelFactory.h"
 #include "GameManager.h"
+#include "GroundComponent.h"
 
 #include "Event.h"
 
 void load()
 {
 	auto& scene = Twengine::SceneManager::GetInstance().CreateScene("Game");
+
+
+	auto gridObject = std::make_unique<Twengine::GameObject>();
+	auto* grid = gridObject->AddComponent<GridComponent>();
+	GameManager::GetInstance().SetGrid(grid);
+
+	auto levelDrawObject = std::make_unique<Twengine::GameObject>();
+	levelDrawObject->AddComponent<GroundComponent>();
+	levelDrawObject->AddComponent<Twengine::TextureRenderComponent>()->SetTexture("Level/FullLevel.png");
+	scene.Add(std::move(levelDrawObject));
 
 	auto* font = Twengine::ResourceManager::GetInstance().LoadFont("GameFont.otf", 12);
 
@@ -112,10 +123,7 @@ void load()
 	Twengine::InputManager::GetInstance().BindCommandToInput<KillEnemyCommand>(SDLK_x, Twengine::InteractionStates::up, digdug.get(), -1);
 	//scene.Add(std::move(collisionCheck));
 
-	auto gridObject = std::make_unique<Twengine::GameObject>();
-	auto* grid = gridObject->AddComponent<GridComponent>();
 	digDugLivesDisplayComp->Initialize(grid);
-	GameManager::GetInstance().SetGrid(grid);
 
 	scene.Add(std::move(gridObject));
 	scene.Add(std::move(digdugLivesText));
