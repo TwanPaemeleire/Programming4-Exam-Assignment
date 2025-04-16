@@ -9,6 +9,11 @@ Twengine::Scene::Scene(const std::string& name) : m_Name(name) {}
 
 Twengine::Scene::~Scene() = default;
 
+void Twengine::Scene::Load()
+{
+	m_LoadFunction();
+}
+
 void Twengine::Scene::Add(std::unique_ptr<GameObject> object)
 {
 	m_Objects.emplace_back(std::move(object));

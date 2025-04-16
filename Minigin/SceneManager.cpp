@@ -37,7 +37,14 @@ void Twengine::SceneManager::SetCurrentScene(const std::string& name)
 	{
 		if (scene->GetName() == name)
 		{
+			Scene* prevScene = m_CurrentScene;	
 			m_CurrentScene = scene.get();
+			m_CurrentScene->Load();
+			if (prevScene != nullptr)
+			{
+				prevScene->RemoveAll();
+			}
+			m_CurrentScene->Start();
 			return;
 		}
 	}

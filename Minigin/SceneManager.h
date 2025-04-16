@@ -19,6 +19,7 @@ namespace Twengine
 		void RenderUI();
 
 		void SetCurrentScene(const std::string& name);
+		Scene& GetCurrentScene() const { return *m_CurrentScene; }
 		Scene& CreateScene(const std::string& name);
 	private:
 		Scene* m_CurrentScene{ nullptr };

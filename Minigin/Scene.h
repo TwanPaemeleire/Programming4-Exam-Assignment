@@ -1,6 +1,7 @@
 #pragma once
 #include "GameObject.h"
 #include <string>
+#include <functional>
 
 namespace Twengine
 {
@@ -14,6 +15,7 @@ namespace Twengine
 		Scene& operator=(const Scene& other) = delete;
 		Scene& operator=(Scene&& other) = delete;
 
+		void Load();
 		void Add(std::unique_ptr<GameObject> object);
 		void Remove(std::unique_ptr<GameObject> object);
 		void RemoveAll();
@@ -26,10 +28,12 @@ namespace Twengine
 		void RenderUI();
 
 		const std::string& GetName() const { return m_Name; }
+		void SetLoadFunction(std::function<void()> loadFunction) { m_LoadFunction = loadFunction; }
 
 	private:
 		std::string m_Name;
 		std::vector <std::unique_ptr<GameObject>> m_Objects{};
+		std::function<void()> m_LoadFunction{};
 
 		static unsigned int m_idCounter;
 	};
