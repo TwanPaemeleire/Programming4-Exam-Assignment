@@ -15,7 +15,7 @@ public:
 
 	virtual void Render() const override;
 
-	void ErasePlayerTrail(SDL_Rect playerRect);
+	void ErasePlayerTrail(SDL_Rect playerRect, bool isInWorldSpace = true);
 	bool PositionIsDugOut(const glm::vec2& pos);
 private:
 	SDL_Surface* m_Surface{};

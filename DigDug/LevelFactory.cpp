@@ -30,6 +30,7 @@
 #include "GroundComponent.h"
 
 #include "Event.h"
+#include <fstream>
 
 void LevelFactory::LoadMenu()
 {
@@ -41,6 +42,7 @@ void LevelFactory::LoadMenu()
 
 	auto levelDrawObject = std::make_unique<Twengine::GameObject>();
 	auto* ground = levelDrawObject->AddComponent<GroundComponent>();
+	LoadLevelFromFile(ground, "Level/LevelOne.bin");
 	GameManager::GetInstance().SetGround(ground);
 	scene.Add(std::move(levelDrawObject));
 
@@ -156,7 +158,26 @@ void LevelFactory::CreateAndAddFygar(Twengine::Scene& scene)
 	scene.Add(std::move(fygar));
 }
 
-void LevelFactory::LoadLevelFromFile(Twengine::Scene& scene)
+void LevelFactory::LoadLevelFromFile(GroundComponent* groundComponent, const std::string& filePath)
 {
-	scene;
+	std::ifstream input;
+	input.open(filePath, std::ios::binary);
+	if (input.is_open())
+	{
+		size_t amountOfRects;
+		input.read(reinterpret_cast<char*>(&amountOfRects), sizeof(amountOfRects));
+		std::vector<SDL_Rect> dugRects(amountOfRects);
+		for (SDL_Rect& rect : dugRects)
+		{
+			input.read(reinterpret_cast<char*>(&rect.x), sizeof(rect.x));
+			input.read(reinterpret_cast<char*>(&rect.y), sizeof(rect.y));
+			input.read(reinterpret_cast<char*>(&rect.w), sizeof(rect.w));
+			input.read(reinterpret_cast<char*>(&rect.h), sizeof(rect.h));
+		}
+
+		for (SDL_Rect& rect : dugRects)
+		{
+			groundComponent->ErasePlayerTrail(rect, false);
+		}
+	}
 }

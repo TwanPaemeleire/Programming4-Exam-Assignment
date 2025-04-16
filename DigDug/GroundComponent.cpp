@@ -33,12 +33,15 @@ void GroundComponent::Render() const
 	SDL_RenderCopy(Twengine::Renderer::GetInstance().GetSDLRenderer(), m_Texture, nullptr, &dstRect);
 }
 
-void GroundComponent::ErasePlayerTrail(SDL_Rect playerRect)
+void GroundComponent::ErasePlayerTrail(SDL_Rect playerRect, bool isInWorldSpace)
 {
-	// Calculate Position Relative To Where The Ground Starts, As This Won't Be The Same As Player World Position
 	SDL_Rect rectRelativeToPos = playerRect;
-	rectRelativeToPos.x -= static_cast<int>(m_Transform->GetWorldPosition().x);
-	rectRelativeToPos.y -= static_cast<int>(m_Transform->GetWorldPosition().y);
+	if (isInWorldSpace)
+	{
+		// Calculate Position Relative To Where The Ground Starts, As This Won't Be The Same As Player World Position
+		rectRelativeToPos.x -= static_cast<int>(m_Transform->GetWorldPosition().x);
+		rectRelativeToPos.y -= static_cast<int>(m_Transform->GetWorldPosition().y);
+	}
 
 	Uint32* pixels = (Uint32*)m_Surface->pixels;
 
