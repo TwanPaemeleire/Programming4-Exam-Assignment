@@ -20,7 +20,7 @@ void load()
 	level2Scene.SetLoadFunction(LevelFactory::LoadLevel2);
 	auto& level3Scene = Twengine::SceneManager::GetInstance().CreateScene("Level3");
 	level3Scene.SetLoadFunction(LevelFactory::LoadLevel3);
-	Twengine::SceneManager::GetInstance().SetCurrentScene("Level3");
+	Twengine::SceneManager::GetInstance().SetCurrentScene("Menu");
 }
 
 int main(int, char* [])

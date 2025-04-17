@@ -7,6 +7,7 @@ namespace Twengine
 }
 
 class GroundComponent;
+class GridComponent;
 
 class LevelFactory
 {
@@ -17,9 +18,9 @@ public:
 	static void LoadLevel3();
 
 private:
-	static void CreateAndAddDigDug(Twengine::Scene& scene);
-	static void CreateAndAddPooka(Twengine::Scene& scene);
-	static void CreateAndAddFygar(Twengine::Scene& scene);
-	static void LoadLevelFromFile(GroundComponent* groundComponent, const std::string& filePath);
+	static void LoadLevelFromFile(Twengine::Scene& scene, GroundComponent* groundComponent, GridComponent* gridComponent, const std::string& filePath);
+	static void CreateAndAddPooka(Twengine::Scene& scene, int row, int column, GridComponent* gridComponent);
+	static void CreateAndAddFygar(Twengine::Scene& scene, int row, int column, GridComponent* gridComponent);
+	static void CreateAndAddRock(Twengine::Scene& scene, int row, int column, GridComponent* gridComponent);
 };
 

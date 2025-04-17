@@ -41,9 +41,9 @@ void LevelFactory::LoadMenu()
 
 	auto levelDrawObject = std::make_unique<Twengine::GameObject>();
 	auto* ground = levelDrawObject->AddComponent<GroundComponent>();
-	LoadLevelFromFile(ground, "Level/Level1.bin");
-	GameManager::GetInstance().SetGround(ground);
 	scene.Add(std::move(levelDrawObject));
+	LoadLevelFromFile(scene, ground, grid, "Level/Level1.bin");
+	GameManager::GetInstance().SetGround(ground);
 
 	auto* font = Twengine::ResourceManager::GetInstance().LoadFont("GameFont.otf", 12);
 
@@ -136,7 +136,7 @@ void LevelFactory::LoadLevel1()
 
 	auto levelDrawObject = std::make_unique<Twengine::GameObject>();
 	auto* ground = levelDrawObject->AddComponent<GroundComponent>();
-	LoadLevelFromFile(ground, "Level/Level2.bin");
+	LoadLevelFromFile(scene, ground, grid, "Level/Level2.bin");
 	GameManager::GetInstance().SetGround(ground);
 	scene.Add(std::move(levelDrawObject));
 }
@@ -150,7 +150,7 @@ void LevelFactory::LoadLevel2()
 
 	auto levelDrawObject = std::make_unique<Twengine::GameObject>();
 	auto* ground = levelDrawObject->AddComponent<GroundComponent>();
-	LoadLevelFromFile(ground, "Level/Level2.bin");
+	LoadLevelFromFile(scene, ground, grid, "Level/Level2.bin");
 	GameManager::GetInstance().SetGround(ground);
 	scene.Add(std::move(levelDrawObject));
 }
@@ -164,35 +164,18 @@ void LevelFactory::LoadLevel3()
 
 	auto levelDrawObject = std::make_unique<Twengine::GameObject>();
 	auto* ground = levelDrawObject->AddComponent<GroundComponent>();
-	LoadLevelFromFile(ground, "Level/Level3.bin");
+	LoadLevelFromFile(scene, ground, grid, "Level/Level3.bin");
 	GameManager::GetInstance().SetGround(ground);
 	scene.Add(std::move(levelDrawObject));
 }
 
-void LevelFactory::CreateAndAddDigDug(Twengine::Scene& scene)
-{
-	std::unique_ptr<Twengine::GameObject> digDug = std::make_unique<Twengine::GameObject>();
-	scene.Add(std::move(digDug));
-}
-
-void LevelFactory::CreateAndAddPooka(Twengine::Scene& scene)
-{
-	std::unique_ptr<Twengine::GameObject> pooka = std::make_unique<Twengine::GameObject>();
-	scene.Add(std::move(pooka));
-}
-
-void LevelFactory::CreateAndAddFygar(Twengine::Scene& scene)
-{
-	std::unique_ptr<Twengine::GameObject> fygar = std::make_unique<Twengine::GameObject>();
-	scene.Add(std::move(fygar));
-}
-
-void LevelFactory::LoadLevelFromFile(GroundComponent* groundComponent, const std::string& filePath)
+void LevelFactory::LoadLevelFromFile(Twengine::Scene& scene, GroundComponent* groundComponent, GridComponent* gridComponent, const std::string& filePath)
 {
 	std::ifstream input;
 	input.open(filePath, std::ios::binary);
 	if (input.is_open())
 	{
+		// Reading And Erasing Parts That Need To Be Erased
 		size_t amountOfRects;
 		input.read(reinterpret_cast<char*>(&amountOfRects), sizeof(amountOfRects));
 		std::vector<SDL_Rect> dugRects(amountOfRects);
@@ -202,11 +185,70 @@ void LevelFactory::LoadLevelFromFile(GroundComponent* groundComponent, const std
 			input.read(reinterpret_cast<char*>(&rect.y), sizeof(rect.y));
 			input.read(reinterpret_cast<char*>(&rect.w), sizeof(rect.w));
 			input.read(reinterpret_cast<char*>(&rect.h), sizeof(rect.h));
-		}
-
-		for (SDL_Rect& rect : dugRects)
-		{
 			groundComponent->ErasePlayerTrail(rect, false);
 		}
+
+		// Reading And Spawning Pookas
+		size_t amountOfPookas;
+		input.read(reinterpret_cast<char*>(&amountOfPookas), sizeof(amountOfPookas));
+		std::vector<std::pair<int, int>> pookaIndeces(amountOfPookas);
+		for (std::pair<int, int> indices : pookaIndeces)
+		{
+			input.read(reinterpret_cast<char*>(&indices.first), sizeof(indices.first));
+			input.read(reinterpret_cast<char*>(&indices.second), sizeof(indices.second));
+			CreateAndAddPooka(scene, indices.first, indices.second, gridComponent);
+		}
+
+		// Reading And Spawning Fygars
+		size_t amountOfFygars;
+		input.read(reinterpret_cast<char*>(&amountOfFygars), sizeof(amountOfFygars));
+		std::vector<std::pair<int, int>> fygarIndeces(amountOfFygars);
+		for (std::pair<int, int> indices : fygarIndeces)
+		{
+			input.read(reinterpret_cast<char*>(&indices.first), sizeof(indices.first));
+			input.read(reinterpret_cast<char*>(&indices.second), sizeof(indices.second));
+			CreateAndAddFygar(scene, indices.first, indices.second, gridComponent);
+		}
+
+		// Reading And Spawning Rocks
+		size_t amountOfRocks;
+		input.read(reinterpret_cast<char*>(&amountOfRocks), sizeof(amountOfRocks));
+		std::vector<std::pair<int, int>> rockIndeces(amountOfRocks);
+		for (std::pair<int, int> indices : rockIndeces)
+		{
+			input.read(reinterpret_cast<char*>(&indices.first), sizeof(indices.first));
+			input.read(reinterpret_cast<char*>(&indices.second), sizeof(indices.second));
+			CreateAndAddRock(scene, indices.first, indices.second, gridComponent);
+		}
 	}
+}
+
+void LevelFactory::CreateAndAddPooka(Twengine::Scene& scene, int row, int column, GridComponent* gridComponent)
+{
+	std::unique_ptr<Twengine::GameObject> pooka = std::make_unique<Twengine::GameObject>();
+	Twengine::AnimationComponent* animation = pooka->AddComponent<Twengine::AnimationComponent>();
+	animation->AddAnimation("Pooka/PookaMove.png", make_sdbm_hash("PookaMove"), 2);
+	animation->PlayAnimation(make_sdbm_hash("PookaMove"));
+	pooka->GetTransform()->SetLocalPosition(gridComponent->GetPositionFromIndex(row, column));
+	scene.Add(std::move(pooka));
+}
+
+void LevelFactory::CreateAndAddFygar(Twengine::Scene& scene, int row, int column, GridComponent* gridComponent)
+{
+	std::unique_ptr<Twengine::GameObject> fygar = std::make_unique<Twengine::GameObject>();
+	Twengine::AnimationComponent* animation = fygar->AddComponent<Twengine::AnimationComponent>();
+	animation->AddAnimation("Fygar/FygarMove.png", make_sdbm_hash("FygarMove"), 2);
+	animation->PlayAnimation(make_sdbm_hash("FygarMove"));
+	fygar->GetTransform()->SetLocalPosition(gridComponent->GetPositionFromIndex(row, column));
+	scene.Add(std::move(fygar));
+}
+
+void LevelFactory::CreateAndAddRock(Twengine::Scene& scene, int row, int column, GridComponent* gridComponent)
+{
+	std::unique_ptr<Twengine::GameObject> rock = std::make_unique<Twengine::GameObject>();
+	Twengine::TextureRenderComponent* texture = rock->AddComponent<Twengine::TextureRenderComponent>();
+	texture->SetTexture("Level/Rock.png");
+	auto pos = gridComponent->GetPositionFromIndex(row, column);
+	rock->GetTransform()->SetLocalPosition(gridComponent->GetPositionFromIndex(row, column));
+	scene.Add(std::move(rock));
 }
