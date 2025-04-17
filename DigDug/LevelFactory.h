@@ -12,7 +12,9 @@ class LevelFactory
 {
 public:
 	static void LoadMenu();
-	static void LoadLevelOne();
+	static void LoadLevel1();
+	static void LoadLevel2();
+	static void LoadLevel3();
 
 private:
 	static void CreateAndAddDigDug(Twengine::Scene& scene);

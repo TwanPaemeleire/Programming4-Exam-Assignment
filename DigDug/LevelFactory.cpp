@@ -35,14 +35,13 @@
 void LevelFactory::LoadMenu()
 {
 	Twengine::Scene& scene = Twengine::SceneManager::GetInstance().GetCurrentScene();
-	//Twengine::Scene& menuScene = Twengine::SceneManager::GetInstance().CreateScene("Menu");
 	auto gridObject = std::make_unique<Twengine::GameObject>();
 	auto* grid = gridObject->AddComponent<GridComponent>();
 	GameManager::GetInstance().SetGrid(grid);
 
 	auto levelDrawObject = std::make_unique<Twengine::GameObject>();
 	auto* ground = levelDrawObject->AddComponent<GroundComponent>();
-	LoadLevelFromFile(ground, "Level/LevelOne.bin");
+	LoadLevelFromFile(ground, "Level/Level1.bin");
 	GameManager::GetInstance().SetGround(ground);
 	scene.Add(std::move(levelDrawObject));
 
@@ -128,16 +127,46 @@ void LevelFactory::LoadMenu()
 	Twengine::ServiceLocator::register_sound_system(std::move(soundSystem));
 }
 
-void LevelFactory::LoadLevelOne()
+void LevelFactory::LoadLevel1()
 {
 	Twengine::Scene& scene = Twengine::SceneManager::GetInstance().GetCurrentScene();
+	auto gridObject = std::make_unique<Twengine::GameObject>();
+	auto* grid = gridObject->AddComponent<GridComponent>();
+	GameManager::GetInstance().SetGrid(grid);
 
-	auto* font = Twengine::ResourceManager::GetInstance().LoadFont("GameFont.otf", 12);
-	auto fpsDisplayer = std::make_unique<Twengine::GameObject>();
-	Twengine::TextComponent* fpsText = fpsDisplayer->AddComponent<Twengine::TextComponent>();
-	fpsText->SetFont(font);
-	fpsDisplayer->AddComponent<Twengine::FPSComponent>();
-	scene.Add(std::move(fpsDisplayer));
+	auto levelDrawObject = std::make_unique<Twengine::GameObject>();
+	auto* ground = levelDrawObject->AddComponent<GroundComponent>();
+	LoadLevelFromFile(ground, "Level/Level2.bin");
+	GameManager::GetInstance().SetGround(ground);
+	scene.Add(std::move(levelDrawObject));
+}
+
+void LevelFactory::LoadLevel2()
+{
+	Twengine::Scene& scene = Twengine::SceneManager::GetInstance().GetCurrentScene();
+	auto gridObject = std::make_unique<Twengine::GameObject>();
+	auto* grid = gridObject->AddComponent<GridComponent>();
+	GameManager::GetInstance().SetGrid(grid);
+
+	auto levelDrawObject = std::make_unique<Twengine::GameObject>();
+	auto* ground = levelDrawObject->AddComponent<GroundComponent>();
+	LoadLevelFromFile(ground, "Level/Level2.bin");
+	GameManager::GetInstance().SetGround(ground);
+	scene.Add(std::move(levelDrawObject));
+}
+
+void LevelFactory::LoadLevel3()
+{
+	Twengine::Scene& scene = Twengine::SceneManager::GetInstance().GetCurrentScene();
+	auto gridObject = std::make_unique<Twengine::GameObject>();
+	auto* grid = gridObject->AddComponent<GridComponent>();
+	GameManager::GetInstance().SetGrid(grid);
+
+	auto levelDrawObject = std::make_unique<Twengine::GameObject>();
+	auto* ground = levelDrawObject->AddComponent<GroundComponent>();
+	LoadLevelFromFile(ground, "Level/Level3.bin");
+	GameManager::GetInstance().SetGround(ground);
+	scene.Add(std::move(levelDrawObject));
 }
 
 void LevelFactory::CreateAndAddDigDug(Twengine::Scene& scene)

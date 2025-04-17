@@ -14,10 +14,13 @@ void load()
 {
 	auto& menuScene = Twengine::SceneManager::GetInstance().CreateScene("Menu");
 	menuScene.SetLoadFunction(LevelFactory::LoadMenu);
-	Twengine::SceneManager::GetInstance().SetCurrentScene("Menu");
-	auto& levelOneScene = Twengine::SceneManager::GetInstance().CreateScene("LevelOne");
-	levelOneScene.SetLoadFunction(LevelFactory::LoadLevelOne);
-	//Twengine::SceneManager::GetInstance().SetCurrentScene("LevelOne");
+	auto& level1Scene = Twengine::SceneManager::GetInstance().CreateScene("Level1");
+	level1Scene.SetLoadFunction(LevelFactory::LoadLevel1);
+	auto& level2Scene = Twengine::SceneManager::GetInstance().CreateScene("Level2");
+	level2Scene.SetLoadFunction(LevelFactory::LoadLevel2);
+	auto& level3Scene = Twengine::SceneManager::GetInstance().CreateScene("Level3");
+	level3Scene.SetLoadFunction(LevelFactory::LoadLevel3);
+	Twengine::SceneManager::GetInstance().SetCurrentScene("Level3");
 }
 
 int main(int, char* [])
