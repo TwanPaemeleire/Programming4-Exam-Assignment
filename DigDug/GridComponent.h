@@ -21,7 +21,7 @@ public:
 
 	virtual void Render() const override;
 
-	Cell& GetCell(int row, int column) { return m_Grid[row][column]; }
+	Cell* GetCell(int row, int column) { return &m_Grid[row][column]; }
 	int GetRows() const { return m_Rows; }
 	int GetColumns() const { return m_Columns; }
 	float GetCellSize() const { return m_CellSize; }

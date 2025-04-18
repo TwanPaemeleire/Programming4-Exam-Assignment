@@ -4,11 +4,17 @@
 #include "GridComponent.h"
 #include <iostream>
 #include "Renderer.h"
+#include <queue>
+#include <unordered_map>
 
 GroundComponent::GroundComponent(Twengine::GameObject* owner)
 	: Component(owner)
 {
-	m_Transform->SetLocalPosition(GameManager::GetInstance().GetGrid()->GetPositionFromIndex(2, 0));
+	m_GridComponent = GameManager::GetInstance().GetGrid();
+	m_GridCellSize = m_GridComponent->GetCellSize();
+	m_HalfGridCellSize = m_GridCellSize / 2.f;
+
+	m_Transform->SetLocalPosition(m_GridComponent->GetPositionFromIndex(2, 0));
 	m_Surface = IMG_Load("Level/FullLevel.png");
 	// Make Sure The Blend Mode Is Set Correctly So We Can "Erase" Parts Of The Texture
 	SDL_SetSurfaceBlendMode(m_Surface, SDL_BLENDMODE_BLEND);
@@ -67,6 +73,16 @@ void GroundComponent::ErasePlayerTrail(SDL_Rect playerRect, bool isInWorldSpace)
 	SDL_DestroyTexture(m_Texture);
 	m_Texture = SDL_CreateTextureFromSurface(Twengine::Renderer::GetInstance().GetSDLRenderer(), m_Surface);
 	SDL_SetTextureBlendMode(m_Texture, SDL_BLENDMODE_BLEND);
+
+	std::vector<Cell*> affectedCells{};
+	for (int cellCounter =0; cellCounter < affectedCells.size(); ++cellCounter)
+	{
+		glm::vec2 topLeft = affectedCells[cellCounter]->topLeft;
+		glm::vec2 middleLeft = glm::vec2(topLeft.x, topLeft.y + m_HalfGridCellSize);
+		glm::vec2 middleRight = glm::vec2(topLeft.x + m_GridCellSize, topLeft.y + m_HalfGridCellSize);
+		glm::vec2 topMiddle = glm::vec2(topLeft.x, topLeft.y + m_HalfGridCellSize);
+		glm::vec2 bottomMiddle = glm::vec2(topLeft.x + m_GridCellSize, topLeft.y + m_HalfGridCellSize);
+	}
 }
 
 bool GroundComponent::PositionIsDugOut(const glm::vec2& pos)
@@ -87,5 +103,14 @@ bool GroundComponent::PositionIsDugOut(const glm::vec2& pos)
 
 	Uint32* pixels = (Uint32*)m_Surface->pixels;
 	return pixels[y * pitch + x] == m_TransparentValue;
+}
+
+std::vector<glm::vec2> GroundComponent::FindPath(const glm::vec2& startPos, const glm::vec2& endPos, float width, float height)
+{
+	startPos;
+	endPos;
+	width;
+	height;
+	return {};
 }
 

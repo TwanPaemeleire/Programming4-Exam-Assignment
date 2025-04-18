@@ -31,7 +31,7 @@ void DisplayLivesComponent::Notify(const GameEvent& event, Twengine::GameObject*
 
 void DisplayLivesComponent::Initialize(GridComponent* gridComp)
 {
-	auto& pos = gridComp->GetCell(gridComp->GetRows() - 1, 0).topLeft;
+	auto& pos = gridComp->GetCell(gridComp->GetRows() - 1, 0)->topLeft;
 	GetOwner()->GetTransform()->SetLocalPosition(pos.x, pos.y);
 	m_LifeDrawOffset = gridComp->GetCellSize();
 }

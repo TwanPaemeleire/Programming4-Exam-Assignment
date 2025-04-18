@@ -28,6 +28,7 @@
 #include "SDLSoundSystem.h"
 #include "GameManager.h"
 #include "GroundComponent.h"
+#include "PookaComponent.h"
 
 #include "Event.h"
 #include <fstream>
@@ -57,18 +58,10 @@ void LevelFactory::LoadMenu()
 	// Tutorial 
 	auto enemyTutorial = std::make_unique<Twengine::GameObject>();
 	auto* enemyTutorialText = enemyTutorial->AddComponent<Twengine::TextComponent>();
-	enemyTutorialText->SetText("Use The Left Joystick To Move The Second DigDug");
+	enemyTutorialText->SetText("Use The Left Joystick To Move DigDug");
 	enemyTutorialText->SetFont(smallFont);
-	enemyTutorial->GetTransform()->SetLocalPosition(5, 100);
+	enemyTutorial->GetTransform()->SetLocalPosition(5, 20);
 	scene.Add(std::move(enemyTutorial));
-
-	auto digDugTutorial = std::make_unique<Twengine::GameObject>();
-	auto* digDugTutorialText = digDugTutorial->AddComponent<Twengine::TextComponent>();
-	digDugTutorialText->SetText("Use WASD To Move DigDug");
-	digDugTutorialText->SetFont(smallFont);
-	digDugTutorial->GetTransform()->SetLocalPosition(5, 120);
-	scene.Add(std::move(digDugTutorial));
-
 
 	// Display DigDug Lives
 	auto digdugLivesText = std::make_unique<Twengine::GameObject>();
@@ -83,6 +76,7 @@ void LevelFactory::LoadMenu()
 	// DIGDUG
 	auto digdug = std::make_unique<Twengine::GameObject>();
 	digdug->GetTransform()->SetLocalPosition(200, 350);
+	GameManager::GetInstance().SetPlayerTransform(digdug->GetTransform());
 
 	auto* diDugHealth = digdug->AddComponent<HealthComponent>();
 	diDugHealth->GetObjectDiedEvent()->AddObserver(digDugLivesDisplayComp);
@@ -230,6 +224,7 @@ void LevelFactory::CreateAndAddPooka(Twengine::Scene& scene, int row, int column
 	animation->AddAnimation("Pooka/PookaMove.png", make_sdbm_hash("PookaMove"), 2);
 	animation->PlayAnimation(make_sdbm_hash("PookaMove"));
 	pooka->GetTransform()->SetLocalPosition(gridComponent->GetPositionFromIndex(row, column));
+	pooka->AddComponent<PookaComponent>();
 	scene.Add(std::move(pooka));
 }
 
