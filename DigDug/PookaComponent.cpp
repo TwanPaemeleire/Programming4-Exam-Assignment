@@ -114,7 +114,7 @@ void PookaComponent::SetNewIdleTarget()
 			if (m_IdleDirections[dirCounter].direction == glm::vec2(1.f, 0.f))      m_IdleTarget.x -= m_GridCellSize;
 			else if (m_IdleDirections[dirCounter].direction == glm::vec2(0.f, 1.f)) m_IdleTarget.y -= m_GridCellSize;
 			m_IdleDirection = m_IdleDirections[dirCounter].direction;
-			m_PreviousDirIndex = dirCounter;
+			m_PreviousDirIndex = static_cast<int>(dirCounter);
 			return;
 		}
 	}
