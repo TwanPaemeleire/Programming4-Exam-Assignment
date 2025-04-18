@@ -106,7 +106,7 @@ void PookaComponent::SetNewIdleTarget()
 	}
 
 	// Check Which Direction To Move In If Previous Wasn't Possible
-	for (int dirCounter = 0; dirCounter < m_IdleDirections.size(); ++dirCounter)
+	for (size_t dirCounter = 0; dirCounter < m_IdleDirections.size(); ++dirCounter)
 	{
 		if (m_IdleDirections[dirCounter].canMoveHere)
 		{

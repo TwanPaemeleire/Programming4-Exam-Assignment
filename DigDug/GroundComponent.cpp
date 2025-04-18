@@ -75,7 +75,7 @@ void GroundComponent::ErasePlayerTrail(SDL_Rect playerRect, bool isInWorldSpace)
 	SDL_SetTextureBlendMode(m_Texture, SDL_BLENDMODE_BLEND);
 
 	std::vector<Cell*> affectedCells{};
-	for (int cellCounter =0; cellCounter < affectedCells.size(); ++cellCounter)
+	for (size_t cellCounter =0; cellCounter < affectedCells.size(); ++cellCounter)
 	{
 		glm::vec2 topLeft = affectedCells[cellCounter]->topLeft;
 		glm::vec2 middleLeft = glm::vec2(topLeft.x, topLeft.y + m_HalfGridCellSize);
