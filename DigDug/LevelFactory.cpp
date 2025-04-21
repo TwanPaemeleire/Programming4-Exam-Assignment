@@ -170,7 +170,7 @@ void LevelFactory::LoadLevelFromFile(Twengine::Scene& scene, GroundComponent* gr
 	if (input.is_open())
 	{
 		// Reading And Erasing Parts That Need To Be Erased
-		size_t amountOfRects;
+		uint32_t amountOfRects;
 		input.read(reinterpret_cast<char*>(&amountOfRects), sizeof(amountOfRects));
 		std::vector<SDL_Rect> dugRects(amountOfRects);
 		for (SDL_Rect& rect : dugRects)
@@ -183,10 +183,10 @@ void LevelFactory::LoadLevelFromFile(Twengine::Scene& scene, GroundComponent* gr
 		}
 
 		// Reading And Spawning Pookas
-		size_t amountOfPookas;
+		uint32_t amountOfPookas;
 		input.read(reinterpret_cast<char*>(&amountOfPookas), sizeof(amountOfPookas));
-		std::vector<std::pair<int, int>> pookaIndeces(amountOfPookas);
-		for (std::pair<int, int> indices : pookaIndeces)
+		std::vector<std::pair<int, int>> pookaIndices(amountOfPookas);
+		for (std::pair<int, int> indices : pookaIndices)
 		{
 			input.read(reinterpret_cast<char*>(&indices.first), sizeof(indices.first));
 			input.read(reinterpret_cast<char*>(&indices.second), sizeof(indices.second));
@@ -194,10 +194,10 @@ void LevelFactory::LoadLevelFromFile(Twengine::Scene& scene, GroundComponent* gr
 		}
 
 		// Reading And Spawning Fygars
-		size_t amountOfFygars;
+		uint32_t amountOfFygars;
 		input.read(reinterpret_cast<char*>(&amountOfFygars), sizeof(amountOfFygars));
-		std::vector<std::pair<int, int>> fygarIndeces(amountOfFygars);
-		for (std::pair<int, int> indices : fygarIndeces)
+		std::vector<std::pair<int, int>> fygarIndices(amountOfFygars);
+		for (std::pair<int, int> indices : fygarIndices)
 		{
 			input.read(reinterpret_cast<char*>(&indices.first), sizeof(indices.first));
 			input.read(reinterpret_cast<char*>(&indices.second), sizeof(indices.second));
@@ -205,10 +205,10 @@ void LevelFactory::LoadLevelFromFile(Twengine::Scene& scene, GroundComponent* gr
 		}
 
 		// Reading And Spawning Rocks
-		size_t amountOfRocks;
+		uint32_t amountOfRocks;
 		input.read(reinterpret_cast<char*>(&amountOfRocks), sizeof(amountOfRocks));
-		std::vector<std::pair<int, int>> rockIndeces(amountOfRocks);
-		for (std::pair<int, int> indices : rockIndeces)
+		std::vector<std::pair<int, int>> rockIndices(amountOfRocks);
+		for (std::pair<int, int> indices : rockIndices)
 		{
 			input.read(reinterpret_cast<char*>(&indices.first), sizeof(indices.first));
 			input.read(reinterpret_cast<char*>(&indices.second), sizeof(indices.second));
