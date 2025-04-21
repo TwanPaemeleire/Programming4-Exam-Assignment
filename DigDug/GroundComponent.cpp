@@ -73,16 +73,6 @@ void GroundComponent::ErasePlayerTrail(SDL_Rect playerRect, bool isInWorldSpace)
 	SDL_DestroyTexture(m_Texture);
 	m_Texture = SDL_CreateTextureFromSurface(Twengine::Renderer::GetInstance().GetSDLRenderer(), m_Surface);
 	SDL_SetTextureBlendMode(m_Texture, SDL_BLENDMODE_BLEND);
-
-	std::vector<Cell*> affectedCells{};
-	for (size_t cellCounter =0; cellCounter < affectedCells.size(); ++cellCounter)
-	{
-		glm::vec2 topLeft = affectedCells[cellCounter]->topLeft;
-		glm::vec2 middleLeft = glm::vec2(topLeft.x, topLeft.y + m_HalfGridCellSize);
-		glm::vec2 middleRight = glm::vec2(topLeft.x + m_GridCellSize, topLeft.y + m_HalfGridCellSize);
-		glm::vec2 topMiddle = glm::vec2(topLeft.x, topLeft.y + m_HalfGridCellSize);
-		glm::vec2 bottomMiddle = glm::vec2(topLeft.x + m_GridCellSize, topLeft.y + m_HalfGridCellSize);
-	}
 }
 
 bool GroundComponent::PositionIsDugOut(const glm::vec2& pos)
@@ -114,3 +104,140 @@ std::vector<glm::vec2> GroundComponent::FindPath(const glm::vec2& startPos, cons
 	return {};
 }
 
+glm::vec2 GroundComponent::GetCellTargetToGetCloserToPlayer(const glm::vec2& enemyPos) const
+{
+	glm::vec2 playerPos = GameManager::GetInstance().GetPlayerTransform()->GetWorldPosition();
+	glm::vec2 up = glm::vec2(enemyPos.x + (m_GridCellSize * 2) - 1.f, enemyPos.y);
+	glm::vec2 right = glm::vec2(enemyPos.x, enemyPos.y + (m_GridCellSize * 2) - 1.f);
+	glm::vec2 down = glm::vec2(enemyPos.x - m_GridCellSize + 1.f, enemyPos.y);
+	glm::vec2 left = glm::vec2(enemyPos.x, enemyPos.y - m_GridCellSize + 1.f);
+
+	std::vector<std::pair<glm::vec2, bool>> directions = {
+		{ up, CanMoveBetween(enemyPos, up) },
+		{ right, CanMoveBetween(enemyPos, right) },
+		{ down, CanMoveBetween(enemyPos, down) },
+		{ left, CanMoveBetween(enemyPos, left) }
+	};
+
+	glm::vec2 bestTarget = enemyPos;
+	float shortestDistance = std::numeric_limits<float>::max();
+
+	for (const auto& [target, canMove] : directions)
+	{
+		if (canMove)
+		{
+			float dist = glm::distance(playerPos, target);
+			if (dist < shortestDistance)
+			{
+				shortestDistance = dist;
+				bestTarget = target;
+			}
+		}
+	}
+
+	return bestTarget;
+}
+
+bool GroundComponent::CanMoveBetween(const glm::vec2& startPos, const glm::vec2& targetPos, int dirtLeeway) const
+{
+	int dirtCount = 0;
+	const int pitch = m_Surface->pitch / 4;
+	Uint32* pixels = (Uint32*)m_Surface->pixels;
+
+	// Convert From World Space To Ensure Calculation Is Correct
+	glm::vec2 localStart = startPos - glm::vec2(m_Transform->GetWorldPosition());
+	glm::vec2 localTarget = targetPos - glm::vec2(m_Transform->GetWorldPosition());
+
+	// Calculate The Bounding Box
+	int minX = static_cast<int>(std::min(localStart.x, localTarget.x));
+	int maxX = static_cast<int>(std::max(localStart.x, localTarget.x));
+	int minY = static_cast<int>(std::min(localStart.y, localTarget.y));
+	int maxY = static_cast<int>(std::max(localStart.y, localTarget.y));
+
+	for (int y = minY; y <= maxY; ++y)
+	{
+		for (int x = minX; x <= maxX; ++x)
+		{
+			// Out Of Bounds Check
+			if (x < 0 || x >= m_Surface->w || y < 0 || y >= m_Surface->h) continue;
+
+			if (pixels[y * pitch + x] != m_TransparentValue) // Pixel Has Not Been Dug Out
+			{
+				++dirtCount;
+				if (dirtCount > dirtLeeway) return false;
+			}
+		}
+	}
+
+	return true;
+}
+
+bool GroundComponent::EnemyCanReachPlayer(const glm::vec2& enemyPos) const
+{
+	glm::vec2 playerPos = GameManager::GetInstance().GetPlayerTransform()->GetWorldPosition();
+
+	// Convert World Positions So They Can Be Used Correctly On The Surface To Perform The Checks
+	glm::ivec2 start = glm::ivec2(enemyPos - glm::vec2(m_Transform->GetWorldPosition()));
+	glm::ivec2 end = glm::ivec2(playerPos - glm::vec2(m_Transform->GetWorldPosition()));
+
+	// Check If Neither Of The Positions Are Out Of Bounds
+	if (start.x < 0 || start.x >= m_Surface->w || start.y < 0 || start.y >= m_Surface->h ||
+		end.x < 0 || end.x >= m_Surface->w || end.y < 0 || end.y >= m_Surface->h)
+	{
+		return false;
+	}
+
+	const int pitch = m_Surface->pitch / 4;
+	Uint32* pixels = (Uint32*)m_Surface->pixels;
+
+	std::queue<glm::ivec2> toVisit;
+	std::unordered_map<int, bool> visited;
+
+	// Add Start 'Node'
+	toVisit.push(start);
+	visited[GetIndex(start.x, start.y)] = true;
+
+	const glm::ivec2 directions[] = {
+		{0, -1}, {1, 0}, {0, 1}, { -1, 0 }   // Up, Right, Down, Left
+	};
+
+	// Run BFS To Check If Enemy Could Reach Player
+	while (!toVisit.empty())
+	{
+		// Get Next Position To Check
+		glm::ivec2 current = toVisit.front();
+		toVisit.pop();
+
+		// If Next Position Is Player Position We Can Reach It
+		if (current == end)
+			return true;
+
+		for (const glm::ivec2& dir : directions)
+		{
+			glm::ivec2 next = current + dir;
+
+			// Check If Not Out Of Bounds
+			if (next.x < 0 || next.x >= m_Surface->w || next.y < 0 || next.y >= m_Surface->h)
+				continue;
+
+			// Check If Not Visited Already
+			int flatIndex = GetIndex(next.x, next.y);
+			if (visited[flatIndex])
+				continue;
+
+			// If Not Visited And Is Dug Out, Add It To Our Queue, Which Then Gets Checked In The Next Iteration Of The While Loop
+			if (pixels[next.y * pitch + next.x] == m_TransparentValue)
+			{
+				visited[flatIndex] = true;
+				toVisit.push(next);
+			}
+		}
+	}
+
+	return false; // Enemy Can't Reach Player
+}
+
+int GroundComponent::GetIndex(int x, int y) const
+{
+	return y * m_Surface->w + x;
+}

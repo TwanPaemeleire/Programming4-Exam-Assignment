@@ -45,11 +45,7 @@ void PookaComponent::Update()
 	if (distance < 0.5f) // Next Node Reached
 	{
 		m_Transform->SetLocalPosition(m_NextNodeToPlayer);
-		std::vector<glm::vec2> path = GameManager::GetInstance().GetGround()->FindPath(currentPosition, GameManager::GetInstance().GetPlayerTransform()->GetWorldPosition(), m_Width, m_Height);
-		if (path.size() > 1)
-		{
-			m_NextNodeToPlayer = path[1];
-		}
+		m_NextNodeToPlayer = GameManager::GetInstance().GetGround()->GetCellTargetToGetCloserToPlayer(m_Transform->GetWorldPosition());
 	}
 	else // Continue Moving Towards Next Node
 	{
@@ -74,8 +70,10 @@ void PookaComponent::MovementIfNoPathToPlayer()
 	if (glm::distance(glm::vec2(m_Transform->GetWorldPosition()), m_IdleTarget) < 1.f)
 	{
 		m_Transform->SetLocalPosition(m_IdleTarget);
-		//std::vector<glm::vec2> path = GameManager::GetInstance().GetGround()->FindPath(currentPosition, GameManager::GetInstance().GetPlayerTransform()->GetWorldPosition(), m_Width, m_Height);
-		//if (path.size() > 1) m_NextNodeToPlayer = path[1];
+		if (GameManager::GetInstance().GetGround()->EnemyCanReachPlayer(m_Transform->GetWorldPosition()))
+		{
+			m_NextNodeToPlayer = GameManager::GetInstance().GetGround()->GetCellTargetToGetCloserToPlayer(m_Transform->GetWorldPosition());
+		}
 		SetNewIdleTarget();
 	}
 }
@@ -90,10 +88,10 @@ void PookaComponent::SetNewIdleTarget()
 	m_IdleDirections[2].target = glm::vec2(pos.x - m_GridCellSize + 1.f, pos.y);
 	m_IdleDirections[3].target = glm::vec2(pos.x, pos.y - m_GridCellSize + 1.f);
 	// Check If Previously Calculated Positions Are Reachable
-	m_IdleDirections[0].canMoveHere = m_GroundComponent->PositionIsDugOut(m_IdleDirections[0].target);
-	m_IdleDirections[1].canMoveHere= m_GroundComponent->PositionIsDugOut(m_IdleDirections[1].target);
-	m_IdleDirections[2].canMoveHere= m_GroundComponent->PositionIsDugOut(m_IdleDirections[2].target);
-	m_IdleDirections[3].canMoveHere= m_GroundComponent->PositionIsDugOut(m_IdleDirections[3].target);
+	m_IdleDirections[0].canMoveHere = m_GroundComponent->CanMoveBetween(pos, m_IdleDirections[0].target);
+	m_IdleDirections[1].canMoveHere = m_GroundComponent->CanMoveBetween(pos, m_IdleDirections[1].target);
+	m_IdleDirections[2].canMoveHere = m_GroundComponent->CanMoveBetween(pos, m_IdleDirections[2].target);
+	m_IdleDirections[3].canMoveHere = m_GroundComponent->CanMoveBetween(pos, m_IdleDirections[3].target);
 
 	// Prioritize Previous Movement Direction If Possible
 	if (m_PreviousDirIndex!= -1 && m_IdleDirections[m_PreviousDirIndex].canMoveHere)

@@ -4,21 +4,6 @@
 #include <glm.hpp>
 #include <vector>
 
-struct Node
-{
-	int x, y;
-	int gCost;
-	int hCost;
-	Node* parent;
-
-	int FCost() const { return gCost + hCost; }
-
-	bool operator>(const Node& other) const
-	{
-		return FCost() > other.FCost();
-	}
-};
-
 class GridComponent;
 
 class GroundComponent final : public Twengine::Component
@@ -36,6 +21,10 @@ public:
 	void ErasePlayerTrail(SDL_Rect playerRect, bool isInWorldSpace = true);
 	bool PositionIsDugOut(const glm::vec2& pos);
 	std::vector<glm::vec2> FindPath(const glm::vec2& startPos, const glm::vec2& endPos, float width, float height);
+
+	glm::vec2 GetCellTargetToGetCloserToPlayer(const glm::vec2& enemyPos) const;
+	bool CanMoveBetween(const glm::vec2& startPos, const glm::vec2& targetPos, int dirtLeeway = 0) const; // Dirt Leeway Will Be Used For Pump & Fygar Fire
+	bool EnemyCanReachPlayer(const glm::vec2& enemyPos) const;
 private:
 	SDL_Surface* m_Surface{};
 	SDL_Texture* m_Texture{};
@@ -44,5 +33,7 @@ private:
 	GridComponent* m_GridComponent{};
 	float m_GridCellSize{};
 	float m_HalfGridCellSize{};
+
+	int GetIndex(int x, int y) const;
 };
 
