@@ -19,7 +19,7 @@ public:
 	virtual void RequestPlayMusic(const std::string& file, const float volume);
 	virtual void RequestPlaySound(const std::string& file, const float volume);
 private:
-	void SoundThreadLoop(std::stop_token stopToken);
+	void SoundThreadLoop(const std::stop_token& stopToken);
 
 	enum class SoundRequestType
 	{
@@ -91,7 +91,7 @@ Twengine::SDLSoundSystem::SDLSoundSystemImpl::SDLSoundSystemImpl()
 {
 	SDL_Init(SDL_INIT_AUDIO);
 	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
-	m_SoundThread = std::jthread([this](std::stop_token stopToken)
+	m_SoundThread = std::jthread([this](const std::stop_token& stopToken)
 		{
 			SoundThreadLoop(stopToken);
 		});
@@ -121,7 +121,7 @@ void Twengine::SDLSoundSystem::SDLSoundSystemImpl::RequestPlaySound(const std::s
 	m_Condition.notify_one();
 }
 
-void Twengine::SDLSoundSystem::SDLSoundSystemImpl::SoundThreadLoop(std::stop_token stopToken)
+void Twengine::SDLSoundSystem::SDLSoundSystemImpl::SoundThreadLoop(const std::stop_token& stopToken)
 {
 	while (!stopToken.stop_requested())
 	{

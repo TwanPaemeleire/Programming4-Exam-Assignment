@@ -95,45 +95,46 @@ bool GroundComponent::PositionIsDugOut(const glm::vec2& pos)
 	return pixels[y * pitch + x] == m_TransparentValue;
 }
 
-std::vector<glm::vec2> GroundComponent::FindPath(const glm::vec2& startPos, const glm::vec2& endPos, float width, float height)
-{
-	startPos;
-	endPos;
-	width;
-	height;
-	return {};
-}
-
 glm::vec2 GroundComponent::GetCellTargetToGetCloserToPlayer(const glm::vec2& enemyPos) const
 {
 	glm::vec2 playerPos = GameManager::GetInstance().GetPlayerTransform()->GetWorldPosition();
-	glm::vec2 up = glm::vec2(enemyPos.x + (m_GridCellSize * 2) - 1.f, enemyPos.y);
-	glm::vec2 right = glm::vec2(enemyPos.x, enemyPos.y + (m_GridCellSize * 2) - 1.f);
-	glm::vec2 down = glm::vec2(enemyPos.x - m_GridCellSize + 1.f, enemyPos.y);
-	glm::vec2 left = glm::vec2(enemyPos.x, enemyPos.y - m_GridCellSize + 1.f);
+
+	glm::vec2 right = glm::vec2(enemyPos.x + m_GridCellSize, enemyPos.y);
+	glm::vec2 down = glm::vec2(enemyPos.x, enemyPos.y + m_GridCellSize);
+	glm::vec2 left = glm::vec2(enemyPos.x - m_GridCellSize, enemyPos.y);
+	glm::vec2 up = glm::vec2(enemyPos.x, enemyPos.y - m_GridCellSize);
+
+	glm::vec2 rightToCheck = glm::vec2{right.x + (m_GridCellSize * 0.5f), right.y};
+	glm::vec2 downToCheck = glm::vec2{down.x, down.y  + (m_GridCellSize * 0.5f)};
+	glm::vec2 leftToCheck = glm::vec2{left.x + (m_GridCellSize * 0.5f), left.y};
+	glm::vec2 upToCheck = glm::vec2{up.x, up.y + (m_GridCellSize * 0.5f)};
 
 	std::vector<std::pair<glm::vec2, bool>> directions = {
-		{ up, CanMoveBetween(enemyPos, up) },
-		{ right, CanMoveBetween(enemyPos, right) },
-		{ down, CanMoveBetween(enemyPos, down) },
-		{ left, CanMoveBetween(enemyPos, left) }
+		{ right, CanMoveBetween(enemyPos, rightToCheck) },
+		{ down, CanMoveBetween(enemyPos, downToCheck) },
+		{ left, CanMoveBetween(enemyPos, leftToCheck) },
+		{ up, CanMoveBetween(enemyPos, upToCheck) }
 	};
 
 	glm::vec2 bestTarget = enemyPos;
 	float shortestDistance = std::numeric_limits<float>::max();
 
-	for (const auto& [target, canMove] : directions)
+	for (const auto& dir: directions)
 	{
-		if (canMove)
+		if (dir.second)
 		{
-			float dist = glm::distance(playerPos, target);
+			float dist = glm::distance(playerPos, dir.first);
 			if (dist < shortestDistance)
 			{
 				shortestDistance = dist;
-				bestTarget = target;
+				bestTarget = dir.first;
 			}
 		}
 	}
+
+	std::pair<int, int> test = m_GridComponent->GetIndexFromPosition(bestTarget);
+	auto* cell = m_GridComponent->GetCell(test.first, test.second);
+	cell;
 
 	return bestTarget;
 }

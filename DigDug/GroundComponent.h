@@ -20,7 +20,6 @@ public:
 
 	void ErasePlayerTrail(SDL_Rect playerRect, bool isInWorldSpace = true);
 	bool PositionIsDugOut(const glm::vec2& pos);
-	std::vector<glm::vec2> FindPath(const glm::vec2& startPos, const glm::vec2& endPos, float width, float height);
 
 	glm::vec2 GetCellTargetToGetCloserToPlayer(const glm::vec2& enemyPos) const;
 	bool CanMoveBetween(const glm::vec2& startPos, const glm::vec2& targetPos, int dirtLeeway = 0) const; // Dirt Leeway Will Be Used For Pump & Fygar Fire

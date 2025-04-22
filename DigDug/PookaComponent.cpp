@@ -83,15 +83,22 @@ void PookaComponent::SetNewIdleTarget()
 	auto& pos = m_Transform->GetWorldPosition();
 
 	// Offset Of 1 To Make Sure We're Checking Last Pixel Of Next Cell, And Not The First Of The One Behind That
-	m_IdleDirections[0].target = glm::vec2(pos.x + (m_GridCellSize * 2) - 1.f, pos.y);
-	m_IdleDirections[1].target = glm::vec2(pos.x, pos.y + (m_GridCellSize * 2) - 1.f);
-	m_IdleDirections[2].target = glm::vec2(pos.x - m_GridCellSize + 1.f, pos.y);
-	m_IdleDirections[3].target = glm::vec2(pos.x, pos.y - m_GridCellSize + 1.f);
+	m_IdleDirections[0].target = glm::vec2(pos.x + (m_GridCellSize * 2) /*- 1.f*/, pos.y);
+	m_IdleDirections[1].target = glm::vec2(pos.x, pos.y + (m_GridCellSize * 2) /*- 1.f*/);
+	m_IdleDirections[2].target = glm::vec2(pos.x - m_GridCellSize /*+ 1.f*/, pos.y);
+	m_IdleDirections[3].target = glm::vec2(pos.x, pos.y - m_GridCellSize /*+ 1.f*/);
+
+	// Targets To Check for
+	glm::vec2 rightCheck = glm::vec2(m_IdleDirections[0].target.x - 1.f, m_IdleDirections[0].target.y);
+	glm::vec2 downCheck = glm::vec2(m_IdleDirections[1].target.x, m_IdleDirections[1].target.y - 1.f);
+	glm::vec2 leftCheck = glm::vec2(m_IdleDirections[2].target.x + 1.f, m_IdleDirections[2].target.y);
+	glm::vec2 upCheck = glm::vec2(m_IdleDirections[3].target.x, m_IdleDirections[3].target.y + 1.f);
+
 	// Check If Previously Calculated Positions Are Reachable
-	m_IdleDirections[0].canMoveHere = m_GroundComponent->CanMoveBetween(pos, m_IdleDirections[0].target);
-	m_IdleDirections[1].canMoveHere = m_GroundComponent->CanMoveBetween(pos, m_IdleDirections[1].target);
-	m_IdleDirections[2].canMoveHere = m_GroundComponent->CanMoveBetween(pos, m_IdleDirections[2].target);
-	m_IdleDirections[3].canMoveHere = m_GroundComponent->CanMoveBetween(pos, m_IdleDirections[3].target);
+	m_IdleDirections[0].canMoveHere = m_GroundComponent->CanMoveBetween(pos, rightCheck);
+	m_IdleDirections[1].canMoveHere = m_GroundComponent->CanMoveBetween(pos, downCheck);
+	m_IdleDirections[2].canMoveHere = m_GroundComponent->CanMoveBetween(pos, leftCheck);
+	m_IdleDirections[3].canMoveHere = m_GroundComponent->CanMoveBetween(pos, upCheck);
 
 	// Prioritize Previous Movement Direction If Possible
 	if (m_PreviousDirIndex!= -1 && m_IdleDirections[m_PreviousDirIndex].canMoveHere)
