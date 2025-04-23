@@ -13,10 +13,8 @@ void ScoreComponent::SetScore(int points)
 	m_ScoreChangedEvent->NotifyObservers(GameEvent(make_sdbm_hash("ScoreChanged")), GetOwner());
 }
 
-void ScoreComponent::Notify(const GameEvent& event, Twengine::GameObject* observedObject)
+void ScoreComponent::Notify(const GameEvent& event, Twengine::GameObject*)
 {
-	// Use observed object to get it's layer or something?
-	observedObject;
 	if (event.id == make_sdbm_hash("PlayerDied"))
 	{
 		m_Score -= 200;

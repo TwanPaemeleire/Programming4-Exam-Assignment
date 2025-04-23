@@ -5,11 +5,20 @@
 #include "Renderer.h"
 #include "ResourceManager.h"
 #include "GridComponent.h"
+#include "GameManager.h"
 
 DisplayLivesComponent::DisplayLivesComponent(Twengine::GameObject* owner)
 	:Component(owner)
 {
 	m_LifeTexture = Twengine::ResourceManager::GetInstance().LoadTexture("DigDug/LivesDisplay.png");
+}
+
+void DisplayLivesComponent::Start()
+{
+	GridComponent* gridComp = GameManager::GetInstance().GetGrid();
+	auto& pos = gridComp->GetCell(gridComp->GetRows() - 1, 0)->topLeft;
+	GetOwner()->GetTransform()->SetLocalPosition(pos.x, pos.y);
+	m_LifeDrawOffset = gridComp->GetCellSize();
 }
 
 void DisplayLivesComponent::Render() const
@@ -27,11 +36,4 @@ void DisplayLivesComponent::Notify(const GameEvent& event, Twengine::GameObject*
 	{
 		m_LivesLeft = observedObject->GetComponent<HealthComponent>()->GetLives();
 	}
-}
-
-void DisplayLivesComponent::Initialize(GridComponent* gridComp)
-{
-	auto& pos = gridComp->GetCell(gridComp->GetRows() - 1, 0)->topLeft;
-	GetOwner()->GetTransform()->SetLocalPosition(pos.x, pos.y);
-	m_LifeDrawOffset = gridComp->GetCellSize();
 }

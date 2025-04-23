@@ -24,11 +24,10 @@ void FygarComponent::Update()
 	m_MovementComponent->PathFindingToPlayer();
 }
 
-void FygarComponent::Notify(const GameEvent& event, Twengine::GameObject* observedObject)
+void FygarComponent::Notify(const GameEvent& event, Twengine::GameObject*)
 {
 	if (event.id == make_sdbm_hash("OnCanReachPlayer"))
 	{
-		observedObject;
 		m_CanMoveToPlayer = true;
 	}
 }

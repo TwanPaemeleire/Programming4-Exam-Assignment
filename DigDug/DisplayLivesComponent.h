@@ -19,10 +19,9 @@ public:
 	DisplayLivesComponent& operator=(const DisplayLivesComponent& other) = delete;
 	DisplayLivesComponent& operator=(DisplayLivesComponent&& other) = delete;
 
+	virtual void Start() override;
 	virtual void Render() const override;
 	virtual void Notify(const GameEvent& event, Twengine::GameObject* observedObject) override;
-
-	void Initialize(GridComponent* gridComp);
 
 private:
 	Twengine::Texture2D* m_LifeTexture{};

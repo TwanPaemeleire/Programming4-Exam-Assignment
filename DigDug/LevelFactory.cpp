@@ -34,7 +34,7 @@
 #include "Event.h"
 #include <fstream>
 
-void LevelFactory::LoadMenu()
+void LevelFactory::LoadDevScene()
 {
 	Twengine::Scene& scene = Twengine::SceneManager::GetInstance().GetCurrentScene();
 	auto gridObject = std::make_unique<Twengine::GameObject>();
@@ -111,8 +111,6 @@ void LevelFactory::LoadMenu()
 	Twengine::InputManager::GetInstance().BindCommandToInput<KillEnemyCommand>(SDLK_x, Twengine::InteractionStates::up, digdug.get(), -1);
 	//scene.Add(std::move(collisionCheck));
 
-	digDugLivesDisplayComp->Initialize(grid);
-
 	scene.Add(std::move(gridObject));
 	scene.Add(std::move(digdugLivesText));
 	scene.Add(std::move(digdug));
@@ -120,6 +118,30 @@ void LevelFactory::LoadMenu()
 
 	std::unique_ptr<Twengine::SDLSoundSystem> soundSystem = std::make_unique<Twengine::SDLSoundSystem>();
 	Twengine::ServiceLocator::register_sound_system(std::move(soundSystem));
+}
+
+void LevelFactory::LoadMainMenu()
+{
+	Twengine::Scene& scene = Twengine::SceneManager::GetInstance().GetCurrentScene();
+	auto titleObject = std::make_unique<Twengine::GameObject>();
+	titleObject->AddComponent<Twengine::TextureRenderComponent>()->SetTexture("StartScreen/DigDugLogo.png");
+	titleObject->GetTransform()->SetLocalPosition(64, 128);
+	scene.Add(std::move(titleObject));
+
+	auto digDugIconObject = std::make_unique<Twengine::GameObject>();
+	digDugIconObject->AddComponent<Twengine::TextureRenderComponent>()->SetTexture("StartScreen/DigDugIcon.png");
+	digDugIconObject->GetTransform()->SetLocalPosition(32, 320);
+	scene.Add(std::move(digDugIconObject));
+
+	auto pookaIconObject = std::make_unique<Twengine::GameObject>();
+	pookaIconObject->AddComponent<Twengine::TextureRenderComponent>()->SetTexture("StartScreen/PookaIcon.png");
+	pookaIconObject->GetTransform()->SetLocalPosition(240, 384);
+	scene.Add(std::move(pookaIconObject));
+
+	auto fygarIconObject = std::make_unique<Twengine::GameObject>();
+	fygarIconObject->AddComponent<Twengine::TextureRenderComponent>()->SetTexture("StartScreen/FygarIcon.png");
+	fygarIconObject->GetTransform()->SetLocalPosition(304, 320);
+	scene.Add(std::move(fygarIconObject));
 }
 
 void LevelFactory::LoadLevel1()
