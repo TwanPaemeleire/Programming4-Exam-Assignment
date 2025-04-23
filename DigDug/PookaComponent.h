@@ -17,19 +17,11 @@ public:
 	PookaComponent& operator=(const PookaComponent& other) = delete;
 	PookaComponent& operator=(PookaComponent&& other) = delete;
 
-	virtual void Start() override;
 	virtual void Update() override;
-	virtual void RenderUI() override;
-
 	virtual void Notify(const GameEvent& event, Twengine::GameObject* observedObject) override;
 
 private:
 	bool m_CanMoveToPlayer{ false };
 	EnemyMovementComponent* m_MovementComponent;
-	// Pathfinding To Player
-	glm::vec2 m_NextNodeToPlayer{-1.f, -1.f};
-	float m_MovementSpeed{20.f};
-
-	GroundComponent* m_GroundComponent{};
 };
 

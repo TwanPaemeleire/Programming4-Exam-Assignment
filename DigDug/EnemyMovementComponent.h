@@ -4,13 +4,13 @@
 #include <vector>
 #include <memory>
 
-class GroundComponent;
-class GridComponent;
-
 namespace Twengine
 {
 	class Event;
 }
+
+class GroundComponent;
+class GridComponent;
 
 class EnemyMovementComponent final : public Twengine::Component
 {
@@ -25,16 +25,17 @@ public:
 	virtual void Start() override;
 	virtual void RenderUI() override;
 
-	Twengine::Event* GetCanReachPlayerEvent() const { return m_CanReachPlayerEvent.get(); }
+	Twengine::Event* GetOnCanReachPlayerEvent() const { return m_OnCanReachPlayerEvent.get(); }
 
 	void MovementIfNoPathToPlayer();
 	void SetNewIdleTarget();
+	void SetMovementSpeed(float movementSpeed) { m_MovementSpeed = movementSpeed; }
+	void PathFindingToPlayer();
+
 private:
-
-	std::unique_ptr<Twengine::Event> m_CanReachPlayerEvent;
-
 	glm::vec2 m_NextNodeToPlayer{ -1.f, -1.f };
 	float m_MovementSpeed{ 20.f };
+	std::unique_ptr<Twengine::Event> m_OnCanReachPlayerEvent;
 
 	// Idle Movement
 	struct IdleTargetOption

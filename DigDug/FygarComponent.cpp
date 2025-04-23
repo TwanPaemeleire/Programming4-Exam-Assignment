@@ -10,12 +10,7 @@ FygarComponent::FygarComponent(Twengine::GameObject* owner)
 	:Component(owner)
 {
 	m_MovementComponent = GetOwner()->AddComponent<EnemyMovementComponent>();
-	m_MovementComponent->GetCanReachPlayerEvent()->AddObserver(this);
-}
-
-void FygarComponent::Start()
-{
-	m_GroundComponent = GameManager::GetInstance().GetGround();
+	m_MovementComponent->GetOnCanReachPlayerEvent()->AddObserver(this);
 }
 
 void FygarComponent::Update()
@@ -25,11 +20,8 @@ void FygarComponent::Update()
 		m_MovementComponent->MovementIfNoPathToPlayer();
 		return;
 	}
-}
 
-void FygarComponent::RenderUI()
-{
-	Twengine::Renderer::GetInstance().DrawRectangle(m_NextNodeToPlayer.x, m_NextNodeToPlayer.y, 5.f, 5.f, SDL_Color(0, 255, 0, 255));
+	m_MovementComponent->PathFindingToPlayer();
 }
 
 void FygarComponent::Notify(const GameEvent& event, Twengine::GameObject* observedObject)
@@ -38,6 +30,5 @@ void FygarComponent::Notify(const GameEvent& event, Twengine::GameObject* observ
 	{
 		observedObject;
 		m_CanMoveToPlayer = true;
-		m_NextNodeToPlayer = m_GroundComponent->GetCellTargetToGetCloserToPlayer(m_Transform->GetWorldPosition());
 	}
 }

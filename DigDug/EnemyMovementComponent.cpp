@@ -10,7 +10,7 @@
 EnemyMovementComponent::EnemyMovementComponent(Twengine::GameObject* owner)
 	:Component(owner)
 {
-	m_CanReachPlayerEvent = std::make_unique<Twengine::Event>();
+	m_OnCanReachPlayerEvent = std::make_unique<Twengine::Event>();
 }
 
 void EnemyMovementComponent::Start()
@@ -30,6 +30,7 @@ void EnemyMovementComponent::Start()
 void EnemyMovementComponent::RenderUI()
 {
 	Twengine::Renderer::GetInstance().DrawPoint(m_IdleTarget.x, m_IdleTarget.y, SDL_Color(0, 0, 255, 255), 5);
+	Twengine::Renderer::GetInstance().DrawRectangle(m_NextNodeToPlayer.x, m_NextNodeToPlayer.y, 5.f, 5.f, SDL_Color(0, 255, 0, 255));
 }
 
 
@@ -44,8 +45,8 @@ void EnemyMovementComponent::MovementIfNoPathToPlayer()
 		m_Transform->SetLocalPosition(m_IdleTarget);
 		if (GameManager::GetInstance().GetGround()->EnemyCanReachPlayer(m_Transform->GetWorldPosition()))
 		{
-			m_CanReachPlayerEvent->NotifyObservers(GameEvent(make_sdbm_hash("OnCanReachPlayer")), GetOwner());
-			//m_NextNodeToPlayer = GameManager::GetInstance().GetGround()->GetCellTargetToGetCloserToPlayer(m_Transform->GetWorldPosition());
+			m_NextNodeToPlayer = m_GroundComponent->GetCellTargetToGetCloserToPlayer(m_Transform->GetWorldPosition());
+			m_OnCanReachPlayerEvent->NotifyObservers(GameEvent(make_sdbm_hash("OnCanReachPlayer")), GetOwner());
 		}
 		SetNewIdleTarget();
 	}
@@ -55,13 +56,12 @@ void EnemyMovementComponent::SetNewIdleTarget()
 {
 	auto& pos = m_Transform->GetWorldPosition();
 
-	// Offset Of 1 To Make Sure We're Checking Last Pixel Of Next Cell, And Not The First Of The One Behind That
-	m_IdleDirections[0].target = glm::vec2(pos.x + (m_GridCellSize * 2) /*- 1.f*/, pos.y);
-	m_IdleDirections[1].target = glm::vec2(pos.x, pos.y + (m_GridCellSize * 2) /*- 1.f*/);
-	m_IdleDirections[2].target = glm::vec2(pos.x - m_GridCellSize /*+ 1.f*/, pos.y);
-	m_IdleDirections[3].target = glm::vec2(pos.x, pos.y - m_GridCellSize /*+ 1.f*/);
+	m_IdleDirections[0].target = glm::vec2(pos.x + (m_GridCellSize * 2), pos.y);
+	m_IdleDirections[1].target = glm::vec2(pos.x, pos.y + (m_GridCellSize * 2));
+	m_IdleDirections[2].target = glm::vec2(pos.x - m_GridCellSize, pos.y);
+	m_IdleDirections[3].target = glm::vec2(pos.x, pos.y - m_GridCellSize);
 
-	// Targets To Check for
+	// Offset Of 1 To Make Sure We're Checking Last Pixel Of Next Cell, And Not The First Of The One Behind That
 	glm::vec2 rightCheck = glm::vec2(m_IdleDirections[0].target.x - 1.f, m_IdleDirections[0].target.y);
 	glm::vec2 downCheck = glm::vec2(m_IdleDirections[1].target.x, m_IdleDirections[1].target.y - 1.f);
 	glm::vec2 leftCheck = glm::vec2(m_IdleDirections[2].target.x + 1.f, m_IdleDirections[2].target.y);
@@ -97,3 +97,24 @@ void EnemyMovementComponent::SetNewIdleTarget()
 		}
 	}
 }
+
+void EnemyMovementComponent::PathFindingToPlayer()
+{
+	// Pathfinding To Player
+	const glm::vec2& currentPosition = m_Transform->GetWorldPosition();
+	const glm::vec2 direction = m_NextNodeToPlayer - currentPosition;
+	const float distance = glm::length(direction);
+
+	if (distance < 0.5f) // Next Node Reached
+	{
+		m_Transform->SetLocalPosition(m_NextNodeToPlayer);
+		m_NextNodeToPlayer = m_GroundComponent->GetCellTargetToGetCloserToPlayer(m_Transform->GetWorldPosition());
+	}
+	else // Continue Moving Towards Next Node
+	{
+		glm::vec2 normalizedDir = glm::normalize(direction);
+		glm::vec2 movement = normalizedDir * m_MovementSpeed * Twengine::Time::GetInstance().deltaTime;
+		m_Transform->SetLocalPosition(currentPosition + movement);
+	}
+}
+
