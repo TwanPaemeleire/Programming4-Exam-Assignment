@@ -206,6 +206,7 @@ void DigDugMovementComponent::UpdateGroundAndAnimation()
 			m_HasStartedDiggingAnimation = false;
 			m_HasStartedIdleAnimation = false;
 			m_AnimationComponent->PlayAnimation(make_sdbm_hash("DigDugMove"));
+			std::cout << "start move anim" << std::endl;
 		}
 	}
 	else // Next Is Not Dug Out Yet

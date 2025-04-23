@@ -164,6 +164,8 @@
     <ClCompile Include="DigDugMovementComponent.cpp" />
     <ClCompile Include="DisplayLivesComponent.cpp" />
     <ClCompile Include="DisplayPointsComponent.cpp" />
+    <ClCompile Include="EnemyMovementComponent.cpp" />
+    <ClCompile Include="FygarComponent.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="GridComponent.cpp" />
     <ClCompile Include="GroundComponent.cpp" />
@@ -181,6 +183,8 @@
     <ClInclude Include="DigDugMovementComponent.h" />
     <ClInclude Include="DisplayLivesComponent.h" />
     <ClInclude Include="DisplayPointsComponent.h" />
+    <ClInclude Include="EnemyMovementComponent.h" />
+    <ClInclude Include="FygarComponent.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="GridComponent.h" />
     <ClInclude Include="GroundComponent.h" />

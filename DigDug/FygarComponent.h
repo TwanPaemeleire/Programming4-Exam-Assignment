@@ -7,15 +7,15 @@
 class GroundComponent;
 class EnemyMovementComponent;
 
-class PookaComponent final : public Twengine::Component, public Twengine::Observer
+class FygarComponent final : public Twengine::Component, public Twengine::Observer
 {
 public:
-	PookaComponent(Twengine::GameObject* owner);
-	virtual ~PookaComponent() override = default;
-	PookaComponent(const PookaComponent& other) = delete;
-	PookaComponent(PookaComponent&& other) = delete;
-	PookaComponent& operator=(const PookaComponent& other) = delete;
-	PookaComponent& operator=(PookaComponent&& other) = delete;
+	FygarComponent(Twengine::GameObject* owner);
+	virtual ~FygarComponent() override = default;
+	FygarComponent(const FygarComponent& other) = delete;
+	FygarComponent(FygarComponent&& other) = delete;
+	FygarComponent& operator=(const FygarComponent& other) = delete;
+	FygarComponent& operator=(FygarComponent&& other) = delete;
 
 	virtual void Start() override;
 	virtual void Update() override;
@@ -27,8 +27,8 @@ private:
 	bool m_CanMoveToPlayer{ false };
 	EnemyMovementComponent* m_MovementComponent;
 	// Pathfinding To Player
-	glm::vec2 m_NextNodeToPlayer{-1.f, -1.f};
-	float m_MovementSpeed{20.f};
+	glm::vec2 m_NextNodeToPlayer{ -1.f, -1.f };
+	float m_MovementSpeed{ 20.f };
 
 	GroundComponent* m_GroundComponent{};
 };

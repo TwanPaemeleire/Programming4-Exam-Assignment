@@ -29,6 +29,7 @@
 #include "GameManager.h"
 #include "GroundComponent.h"
 #include "PookaComponent.h"
+#include "FygarComponent.h"
 
 #include "Event.h"
 #include <fstream>
@@ -101,10 +102,10 @@ void LevelFactory::LoadMenu()
 
 	Twengine::InputManager::GetInstance().BindJoystickCommandToInput<JoystickMoveCommand>(Twengine::InteractionStates::pressed, digdug.get(), 0);
 	// Bindings For Keyboard
-	//Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_w, Twengine::InteractionStates::pressed, collisionCheck.get(), -1)->SetDirection(0, -1);
-	//Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_s, Twengine::InteractionStates::pressed, collisionCheck.get(), -1)->SetDirection(0, 1);
-	//Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_a, Twengine::InteractionStates::pressed, collisionCheck.get(), -1)->SetDirection(-1, 0);
-	//Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_d, Twengine::InteractionStates::pressed, collisionCheck.get(), -1)->SetDirection(1, 0);
+	Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_w, Twengine::InteractionStates::pressed, digdug.get(), -1)->SetDirection(0, -1);
+	Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_s, Twengine::InteractionStates::pressed, digdug.get(), -1)->SetDirection(0, 1);
+	Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_a, Twengine::InteractionStates::pressed, digdug.get(), -1)->SetDirection(-1, 0);
+	Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_d, Twengine::InteractionStates::pressed, digdug.get(), -1)->SetDirection(1, 0);
 	Twengine::InputManager::GetInstance().BindCommandToInput<KillObjectCommand>(SDLK_c, Twengine::InteractionStates::up, digdug.get(), -1);
 	Twengine::InputManager::GetInstance().BindCommandToInput<KillEnemyCommand>(SDLK_z, Twengine::InteractionStates::up, digdug.get(), -1)->GetEnemyKilledEvent()->AddObserver(digDugScore);
 	Twengine::InputManager::GetInstance().BindCommandToInput<KillEnemyCommand>(SDLK_x, Twengine::InteractionStates::up, digdug.get(), -1);
@@ -117,7 +118,7 @@ void LevelFactory::LoadMenu()
 	scene.Add(std::move(digdug));
 	scene.Add(std::move(digdugScoreText));
 
-	std::unique_ptr<Twengine::SDLSoundSystem> soundSystem = std::make_unique<Twengine::SDLSoundSystem>();;
+	std::unique_ptr<Twengine::SDLSoundSystem> soundSystem = std::make_unique<Twengine::SDLSoundSystem>();
 	Twengine::ServiceLocator::register_sound_system(std::move(soundSystem));
 }
 
@@ -235,6 +236,7 @@ void LevelFactory::CreateAndAddFygar(Twengine::Scene& scene, int row, int column
 	animation->AddAnimation("Fygar/FygarMove.png", make_sdbm_hash("FygarMove"), 2);
 	animation->PlayAnimation(make_sdbm_hash("FygarMove"));
 	fygar->GetTransform()->SetLocalPosition(gridComponent->GetPositionFromIndex(row, column));
+	fygar->AddComponent<FygarComponent>();
 	scene.Add(std::move(fygar));
 }
 
