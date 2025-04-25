@@ -1,16 +1,20 @@
 #include "FygarComponent.h"
-#include "Renderer.h"
 #include "GameObject.h"
-#include "GameManager.h"
-#include "GroundComponent.h"
-#include "MyTime.h"
 #include "EnemyMovementComponent.h"
+#include "RectColliderComponent.h"
+#include "AnimationComponent.h"
 
 FygarComponent::FygarComponent(Twengine::GameObject* owner)
 	:Component(owner)
 {
 	m_MovementComponent = GetOwner()->AddComponent<EnemyMovementComponent>();
 	m_MovementComponent->GetOnCanReachPlayerEvent()->AddObserver(this);
+}
+
+void FygarComponent::Start()
+{
+	Twengine::AnimationComponent* animComp = GetOwner()->GetComponent<Twengine::AnimationComponent>();
+	GetOwner()->GetComponent<Twengine::RectColliderComponent>()->SetHitBox(m_Transform->GetWorldPosition(), animComp->GetAnimationFrameWidth(), animComp->GetAnimationFrameHeight());
 }
 
 void FygarComponent::Update()
@@ -22,6 +26,7 @@ void FygarComponent::Update()
 	}
 
 	m_MovementComponent->PathFindingToPlayer();
+	// In The Future, Add Code Here For Distance & Reachability Check To Player To Determine When To Trigger Attack
 }
 
 void FygarComponent::Notify(const GameEvent& event, Twengine::GameObject*)

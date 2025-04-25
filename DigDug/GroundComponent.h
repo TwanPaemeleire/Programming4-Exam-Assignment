@@ -19,6 +19,8 @@ public:
 	virtual void Render() const override;
 
 	void ErasePlayerTrail(SDL_Rect playerRect, bool isInWorldSpace = true);
+	// Will Be Used If I Have Enough Time Left
+	void ErasePlayerTrail(int centerX, int centerY, int width, int height, bool isInWorldSpace = true);
 	bool PositionIsDugOut(const glm::vec2& pos);
 
 	glm::vec2 GetCellTargetToGetCloserToPlayer(const glm::vec2& enemyPos) const;

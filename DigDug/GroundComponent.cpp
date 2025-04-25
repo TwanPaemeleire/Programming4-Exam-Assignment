@@ -75,6 +75,56 @@ void GroundComponent::ErasePlayerTrail(SDL_Rect playerRect, bool isInWorldSpace)
 	SDL_SetTextureBlendMode(m_Texture, SDL_BLENDMODE_BLEND);
 }
 
+void GroundComponent::ErasePlayerTrail(int centerX, int centerY, int width, int height, bool isInWorldSpace)
+{
+	
+	if (isInWorldSpace)
+	{
+		// Calculate Position Relative To Where The Ground Starts, As This Won't Be The Same As Player World Position
+		centerX -= static_cast<int>(m_Transform->GetWorldPosition().x);
+		centerY -= static_cast<int>(m_Transform->GetWorldPosition().y);
+	}
+
+	Uint32* pixels = (Uint32*)m_Surface->pixels;
+
+	// Gives The Number Of Bytes In A Single Row Of Pixel Data On This Surface
+	int pitchInBytes = m_Surface->pitch;
+	// / 4 Because Each Pixel Is 4 Bytes And We Want To Work In The 1D "pixels" Array, So This Way We Get The Number Of Pixels Per Row, Not Number Of Bytes
+	int pitch = pitchInBytes / 4;
+
+	// Calculate Bounding Box Of The Ellipse
+	int startX = centerX - width / 2;
+	int startY = centerY - height / 2;
+	int endX = centerX + width / 2;
+	int endY = centerY + height / 2;
+
+	float radiusX = width / 2.0f;
+	float radiusY = height / 2.0f;
+
+	for (int y = startY; y <= endY; ++y)
+	{
+		for (int x = startX; x <= endX; ++x)
+		{
+			// Make Sure We Don't Go Out Of Bounds
+			if (x >= 0 && x < m_Surface->w && y >= 0 && y < m_Surface->h)
+			{
+				float dx = (x - centerX) / radiusX;
+				float dy = (y - centerY) / radiusY;
+				// Check If Pixel Is Inside The Ellipse
+				if ((dx * dx + dy * dy) <= 1.0f)
+				{
+					pixels[y * pitch + x] = m_TransparentValue;
+				}
+			}
+		}
+	}
+
+	// Recreate Texture From Updated Surface
+	SDL_DestroyTexture(m_Texture);
+	m_Texture = SDL_CreateTextureFromSurface(Twengine::Renderer::GetInstance().GetSDLRenderer(), m_Surface);
+	SDL_SetTextureBlendMode(m_Texture, SDL_BLENDMODE_BLEND);
+}
+
 bool GroundComponent::PositionIsDugOut(const glm::vec2& pos)
 {
 	// Calculate Position Relative To Where The Ground Starts, As This Won't Be The Same As Player World Position

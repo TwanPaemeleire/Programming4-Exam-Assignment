@@ -64,6 +64,13 @@ void LevelFactory::LoadDevScene()
 	enemyTutorial->GetTransform()->SetLocalPosition(5, 20);
 	scene.Add(std::move(enemyTutorial));
 
+	auto soundTutorial = std::make_unique<Twengine::GameObject>();
+	auto* soundTutorialText = soundTutorial->AddComponent<Twengine::TextComponent>();
+	soundTutorialText->SetText("Press Z To Trigger A Sound");
+	soundTutorialText->SetFont(smallFont);
+	soundTutorial->GetTransform()->SetLocalPosition(5, 36);
+	scene.Add(std::move(soundTutorial));
+
 	// Display DigDug Lives
 	auto digdugLivesText = std::make_unique<Twengine::GameObject>();
 	auto* digDugLivesDisplayComp = digdugLivesText->AddComponent<DisplayLivesComponent>();
@@ -89,27 +96,22 @@ void LevelFactory::LoadDevScene()
 	digdug->AddComponent<DigDugComponent>();
 	digdug->AddComponent<DigDugMovementComponent>();
 
-	auto emptyCheck = std::make_unique<Twengine::GameObject>();
-	auto collisionCheck = std::make_unique<Twengine::GameObject>();
-	auto* animationColl = collisionCheck->AddComponent<Twengine::AnimationComponent>();
-	//animationColl->AddAnimation("DigDug/DigDugMove.png", 2);
-	//animationColl->PlayAnimation("DigDugMove");
-	auto* collider = collisionCheck->AddComponent<Twengine::RectColliderComponent>();
-	collider->SetHitBox(collisionCheck->GetTransform()->GetWorldPosition(), animationColl->GetAnimationFrameWidth(), animationColl->GetAnimationFrameHeight());
-	collisionCheck->SetParent(emptyCheck.get(), true);
-	collisionCheck->SetTag(make_sdbm_hash("CollisionTest"));
-	collisionCheck->AddComponent<DigDugMovementComponent>();
 
 	Twengine::InputManager::GetInstance().BindJoystickCommandToInput<JoystickMoveCommand>(Twengine::InteractionStates::pressed, digdug.get(), 0);
 	// Bindings For Keyboard
-	Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_w, Twengine::InteractionStates::pressed, digdug.get(), -1)->SetDirection(0, -1);
-	Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_s, Twengine::InteractionStates::pressed, digdug.get(), -1)->SetDirection(0, 1);
-	Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_a, Twengine::InteractionStates::pressed, digdug.get(), -1)->SetDirection(-1, 0);
-	Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_d, Twengine::InteractionStates::pressed, digdug.get(), -1)->SetDirection(1, 0);
-	Twengine::InputManager::GetInstance().BindCommandToInput<KillObjectCommand>(SDLK_c, Twengine::InteractionStates::up, digdug.get(), -1);
+	//Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_w, Twengine::InteractionStates::pressed, digdug.get(), -1)->SetDirection(0, -1);
+	//Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_s, Twengine::InteractionStates::pressed, digdug.get(), -1)->SetDirection(0, 1);
+	//Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_a, Twengine::InteractionStates::pressed, digdug.get(), -1)->SetDirection(-1, 0);
+	//Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_d, Twengine::InteractionStates::pressed, digdug.get(), -1)->SetDirection(1, 0);
+	//
+	//Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_w, Twengine::InteractionStates::up, digdug.get(), -1)->SetDirection(0, 0);
+	//Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_s, Twengine::InteractionStates::up, digdug.get(), -1)->SetDirection(0, 0);
+	//Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_a, Twengine::InteractionStates::up, digdug.get(), -1)->SetDirection(0, 0);
+	//Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_d, Twengine::InteractionStates::up, digdug.get(), -1)->SetDirection(0, 0);
+
+	//Twengine::InputManager::GetInstance().BindCommandToInput<KillObjectCommand>(SDLK_c, Twengine::InteractionStates::up, digdug.get(), -1);
 	Twengine::InputManager::GetInstance().BindCommandToInput<KillEnemyCommand>(SDLK_z, Twengine::InteractionStates::up, digdug.get(), -1)->GetEnemyKilledEvent()->AddObserver(digDugScore);
-	Twengine::InputManager::GetInstance().BindCommandToInput<KillEnemyCommand>(SDLK_x, Twengine::InteractionStates::up, digdug.get(), -1);
-	//scene.Add(std::move(collisionCheck));
+	//Twengine::InputManager::GetInstance().BindCommandToInput<KillEnemyCommand>(SDLK_x, Twengine::InteractionStates::up, digdug.get(), -1);
 
 	scene.Add(std::move(gridObject));
 	scene.Add(std::move(digdugLivesText));
@@ -247,6 +249,7 @@ void LevelFactory::CreateAndAddPooka(Twengine::Scene& scene, int row, int column
 	animation->AddAnimation("Pooka/PookaMove.png", make_sdbm_hash("PookaMove"), 2);
 	animation->PlayAnimation(make_sdbm_hash("PookaMove"));
 	pooka->GetTransform()->SetLocalPosition(gridComponent->GetPositionFromIndex(row, column));
+	pooka->AddComponent<Twengine::RectColliderComponent>();
 	pooka->AddComponent<PookaComponent>();
 	scene.Add(std::move(pooka));
 }
@@ -258,6 +261,7 @@ void LevelFactory::CreateAndAddFygar(Twengine::Scene& scene, int row, int column
 	animation->AddAnimation("Fygar/FygarMove.png", make_sdbm_hash("FygarMove"), 2);
 	animation->PlayAnimation(make_sdbm_hash("FygarMove"));
 	fygar->GetTransform()->SetLocalPosition(gridComponent->GetPositionFromIndex(row, column));
+	fygar->AddComponent<Twengine::RectColliderComponent>();
 	fygar->AddComponent<FygarComponent>();
 	scene.Add(std::move(fygar));
 }

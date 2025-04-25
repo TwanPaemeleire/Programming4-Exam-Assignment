@@ -17,6 +17,7 @@ public:
 	PookaComponent& operator=(const PookaComponent& other) = delete;
 	PookaComponent& operator=(PookaComponent&& other) = delete;
 
+	virtual void Start() override;
 	virtual void Update() override;
 	virtual void Notify(const GameEvent& event, Twengine::GameObject* observedObject) override;
 

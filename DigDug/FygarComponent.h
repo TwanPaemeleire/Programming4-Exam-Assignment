@@ -17,6 +17,7 @@ public:
 	FygarComponent& operator=(const FygarComponent& other) = delete;
 	FygarComponent& operator=(FygarComponent&& other) = delete;
 
+	virtual void Start() override;
 	virtual void Update() override;
 	virtual void Notify(const GameEvent& event, Twengine::GameObject* observedObject) override;
 

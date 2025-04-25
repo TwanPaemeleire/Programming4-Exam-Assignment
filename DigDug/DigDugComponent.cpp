@@ -8,6 +8,7 @@
 #include "SoundSystem.h"
 #include "GameManager.h"
 #include "GridComponent.h"
+#include "EnemyMovementComponent.h"
 
 DigDugComponent::DigDugComponent(Twengine::GameObject* owner)
 	:Component(owner)
@@ -40,10 +41,14 @@ void DigDugComponent::Update()
 
 void DigDugComponent::Notify(const GameEvent& event, Twengine::GameObject* observedObject)
 {
-	if (event.id == make_sdbm_hash("OnCollision") && observedObject->GetTag() == make_sdbm_hash("CollisionTest"))
+	//if (event.id == make_sdbm_hash("OnCollision") && observedObject->GetTag() == make_sdbm_hash("CollisionTest"))
+	//{
+	//	std::cout << "COLLISION DETECTED IN PLAYER COMPONENT" << std::endl;
+	//	Twengine::ServiceLocator::get_sound_system().RequestPlaySound("DigDug/DigDugShot.wav", 0.9f);
+	//}
+
+	if (event.id == make_sdbm_hash("OnCollision") && observedObject->GetComponent<EnemyMovementComponent>())
 	{
-		std::cout << "COLLISION DETECTED IN PLAYER COMPONENT" << std::endl;
-		Twengine::ServiceLocator::get_sound_system().RequestPlaySound("DigDug/DigDugShot.wav", 0.9f);
-		observedObject;
+		std::cout << "Collision With Enemy" << std::endl;
 	}
 }

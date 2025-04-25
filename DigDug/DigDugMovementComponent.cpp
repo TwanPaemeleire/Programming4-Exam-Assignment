@@ -206,7 +206,6 @@ void DigDugMovementComponent::UpdateGroundAndAnimation()
 			m_HasStartedDiggingAnimation = false;
 			m_HasStartedIdleAnimation = false;
 			m_AnimationComponent->PlayAnimation(make_sdbm_hash("DigDugMove"));
-			std::cout << "start move anim" << std::endl;
 		}
 	}
 	else // Next Is Not Dug Out Yet
@@ -220,6 +219,15 @@ void DigDugMovementComponent::UpdateGroundAndAnimation()
 		}
 	}
 	m_GroundComponent->ErasePlayerTrail(playerRect);
+	// If Time Left Later Down The Line, Do This, And Make Player And Enemies Be At Center Of Cell Instead Of Top Left 
+	// Will Give Smoother Look For Entire Game But Require A Lot Of Reworking 
+	//int centerX = static_cast<int>(m_Transform->GetWorldPosition().x);
+	//int width = static_cast<int>(GetOwner()->GetComponent<Twengine::AnimationComponent>()->GetAnimationFrameWidth());
+	//centerX += width / 2;
+	//int centerY = static_cast<int>(m_Transform->GetWorldPosition().y);
+	//int height = static_cast<int>(GetOwner()->GetComponent<Twengine::AnimationComponent>()->GetAnimationFrameHeight());
+	//centerY += height / 2;
+	//m_GroundComponent->ErasePlayerTrail(centerX, centerY, width, height);
 }
 
 void DigDugMovementComponent::UpdateFlipAndRotation()

@@ -1,16 +1,20 @@
 #include "PookaComponent.h"
-#include "Renderer.h"
 #include "GameObject.h"
-#include "GameManager.h"
-#include "GroundComponent.h"
-#include "MyTime.h"
 #include "EnemyMovementComponent.h"
+#include "AnimationComponent.h"
+#include "RectColliderComponent.h"
 
 PookaComponent::PookaComponent(Twengine::GameObject* owner)
 	: Component(owner)
 {
 	m_MovementComponent = GetOwner()->AddComponent<EnemyMovementComponent>();
 	m_MovementComponent->GetOnCanReachPlayerEvent()->AddObserver(this);
+}
+
+void PookaComponent::Start()
+{
+	Twengine::AnimationComponent* animComp = GetOwner()->GetComponent<Twengine::AnimationComponent>();
+	GetOwner()->GetComponent<Twengine::RectColliderComponent>()->SetHitBox(m_Transform->GetWorldPosition(), animComp->GetAnimationFrameWidth(), animComp->GetAnimationFrameHeight());
 }
 
 void PookaComponent::Update()
