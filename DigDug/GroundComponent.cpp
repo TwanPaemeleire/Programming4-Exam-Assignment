@@ -77,7 +77,6 @@ void GroundComponent::ErasePlayerTrail(SDL_Rect playerRect, bool isInWorldSpace)
 
 void GroundComponent::ErasePlayerTrail(int centerX, int centerY, int width, int height, bool isInWorldSpace)
 {
-	
 	if (isInWorldSpace)
 	{
 		// Calculate Position Relative To Where The Ground Starts, As This Won't Be The Same As Player World Position
@@ -181,10 +180,6 @@ glm::vec2 GroundComponent::GetCellTargetToGetCloserToPlayer(const glm::vec2& ene
 			}
 		}
 	}
-
-	std::pair<int, int> test = m_GridComponent->GetIndexFromPosition(bestTarget);
-	auto* cell = m_GridComponent->GetCell(test.first, test.second);
-	cell;
 
 	return bestTarget;
 }

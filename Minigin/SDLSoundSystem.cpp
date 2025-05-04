@@ -16,13 +16,17 @@ public:
 	SDLSoundSystemImpl(SDLSoundSystemImpl&& other) = delete;
 	SDLSoundSystemImpl& operator=(const SDLSoundSystemImpl& other) = delete;
 	SDLSoundSystemImpl& operator=(SDLSoundSystemImpl&& other) = delete;
-	virtual void RequestPlayMusic(const std::string& file, const float volume);
-	virtual void RequestPlaySound(const std::string& file, const float volume);
+	void RequestLoadMusic(const std::string& file, SoundId id);
+	void RequestLoadSound(const std::string& file, SoundId id);
+	void RequestPlayMusic(SoundId id, const float volume);
+	void RequestPlaySound(SoundId id, const float volume);
 private:
 	void SoundThreadLoop(const std::stop_token& stopToken);
 
 	enum class SoundRequestType
 	{
+		LoadSound,
+		LoadMusic,
 		PlaySound,
 		PlayMusic,
 		StopSound,
@@ -32,18 +36,19 @@ private:
 	struct SoundData
 	{
 		SoundRequestType type;
-		std::string file;
+		SoundId id;
 		float volume;
+		std::string file;
 	};
 	std::jthread m_SoundThread;
 	std::queue<SoundData> m_SoundQueue;
 	std::mutex m_QueueMutex;
 	std::condition_variable m_Condition;
 
+	void LoadMusic(const SoundData& soundData);
+	void LoadSound(const SoundData& soundData);
 	void PlayMusic(const SoundData& soundData);
 	void PlaySound(const SoundData& soundData);
-	Mix_Music* LoadMusic(const std::string& file);
-	Mix_Chunk* LoadChunk(const std::string& file);
 
 	// Define A Custom Deleter So We Don't Have To Worry About Having To Work With Raw Pointers
 	struct MixMusicDeleter
@@ -53,7 +58,7 @@ private:
 			Mix_FreeMusic(music);
 		}
 	};
-	std::unordered_map<std::string, std::unique_ptr<Mix_Music, MixMusicDeleter>> m_LoadedMusic;
+	std::unordered_map<SoundId, std::unique_ptr<Mix_Music, MixMusicDeleter>> m_LoadedMusic;
 
 	// Define A Custom Deleter So We Don't Have To Worry About Having To Work With Raw Pointers
 	struct MixChunkDeleter
@@ -63,7 +68,7 @@ private:
 			Mix_FreeChunk(chunk);
 		}
 	};
-	std::unordered_map<std::string, std::unique_ptr<Mix_Chunk, MixChunkDeleter>> m_LoadedChunks;
+	std::unordered_map<SoundId, std::unique_ptr<Mix_Chunk, MixChunkDeleter>> m_LoadedChunks;
 };
 
 
@@ -77,14 +82,24 @@ Twengine::SDLSoundSystem::~SDLSoundSystem()
 	delete m_pImplSDLSoundSystem;
 }
 
-void Twengine::SDLSoundSystem::RequestPlayMusic(const std::string& file, const float volume)
+void Twengine::SDLSoundSystem::RequestLoadMusic(const std::string& file, SoundId id)
 {
-	m_pImplSDLSoundSystem->RequestPlayMusic(file, volume);
+	m_pImplSDLSoundSystem->RequestLoadMusic(file, id);
 }
 
-void Twengine::SDLSoundSystem::RequestPlaySound(const std::string& file, const float volume)
+void Twengine::SDLSoundSystem::RequestLoadSound(const std::string& file, SoundId id)
 {
-	m_pImplSDLSoundSystem->RequestPlaySound(file, volume);
+	m_pImplSDLSoundSystem->RequestLoadSound(file, id);
+}
+
+void Twengine::SDLSoundSystem::RequestPlayMusic(SoundId id, const float volume)
+{
+	m_pImplSDLSoundSystem->RequestPlayMusic(id, volume);
+}
+
+void Twengine::SDLSoundSystem::RequestPlaySound(SoundId id, const float volume)
+{
+	m_pImplSDLSoundSystem->RequestPlaySound(id, volume);
 }
 
 Twengine::SDLSoundSystem::SDLSoundSystemImpl::SDLSoundSystemImpl()
@@ -107,17 +122,31 @@ Twengine::SDLSoundSystem::SDLSoundSystemImpl::~SDLSoundSystemImpl()
 	SDL_QuitSubSystem(SDL_INIT_AUDIO);
 }
 
-void Twengine::SDLSoundSystem::SDLSoundSystemImpl::RequestPlayMusic(const std::string& file, const float volume)
+void Twengine::SDLSoundSystem::SDLSoundSystemImpl::RequestLoadMusic(const std::string& file, SoundId id)
 {
 	std::lock_guard<std::mutex> lock(m_QueueMutex);
-	m_SoundQueue.push({ SoundRequestType::PlayMusic, file, volume });
+	m_SoundQueue.push({ SoundRequestType::LoadMusic, id, 0, file });
 	m_Condition.notify_one();
 }
 
-void Twengine::SDLSoundSystem::SDLSoundSystemImpl::RequestPlaySound(const std::string& file, const float volume)
+void Twengine::SDLSoundSystem::SDLSoundSystemImpl::RequestLoadSound(const std::string& file, SoundId id)
 {
 	std::lock_guard<std::mutex> lock(m_QueueMutex);
-	m_SoundQueue.push({ SoundRequestType::PlaySound, file, volume });
+	m_SoundQueue.push({ SoundRequestType::LoadSound, id, 0, file });
+	m_Condition.notify_one();
+}
+
+void Twengine::SDLSoundSystem::SDLSoundSystemImpl::RequestPlayMusic(SoundId id, const float volume)
+{
+	std::lock_guard<std::mutex> lock(m_QueueMutex);
+	m_SoundQueue.push({ SoundRequestType::PlayMusic, id, volume });
+	m_Condition.notify_one();
+}
+
+void Twengine::SDLSoundSystem::SDLSoundSystemImpl::RequestPlaySound(SoundId id, const float volume)
+{
+	std::lock_guard<std::mutex> lock(m_QueueMutex);
+	m_SoundQueue.push({ SoundRequestType::PlaySound, id, volume });
 	m_Condition.notify_one();
 }
 
@@ -135,8 +164,20 @@ void Twengine::SDLSoundSystem::SDLSoundSystemImpl::SoundThreadLoop(const std::st
 		SoundData soundData = m_SoundQueue.front();
 		m_SoundQueue.pop();
 
+		lock.unlock();
+
 		switch (soundData.type)
 		{
+			case SoundRequestType::LoadMusic:
+			{
+				LoadMusic(soundData);
+				break;
+			}
+			case SoundRequestType::LoadSound:
+			{
+				LoadSound(soundData);
+				break;
+			}
 			case SoundRequestType::PlayMusic:
 			{
 				PlayMusic(soundData);
@@ -151,31 +192,29 @@ void Twengine::SDLSoundSystem::SDLSoundSystemImpl::SoundThreadLoop(const std::st
 	}
 }
 
+void Twengine::SDLSoundSystem::SDLSoundSystemImpl::LoadMusic(const SoundData& soundData)
+{
+	if (m_LoadedMusic.find(soundData.id) == m_LoadedMusic.end())
+		m_LoadedMusic.insert(std::pair(soundData.id, Mix_LoadMUS(soundData.file.c_str())));
+}
+
+void Twengine::SDLSoundSystem::SDLSoundSystemImpl::LoadSound(const SoundData& soundData)
+{
+	if (m_LoadedChunks.find(soundData.id) == m_LoadedChunks.end())
+		m_LoadedChunks.insert(std::pair(soundData.id, Mix_LoadWAV(soundData.file.c_str())));
+}
+
 void Twengine::SDLSoundSystem::SDLSoundSystemImpl::PlayMusic(const SoundData& soundData)
 {
-	Mix_Music* music = LoadMusic(soundData.file);
+	Mix_Music* music = m_LoadedMusic.at(soundData.id).get();
 	Mix_VolumeMusic(static_cast<int>(soundData.volume * MIX_MAX_VOLUME));
 	Mix_PlayMusic(music, -1);
 }
 
 void Twengine::SDLSoundSystem::SDLSoundSystemImpl::PlaySound(const SoundData& soundData)
 {
-	Mix_Chunk* chunk = LoadChunk(soundData.file);
+	Mix_Chunk* chunk = m_LoadedChunks.at(soundData.id).get();
 	Mix_VolumeChunk(chunk, static_cast<int>(soundData.volume * MIX_MAX_VOLUME));
 	int channel = Mix_PlayChannel(-1, chunk, 0);
 	Mix_SetPosition(channel, 90, 50);
-}
-
-Mix_Music* Twengine::SDLSoundSystem::SDLSoundSystemImpl::LoadMusic(const std::string& file)
-{
-	if (m_LoadedMusic.find(file) == m_LoadedMusic.end())
-		m_LoadedMusic.insert(std::pair(file, Mix_LoadMUS(file.c_str())));
-	return m_LoadedMusic.at(file).get();
-}
-
-Mix_Chunk* Twengine::SDLSoundSystem::SDLSoundSystemImpl::LoadChunk(const std::string& file)
-{
-	if (m_LoadedChunks.find(file) == m_LoadedChunks.end())
-		m_LoadedChunks.insert(std::pair(file, Mix_LoadWAV(file.c_str())));
-	return m_LoadedChunks.at(file).get();
 }

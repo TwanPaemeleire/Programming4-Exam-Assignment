@@ -10,7 +10,7 @@ namespace Twengine
 		static SoundSystem& get_sound_system() { return *s_SoundSystem; }
 		static void register_sound_system(std::unique_ptr<SoundSystem>&& soundSystem)
 		{
-			s_SoundSystem = std::move(soundSystem);
+			s_SoundSystem = (soundSystem == nullptr) ? std::make_unique<NullSoundSystem>() : std::move(soundSystem);
 		}
 
 	private:

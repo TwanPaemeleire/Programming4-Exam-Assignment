@@ -13,8 +13,10 @@ namespace Twengine
 		SDLSoundSystem(SDLSoundSystem&& other) = delete;
 		SDLSoundSystem& operator=(const SDLSoundSystem& other) = delete;
 		SDLSoundSystem& operator=(SDLSoundSystem&& other) = delete;
-		virtual void RequestPlayMusic(const std::string& file, const float volume) override;
-		virtual void RequestPlaySound(const std::string& file, const float volume) override;
+		virtual void RequestLoadMusic(const std::string& file, SoundId id) override;
+		virtual void RequestLoadSound(const std::string& file, SoundId id) override;
+		virtual void RequestPlayMusic(SoundId id, const float volume) override;
+		virtual void RequestPlaySound(SoundId id, const float volume) override;
 
 	private:
 		class SDLSoundSystemImpl;

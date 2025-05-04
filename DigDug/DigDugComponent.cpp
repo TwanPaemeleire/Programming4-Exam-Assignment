@@ -29,8 +29,8 @@ void DigDugComponent::Start()
 	m_AnimationComponent->PlayAnimation(make_sdbm_hash("DigDugMove"));
 	glm::vec2 pos = GetOwner()->GetTransform()->GetLocalPosition();
 	m_RectColliderComponent->SetHitBox(pos, m_AnimationComponent->GetAnimationFrameWidth(), m_AnimationComponent->GetAnimationFrameHeight());
-
-	Twengine::ServiceLocator::get_sound_system().RequestPlayMusic("Level/LevelMusic.wav", 0.9f);
+	Twengine::ServiceLocator::get_sound_system().RequestLoadMusic("Level/LevelMusic.wav", SoundId(make_sdbm_hash("LevelMusic")));
+	Twengine::ServiceLocator::get_sound_system().RequestPlayMusic(SoundId(make_sdbm_hash("LevelMusic")), 0.9f);
 }
 
 void DigDugComponent::Update()

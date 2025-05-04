@@ -41,6 +41,9 @@ void LevelFactory::LoadDevScene()
 	auto* grid = gridObject->AddComponent<GridComponent>();
 	GameManager::GetInstance().SetGrid(grid);
 
+	std::unique_ptr<Twengine::SDLSoundSystem> soundSystem = std::make_unique<Twengine::SDLSoundSystem>();
+	Twengine::ServiceLocator::register_sound_system(std::move(soundSystem));
+
 	auto levelDrawObject = std::make_unique<Twengine::GameObject>();
 	auto* ground = levelDrawObject->AddComponent<GroundComponent>();
 	scene.Add(std::move(levelDrawObject));
@@ -117,9 +120,6 @@ void LevelFactory::LoadDevScene()
 	scene.Add(std::move(digdugLivesText));
 	scene.Add(std::move(digdug));
 	scene.Add(std::move(digdugScoreText));
-
-	std::unique_ptr<Twengine::SDLSoundSystem> soundSystem = std::make_unique<Twengine::SDLSoundSystem>();
-	Twengine::ServiceLocator::register_sound_system(std::move(soundSystem));
 }
 
 void LevelFactory::LoadMainMenu()
