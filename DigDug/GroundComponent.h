@@ -3,8 +3,10 @@
 #include <SDL_image.h>
 #include <glm.hpp>
 #include <vector>
+#include <unordered_map>
 
 class GridComponent;
+struct Cell;
 
 class GroundComponent final : public Twengine::Component
 {
@@ -17,6 +19,7 @@ public:
 	GroundComponent& operator=(GroundComponent&& other) = delete;
 
 	virtual void Render() const override;
+	virtual void RenderUI() override;
 
 	void ErasePlayerTrail(SDL_Rect playerRect, bool isInWorldSpace = true);
 	// Will Be Used If I Have Enough Time Left
@@ -36,5 +39,7 @@ private:
 	float m_HalfGridCellSize{};
 
 	int GetIndex(int x, int y) const;
+	std::unordered_map<Cell*, Cell*> BuildReachableCellTree(const glm::vec2& enemyPos) const;
+	void UpdateConnectionsWithNeighbors(Cell* cell);
 };
 

@@ -1,6 +1,7 @@
 #include "GridComponent.h"
 #include "Renderer.h"
 #include <algorithm>
+#include "SDL_rect.h"
 
 GridComponent::GridComponent(Twengine::GameObject* owner)
 	:Component(owner)
@@ -37,4 +38,31 @@ std::pair<int, int> GridComponent::GetIndexFromPosition(glm::vec2 pos) const
 	row = std::clamp(row, 0, m_Rows - 1);
 
 	return std::pair<int, int>(row, column);
+}
+
+std::pair<int, int> GridComponent::GetIndexFromCell(Cell* cell) const
+{
+	cell;
+	return std::pair<int, int>();
+}
+
+std::vector<Cell*> GridComponent::GetCellsInRect(const SDL_Rect& rect)
+{
+	glm::vec2 topLeft = glm::vec2(rect.x, rect.y);
+	glm::vec2 bottomRight = glm::vec2(rect.x + rect.w, rect.y + rect.h);
+
+	auto [minRow, minCol] = GetIndexFromPosition(topLeft);
+	auto [maxRow, maxCol] = GetIndexFromPosition(bottomRight);
+
+	std::vector<Cell*> cellsInRect;
+	cellsInRect.reserve((maxRow - minRow) * (maxCol - minCol));
+
+	for (int rowIdx = minRow; rowIdx <= maxRow; ++rowIdx)
+	{
+		for (int columnIdx = minCol; columnIdx <= maxCol; ++columnIdx)
+		{
+			cellsInRect.push_back(GetCell(rowIdx, columnIdx));
+		}
+	}
+	return cellsInRect;
 }

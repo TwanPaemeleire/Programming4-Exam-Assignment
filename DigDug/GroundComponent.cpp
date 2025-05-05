@@ -5,7 +5,7 @@
 #include <iostream>
 #include "Renderer.h"
 #include <queue>
-#include <unordered_map>
+#include <unordered_set>
 
 GroundComponent::GroundComponent(Twengine::GameObject* owner)
 	: Component(owner)
@@ -37,6 +37,16 @@ void GroundComponent::Render() const
 	dstRect.w = static_cast<int>(dst.w);
 	dstRect.h = static_cast<int>(dst.h);
 	SDL_RenderCopy(Twengine::Renderer::GetInstance().GetSDLRenderer(), m_Texture, nullptr, &dstRect);
+}
+
+void GroundComponent::RenderUI()
+{
+	//std::unordered_map<Cell*, Cell*> cellTree = BuildReachableCellTree(glm::vec2(320.f, 128.f));
+	//
+	//for (const auto& [child, parent] : cellTree)
+	//{
+	//	Twengine::Renderer::GetInstance().DrawRectangle(child->topLeft.x, child->topLeft.y, m_GridCellSize, m_GridCellSize, SDL_Color(0, 255, 0, 255));
+	//}
 }
 
 void GroundComponent::ErasePlayerTrail(SDL_Rect playerRect, bool isInWorldSpace)
@@ -73,6 +83,35 @@ void GroundComponent::ErasePlayerTrail(SDL_Rect playerRect, bool isInWorldSpace)
 	SDL_DestroyTexture(m_Texture);
 	m_Texture = SDL_CreateTextureFromSurface(Twengine::Renderer::GetInstance().GetSDLRenderer(), m_Surface);
 	SDL_SetTextureBlendMode(m_Texture, SDL_BLENDMODE_BLEND);
+
+	if (!isInWorldSpace)
+	{
+		rectRelativeToPos.x = static_cast<int>(m_Transform->GetWorldPosition().x + rectRelativeToPos.x);
+		rectRelativeToPos.y = static_cast<int>(m_Transform->GetWorldPosition().y + rectRelativeToPos.y);
+	}
+	else
+	{
+		// Calculate Back To World Space
+		rectRelativeToPos.x += static_cast<int>(m_Transform->GetWorldPosition().x);
+		rectRelativeToPos.y += static_cast<int>(m_Transform->GetWorldPosition().y);
+	}
+
+	std::vector<Cell*> affectedCells = m_GridComponent->GetCellsInRect(rectRelativeToPos);
+	for (Cell* cell : affectedCells)
+	{
+		glm::vec2 cellCenter = glm::vec2(cell->topLeft.x + m_HalfGridCellSize, cell->topLeft.y + m_HalfGridCellSize);
+
+		glm::vec2 upToCheck = glm::vec2(cell->topLeft.x, cell->topLeft.y - (m_GridCellSize * 0.5f));
+		glm::vec2 downToCheck = glm::vec2(cell->topLeft.x , cell->topLeft.y + (m_GridCellSize * 1.5f));
+		glm::vec2 leftToCheck = glm::vec2(cell->topLeft.x - (m_GridCellSize * 0.5f), cell->topLeft.y);
+		glm::vec2 rightToCheck = glm::vec2(cell->topLeft.x + (m_GridCellSize * 1.5f), cell->topLeft.y);
+		
+		cell->canGoUp = CanMoveBetween(cellCenter, upToCheck);
+		cell->canGoDown = CanMoveBetween(cellCenter, downToCheck);
+		cell->canGoLeft = CanMoveBetween(cellCenter, leftToCheck);
+		cell->canGoRight = CanMoveBetween(cellCenter, rightToCheck);
+		UpdateConnectionsWithNeighbors(cell);
+	}
 }
 
 void GroundComponent::ErasePlayerTrail(int centerX, int centerY, int width, int height, bool isInWorldSpace)
@@ -221,69 +260,67 @@ bool GroundComponent::CanMoveBetween(const glm::vec2& startPos, const glm::vec2&
 bool GroundComponent::EnemyCanReachPlayer(const glm::vec2& enemyPos) const
 {
 	glm::vec2 playerPos = GameManager::GetInstance().GetPlayerTransform()->GetWorldPosition();
-
-	// Convert World Positions So They Can Be Used Correctly On The Surface To Perform The Checks
-	glm::ivec2 start = glm::ivec2(enemyPos - glm::vec2(m_Transform->GetWorldPosition()));
-	glm::ivec2 end = glm::ivec2(playerPos - glm::vec2(m_Transform->GetWorldPosition()));
-
-	// Check If Neither Of The Positions Are Out Of Bounds
-	if (start.x < 0 || start.x >= m_Surface->w || start.y < 0 || start.y >= m_Surface->h ||
-		end.x < 0 || end.x >= m_Surface->w || end.y < 0 || end.y >= m_Surface->h)
-	{
-		return false;
-	}
-
-	const int pitch = m_Surface->pitch / 4;
-	Uint32* pixels = (Uint32*)m_Surface->pixels;
-
-	std::queue<glm::ivec2> toVisit;
-	std::unordered_map<int, bool> visited;
-
-	// Add Start 'Node'
-	toVisit.push(start);
-	visited[GetIndex(start.x, start.y)] = true;
-
-	const glm::ivec2 directions[] = {
-		{0, -1}, {1, 0}, {0, 1}, { -1, 0 }   // Up, Right, Down, Left
-	};
-
-	// Run BFS To Check If Enemy Could Reach Player
-	while (!toVisit.empty())
-	{
-		// Get Next Position To Check
-		glm::ivec2 current = toVisit.front();
-		toVisit.pop();
-
-		// If Next Position Is Player Position We Can Reach It
-		if (current == end)
-			return true;
-
-		for (const glm::ivec2& dir : directions)
-		{
-			glm::ivec2 next = current + dir;
-
-			// Check If Not Out Of Bounds
-			if (next.x < 0 || next.x >= m_Surface->w || next.y < 0 || next.y >= m_Surface->h)
-				continue;
-
-			// Check If Not Visited Already
-			int flatIndex = GetIndex(next.x, next.y);
-			if (visited[flatIndex])
-				continue;
-
-			// If Not Visited And Is Dug Out, Add It To Our Queue, Which Then Gets Checked In The Next Iteration Of The While Loop
-			if (pixels[next.y * pitch + next.x] == m_TransparentValue)
-			{
-				visited[flatIndex] = true;
-				toVisit.push(next);
-			}
-		}
-	}
-
-	return false; // Enemy Can't Reach Player
+	Cell* playerCell = m_GridComponent->GetCell(m_GridComponent->GetIndexFromPosition(playerPos));
+	std::unordered_map<Cell*, Cell*> reachableCellTree = BuildReachableCellTree(enemyPos);
+	return reachableCellTree.find(playerCell) != reachableCellTree.end();
 }
 
 int GroundComponent::GetIndex(int x, int y) const
 {
 	return y * m_Surface->w + x;
+}
+
+std::unordered_map<Cell*, Cell*> GroundComponent::BuildReachableCellTree(const glm::vec2& enemyPos) const
+{
+	std::pair<int, int> enemyCellIdx = m_GridComponent->GetIndexFromPosition(enemyPos);
+
+	// First One Is Child, Second Is Parent
+	std::unordered_map<Cell*, Cell*> cellTree;
+	std::queue<Cell*> toVisit;
+	std::unordered_set<Cell*> visited;
+
+	Cell* startCell = m_GridComponent->GetCell(m_GridComponent->GetIndexFromPosition(enemyPos));
+
+	toVisit.push(startCell);
+	visited.insert(startCell);
+
+	while (!toVisit.empty())
+	{
+		Cell* current = toVisit.front();
+		toVisit.pop();
+
+		std::pair<int, int> currentIndex = m_GridComponent->GetIndexFromPosition(current->topLeft);
+
+		std::vector<std::pair<Cell*, bool>> neighbors = {
+			{ m_GridComponent->GetCell(currentIndex.first - 1, currentIndex.second), current->canGoUp },
+			{ m_GridComponent->GetCell(currentIndex.first + 1, currentIndex.second), current->canGoDown },
+			{ m_GridComponent->GetCell(currentIndex.first, currentIndex.second - 1), current->canGoLeft },
+			{ m_GridComponent->GetCell(currentIndex.first, currentIndex.second + 1), current->canGoRight }
+		};
+
+		for (auto& [neighbor, canMove] : neighbors)
+		{
+			if (neighbor && canMove && visited.find(neighbor) == visited.end())
+			{
+				cellTree[neighbor] = current;
+				visited.insert(neighbor);
+				toVisit.push(neighbor);
+			}
+		}
+	}
+
+	return cellTree;
+}
+
+void GroundComponent::UpdateConnectionsWithNeighbors(Cell* cell)
+{
+	std::pair<int, int> cellIdx = m_GridComponent->GetIndexFromPosition(cell->topLeft);
+	Cell* upCell = m_GridComponent->GetCell(cellIdx.first - 1, cellIdx.second);
+	Cell* downCell = m_GridComponent->GetCell(cellIdx.first + 1, cellIdx.second);
+	Cell* leftCell = m_GridComponent->GetCell(cellIdx.first, cellIdx.second - 1);
+	Cell* rightCell = m_GridComponent->GetCell(cellIdx.first, cellIdx.second + 1);
+	upCell->canGoDown = cell->canGoUp;
+	downCell->canGoUp = cell->canGoDown;
+	leftCell->canGoRight = cell->canGoLeft;
+	rightCell->canGoLeft = cell->canGoRight;
 }
