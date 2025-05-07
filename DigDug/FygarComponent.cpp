@@ -8,7 +8,7 @@ FygarComponent::FygarComponent(Twengine::GameObject* owner)
 	:Component(owner)
 {
 	m_MovementComponent = GetOwner()->AddComponent<EnemyMovementComponent>();
-	m_MovementComponent->GetOnCanReachPlayerEvent()->AddObserver(this);
+	//m_MovementComponent->GetOnCanReachPlayerEvent()->AddObserver(this);
 }
 
 void FygarComponent::Start()

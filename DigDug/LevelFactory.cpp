@@ -29,6 +29,7 @@
 #include "GroundComponent.h"
 #include "PookaComponent.h"
 #include "FygarComponent.h"
+#include "EnemyMovementComponent.h"
 
 #include "Event.h"
 #include <fstream>
@@ -96,6 +97,10 @@ void LevelFactory::LoadDevScene()
 	digDugScore->GetScoreChangedEvent()->AddObserver(digdugPointsDisplayComp);
 
 	digdug->AddComponent<DigDugComponent>();
+	auto test = std::make_unique<Twengine::GameObject>();
+	test->AddComponent<Twengine::TextureRenderComponent>()->SetTexture("Level/Flower.png");
+	test->SetParent(digdug.get(), false);
+	scene.Add(std::move(test));
 
 
 	//Twengine::InputManager::GetInstance().BindJoystickCommandToInput<JoystickMoveCommand>(Twengine::InteractionStates::pressed, digdug.get(), 0);
@@ -243,9 +248,8 @@ void LevelFactory::LoadLevelFromFile(Twengine::Scene& scene, GroundComponent* gr
 void LevelFactory::CreateAndAddPooka(Twengine::Scene& scene, int row, int column, GridComponent* gridComponent)
 {
 	std::unique_ptr<Twengine::GameObject> pooka = std::make_unique<Twengine::GameObject>();
-	Twengine::AnimationComponent* animation = pooka->AddComponent<Twengine::AnimationComponent>();
-	animation->AddAnimation("Pooka/PookaMove.png", make_sdbm_hash("PookaMove"), 2);
-	animation->PlayAnimation(make_sdbm_hash("PookaMove"));
+	pooka->AddComponent<Twengine::AnimationComponent>();
+	pooka->AddComponent<EnemyMovementComponent>();
 	pooka->GetTransform()->SetLocalPosition(gridComponent->GetPositionFromIndex(row, column));
 	pooka->AddComponent<Twengine::RectColliderComponent>();
 	pooka->AddComponent<PookaComponent>();

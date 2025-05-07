@@ -10,7 +10,7 @@
 EnemyMovementComponent::EnemyMovementComponent(Twengine::GameObject* owner)
 	:Component(owner)
 {
-	m_OnCanReachPlayerEvent = std::make_unique<Twengine::Event>();
+	//m_OnCanReachPlayerEvent = std::make_unique<Twengine::Event>();
 }
 
 void EnemyMovementComponent::Start()
@@ -33,8 +33,7 @@ void EnemyMovementComponent::RenderUI()
 	Twengine::Renderer::GetInstance().DrawRectangle(m_NextNodeToPlayer.x, m_NextNodeToPlayer.y, 5.f, 5.f, SDL_Color(0, 255, 0, 255));
 }
 
-
-void EnemyMovementComponent::MovementIfNoPathToPlayer()
+bool EnemyMovementComponent::MovementIfNoPathToPlayer()
 {
 	glm::vec2 movement = m_IdleDirection * m_MovementSpeed * Twengine::Time::GetInstance().deltaTime;
 	m_Transform->SetLocalPosition(glm::vec2(m_Transform->GetWorldPosition()) + movement);
@@ -46,10 +45,11 @@ void EnemyMovementComponent::MovementIfNoPathToPlayer()
 		if (GameManager::GetInstance().GetGround()->EnemyCanReachPlayer(m_Transform->GetWorldPosition()))
 		{
 			m_NextNodeToPlayer = m_GroundComponent->GetCellTargetToGetCloserToPlayer(m_Transform->GetWorldPosition());
-			m_OnCanReachPlayerEvent->NotifyObservers(GameEvent(make_sdbm_hash("OnCanReachPlayer")), GetOwner());
+			return true;
 		}
 		SetNewIdleTarget();
 	}
+	return false;
 }
 
 void EnemyMovementComponent::SetNewIdleTarget()

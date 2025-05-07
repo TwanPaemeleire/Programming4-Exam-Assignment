@@ -29,7 +29,7 @@ public:
 
 private:
 	void CheckAndTransitionStates(std::unique_ptr<PlayerState> newState);
-	std::unique_ptr<PlayerState> m_CurrentState;
+	std::unique_ptr<PlayerState> m_CurrentState{};
 	Twengine::AnimationComponent* m_AnimationComponent{};
 	Twengine::RectColliderComponent* m_RectColliderComponent{};
 };

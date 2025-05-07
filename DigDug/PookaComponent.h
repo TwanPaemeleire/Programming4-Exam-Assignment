@@ -1,13 +1,9 @@
 #pragma once
 #include "Component.h"
-#include "glm.hpp"
-#include <vector>
-#include "Observer.h"
+#include <memory>
+#include "PookaStates.h"
 
-class GroundComponent;
-class EnemyMovementComponent;
-
-class PookaComponent final : public Twengine::Component, public Twengine::Observer
+class PookaComponent final : public Twengine::Component
 {
 public:
 	PookaComponent(Twengine::GameObject* owner);
@@ -19,10 +15,9 @@ public:
 
 	virtual void Start() override;
 	virtual void Update() override;
-	virtual void Notify(const GameEvent& event, Twengine::GameObject* observedObject) override;
 
 private:
-	bool m_CanMoveToPlayer{ false };
-	EnemyMovementComponent* m_MovementComponent;
+	void CheckAndTransitionStates(std::unique_ptr<PookaState> newState);
+	std::unique_ptr<PookaState> m_CurrentState{};
 };
 
