@@ -24,13 +24,11 @@ public:
 	virtual void Update() override;
 	virtual void RenderUI() override;
 
-	void SetXDirection(float x);
-	void SetYDirection(float y);
+	void SetDirection(glm::vec2 dir);
 	virtual void Notify(const GameEvent& event, Twengine::GameObject* observedObject) override;
 
 private:
 	void CheckAndTransitionStates(std::unique_ptr<PlayerState> newState);
-	//double m_Angle{};
 	std::unique_ptr<PlayerState> m_CurrentState;
 	Twengine::AnimationComponent* m_AnimationComponent{};
 	Twengine::RectColliderComponent* m_RectColliderComponent{};

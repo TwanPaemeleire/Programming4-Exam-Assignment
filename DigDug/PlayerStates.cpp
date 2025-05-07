@@ -59,10 +59,10 @@ void PlayerMoving::RenderDebugDrawing() const
 	Twengine::Renderer::GetInstance().DrawPoint(m_TargetPosition.x, m_TargetPosition.y, SDL_Color(0, 0, 255), 5);
 }
 
-std::unique_ptr<PlayerState> PlayerMoving::SetXDirection(Twengine::GameObject*, float x)
+std::unique_ptr<PlayerState> PlayerMoving::SetXDirection(Twengine::GameObject*, float x, float yToSet)
 {
 	// No Input Detected At All
-	if (x == 0.f && m_CurrentInputDirection.y == 0.f)
+	if (x == 0.f && m_CurrentInputDirection.y == 0.f && yToSet == 0.f)
 	{
 		m_IsMoving = false;
 		SetIdleAnimation();
@@ -76,10 +76,10 @@ std::unique_ptr<PlayerState> PlayerMoving::SetXDirection(Twengine::GameObject*, 
 	return nullptr;
 }
 
-std::unique_ptr<PlayerState> PlayerMoving::SetYDirection(Twengine::GameObject*, float y)
+std::unique_ptr<PlayerState> PlayerMoving::SetYDirection(Twengine::GameObject*, float y, float xToSet)
 {
 	// No Input Detected At All
-	if (y == 0.f && m_CurrentInputDirection.x == 0.f)
+	if (y == 0.f && m_CurrentInputDirection.x == 0.f && xToSet == 0.f)
 	{
 		m_IsMoving = false;
 		SetIdleAnimation();

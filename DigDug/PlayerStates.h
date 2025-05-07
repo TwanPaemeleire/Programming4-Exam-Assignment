@@ -25,8 +25,8 @@ public:
 	virtual void OnExit(Twengine::GameObject*) {};
 	virtual std::unique_ptr<PlayerState> Update(Twengine::GameObject* stateOwner) =0;
 	virtual void RenderDebugDrawing() const {};
-	virtual std::unique_ptr<PlayerState> SetXDirection(Twengine::GameObject*, float) { return nullptr; }
-	virtual std::unique_ptr<PlayerState> SetYDirection(Twengine::GameObject*, float) { return nullptr; }
+	virtual std::unique_ptr<PlayerState> SetXDirection(Twengine::GameObject*, float, float) { return nullptr; }
+	virtual std::unique_ptr<PlayerState> SetYDirection(Twengine::GameObject*, float, float) { return nullptr; }
 };
 
 class PlayerMoving final : public PlayerState
@@ -42,8 +42,8 @@ public:
 	virtual void OnEnter(Twengine::GameObject* stateOwner) override;
 	virtual std::unique_ptr<PlayerState> Update(Twengine::GameObject* stateOwner) override;
 	virtual void RenderDebugDrawing() const override;
-	virtual std::unique_ptr<PlayerState> SetXDirection(Twengine::GameObject* stateOwner, float x) override;
-	virtual std::unique_ptr<PlayerState> SetYDirection(Twengine::GameObject* stateOwner, float y) override;
+	virtual std::unique_ptr<PlayerState> SetXDirection(Twengine::GameObject* stateOwner, float x, float yToSet) override;
+	virtual std::unique_ptr<PlayerState> SetYDirection(Twengine::GameObject* stateOwner, float y, float xToSet) override;
 private:
 	void CalculateNextTarget();
 	void SetIdleAnimation();

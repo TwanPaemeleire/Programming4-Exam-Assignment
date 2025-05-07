@@ -1,7 +1,6 @@
 #include "MoveCommand.h"
 #include "GameObject.h"
 #include "DigDugComponent.h"
-#include "DigDugMovementComponent.h"
 
 MoveCommand::MoveCommand(Twengine::GameObject* gameObject)
 	:GameObjectCommand(gameObject)
@@ -11,6 +10,7 @@ MoveCommand::MoveCommand(Twengine::GameObject* gameObject)
 
 void MoveCommand::Execute()
 {
-	m_DigDugComp->SetXDirection(m_Direction.x);
-	m_DigDugComp->SetYDirection(m_Direction.y);
+	//m_DigDugComp->SetXDirection(m_Direction.x);
+	//m_DigDugComp->SetYDirection(m_Direction.y);
+	m_DigDugComp->SetDirection(m_Direction);
 }

@@ -46,14 +46,10 @@ void DigDugComponent::RenderUI()
 	m_CurrentState->RenderDebugDrawing();
 }
 
-void DigDugComponent::SetXDirection(float x)
+void DigDugComponent::SetDirection(glm::vec2 dir)
 {
-	CheckAndTransitionStates(m_CurrentState->SetXDirection(GetOwner(), x));
-}
-
-void DigDugComponent::SetYDirection(float y)
-{
-	CheckAndTransitionStates(m_CurrentState->SetYDirection(GetOwner(), y));
+	CheckAndTransitionStates(m_CurrentState->SetXDirection(GetOwner(), dir.x, dir.y));
+	CheckAndTransitionStates(m_CurrentState->SetYDirection(GetOwner(), dir.y, dir.x));
 }
 
 void DigDugComponent::Notify(const GameEvent& event, Twengine::GameObject* observedObject)

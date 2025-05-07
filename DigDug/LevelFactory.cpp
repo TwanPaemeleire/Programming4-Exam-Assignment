@@ -22,7 +22,6 @@
 
 #include "DigDugComponent.h"
 #include "GridComponent.h"
-#include "DigDugMovementComponent.h"
 
 #include "ServiceLocator.h"
 #include "SDLSoundSystem.h"
@@ -97,7 +96,6 @@ void LevelFactory::LoadDevScene()
 	digDugScore->GetScoreChangedEvent()->AddObserver(digdugPointsDisplayComp);
 
 	digdug->AddComponent<DigDugComponent>();
-	//digdug->AddComponent<DigDugMovementComponent>();
 
 
 	//Twengine::InputManager::GetInstance().BindJoystickCommandToInput<JoystickMoveCommand>(Twengine::InteractionStates::pressed, digdug.get(), 0);

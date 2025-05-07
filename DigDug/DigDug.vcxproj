@@ -161,7 +161,6 @@
   <ItemGroup>
     <ClCompile Include="DigDug.cpp" />
     <ClCompile Include="DigDugComponent.cpp" />
-    <ClCompile Include="DigDugMovementComponent.cpp" />
     <ClCompile Include="DisplayLivesComponent.cpp" />
     <ClCompile Include="DisplayPointsComponent.cpp" />
     <ClCompile Include="EnemyMovementComponent.cpp" />
@@ -181,7 +180,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DigDugComponent.h" />
-    <ClInclude Include="DigDugMovementComponent.h" />
     <ClInclude Include="DisplayLivesComponent.h" />
     <ClInclude Include="DisplayPointsComponent.h" />
     <ClInclude Include="EnemyMovementComponent.h" />
