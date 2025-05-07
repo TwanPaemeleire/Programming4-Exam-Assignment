@@ -1,6 +1,8 @@
 #pragma once
 #include "Component.h"
 #include "Observer.h"
+#include <memory>
+#include "PlayerStates.h"
 
 namespace Twengine
 {
@@ -20,12 +22,16 @@ public:
 
 	virtual void Start() override;
 	virtual void Update() override;
+	virtual void RenderUI() override;
 
+	void SetXDirection(float x);
+	void SetYDirection(float y);
 	virtual void Notify(const GameEvent& event, Twengine::GameObject* observedObject) override;
 
 private:
-	double m_Angle{};
-
+	void CheckAndTransitionStates(std::unique_ptr<PlayerState> newState);
+	//double m_Angle{};
+	std::unique_ptr<PlayerState> m_CurrentState;
 	Twengine::AnimationComponent* m_AnimationComponent{};
 	Twengine::RectColliderComponent* m_RectColliderComponent{};
 };

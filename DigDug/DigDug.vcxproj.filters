@@ -25,6 +25,12 @@
     <Filter Include="Header Files\Commands">
       <UniqueIdentifier>{1efa6a88-0a3a-4353-9a40-b9af4ce91445}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\States">
+      <UniqueIdentifier>{079574c8-23a6-4438-97a1-db964bb6fc08}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\States">
+      <UniqueIdentifier>{82760988-4a8f-4c39-9f3a-8679fea44662}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DigDug.cpp">
@@ -81,6 +87,9 @@
     <ClCompile Include="EnemyMovementComponent.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
+    <ClCompile Include="PlayerStates.cpp">
+      <Filter>Source Files\States</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DisplayLivesComponent.h">
@@ -133,6 +142,9 @@
     </ClInclude>
     <ClInclude Include="EnemyMovementComponent.h">
       <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerStates.h">
+      <Filter>Header Files\States</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

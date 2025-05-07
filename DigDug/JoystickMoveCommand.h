@@ -1,7 +1,7 @@
 #pragma once
 #include "JoystickCommand.h"
 
-class DigDugMovementComponent;
+class DigDugComponent;
 
 class JoystickMoveCommand final : public Twengine::JoystickCommand
 {
@@ -10,7 +10,6 @@ public:
 	virtual void Execute(float x, float y) override;
 
 private:
-	DigDugMovementComponent* m_MovementComp;
-	float m_Speed{ 20.f };
+	DigDugComponent* m_DigDugComp;
 };
 

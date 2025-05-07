@@ -97,7 +97,7 @@ void LevelFactory::LoadDevScene()
 	digDugScore->GetScoreChangedEvent()->AddObserver(digdugPointsDisplayComp);
 
 	digdug->AddComponent<DigDugComponent>();
-	digdug->AddComponent<DigDugMovementComponent>();
+	//digdug->AddComponent<DigDugMovementComponent>();
 
 
 	//Twengine::InputManager::GetInstance().BindJoystickCommandToInput<JoystickMoveCommand>(Twengine::InteractionStates::pressed, digdug.get(), 0);

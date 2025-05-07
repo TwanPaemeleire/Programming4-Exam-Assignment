@@ -1,33 +1,29 @@
-#include "DigDugMovementComponent.h"
+#include "PlayerStates.h"
 #include "GameObject.h"
-#include "MyTime.h"
-#include "GameManager.h"
-#include "GridComponent.h"
-#include <iostream>
-#include <algorithm>
-#include "Renderer.h"
-#include "GroundComponent.h"
 #include "AnimationComponent.h"
+#include "GridComponent.h"
+#include "GroundComponent.h"
+#include "GameManager.h"
+#include "MyTime.h"
+#include "Renderer.h"
+#include <memory>
 
-DigDugMovementComponent::DigDugMovementComponent(Twengine::GameObject* owner)
-	:Component(owner)
+// MOVING
+void PlayerMoving::OnEnter(Twengine::GameObject* stateOwner)
 {
-}
-
-void DigDugMovementComponent::Start()
-{
+	m_AnimationComponent = stateOwner->GetComponent<Twengine::AnimationComponent>();
 	m_GridComponent = GameManager::GetInstance().GetGrid();
-	m_CurrentIndex = m_GridComponent->GetIndexFromPosition(m_Transform->GetWorldPosition());
 	m_GroundComponent = GameManager::GetInstance().GetGround();
-	m_AnimationComponent = GetOwner()->GetComponent<Twengine::AnimationComponent>();
+	m_Transform = stateOwner->GetTransform();
+	m_CurrentIndex = m_GridComponent->GetIndexFromPosition(m_Transform->GetWorldPosition());
 }
 
-void DigDugMovementComponent::Update()
+std::unique_ptr<PlayerState> PlayerMoving::Update(Twengine::GameObject*)
 {
 	// Not Moving And No Input
 	if (m_CurrentInputDirection == glm::vec2(0.f, 0.f) && !m_IsMoving)
 	{
-		return;
+		return nullptr;
 	}
 
 	// Not Moving But Input Detected, So Pick A Target If None Has Been Defined Yet
@@ -55,14 +51,15 @@ void DigDugMovementComponent::Update()
 			CalculateNextTarget();
 		}
 	}
+	return nullptr;
 }
 
-void DigDugMovementComponent::RenderUI()
+void PlayerMoving::RenderDebugDrawing() const
 {
 	Twengine::Renderer::GetInstance().DrawPoint(m_TargetPosition.x, m_TargetPosition.y, SDL_Color(0, 0, 255), 5);
 }
 
-void DigDugMovementComponent::SetXDirection(float x)
+std::unique_ptr<PlayerState> PlayerMoving::SetXDirection(Twengine::GameObject*, float x)
 {
 	// No Input Detected At All
 	if (x == 0.f && m_CurrentInputDirection.y == 0.f)
@@ -70,15 +67,16 @@ void DigDugMovementComponent::SetXDirection(float x)
 		m_IsMoving = false;
 		SetIdleAnimation();
 	}
-	if (x == 0.f) return;
+	if (x == 0.f) return nullptr;
 	// Switch Orientations Left -> Right Or Right -> Left
 	bool switchedOrientation = (m_CurrentInputDirection.x != 0.f && m_CurrentInputDirection.x != x && m_Direction.y == 0.f);
 	m_CurrentInputDirection = glm::vec2(x, 0.f);
 	if (switchedOrientation) CalculateNextTarget();
 	m_IsMoving = true;
+	return nullptr;
 }
 
-void DigDugMovementComponent::SetYDirection(float y)
+std::unique_ptr<PlayerState> PlayerMoving::SetYDirection(Twengine::GameObject*, float y)
 {
 	// No Input Detected At All
 	if (y == 0.f && m_CurrentInputDirection.x == 0.f)
@@ -86,15 +84,16 @@ void DigDugMovementComponent::SetYDirection(float y)
 		m_IsMoving = false;
 		SetIdleAnimation();
 	}
-	if (y == 0.f) return;
+	if (y == 0.f) return nullptr;
 	// Switch Orientations Up -> Down Or Down -> Up
 	bool switchedOrientation = (m_CurrentInputDirection.y != 0.f && m_CurrentInputDirection.y != y && m_Direction.x == 0.f);
 	m_CurrentInputDirection = glm::vec2(0.f, y);
 	if (switchedOrientation) CalculateNextTarget();
 	m_IsMoving = true;
+	return nullptr;
 }
 
-void DigDugMovementComponent::CalculateNextTarget()
+void PlayerMoving::CalculateNextTarget()
 {
 	m_CurrentIndex = m_GridComponent->GetIndexFromPosition(m_Transform->GetWorldPosition());
 
@@ -160,7 +159,7 @@ void DigDugMovementComponent::CalculateNextTarget()
 	m_DistanceTracker = 0.f;
 }
 
-void DigDugMovementComponent::SetIdleAnimation()
+void PlayerMoving::SetIdleAnimation()
 {
 	if (!m_HasStartedIdleAnimation)
 	{
@@ -171,7 +170,7 @@ void DigDugMovementComponent::SetIdleAnimation()
 	}
 }
 
-void DigDugMovementComponent::UpdateGroundAndAnimation()
+void PlayerMoving::UpdateGroundAndAnimation()
 {
 	SDL_Rect playerRect{};
 	playerRect.x = static_cast<int>(m_Transform->GetWorldPosition().x);
@@ -230,7 +229,7 @@ void DigDugMovementComponent::UpdateGroundAndAnimation()
 	//m_GroundComponent->ErasePlayerTrail(centerX, centerY, width, height);
 }
 
-void DigDugMovementComponent::UpdateFlipAndRotation()
+void PlayerMoving::UpdateFlipAndRotation()
 {
 	if (m_Direction.x > 0) // Moving Right
 	{

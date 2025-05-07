@@ -84,18 +84,9 @@ void GroundComponent::ErasePlayerTrail(SDL_Rect playerRect, bool isInWorldSpace)
 	m_Texture = SDL_CreateTextureFromSurface(Twengine::Renderer::GetInstance().GetSDLRenderer(), m_Surface);
 	SDL_SetTextureBlendMode(m_Texture, SDL_BLENDMODE_BLEND);
 
-	if (!isInWorldSpace)
-	{
-		rectRelativeToPos.x = static_cast<int>(m_Transform->GetWorldPosition().x + rectRelativeToPos.x);
-		rectRelativeToPos.y = static_cast<int>(m_Transform->GetWorldPosition().y + rectRelativeToPos.y);
-	}
-	else
-	{
-		// Calculate Back To World Space
-		rectRelativeToPos.x += static_cast<int>(m_Transform->GetWorldPosition().x);
-		rectRelativeToPos.y += static_cast<int>(m_Transform->GetWorldPosition().y);
-	}
-
+	// Calculate Back To World Space
+	rectRelativeToPos.x += static_cast<int>(m_Transform->GetWorldPosition().x);
+	rectRelativeToPos.y += static_cast<int>(m_Transform->GetWorldPosition().y);
 	std::vector<Cell*> affectedCells = m_GridComponent->GetCellsInRect(rectRelativeToPos);
 	for (Cell* cell : affectedCells)
 	{

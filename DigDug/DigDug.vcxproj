@@ -175,6 +175,7 @@
     <ClCompile Include="KillObjectCommand.cpp" />
     <ClCompile Include="LevelFactory.cpp" />
     <ClCompile Include="MoveCommand.cpp" />
+    <ClCompile Include="PlayerStates.cpp" />
     <ClCompile Include="PookaComponent.cpp" />
     <ClCompile Include="ScoreComponent.cpp" />
   </ItemGroup>
@@ -194,6 +195,7 @@
     <ClInclude Include="KillObjectCommand.h" />
     <ClInclude Include="LevelFactory.h" />
     <ClInclude Include="MoveCommand.h" />
+    <ClInclude Include="PlayerStates.h" />
     <ClInclude Include="PookaComponent.h" />
     <ClInclude Include="ScoreComponent.h" />
   </ItemGroup>

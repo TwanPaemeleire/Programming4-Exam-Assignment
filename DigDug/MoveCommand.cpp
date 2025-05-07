@@ -1,18 +1,16 @@
 #include "MoveCommand.h"
-#include <iostream>
 #include "GameObject.h"
-#include "MyTime.h"
-#include "AnimationComponent.h"
+#include "DigDugComponent.h"
 #include "DigDugMovementComponent.h"
 
 MoveCommand::MoveCommand(Twengine::GameObject* gameObject)
 	:GameObjectCommand(gameObject)
 {
-	m_MovementComp = gameObject->GetComponent<DigDugMovementComponent>();
+	m_DigDugComp = gameObject->GetComponent<DigDugComponent>();
 }
 
 void MoveCommand::Execute()
 {
-	m_MovementComp->SetXDirection(m_Direction.x);
-	m_MovementComp->SetYDirection(m_Direction.y);
+	m_DigDugComp->SetXDirection(m_Direction.x);
+	m_DigDugComp->SetYDirection(m_Direction.y);
 }

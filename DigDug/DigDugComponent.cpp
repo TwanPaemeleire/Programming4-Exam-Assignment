@@ -9,6 +9,7 @@
 #include "GameManager.h"
 #include "GridComponent.h"
 #include "EnemyMovementComponent.h"
+#include "PlayerStates.h"
 
 DigDugComponent::DigDugComponent(Twengine::GameObject* owner)
 	:Component(owner)
@@ -26,29 +27,49 @@ void DigDugComponent::Start()
 	m_AnimationComponent->AddAnimation("DigDug/DigDugDigging.png", make_sdbm_hash("DigDugDigging"), 2);
 	m_AnimationComponent->AddAnimation("DigDug/DigDugIdle.png", make_sdbm_hash("DigDugIdle"), 1);
 
-	m_AnimationComponent->PlayAnimation(make_sdbm_hash("DigDugMove"));
+	m_AnimationComponent->PlayAnimation(make_sdbm_hash("DigDugIdle"));
 	glm::vec2 pos = GetOwner()->GetTransform()->GetLocalPosition();
 	m_RectColliderComponent->SetHitBox(pos, m_AnimationComponent->GetAnimationFrameWidth(), m_AnimationComponent->GetAnimationFrameHeight());
 	Twengine::ServiceLocator::get_sound_system().RequestLoadMusic("Level/LevelMusic.wav", SoundId(make_sdbm_hash("LevelMusic")));
 	Twengine::ServiceLocator::get_sound_system().RequestPlayMusic(SoundId(make_sdbm_hash("LevelMusic")), 0.9f);
+	m_CurrentState = std::make_unique<PlayerMoving>();
+	m_CurrentState->OnEnter(GetOwner());
 }
 
 void DigDugComponent::Update()
 {
-	//m_Angle += 20 * Twengine::Time::GetInstance().deltaTime;
-	//m_AnimationComponent->SetRotationAngle(m_Angle);
+	CheckAndTransitionStates(m_CurrentState->Update(GetOwner()));
+}
+
+void DigDugComponent::RenderUI()
+{
+	m_CurrentState->RenderDebugDrawing();
+}
+
+void DigDugComponent::SetXDirection(float x)
+{
+	CheckAndTransitionStates(m_CurrentState->SetXDirection(GetOwner(), x));
+}
+
+void DigDugComponent::SetYDirection(float y)
+{
+	CheckAndTransitionStates(m_CurrentState->SetYDirection(GetOwner(), y));
 }
 
 void DigDugComponent::Notify(const GameEvent& event, Twengine::GameObject* observedObject)
 {
-	//if (event.id == make_sdbm_hash("OnCollision") && observedObject->GetTag() == make_sdbm_hash("CollisionTest"))
-	//{
-	//	std::cout << "COLLISION DETECTED IN PLAYER COMPONENT" << std::endl;
-	//	Twengine::ServiceLocator::get_sound_system().RequestPlaySound("DigDug/DigDugShot.wav", 0.9f);
-	//}
-
 	if (event.id == make_sdbm_hash("OnCollision") && observedObject->GetComponent<EnemyMovementComponent>())
 	{
 		std::cout << "Collision With Enemy" << std::endl;
+	}
+}
+
+void DigDugComponent::CheckAndTransitionStates(std::unique_ptr<PlayerState> newState)
+{
+	if (newState && typeid(*m_CurrentState) != typeid(*newState))
+	{
+		m_CurrentState->OnExit(GetOwner());
+		m_CurrentState = std::move(newState);
+		m_CurrentState->OnEnter(GetOwner());
 	}
 }

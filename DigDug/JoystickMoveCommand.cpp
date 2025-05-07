@@ -1,15 +1,11 @@
 #include "JoystickMoveCommand.h"
-#include <iostream>
-#include "glm.hpp"
 #include "GameObject.h"
-#include "AnimationComponent.h"
-#include "MyTime.h"
-#include "DigDugMovementComponent.h"	
+#include "DigDugComponent.h"
 
 JoystickMoveCommand::JoystickMoveCommand(Twengine::GameObject* gameObject)
 	:Twengine::JoystickCommand(gameObject)
 {
-	m_MovementComp = gameObject->GetComponent<DigDugMovementComponent>();
+	m_DigDugComp = gameObject->GetComponent<DigDugComponent>();
 }
 
 void JoystickMoveCommand::Execute(float x, float y)
@@ -27,6 +23,6 @@ void JoystickMoveCommand::Execute(float x, float y)
 			y = (y > 0.f) ? 1.f : -1.f;
 		}
 	}
-	m_MovementComp->SetXDirection(x);
-	m_MovementComp->SetYDirection(-y);
+	m_DigDugComp->SetXDirection(x);
+	m_DigDugComp->SetYDirection(-y);
 }
