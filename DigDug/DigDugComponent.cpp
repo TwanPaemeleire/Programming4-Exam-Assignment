@@ -56,7 +56,7 @@ void DigDugComponent::Notify(const GameEvent& event, Twengine::GameObject* obser
 {
 	if (event.id == make_sdbm_hash("OnCollision") && observedObject->GetComponent<EnemyMovementComponent>())
 	{
-		std::cout << "Collision With Enemy" << std::endl;
+		//std::cout << "Collision With Enemy" << std::endl;
 	}
 }
 

@@ -4,6 +4,11 @@
 #include <vector>
 #include <memory>
 
+namespace Twengine
+{
+	class RectColliderComponent;
+}
+
 class GroundComponent;
 class GridComponent;
 
@@ -18,14 +23,33 @@ public:
 	EnemyMovementComponent& operator=(EnemyMovementComponent&& other) = delete;
 
 	virtual void Start() override;
+	virtual void Update() override;
 	virtual void RenderUI() override;
 
 	bool MovementIfNoPathToPlayer();
+	bool MovementInGhostForm();
 	void SetNewIdleTarget();
 	void SetMovementSpeed(float movementSpeed) { m_MovementSpeed = movementSpeed; }
 	void PathFindingToPlayer();
 
+	bool GhostCoolDownHasFinished() const { return m_GhostCooldownHasFinished; }
+	void ResetGhostStateValues();
+
 private:
+	// Ghost Movement
+	float m_MinimumGhostFormCooldown{5.f};
+	float m_MaximumGhostFormCooldown{20.f};
+	float m_GhostCooldown{};
+	float m_GhostCoolDownTimer{};
+	bool m_GhostCooldownHasFinished{false};
+
+	float m_MinimumTimeInGhostForm{2.f};
+	float m_GhostFormTimer{ 0.f };
+	glm::vec2 m_CellToPositionIn{};
+	bool m_IsGettingPositionedInCell{ false };
+	float m_MinimumDistanceFromPlayerToActivate{ 20.f };
+
+	// Pathfinding Movement
 	glm::vec2 m_NextNodeToPlayer{ -1.f, -1.f };
 	float m_MovementSpeed{ 20.f };
 
@@ -45,5 +69,7 @@ private:
 
 	GroundComponent* m_GroundComponent{};
 	GridComponent* m_GridComponent{};
+	Twengine::RectColliderComponent* m_RectColliderComponent{};
+	float m_HalfGridCellSize{};
 };
 

@@ -68,3 +68,8 @@ void Twengine::AnimationComponent::PlayAnimation(AnimationId id, float frameDela
 	m_FrameHeight = m_CurrentAnimation->frameHeight;
 	m_HasFinishedPlayingOnce = false;
 }
+
+bool Twengine::AnimationComponent::IsPlayingAnimation(AnimationId id)
+{
+	return (m_Animations.find(id)->second.get() == m_CurrentAnimation);
+}

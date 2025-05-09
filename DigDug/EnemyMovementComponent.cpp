@@ -4,6 +4,7 @@
 #include "GameManager.h"
 #include "GroundComponent.h"
 #include "GridComponent.h"
+#include "RectColliderComponent.h"
 #include "Event.h"
 #include "Renderer.h"
 
@@ -17,7 +18,9 @@ void EnemyMovementComponent::Start()
 {
 	m_GroundComponent = GameManager::GetInstance().GetGround();
 	m_GridComponent = GameManager::GetInstance().GetGrid();
+	m_RectColliderComponent = GetOwner()->GetComponent<Twengine::RectColliderComponent>();
 	m_GridCellSize = m_GridComponent->GetCellSize();
+	m_HalfGridCellSize = m_GridCellSize / 2.f;
 
 	m_IdleDirections[0].direction = { 1.f, 0.f };
 	m_IdleDirections[1].direction = { 0.f, 1.f };
@@ -25,6 +28,17 @@ void EnemyMovementComponent::Start()
 	m_IdleDirections[3].direction = { 0.f, -1.f };
 
 	SetNewIdleTarget();
+	ResetGhostStateValues();
+}
+
+void EnemyMovementComponent::Update()
+{
+	if (m_GhostCooldownHasFinished) return;
+	m_GhostCoolDownTimer += Twengine::Time::GetInstance().deltaTime;
+	if (m_GhostCoolDownTimer >= m_GhostCooldown)
+	{
+		m_GhostCooldownHasFinished = true;
+	}
 }
 
 void EnemyMovementComponent::RenderUI()
@@ -50,6 +64,61 @@ bool EnemyMovementComponent::MovementIfNoPathToPlayer()
 		SetNewIdleTarget();
 	}
 	return false;
+}
+
+bool EnemyMovementComponent::MovementInGhostForm()
+{
+	m_GhostFormTimer += Twengine::Time::GetInstance().deltaTime;
+
+	if (!m_IsGettingPositionedInCell)
+	{
+		// Move Enemy Towards Player
+		glm::vec2 playerPos = GameManager::GetInstance().GetPlayerTransform()->GetWorldPosition();
+		glm::vec2 currentPos = GetOwner()->GetTransform()->GetWorldPosition();
+		glm::vec2 direction = glm::normalize(glm::vec2(GameManager::GetInstance().GetPlayerTransform()->GetWorldPosition()) - currentPos);
+		glm::vec2 newPos = currentPos + direction * m_MovementSpeed * Twengine::Time::GetInstance().deltaTime;
+		GetOwner()->GetTransform()->SetLocalPosition(newPos);
+
+		if (m_GhostFormTimer >= m_MinimumTimeInGhostForm)
+		{
+			glm::vec2 enemyPos = GetOwner()->GetTransform()->GetWorldPosition();
+
+			GridComponent* gridComponent = GameManager::GetInstance().GetGrid();
+			Twengine::RectHitbox* hitBox = m_RectColliderComponent->GetHitBox();
+			SDL_Rect enemyRect = SDL_Rect(static_cast<int>(hitBox->topLeft.x), static_cast<int>(hitBox->topLeft.y),
+										  static_cast<int>(hitBox->width), static_cast<int>(hitBox->height));
+			std::vector<Cell*> nearbyCells = gridComponent->GetCellsInRect(enemyRect);
+			for(Cell* cell : nearbyCells) // Check If Any Of The Nearby Cells Are Walkable
+			{
+				glm::vec2 cellCenter = glm::vec2(cell->topLeft.x + m_HalfGridCellSize, cell->topLeft.y + m_HalfGridCellSize);
+				if (m_GroundComponent->PositionIsDugOut(cellCenter))
+				{
+					m_CellToPositionIn = cell->topLeft;
+					m_IsGettingPositionedInCell = true;
+					break;
+				}
+			}
+		}
+		return false;
+	}
+	else // Move Towards The Targeted Cell
+	{
+		glm::vec2 currentPos = GetOwner()->GetTransform()->GetWorldPosition();
+		glm::vec2 direction = glm::normalize(m_CellToPositionIn - currentPos);
+		glm::vec2 newPos = currentPos + direction * m_MovementSpeed * Twengine::Time::GetInstance().deltaTime;
+
+		if (glm::distance(newPos, m_CellToPositionIn) < 1.0f) // Targeted Cell Reached
+		{
+			newPos = m_CellToPositionIn;
+			m_GhostFormTimer = 0.f;
+			m_IsGettingPositionedInCell = false;
+			GetOwner()->GetTransform()->SetLocalPosition(m_CellToPositionIn);
+			return true;
+		}
+
+		GetOwner()->GetTransform()->SetLocalPosition(newPos);
+		return false;
+	}
 }
 
 void EnemyMovementComponent::SetNewIdleTarget()
@@ -116,5 +185,14 @@ void EnemyMovementComponent::PathFindingToPlayer()
 		glm::vec2 movement = normalizedDir * m_MovementSpeed * Twengine::Time::GetInstance().deltaTime;
 		m_Transform->SetLocalPosition(currentPosition + movement);
 	}
+}
+
+void EnemyMovementComponent::ResetGhostStateValues()
+{
+	m_GhostCooldownHasFinished = false;
+	m_IsGettingPositionedInCell = false;
+	m_GhostFormTimer = 0.0f;
+	m_GhostCoolDownTimer = 0.0f;
+	m_GhostCooldown = rand() % static_cast<int>(m_MaximumGhostFormCooldown - m_MinimumGhostFormCooldown) + m_MinimumGhostFormCooldown;
 }
 

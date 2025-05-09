@@ -35,6 +35,7 @@ namespace Twengine
 
 		void AddAnimation(const std::string& filePath, AnimationId id, int columns, int repeatStartColumn = 0);
 		void PlayAnimation(AnimationId id, float frameDelay = 0.2f);
+		bool IsPlayingAnimation(AnimationId id);
 
 		float GetAnimationFrameWidth() const { return m_FrameWidth; }
 		float GetAnimationFrameHeight() const { return m_FrameHeight; }

@@ -34,7 +34,7 @@ public:
 	PookaIdleState& operator=(const PookaIdleState& other) = delete;
 	PookaIdleState& operator=(PookaIdleState&& other) = delete;
 
-	virtual void OnEnter(Twengine::GameObject*) override;
+	virtual void OnEnter(Twengine::GameObject* stateOwner) override;
 	virtual std::unique_ptr<PookaState> Update(Twengine::GameObject* stateOwner) override;
 
 private:
@@ -51,10 +51,29 @@ public:
 	PookaTrackingState& operator=(const PookaTrackingState& other) = delete;
 	PookaTrackingState& operator=(PookaTrackingState&& other) = delete;
 
-	virtual void OnEnter(Twengine::GameObject*) override;
+	virtual void OnEnter(Twengine::GameObject* stateOwner) override;
 	virtual std::unique_ptr<PookaState> Update(Twengine::GameObject* stateOwner) override;
 
 private:
 	EnemyMovementComponent* m_MovementComp{};
 };
+
+class PookaGhostState final : public PookaState
+{
+public:
+	PookaGhostState() = default;
+	virtual ~PookaGhostState() = default;
+	PookaGhostState(const PookaGhostState& other) = delete;
+	PookaGhostState(PookaGhostState&& other) = delete;
+	PookaGhostState& operator=(const PookaGhostState& other) = delete;
+	PookaGhostState& operator=(PookaGhostState&& other) = delete;
+
+	virtual void OnEnter(Twengine::GameObject* stateOwner) override;
+	virtual void OnExit(Twengine::GameObject* stateOwner) override;
+	virtual std::unique_ptr<PookaState> Update(Twengine::GameObject* stateOwner) override;
+
+private:
+	EnemyMovementComponent* m_MovementComp{};
+};
+
 
