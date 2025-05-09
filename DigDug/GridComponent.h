@@ -35,7 +35,6 @@ public:
 	float GetCellSize() const { return m_CellSize; }
 
 	std::pair<int, int> GetIndexFromPosition(glm::vec2 pos) const;
-	std::pair<int, int> GetIndexFromCell(Cell* cell) const;
 	glm::vec2 GetPositionFromIndex(int row, int column) const { return m_Grid[row][column].topLeft; }
 	glm::vec2 GetPositionFromIndex(std::pair<int, int> index) const { return m_Grid[index.first][index.second].topLeft; }
 	std::vector<Cell*> GetCellsInRect(const SDL_Rect& rect);

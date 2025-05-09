@@ -52,7 +52,7 @@ bool EnemyMovementComponent::MovementIfNoPathToPlayer()
 	glm::vec2 movement = m_IdleDirection * m_MovementSpeed * Twengine::Time::GetInstance().deltaTime;
 	m_Transform->SetLocalPosition(glm::vec2(m_Transform->GetWorldPosition()) + movement);
 
-	// When Reaching New Cell, Check If Path To Player Exists, Otherwise Pick New Idle Target
+	// When reaching new cell, check if path to player exists, otherwise pick new idle target
 	if (glm::distance(glm::vec2(m_Transform->GetWorldPosition()), m_IdleTarget) < 1.f)
 	{
 		m_Transform->SetLocalPosition(m_IdleTarget);
@@ -72,7 +72,7 @@ bool EnemyMovementComponent::MovementInGhostForm()
 
 	if (!m_IsGettingPositionedInCell)
 	{
-		// Move Enemy Towards Player
+		// Move enemy towards player
 		glm::vec2 playerPos = GameManager::GetInstance().GetPlayerTransform()->GetWorldPosition();
 		glm::vec2 currentPos = GetOwner()->GetTransform()->GetWorldPosition();
 		glm::vec2 direction = glm::normalize(glm::vec2(GameManager::GetInstance().GetPlayerTransform()->GetWorldPosition()) - currentPos);
@@ -88,7 +88,7 @@ bool EnemyMovementComponent::MovementInGhostForm()
 			SDL_Rect enemyRect = SDL_Rect(static_cast<int>(hitBox->topLeft.x), static_cast<int>(hitBox->topLeft.y),
 										  static_cast<int>(hitBox->width), static_cast<int>(hitBox->height));
 			std::vector<Cell*> nearbyCells = gridComponent->GetCellsInRect(enemyRect);
-			for(Cell* cell : nearbyCells) // Check If Any Of The Nearby Cells Are Walkable
+			for(Cell* cell : nearbyCells) // Check if any of the nearby cells are walkable
 			{
 				glm::vec2 cellCenter = glm::vec2(cell->topLeft.x + m_HalfGridCellSize, cell->topLeft.y + m_HalfGridCellSize);
 				if (m_GroundComponent->PositionIsDugOut(cellCenter))
@@ -101,13 +101,13 @@ bool EnemyMovementComponent::MovementInGhostForm()
 		}
 		return false;
 	}
-	else // Move Towards The Targeted Cell
+	else // Move towards the targeted cell
 	{
 		glm::vec2 currentPos = GetOwner()->GetTransform()->GetWorldPosition();
 		glm::vec2 direction = glm::normalize(m_CellToPositionIn - currentPos);
 		glm::vec2 newPos = currentPos + direction * m_MovementSpeed * Twengine::Time::GetInstance().deltaTime;
 
-		if (glm::distance(newPos, m_CellToPositionIn) < 1.0f) // Targeted Cell Reached
+		if (glm::distance(newPos, m_CellToPositionIn) < 1.0f) // Targeted cell reached
 		{
 			newPos = m_CellToPositionIn;
 			m_GhostFormTimer = 0.f;
@@ -130,19 +130,19 @@ void EnemyMovementComponent::SetNewIdleTarget()
 	m_IdleDirections[2].target = glm::vec2(pos.x - m_GridCellSize, pos.y);
 	m_IdleDirections[3].target = glm::vec2(pos.x, pos.y - m_GridCellSize);
 
-	// Offset Of 1 To Make Sure We're Checking Last Pixel Of Next Cell, And Not The First Of The One Behind That
+	// Offset of 1 to make sure we're checking last pixel of next cell, and not the first of the one behind that
 	glm::vec2 rightCheck = glm::vec2(m_IdleDirections[0].target.x - 1.f, m_IdleDirections[0].target.y);
 	glm::vec2 downCheck = glm::vec2(m_IdleDirections[1].target.x, m_IdleDirections[1].target.y - 1.f);
 	glm::vec2 leftCheck = glm::vec2(m_IdleDirections[2].target.x + 1.f, m_IdleDirections[2].target.y);
 	glm::vec2 upCheck = glm::vec2(m_IdleDirections[3].target.x, m_IdleDirections[3].target.y + 1.f);
 
-	// Check If Previously Calculated Positions Are Reachable
+	// Check if previously calculated positions are reachable
 	m_IdleDirections[0].canMoveHere = m_GroundComponent->CanMoveBetween(pos, rightCheck);
 	m_IdleDirections[1].canMoveHere = m_GroundComponent->CanMoveBetween(pos, downCheck);
 	m_IdleDirections[2].canMoveHere = m_GroundComponent->CanMoveBetween(pos, leftCheck);
 	m_IdleDirections[3].canMoveHere = m_GroundComponent->CanMoveBetween(pos, upCheck);
 
-	// Prioritize Previous Movement Direction If Possible
+	// Prioritize previous movement direction if possible
 	if (m_PreviousDirIndex != -1 && m_IdleDirections[m_PreviousDirIndex].canMoveHere)
 	{
 		m_IdleDirection = m_IdleDirections[m_PreviousDirIndex].direction;
@@ -152,7 +152,7 @@ void EnemyMovementComponent::SetNewIdleTarget()
 		return;
 	}
 
-	// Check Which Direction To Move In If Previous Wasn't Possible
+	// Check which direction to move in if previous wasn't possible
 	for (size_t dirCounter = 0; dirCounter < m_IdleDirections.size(); ++dirCounter)
 	{
 		if (m_IdleDirections[dirCounter].canMoveHere)
@@ -200,4 +200,3 @@ void EnemyMovementComponent::ResetGhostStateValues()
 	m_GhostCoolDownTimer = 0.0f;
 	m_GhostCooldown = rand() % static_cast<int>(m_MaximumGhostFormCooldown - m_MinimumGhostFormCooldown) + m_MinimumGhostFormCooldown;
 }
-

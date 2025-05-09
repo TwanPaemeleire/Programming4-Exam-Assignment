@@ -74,11 +74,11 @@ void LevelFactory::LoadDevScene()
 	soundTutorial->GetTransform()->SetLocalPosition(5, 36);
 	scene.Add(std::move(soundTutorial));
 
-	// Display DigDug Lives
+	// Display DigDug lives
 	auto digdugLivesText = std::make_unique<Twengine::GameObject>();
 	auto* digDugLivesDisplayComp = digdugLivesText->AddComponent<DisplayLivesComponent>();
 
-	// Display DigDug Score
+	// Display DigDug score
 	auto digdugScoreText = std::make_unique<Twengine::GameObject>();
 	digdugScoreText->AddComponent<Twengine::TextComponent>()->SetFont(smallFont);
 	auto* digdugPointsDisplayComp = digdugScoreText->AddComponent<DisplayPointsComponent>();
@@ -104,7 +104,7 @@ void LevelFactory::LoadDevScene()
 
 
 	//Twengine::InputManager::GetInstance().BindJoystickCommandToInput<JoystickMoveCommand>(Twengine::InteractionStates::pressed, digdug.get(), 0);
-	// Bindings For Keyboard
+	// Bindings for keyboard
 	Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_w, Twengine::InteractionStates::pressed, digdug.get(), -1)->SetDirection(0, -1);
 	Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_s, Twengine::InteractionStates::pressed, digdug.get(), -1)->SetDirection(0, 1);
 	Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_a, Twengine::InteractionStates::pressed, digdug.get(), -1)->SetDirection(-1, 0);
@@ -197,7 +197,7 @@ void LevelFactory::LoadLevelFromFile(Twengine::Scene& scene, GroundComponent* gr
 	input.open(filePath, std::ios::binary);
 	if (input.is_open())
 	{
-		// Reading And Erasing Parts That Need To Be Erased
+		// Reading and erasing parts that need to be erased
 		uint32_t amountOfRects;
 		input.read(reinterpret_cast<char*>(&amountOfRects), sizeof(amountOfRects));
 		std::vector<SDL_Rect> dugRects(amountOfRects);
@@ -210,7 +210,7 @@ void LevelFactory::LoadLevelFromFile(Twengine::Scene& scene, GroundComponent* gr
 			groundComponent->ErasePlayerTrail(rect, false);
 		}
 
-		// Reading And Spawning Pookas
+		// Reading and spawning Pookas
 		uint32_t amountOfPookas;
 		input.read(reinterpret_cast<char*>(&amountOfPookas), sizeof(amountOfPookas));
 		std::vector<std::pair<int, int>> pookaIndices(amountOfPookas);
@@ -221,7 +221,7 @@ void LevelFactory::LoadLevelFromFile(Twengine::Scene& scene, GroundComponent* gr
 			CreateAndAddPooka(scene, indices.first, indices.second, gridComponent);
 		}
 
-		// Reading And Spawning Fygars
+		// Reading and spawning Fygars
 		uint32_t amountOfFygars;
 		input.read(reinterpret_cast<char*>(&amountOfFygars), sizeof(amountOfFygars));
 		std::vector<std::pair<int, int>> fygarIndices(amountOfFygars);
@@ -232,7 +232,7 @@ void LevelFactory::LoadLevelFromFile(Twengine::Scene& scene, GroundComponent* gr
 			CreateAndAddFygar(scene, indices.first, indices.second, gridComponent);
 		}
 
-		// Reading And Spawning Rocks
+		// Reading and spawning Rocks
 		uint32_t amountOfRocks;
 		input.read(reinterpret_cast<char*>(&amountOfRocks), sizeof(amountOfRocks));
 		std::vector<std::pair<int, int>> rockIndices(amountOfRocks);

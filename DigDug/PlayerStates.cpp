@@ -20,19 +20,19 @@ void PlayerMoving::OnEnter(Twengine::GameObject* stateOwner)
 
 std::unique_ptr<PlayerState> PlayerMoving::Update(Twengine::GameObject*)
 {
-	// Not Moving And No Input
+	// Not moving and no input
 	if (m_CurrentInputDirection == glm::vec2(0.f, 0.f) && !m_IsMoving)
 	{
 		return nullptr;
 	}
 
-	// Not Moving But Input Detected, So Pick A Target If None Has Been Defined Yet
+	// Not moving but input detected, so pick a target if none has been defined yet
 	if (m_CurrentInputDirection != glm::vec2(0.f, 0.f) && m_TargetPosition == glm::vec2(-1.f, -1.f))
 	{
 		CalculateNextTarget();
 	}
 
-	// Move To Target
+	// Move to target
 	if (m_IsMoving && m_CurrentInputDirection != glm::vec2(0.f, 0.f))
 	{
 		glm::vec2 newPos = m_Transform->GetWorldPosition();
@@ -44,7 +44,7 @@ std::unique_ptr<PlayerState> PlayerMoving::Update(Twengine::GameObject*)
 
 		UpdateGroundAndAnimation();
 
-		// Target Reached, Allow Switching Of Directions
+		// Target reached, allow switching of directions
 		if (abs(m_DistanceTracker) >= abs(m_DistanceToTarget))
 		{
 			m_Transform->SetLocalPosition(m_TargetPosition);
@@ -61,14 +61,14 @@ void PlayerMoving::RenderDebugDrawing() const
 
 std::unique_ptr<PlayerState> PlayerMoving::SetXDirection(Twengine::GameObject*, float x, float yToSet)
 {
-	// No Input Detected At All
+	// No input detected at all
 	if (x == 0.f && m_CurrentInputDirection.y == 0.f && yToSet == 0.f)
 	{
 		m_IsMoving = false;
 		SetIdleAnimation();
 	}
 	if (x == 0.f) return nullptr;
-	// Switch Orientations Left -> Right Or Right -> Left
+	// Switch orientations left -> right or right -> left
 	bool switchedOrientation = (m_CurrentInputDirection.x != 0.f && m_CurrentInputDirection.x != x && m_Direction.y == 0.f);
 	m_CurrentInputDirection = glm::vec2(x, 0.f);
 	if (switchedOrientation) CalculateNextTarget();
@@ -78,14 +78,14 @@ std::unique_ptr<PlayerState> PlayerMoving::SetXDirection(Twengine::GameObject*, 
 
 std::unique_ptr<PlayerState> PlayerMoving::SetYDirection(Twengine::GameObject*, float y, float xToSet)
 {
-	// No Input Detected At All
+	// No input detected at all
 	if (y == 0.f && m_CurrentInputDirection.x == 0.f && xToSet == 0.f)
 	{
 		m_IsMoving = false;
 		SetIdleAnimation();
 	}
 	if (y == 0.f) return nullptr;
-	// Switch Orientations Up -> Down Or Down -> Up
+	// Switch orientations up -> down or down -> up
 	bool switchedOrientation = (m_CurrentInputDirection.y != 0.f && m_CurrentInputDirection.y != y && m_Direction.x == 0.f);
 	m_CurrentInputDirection = glm::vec2(0.f, y);
 	if (switchedOrientation) CalculateNextTarget();
@@ -112,17 +112,17 @@ void PlayerMoving::CalculateNextTarget()
 	float distanceToNextCell = glm::distance(currentPosition, nextCellPosition);
 
 	bool targetNext{};
-	// Check If (Nearly) On Top Left Of Current Cell
+	// Check if (nearly) on top left of current cell
 	if (std::abs(currentPosition.x - currentCellPos.x) < 1e-3f && std::abs(currentPosition.y - currentCellPos.y) < 1e-3f)
 	{
 		targetNext = true;
 	}
 	else
 	{
-		// Closer To Top Left Of Current Cell Than Top Left Of Next Cell
+		// Closer to top left of current cell than top left of next cell
 		if (distanceToCurrentCell < distanceToNextCell)
 		{
-			// Closer To Current Cell, But Check If Current Cell Is Actually In The Direction We Want To Move Towards
+			// Closer to current cell, but check if current cell is actually in the direction we want to move towards
 			if ((m_CurrentInputDirection.x < 0 && currentPosition.x < currentCellPos.x) ||
 				(m_CurrentInputDirection.x > 0 && currentPosition.x > currentCellPos.x) ||
 				(m_CurrentInputDirection.y < 0 && currentPosition.y < currentCellPos.y) ||
@@ -135,19 +135,19 @@ void PlayerMoving::CalculateNextTarget()
 				targetNext = false;
 			}
 		}
-		else // Closer To Top Left Of Next Cell Than Top Left Of Current Cell
+		else // Closer to next cell than current cell
 		{
 			targetNext = true;
 		}
 	}
 
-	if (targetNext) // Target Next Cell
+	if (targetNext) // Target next cell
 	{
 		m_TargetPosition = nextCellPosition;
 		m_DistanceToTarget = distanceToNextCell;
 		m_CurrentIndex = nextIndex;
 	}
-	else // Target Current Cell
+	else // Target current cell
 	{
 		m_TargetPosition = currentCellPos;
 		m_DistanceToTarget = distanceToCurrentCell;
@@ -179,25 +179,25 @@ void PlayerMoving::UpdateGroundAndAnimation()
 	playerRect.h = static_cast<int>(m_AnimationComponent->GetAnimationFrameHeight());
 
 	glm::vec2 posToCheck = m_Transform->GetWorldPosition();
-	// Depending On Direction, We Need To Check A Different Position
-	if (m_Direction == glm::vec2(1.f, 0.f)) // Moving Right
+	// Depending on direction, we need to check a different position
+	if (m_Direction == glm::vec2(1.f, 0.f)) // Moving right
 	{
 		posToCheck.x += playerRect.w + 1.f;
 	}
-	else if (m_Direction == glm::vec2(-1.f, 0.f)) // Moving Left
+	else if (m_Direction == glm::vec2(-1.f, 0.f)) // Moving left
 	{
 		posToCheck.x -= 1.f;
 	}
-	else if (m_Direction == glm::vec2(0.f, -1.f)) // Moving Up
+	else if (m_Direction == glm::vec2(0.f, -1.f)) // Moving up
 	{
 		posToCheck.y -= 1.f;
 	}
-	else if (m_Direction == glm::vec2(0.f, 1.f)) // Moving Down
+	else if (m_Direction == glm::vec2(0.f, 1.f)) // Moving down
 	{
 		posToCheck.y += playerRect.h + 1.f;
 	}
 
-	if (m_GroundComponent->PositionIsDugOut(posToCheck)) // Next Is Already Dug Out
+	if (m_GroundComponent->PositionIsDugOut(posToCheck)) // Next is already dug out
 	{
 		if (!m_HasStartedWalkingAnimation)
 		{
@@ -207,7 +207,7 @@ void PlayerMoving::UpdateGroundAndAnimation()
 			m_AnimationComponent->PlayAnimation(make_sdbm_hash("DigDugMove"));
 		}
 	}
-	else // Next Is Not Dug Out Yet
+	else // Next is not dug out yet
 	{
 		if (!m_HasStartedDiggingAnimation)
 		{
@@ -218,8 +218,8 @@ void PlayerMoving::UpdateGroundAndAnimation()
 		}
 	}
 	m_GroundComponent->ErasePlayerTrail(playerRect);
-	// If Time Left Later Down The Line, Do This, And Make Player And Enemies Be At Center Of Cell Instead Of Top Left 
-	// Will Give Smoother Look For Entire Game But Require A Lot Of Reworking 
+	// If time left later down the line, do this, and make player and enemies be at center of cell instead of top left 
+	// Will give smoother look for entire game but require a lot of reworking 
 	//int centerX = static_cast<int>(m_Transform->GetWorldPosition().x);
 	//int width = static_cast<int>(GetOwner()->GetComponent<Twengine::AnimationComponent>()->GetAnimationFrameWidth());
 	//centerX += width / 2;
@@ -231,22 +231,22 @@ void PlayerMoving::UpdateGroundAndAnimation()
 
 void PlayerMoving::UpdateFlipAndRotation()
 {
-	if (m_Direction.x > 0) // Moving Right
+	if (m_Direction.x > 0) // Moving right
 	{
 		m_AnimationComponent->SetRotationAngle(0);
 		m_AnimationComponent->SetFlipHorizontal(false);
 	}
-	else if (m_Direction.x < 0) // Moving Left
+	else if (m_Direction.x < 0) // Moving left
 	{
 		m_AnimationComponent->SetRotationAngle(0);
 		m_AnimationComponent->SetFlipHorizontal(true);
 	}
-	else if (m_Direction.y > 0) // Moving Up
+	else if (m_Direction.y > 0) // Moving up
 	{
 		m_AnimationComponent->SetRotationAngle(90);
 		m_AnimationComponent->SetFlipHorizontal(false);
 	}
-	else if (m_Direction.y < 0) // Moving Down
+	else if (m_Direction.y < 0) // Moving down
 	{
 		m_AnimationComponent->SetRotationAngle(90);
 		m_AnimationComponent->SetFlipHorizontal(true);

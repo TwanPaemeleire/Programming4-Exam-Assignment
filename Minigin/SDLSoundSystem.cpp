@@ -50,7 +50,7 @@ private:
 	void PlayMusic(const SoundData& soundData);
 	void PlaySound(const SoundData& soundData);
 
-	// Define A Custom Deleter So We Don't Have To Worry About Having To Work With Raw Pointers
+	// Define a custom deleter so we don't have to worry about having to work with raw pointers
 	struct MixMusicDeleter
 	{
 		void operator()(Mix_Music* music) const
@@ -60,7 +60,7 @@ private:
 	};
 	std::unordered_map<SoundId, std::unique_ptr<Mix_Music, MixMusicDeleter>> m_LoadedMusic;
 
-	// Define A Custom Deleter So We Don't Have To Worry About Having To Work With Raw Pointers
+	// Define a custom deleter so we don't have to worry about having to work with raw pointers
 	struct MixChunkDeleter
 	{
 		void operator()(Mix_Chunk* chunk) const
@@ -114,7 +114,7 @@ Twengine::SDLSoundSystem::SDLSoundSystemImpl::SDLSoundSystemImpl()
 
 Twengine::SDLSoundSystem::SDLSoundSystemImpl::~SDLSoundSystemImpl()
 {
-	// Make Sure The Thread Isn't Stuck In Waiting Infinitely
+	// Make sure the thread isn't stuck in waiting infinitely
 	m_Condition.notify_one();
 	m_SoundThread.request_stop();
 
@@ -156,7 +156,7 @@ void Twengine::SDLSoundSystem::SDLSoundSystemImpl::SoundThreadLoop(const std::st
 	{
 		std::unique_lock<std::mutex> lock(m_QueueMutex);
 
-		// Wait Until Something Gets Added To Queue Or We Request For The Thread To Stop
+		// Wait until something gets added to queue or we request for the thread to stop
 		m_Condition.wait(lock, [this, &stopToken] { return !m_SoundQueue.empty() || stopToken.stop_requested(); });
 
 		if (stopToken.stop_requested()) break;

@@ -21,10 +21,10 @@ void Twengine::InputManager::HandleControllerInput()
 {
 	for (const auto& controller : m_Controllers)
 	{
-		controller->ProcessInput(); // Process Input For Every Controller
+		controller->ProcessInput(); // Process input for every controller
 		int controllerIndex = controller->GetControllerIndex();
 
-		// JoyStick Input
+		// JoyStick input
 		float leftX = controller->GetLeftStickX();
 		float leftY = controller->GetLeftStickY();
 
@@ -38,14 +38,14 @@ void Twengine::InputManager::HandleControllerInput()
 
 		for (const auto& command : m_BindedCommands)
 		{
-			if (command->controllerIndex == -1) // If Index Is -1 Then This Command Is Binded To The Keyboard
+			if (command->controllerIndex == -1) // If index is -1 then this command is binded to the keyboard
 				continue;
 
-			if (command->controllerIndex == controllerIndex) // Check If Command Is Binded To This Controller
+			if (command->controllerIndex == controllerIndex) // Check if command is binded to this controller
 			{
 				bool executeCommand = false;
 
-				switch (command->interactionState) // Check If Correct InteractionState Is Achieved
+				switch (command->interactionState) // Check if correct InteractionState is achieved
 				{
 				case InteractionStates::down:
 					executeCommand = controller->IsDownThisFrame(command->button);
@@ -58,7 +58,7 @@ void Twengine::InputManager::HandleControllerInput()
 					break;
 				}
 
-				if (executeCommand) // Execute The Command If InteractionState Was Achieved
+				if (executeCommand) // Execute the command if interactionState was achieved
 				{
 					command->command->Execute();
 				}
@@ -82,9 +82,9 @@ bool Twengine::InputManager::HandleKeyBoardInput()
 		{
 			for (const auto& command : m_BindedCommands)
 			{
-				if (command->controllerIndex != -1) // If Index Is Not -1 Then This Command Is Binded To A Controller
+				if (command->controllerIndex != -1) // If index is not -1 then this command is binded to a controller
 					continue;
-				if (e.key.keysym.sym != static_cast<SDL_Keycode>(command->button)) // Check If Command Key Is The Same As The Key We're Currently Checking
+				if (e.key.keysym.sym != static_cast<SDL_Keycode>(command->button)) // Check if command key is the same as the key we're currently checking
 					continue;
 
 				switch (command->interactionState)
@@ -116,10 +116,10 @@ bool Twengine::InputManager::HandleKeyBoardInput()
 
 	for (const auto& command : m_BindedCommands)
 	{
-		if (command->controllerIndex != -1) continue;  // If Index Is Not -1 Then This Command Is Binded To A Controller
-		if (command->interactionState != InteractionStates::pressed) continue; // Check If This Command Has The "Pressed" Interaction State
+		if (command->controllerIndex != -1) continue;  // If index is not -1 then this command is binded to a controller
+		if (command->interactionState != InteractionStates::pressed) continue; // Check if this command has the "Pressed" InteractionState
 
-		if (keyStates[SDL_GetScancodeFromKey(command->button)]) // Check If Command Key Is Currently Being Pressed Down
+		if (keyStates[SDL_GetScancodeFromKey(command->button)]) // Check if command key is currently being pressed down
 		{
 			command->command->Execute();
 		}

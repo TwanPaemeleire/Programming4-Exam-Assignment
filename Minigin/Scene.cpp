@@ -63,7 +63,7 @@ void Twengine::Scene::LateUpdate()
 		object->LateUpdate();
 	}
 
-	// Delete The Objects Marked For Destruction
+	// Delete the objects marked for destruction
 	std::erase_if(m_Objects, [](const auto& object)
 		{
 			return object->IsMarkedForDestruction();

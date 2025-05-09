@@ -16,7 +16,7 @@ GroundComponent::GroundComponent(Twengine::GameObject* owner)
 
 	m_Transform->SetLocalPosition(m_GridComponent->GetPositionFromIndex(2, 0));
 	m_Surface = IMG_Load("Level/FullLevel.png");
-	// Make Sure The Blend Mode Is Set Correctly So We Can "Erase" Parts Of The Texture
+	// Make sure the blend mode is set correctly so we can "erase" parts of the texture
 	SDL_SetSurfaceBlendMode(m_Surface, SDL_BLENDMODE_BLEND);
 	m_Texture = SDL_CreateTextureFromSurface(Twengine::Renderer::GetInstance().GetSDLRenderer(), m_Surface);
 	SDL_SetTextureBlendMode(m_Texture, SDL_BLENDMODE_BLEND);
@@ -54,24 +54,24 @@ void GroundComponent::ErasePlayerTrail(SDL_Rect playerRect, bool isInWorldSpace)
 	SDL_Rect rectRelativeToPos = playerRect;
 	if (isInWorldSpace)
 	{
-		// Calculate Position Relative To Where The Ground Starts, As This Won't Be The Same As Player World Position
+		// Calculate position relative to where the ground starts, as this won't be the same as player world position
 		rectRelativeToPos.x -= static_cast<int>(m_Transform->GetWorldPosition().x);
 		rectRelativeToPos.y -= static_cast<int>(m_Transform->GetWorldPosition().y);
 	}
 
 	Uint32* pixels = (Uint32*)m_Surface->pixels;
 
-	// Gives The Number Of Bytes In A Single Row Of Pixel Data On This Surface
+	// Gives the number of bytes in a single row of pixel data on this surface
 	int pitchInBytes = m_Surface->pitch;
-	// / 4 Because Each Pixel Is 4 Bytes And We Want To Work In The 1D "pixels" Array, So This Way We Get The Number Of Pixels Per Row, Not Number Of Bytes
+	// / 4 Because each pixel is 4 bytes and we want to work in the 1D "pixels" array, so this way we get the number of pixels per row, not number of bytes
 	int pitch = pitchInBytes / 4;
 
-	// Set All Of The Calculated Rect's Pixels To TransParent
+	// Set all of the calculated rect's pixels to transParent
 	for (int y = rectRelativeToPos.y; y < rectRelativeToPos.y + rectRelativeToPos.h; y++)
 	{
 		for (int x = rectRelativeToPos.x; x < rectRelativeToPos.x + rectRelativeToPos.w; x++)
 		{
-			// Make Sure We Don't Go Out Of Bounds
+			// Make sure we don't go out of bounds
 			if (x >= 0 && x < m_Surface->w && y >= 0 && y < m_Surface->h)
 			{
 				pixels[y * pitch + x] = m_TransparentValue;
@@ -79,12 +79,12 @@ void GroundComponent::ErasePlayerTrail(SDL_Rect playerRect, bool isInWorldSpace)
 		}
 	}
 	
-	// Recreate Texture From Updated Surface
+	// Recreate texture from updated surface
 	SDL_DestroyTexture(m_Texture);
 	m_Texture = SDL_CreateTextureFromSurface(Twengine::Renderer::GetInstance().GetSDLRenderer(), m_Surface);
 	SDL_SetTextureBlendMode(m_Texture, SDL_BLENDMODE_BLEND);
 
-	// Calculate Back To World Space
+	// Calculate back to world space
 	rectRelativeToPos.x += static_cast<int>(m_Transform->GetWorldPosition().x);
 	rectRelativeToPos.y += static_cast<int>(m_Transform->GetWorldPosition().y);
 	std::vector<Cell*> affectedCells = m_GridComponent->GetCellsInRect(rectRelativeToPos);
@@ -109,19 +109,19 @@ void GroundComponent::ErasePlayerTrail(int centerX, int centerY, int width, int 
 {
 	if (isInWorldSpace)
 	{
-		// Calculate Position Relative To Where The Ground Starts, As This Won't Be The Same As Player World Position
+		// Calculate position relative to where the ground starts, as this won't be the same as player world position
 		centerX -= static_cast<int>(m_Transform->GetWorldPosition().x);
 		centerY -= static_cast<int>(m_Transform->GetWorldPosition().y);
 	}
 
 	Uint32* pixels = (Uint32*)m_Surface->pixels;
 
-	// Gives The Number Of Bytes In A Single Row Of Pixel Data On This Surface
+	// Gives the number of bytes in a single row of pixel data on this surface
 	int pitchInBytes = m_Surface->pitch;
-	// / 4 Because Each Pixel Is 4 Bytes And We Want To Work In The 1D "pixels" Array, So This Way We Get The Number Of Pixels Per Row, Not Number Of Bytes
+	// / 4 Because each pixel is 4 bytes and we want to work in the 1D "pixels" array, so this way we get the number of pixels per row, not number of bytes
 	int pitch = pitchInBytes / 4;
 
-	// Calculate Bounding Box Of The Ellipse
+	// Calculate bounding box of the ellipse
 	int startX = centerX - width / 2;
 	int startY = centerY - height / 2;
 	int endX = centerX + width / 2;
@@ -134,12 +134,12 @@ void GroundComponent::ErasePlayerTrail(int centerX, int centerY, int width, int 
 	{
 		for (int x = startX; x <= endX; ++x)
 		{
-			// Make Sure We Don't Go Out Of Bounds
+			// Make sure we don't go out of bounds
 			if (x >= 0 && x < m_Surface->w && y >= 0 && y < m_Surface->h)
 			{
 				float dx = (x - centerX) / radiusX;
 				float dy = (y - centerY) / radiusY;
-				// Check If Pixel Is Inside The Ellipse
+				// Check if pixel is inside the ellipse
 				if ((dx * dx + dy * dy) <= 1.0f)
 				{
 					pixels[y * pitch + x] = m_TransparentValue;
@@ -148,7 +148,7 @@ void GroundComponent::ErasePlayerTrail(int centerX, int centerY, int width, int 
 		}
 	}
 
-	// Recreate Texture From Updated Surface
+	// Recreate texture from updated surface
 	SDL_DestroyTexture(m_Texture);
 	m_Texture = SDL_CreateTextureFromSurface(Twengine::Renderer::GetInstance().GetSDLRenderer(), m_Surface);
 	SDL_SetTextureBlendMode(m_Texture, SDL_BLENDMODE_BLEND);
@@ -156,18 +156,18 @@ void GroundComponent::ErasePlayerTrail(int centerX, int centerY, int width, int 
 
 bool GroundComponent::PositionIsDugOut(const glm::vec2& pos)
 {
-	// Calculate Position Relative To Where The Ground Starts, As This Won't Be The Same As Player World Position
+	// Calculate position relative to where the ground starts, as this won't be the same as player world position
 	glm::vec2 relativePos = pos - glm::vec2(m_Transform->GetWorldPosition());
 	int x = static_cast<int>(relativePos.x);
 	int y = static_cast<int>(relativePos.y);
 
-	// Make Sure We Don't Go Out Of Bounds
+	// Make sure we don't go out of bounds
 	if (x < 0 || x >= m_Surface->w || y < 0 || y >= m_Surface->h)
 		return false;
 
-	// Gives The Number Of Bytes In A Single Row Of Pixel Data On This Surface
+	// Gives the number of bytes in a single row of pixel data on this surface
 	int pitchInBytes = m_Surface->pitch;
-	// / 4 Because Each Pixel Is 4 Bytes And We Want To Work In The 1D "pixels" Array, So This Way We Get The Number Of Pixels Per Row, Not Number Of Bytes
+	// / 4 Because each pixel is 4 bytes and we want to work in the 1D "pixels" array, so this way we get the number of pixels per row, not number of bytes
 	int pitch = pitchInBytes / 4;
 
 	Uint32* pixels = (Uint32*)m_Surface->pixels;
@@ -220,11 +220,11 @@ bool GroundComponent::CanMoveBetween(const glm::vec2& startPos, const glm::vec2&
 	const int pitch = m_Surface->pitch / 4;
 	Uint32* pixels = (Uint32*)m_Surface->pixels;
 
-	// Convert From World Space To Ensure Calculation Is Correct
+	// Convert from world space to ensure calculation is correct
 	glm::vec2 localStart = startPos - glm::vec2(m_Transform->GetWorldPosition());
 	glm::vec2 localTarget = targetPos - glm::vec2(m_Transform->GetWorldPosition());
 
-	// Calculate The Bounding Box
+	// Calculate the bounding box
 	int minX = static_cast<int>(std::min(localStart.x, localTarget.x));
 	int maxX = static_cast<int>(std::max(localStart.x, localTarget.x));
 	int minY = static_cast<int>(std::min(localStart.y, localTarget.y));
@@ -234,10 +234,10 @@ bool GroundComponent::CanMoveBetween(const glm::vec2& startPos, const glm::vec2&
 	{
 		for (int x = minX; x <= maxX; ++x)
 		{
-			// Out Of Bounds Check
+			// Out of bounds check
 			if (x < 0 || x >= m_Surface->w || y < 0 || y >= m_Surface->h) continue;
 
-			if (pixels[y * pitch + x] != m_TransparentValue) // Pixel Has Not Been Dug Out
+			if (pixels[y * pitch + x] != m_TransparentValue) // Pixel has not been dug out
 			{
 				++dirtCount;
 				if (dirtCount > dirtLeeway) return false;
@@ -256,16 +256,11 @@ bool GroundComponent::EnemyCanReachPlayer(const glm::vec2& enemyPos) const
 	return reachableCellTree.find(playerCell) != reachableCellTree.end();
 }
 
-int GroundComponent::GetIndex(int x, int y) const
-{
-	return y * m_Surface->w + x;
-}
-
 std::unordered_map<Cell*, Cell*> GroundComponent::BuildReachableCellTree(const glm::vec2& enemyPos) const
 {
 	std::pair<int, int> enemyCellIdx = m_GridComponent->GetIndexFromPosition(enemyPos);
 
-	// First One Is Child, Second Is Parent
+	// First one is child, second is parent
 	std::unordered_map<Cell*, Cell*> cellTree;
 	std::queue<Cell*> toVisit;
 	std::unordered_set<Cell*> visited;

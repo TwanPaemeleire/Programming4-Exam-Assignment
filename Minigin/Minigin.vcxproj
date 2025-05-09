@@ -249,7 +249,6 @@
     <ClCompile Include="RectColliderComponent.cpp" />
     <ClCompile Include="SDLSoundSystem.cpp" />
     <ClCompile Include="ServiceLocator.cpp" />
-    <ClCompile Include="SoundSystem.cpp" />
     <ClCompile Include="TextureRenderComponent.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Minigin.cpp" />

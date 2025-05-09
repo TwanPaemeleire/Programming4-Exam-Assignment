@@ -23,7 +23,5 @@ void JoystickMoveCommand::Execute(float x, float y)
 			y = (y > 0.f) ? 1.f : -1.f;
 		}
 	}
-	//m_DigDugComp->SetXDirection(x);
-	//m_DigDugComp->SetYDirection(-y);
 	m_DigDugComp->SetDirection(glm::vec2(x, -y));
 }

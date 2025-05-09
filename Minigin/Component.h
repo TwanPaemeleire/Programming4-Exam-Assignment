@@ -10,7 +10,6 @@ namespace Twengine
 	public:
 		Component(GameObject* owner);
 		virtual ~Component() = default;
-		//Will Deleting The Beneath Here Also Delete Them In Deriving Classes?
 		Component(const Component& other) = delete;
 		Component(Component&& other) = delete;
 		Component& operator=(const Component& other) = delete;
@@ -28,7 +27,7 @@ namespace Twengine
 
 	protected:
 		GameObject* GetOwner() const { return m_Owner; }
-		// For Easy Access To The Owner's Transform
+		// For easy access to the owner's transform
 		TransformComponent* m_Transform = nullptr;
 
 	private:

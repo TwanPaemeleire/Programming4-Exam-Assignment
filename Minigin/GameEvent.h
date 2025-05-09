@@ -1,5 +1,5 @@
 #pragma once
-#include "SdbmHash.h" // Everything That Includes Event Will Need This File, So Just Include It Here For Ease Of Access
+#include "SdbmHash.h" // Everything that includes GameEvent.h will also need SdbmHash.h, so just include it here for ease of access
 using EventId = unsigned int;
 
 struct GameEvent

@@ -7,8 +7,6 @@
 
 namespace Twengine
 {
-	//class Event;
-
 	struct RectHitbox
 	{
 		glm::vec2 topLeft{};

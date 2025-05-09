@@ -20,7 +20,7 @@ namespace Twengine
 	{
 		std::unique_ptr<GameObjectCommand> command{};
 		InteractionStates interactionState{};
-		int controllerIndex{}; // An Index Of -1 Will Mean That It's Binded To Keyboard
+		int controllerIndex{}; // An index of -1 will mean that it's binded to keyboard
 		unsigned int button{};
 	};
 
@@ -28,7 +28,7 @@ namespace Twengine
 	{
 		std::unique_ptr<JoystickCommand> command{};
 		InteractionStates interactionState{};
-		int controllerIndex{}; // An Index Of -1 Will Mean That It's Binded To Keyboard
+		int controllerIndex{};
 	};
 
 	class InputManager final : public Singleton<InputManager>
@@ -93,11 +93,12 @@ inline command* Twengine::InputManager::BindJoystickCommandToInput(InteractionSt
 template<typename T>
 inline void Twengine::InputManager::RemoveBindedCommand(int controllerIndex)
 {
+	static_assert(std::is_base_of<GameObjectCommand, T>::value, "Type passed to RemoveBindedCommand<>() does NOT inherit from GameObjectCommand");
 	for (const auto& command : m_BindedCommands)
 	{
 		if (command->controllerIndex != controllerIndex) continue;
 		T* tempCommand = dynamic_cast<T*>(command->command.get());
-		if (tempCommand != nullptr) // If This Goes Through, This Is The Command That Should Be Removed
+		if (tempCommand != nullptr) // If this goes through, this is the command that should be removed
 		{
 			m_BindedCommands.erase(std::remove(m_BindedCommands.begin(), m_BindedCommands.end(), command), m_BindedCommands.end());
 		}

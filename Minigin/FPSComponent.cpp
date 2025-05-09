@@ -4,7 +4,7 @@
 #include "MyTime.h"
 
 #include <sstream>
-#include <iomanip> // Needed To Set The Precision
+#include <iomanip> // Needed to set the precision
 
 Twengine::FPSComponent::FPSComponent(GameObject* owner)
 	:Component(owner)
@@ -14,7 +14,6 @@ Twengine::FPSComponent::FPSComponent(GameObject* owner)
 void Twengine::FPSComponent::Start()
 {
 	m_TextComponent = GetOwner()->GetComponent<TextComponent>();
-	//m_TextComponent->SetColor(255, 0, 0, 255);
 }
 
 void Twengine::FPSComponent::Update()

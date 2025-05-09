@@ -32,10 +32,10 @@ int main(int, char* [])
 	int counter{ 0 };
 	while (not std::filesystem::exists(dataFolderName) and counter < MAX_STEPS_UP)
 	{
-		std::filesystem::current_path(".."); // If "Data" Doesn't Exist In This Current Folder, Navigate One Up In The Hierarchy
+		std::filesystem::current_path(".."); // If "Data" doesn't exist in this current folder, navigate one up in the hierarchy
 		counter++;
 	}
-	std::filesystem::current_path(dataFolderName); // Set The Current Path, This Way The File System Paths Will Be Relative To This One And Thus To Data (If It Found A Data Folder)
+	std::filesystem::current_path(dataFolderName); // Set the current path, this way the file system paths will be relative to this one and thus to "Data" (if it found a "Data" folder)
 
 	Twengine::Minigin engine{};
 	engine.Run(load);

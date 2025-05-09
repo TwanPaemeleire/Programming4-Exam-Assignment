@@ -22,12 +22,12 @@ public:
 	virtual void RenderUI() override;
 
 	void ErasePlayerTrail(SDL_Rect playerRect, bool isInWorldSpace = true);
-	// Will Be Used If I Have Enough Time Left
+	// Will be used if I have enough time left
 	void ErasePlayerTrail(int centerX, int centerY, int width, int height, bool isInWorldSpace = true);
 	bool PositionIsDugOut(const glm::vec2& pos);
 
 	glm::vec2 GetCellTargetToGetCloserToPlayer(const glm::vec2& enemyPos) const;
-	bool CanMoveBetween(const glm::vec2& startPos, const glm::vec2& targetPos, int dirtLeeway = 0) const; // Dirt Leeway Will Be Used For Pump & Fygar Fire
+	bool CanMoveBetween(const glm::vec2& startPos, const glm::vec2& targetPos, int dirtLeeway = 0) const; // Dirt leeway will be used for pump & fygar fire
 	bool EnemyCanReachPlayer(const glm::vec2& enemyPos) const;
 private:
 	SDL_Surface* m_Surface{};
@@ -38,7 +38,6 @@ private:
 	float m_GridCellSize{};
 	float m_HalfGridCellSize{};
 
-	int GetIndex(int x, int y) const;
 	std::unordered_map<Cell*, Cell*> BuildReachableCellTree(const glm::vec2& enemyPos) const;
 	void UpdateConnectionsWithNeighbors(Cell* cell);
 };

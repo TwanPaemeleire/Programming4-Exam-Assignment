@@ -14,7 +14,7 @@ Twengine::GameObject::GameObject()
 
 Twengine::GameObject::~GameObject()
 {
-	// "Notify" Parent That You're Getting Destroyed, And Remove Yourself As Parent From Your Children
+	// "Notify" parent that you're getting destroyed, and remove yourself as parent from your children
 	SetParent(nullptr, false);
 	for (auto& child : m_Children)
 	{
@@ -53,7 +53,7 @@ void Twengine::GameObject::LateUpdate()
 		component->LateUpdate();
 	}
 
-	// Delete The Components Marked For Destruction
+	// Delete the components marked for destruction
 	std::erase_if(m_Components, [](const auto& component)
 		{
 			return component->IsMarkedForDestruction();
@@ -79,7 +79,7 @@ void Twengine::GameObject::RenderUI()
 
 void Twengine::GameObject::MarkForDestruction()
 {
-	// Mark All The Children (And As Such, Also Their Children) For Destruction As Well, As I Want Parent To Own Children
+	// Mark all the children (and as such, also their children) for destruction as well, as we want the parent to own its children
 	m_MarkedForDestruction = true;
 	for (auto& child : m_Children)
 	{

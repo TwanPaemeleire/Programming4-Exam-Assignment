@@ -90,7 +90,7 @@ void Twengine::Minigin::Run(const std::function<void()>& load)
 	auto& sceneManager = SceneManager::GetInstance();
 	auto& input = InputManager::GetInstance();
 
-	//Time Singleton Instance
+	//Time singleton instance
 	auto& time = Time::GetInstance();
 
 	bool doContinue = true;
@@ -105,7 +105,7 @@ void Twengine::Minigin::Run(const std::function<void()>& load)
 		lastTime = currentTime;
 		lag += deltaTime;
 
-		// Set DeltaTime In The Singleton To Be Accessed By Anything That Needs It
+		// Set deltaTime in the singleton to be accessed by anything that needs it
 		time.deltaTime = deltaTime;
 
 		doContinue = input.ProcessInput();

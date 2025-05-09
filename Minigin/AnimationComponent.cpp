@@ -15,14 +15,14 @@ Twengine::AnimationComponent::AnimationComponent(GameObject* owner)
 void Twengine::AnimationComponent::Update()
 {
 	m_DelayCounter += Time::GetInstance().deltaTime;
-	if (m_DelayCounter >= m_FrameDelay) // New Frame Should Be Triggered
+	if (m_DelayCounter >= m_FrameDelay) // New frame should be triggered
 	{
-		if (m_CurrentColumn >= m_MaxColumnIndex) // Animation Reached The End Frame
+		if (m_CurrentColumn >= m_MaxColumnIndex) // Animation reached the end frame
 		{
 			m_CurrentColumn = m_RepeatStartFrame;
 			m_HasFinishedPlayingOnce = true;
 		}
-		else // Go To Next Frame
+		else // Go to next frame
 		{
 			++m_CurrentColumn;
 		}
@@ -52,8 +52,6 @@ void Twengine::AnimationComponent::AddAnimation(const std::string& filePath, Ani
 	tempAnimation->frameWidth = (tempAnimation->spriteSheet->GetSize().x / static_cast<float>(columns));
 	tempAnimation->frameHeight = static_cast<float>(tempAnimation->spriteSheet->GetSize().y);
 
-	// Extract Just The FileName Which Can Be Used As A Key		"Enemies/Pooka/PookaMove.png" => "PookaMove"
-	//std::string fileName = std::filesystem::path(filePath).stem().string();
 	m_Animations.emplace(id, std::move(tempAnimation));
 }
 

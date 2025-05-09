@@ -7,7 +7,7 @@ GridComponent::GridComponent(Twengine::GameObject* owner)
 	:Component(owner)
 {
 	m_CellSize = static_cast<float>(Twengine::Renderer::GetInstance().GetWindowWidth()) / m_Columns;
-	// Create The Grid
+	// Create the grid
 	for (int rowIndex{}; rowIndex < m_Rows; ++rowIndex)
 	{
 		for (int columnIndex{}; columnIndex < m_Columns; ++columnIndex)
@@ -38,12 +38,6 @@ std::pair<int, int> GridComponent::GetIndexFromPosition(glm::vec2 pos) const
 	row = std::clamp(row, 0, m_Rows - 1);
 
 	return std::pair<int, int>(row, column);
-}
-
-std::pair<int, int> GridComponent::GetIndexFromCell(Cell* cell) const
-{
-	cell;
-	return std::pair<int, int>();
 }
 
 std::vector<Cell*> GridComponent::GetCellsInRect(const SDL_Rect& rect)

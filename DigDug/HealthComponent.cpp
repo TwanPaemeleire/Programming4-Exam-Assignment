@@ -9,9 +9,9 @@ HealthComponent::HealthComponent(Twengine::GameObject* owner)
 
 void HealthComponent::TakeDamage(int amount)
 {
-	if (m_Lives <= 0) return; // Object Is Out Of Lives
+	if (m_Lives <= 0) return; // Object is out of lives
 	m_CurrentHealth -= amount;
-	if (m_CurrentHealth <= 0) // Object Has Died
+	if (m_CurrentHealth <= 0) // Object has died
 	{
 		m_CurrentHealth = 0;
 		--m_Lives;

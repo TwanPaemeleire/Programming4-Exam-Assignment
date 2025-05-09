@@ -10,7 +10,5 @@ MoveCommand::MoveCommand(Twengine::GameObject* gameObject)
 
 void MoveCommand::Execute()
 {
-	//m_DigDugComp->SetXDirection(m_Direction.x);
-	//m_DigDugComp->SetYDirection(m_Direction.y);
 	m_DigDugComp->SetDirection(m_Direction);
 }

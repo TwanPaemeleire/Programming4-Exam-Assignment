@@ -75,6 +75,7 @@ inline T* Twengine::GameObject::AddComponent()
 template <typename T>
 inline T* Twengine::GameObject::GetComponent() const
 {
+	static_assert(std::is_base_of<Component, T>::value, "T passed to GetComponent<>() does NOT inherit from Component");
 	for (auto& component : m_Components)
 	{
 		T* tempComponent = dynamic_cast<T*>(component.get());
@@ -89,6 +90,7 @@ inline T* Twengine::GameObject::GetComponent() const
 template<typename T>
 inline bool Twengine::GameObject::HasComponent() const
 {
+	static_assert(std::is_base_of<Component, T>::value, "T passed to HasComponent<>() does NOT inherit from Component");
 	for (auto& component : m_Components)
 	{
 		T* tempComponent = dynamic_cast<T*>(component.get());

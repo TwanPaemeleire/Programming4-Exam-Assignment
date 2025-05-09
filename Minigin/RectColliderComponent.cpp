@@ -52,10 +52,10 @@ bool Twengine::RectColliderComponent::IsOverlapping(RectColliderComponent* other
 	RectHitbox* otherHitBox = other->GetHitBox();
 	glm::vec2& otherTopLeft = otherHitBox->topLeft;
 	glm::vec2& myTopLeft = m_HitBox->topLeft;
-	return (myTopLeft.x < otherTopLeft.x + otherHitBox->width	&& // My Left Is Left Of Other's Right
-			myTopLeft.x + m_HitBox->width > otherTopLeft.x		&& // My Right Is Right Of Other's Left
-			myTopLeft.y < otherTopLeft.y + otherHitBox->height	&& // My Top Is Above Other's Bottom
-			myTopLeft.y + m_HitBox->height > otherTopLeft.y);	   // My Bottom Is Below Other's Top
+	return (myTopLeft.x < otherTopLeft.x + otherHitBox->width	&& // My left is left of other's right
+			myTopLeft.x + m_HitBox->width > otherTopLeft.x		&& // My right is right of other's left
+			myTopLeft.y < otherTopLeft.y + otherHitBox->height	&& // My top is above other's bottom
+			myTopLeft.y + m_HitBox->height > otherTopLeft.y);	   // My bottom is below other's top
 }
 
 void Twengine::RectColliderComponent::SetHitBox(glm::vec2 topLeft, float width, float height)
