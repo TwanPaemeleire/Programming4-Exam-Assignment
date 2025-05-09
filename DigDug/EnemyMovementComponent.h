@@ -36,7 +36,7 @@ public:
 	void ResetGhostStateValues();
 
 private:
-	// Ghost Movement
+	// Ghost movement
 	float m_MinimumGhostFormCooldown{5.f};
 	float m_MaximumGhostFormCooldown{20.f};
 	float m_GhostCooldown{};
@@ -47,13 +47,12 @@ private:
 	float m_GhostFormTimer{ 0.f };
 	glm::vec2 m_CellToPositionIn{};
 	bool m_IsGettingPositionedInCell{ false };
-	float m_MinimumDistanceFromPlayerToActivate{ 20.f };
 
-	// Pathfinding Movement
+	// Pathfinding movement
 	glm::vec2 m_NextNodeToPlayer{ -1.f, -1.f };
 	float m_MovementSpeed{ 20.f };
 
-	// Idle Movement
+	// Idle movement
 	struct IdleTargetOption
 	{
 		glm::vec2 target{};

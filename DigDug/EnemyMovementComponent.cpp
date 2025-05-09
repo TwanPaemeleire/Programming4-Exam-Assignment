@@ -11,7 +11,7 @@
 EnemyMovementComponent::EnemyMovementComponent(Twengine::GameObject* owner)
 	:Component(owner)
 {
-	//m_OnCanReachPlayerEvent = std::make_unique<Twengine::Event>();
+	
 }
 
 void EnemyMovementComponent::Start()
@@ -169,17 +169,22 @@ void EnemyMovementComponent::SetNewIdleTarget()
 
 void EnemyMovementComponent::PathFindingToPlayer()
 {
-	// Pathfinding To Player
+	// Check if a target was already set
+	if (m_NextNodeToPlayer == glm::vec2(-1.f, -1.f))
+	{
+		m_NextNodeToPlayer = m_GroundComponent->GetCellTargetToGetCloserToPlayer(m_Transform->GetWorldPosition());
+	}
+	// Pathfinding to player
 	const glm::vec2& currentPosition = m_Transform->GetWorldPosition();
 	const glm::vec2 direction = m_NextNodeToPlayer - currentPosition;
 	const float distance = glm::length(direction);
 
-	if (distance < 0.5f) // Next Node Reached
+	if (distance < 0.5f) // Next node reached
 	{
 		m_Transform->SetLocalPosition(m_NextNodeToPlayer);
 		m_NextNodeToPlayer = m_GroundComponent->GetCellTargetToGetCloserToPlayer(m_Transform->GetWorldPosition());
 	}
-	else // Continue Moving Towards Next Node
+	else // Continue moving towards next node
 	{
 		glm::vec2 normalizedDir = glm::normalize(direction);
 		glm::vec2 movement = normalizedDir * m_MovementSpeed * Twengine::Time::GetInstance().deltaTime;

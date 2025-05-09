@@ -259,9 +259,8 @@ void LevelFactory::CreateAndAddPooka(Twengine::Scene& scene, int row, int column
 void LevelFactory::CreateAndAddFygar(Twengine::Scene& scene, int row, int column, GridComponent* gridComponent)
 {
 	std::unique_ptr<Twengine::GameObject> fygar = std::make_unique<Twengine::GameObject>();
-	Twengine::AnimationComponent* animation = fygar->AddComponent<Twengine::AnimationComponent>();
-	animation->AddAnimation("Fygar/FygarMove.png", make_sdbm_hash("FygarMove"), 2);
-	animation->PlayAnimation(make_sdbm_hash("FygarMove"));
+	fygar->AddComponent<Twengine::AnimationComponent>();
+	fygar->AddComponent<EnemyMovementComponent>();
 	fygar->GetTransform()->SetLocalPosition(gridComponent->GetPositionFromIndex(row, column));
 	fygar->AddComponent<Twengine::RectColliderComponent>();
 	fygar->AddComponent<FygarComponent>();
