@@ -21,6 +21,7 @@ public:
 	virtual void OnEnter(Twengine::GameObject*) {};
 	virtual void OnExit(Twengine::GameObject*) {};
 	virtual std::unique_ptr<FygarState> Update(Twengine::GameObject* stateOwner) = 0;
+	virtual std::unique_ptr<FygarState> LateUpdate(Twengine::GameObject*) { return nullptr; }
 	virtual void RenderDebugDrawing() const {};
 };
 
@@ -74,4 +75,23 @@ public:
 
 private:
 	EnemyMovementComponent* m_MovementComp{};
+};
+
+class FygarFireBreathingState final : public FygarState
+{
+public:
+	FygarFireBreathingState() = default;
+	virtual ~FygarFireBreathingState() = default;
+	FygarFireBreathingState(const FygarFireBreathingState& other) = delete;
+	FygarFireBreathingState(FygarFireBreathingState&& other) = delete;
+	FygarFireBreathingState& operator=(const FygarFireBreathingState& other) = delete;
+	FygarFireBreathingState& operator=(FygarFireBreathingState&& other) = delete;
+
+	virtual void OnEnter(Twengine::GameObject* stateOwner) override;
+	virtual std::unique_ptr<FygarState> Update(Twengine::GameObject* stateOwner) override;
+	virtual std::unique_ptr<FygarState> LateUpdate(Twengine::GameObject* stateOwner) override;
+
+private:
+	EnemyMovementComponent* m_MovementComp{};
+	Twengine::GameObject* m_FireGameObject{};
 };

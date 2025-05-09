@@ -18,13 +18,18 @@ void FygarComponent::Start()
 	animationComp->AddAnimation("Fygar/FygarCrushed.png", make_sdbm_hash("FygarCrushed"), 2);
 	animationComp->PlayAnimation(make_sdbm_hash("FygarMove")); // To make sure we have a valid width and height for the hitbox
 	GetOwner()->GetComponent<Twengine::RectColliderComponent>()->SetHitBox(m_Transform->GetWorldPosition(), animationComp->GetAnimationFrameWidth(), animationComp->GetAnimationFrameHeight());
-	m_CurrentState = std::make_unique<FygarIdleState>();
+	m_CurrentState = std::make_unique<FygarFireBreathingState>();
 	m_CurrentState->OnEnter(GetOwner());
 }
 
 void FygarComponent::Update()
 {
 	CheckAndTransitionStates(m_CurrentState->Update(GetOwner()));
+}
+
+void FygarComponent::LateUpdate()
+{
+	CheckAndTransitionStates(m_CurrentState->LateUpdate(GetOwner()));
 }
 
 void FygarComponent::CheckAndTransitionStates(std::unique_ptr<FygarState> newState)

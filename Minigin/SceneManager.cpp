@@ -20,7 +20,6 @@ void Twengine::SceneManager::LateUpdate()
 	if (m_CurrentScene != nullptr) m_CurrentScene->LateUpdate();
 }
 
-
 void Twengine::SceneManager::Render() const
 {
 	if (m_CurrentScene != nullptr) m_CurrentScene->Render();
@@ -42,6 +41,7 @@ void Twengine::SceneManager::SetCurrentScene(const std::string& name)
 			m_CurrentScene->Load();
 			if (prevScene != nullptr)
 			{
+				prevScene->ResetHasStarted();
 				prevScene->RemoveAll();
 			}
 			m_CurrentScene->Start();

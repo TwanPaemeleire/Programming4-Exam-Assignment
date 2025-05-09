@@ -15,6 +15,7 @@ public:
 
 	virtual void Start() override;
 	virtual void Update() override;
+	virtual void LateUpdate() override;
 
 private:
 	void CheckAndTransitionStates(std::unique_ptr<FygarState> newState);

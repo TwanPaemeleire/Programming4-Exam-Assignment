@@ -2,8 +2,10 @@
 #include "AnimationComponent.h"
 #include "EnemyMovementComponent.h"
 #include "GroundComponent.h"
+#include "FygarFireComponent.h"
 #include "GameObject.h"
 #include "GameManager.h"
+#include "SceneManager.h"
 #include <iostream>
 
 void FygarIdleState::OnEnter(Twengine::GameObject* stateOwner)
@@ -71,6 +73,30 @@ std::unique_ptr<FygarState> FygarGhostState::Update(Twengine::GameObject* stateO
 			return std::make_unique<FygarTrackingState>();
 		}
 		return std::make_unique<FygarIdleState>();
+	}
+	return nullptr;
+}
+
+void FygarFireBreathingState::OnEnter(Twengine::GameObject* stateOwner)
+{
+	std::unique_ptr<Twengine::GameObject> fire = std::make_unique<Twengine::GameObject>();
+	fire->AddComponent<FygarFireComponent>();
+	m_FireGameObject = fire.get();
+	fire->SetParent(stateOwner, false);
+	m_FireGameObject->Start(); // TEMP, REMOVE LATER, THIS IS CURRENTLY BEING ADDED IN GAME "START" AND THEREFORE NOT ACTUALLY CALLING START ON THIS OBJECT
+	Twengine::SceneManager::GetInstance().GetCurrentScene().Add(std::move(fire));
+}
+
+std::unique_ptr<FygarState> FygarFireBreathingState::Update(Twengine::GameObject*)
+{
+	return nullptr;
+}
+
+std::unique_ptr<FygarState> FygarFireBreathingState::LateUpdate(Twengine::GameObject*)
+{
+	if (m_FireGameObject->IsMarkedForDestruction()) 
+	{
+		return std::make_unique<FygarIdleState>(); // TEMP, CHANGE TO TRACKING
 	}
 	return nullptr;
 }

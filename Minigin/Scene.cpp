@@ -16,6 +16,7 @@ void Twengine::Scene::Load()
 
 void Twengine::Scene::Add(std::unique_ptr<GameObject> object)
 {
+	if (m_HasStarted) object->Start(); // If added during the game, call start on it again
 	m_Objects.emplace_back(std::move(object));
 }
 
@@ -31,10 +32,12 @@ void Twengine::Scene::RemoveAll()
 
 void Twengine::Scene::Start()
 {
+	if (m_HasStarted) return;
 	for (auto& object : m_Objects)
 	{
 		object->Start();
 	}
+	m_HasStarted = true;
 }
 
 void Twengine::Scene::Update()

@@ -29,8 +29,10 @@ namespace Twengine
 
 		const std::string& GetName() const { return m_Name; }
 		void SetLoadFunction(std::function<void()> loadFunction) { m_LoadFunction = loadFunction; }
+		void ResetHasStarted() { m_HasStarted = false; }
 
 	private:
+		bool m_HasStarted = false;
 		std::string m_Name;
 		std::vector <std::unique_ptr<GameObject>> m_Objects{};
 		std::function<void()> m_LoadFunction{};

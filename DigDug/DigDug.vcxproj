@@ -165,6 +165,7 @@
     <ClCompile Include="DisplayPointsComponent.cpp" />
     <ClCompile Include="EnemyMovementComponent.cpp" />
     <ClCompile Include="FygarComponent.cpp" />
+    <ClCompile Include="FygarFireComponent.cpp" />
     <ClCompile Include="FygarStates.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="GridComponent.cpp" />
@@ -186,6 +187,7 @@
     <ClInclude Include="DisplayPointsComponent.h" />
     <ClInclude Include="EnemyMovementComponent.h" />
     <ClInclude Include="FygarComponent.h" />
+    <ClInclude Include="FygarFireComponent.h" />
     <ClInclude Include="FygarStates.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="GridComponent.h" />
