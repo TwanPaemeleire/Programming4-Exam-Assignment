@@ -4,6 +4,7 @@
 namespace Twengine
 {
 	class GameObject;
+	class AnimationComponent;
 }
 
 class EnemyMovementComponent;
@@ -76,4 +77,32 @@ private:
 	EnemyMovementComponent* m_MovementComp{};
 };
 
+class PookaPumpingState final : public PookaState
+{
+public:
+	PookaPumpingState() = default;
+	virtual ~PookaPumpingState() = default;
+	PookaPumpingState(const PookaPumpingState& other) = delete;
+	PookaPumpingState(PookaPumpingState&& other) = delete;
+	PookaPumpingState& operator=(const PookaPumpingState& other) = delete;
+	PookaPumpingState& operator=(PookaPumpingState&& other) = delete;
 
+	virtual void OnEnter(Twengine::GameObject* stateOwner) override;
+	virtual std::unique_ptr<PookaState> Update(Twengine::GameObject* stateOwner) override;
+private:
+	Twengine::AnimationComponent* m_AnimationComponent{};
+};
+
+class PookaDeathState final : public PookaState
+{
+public:
+	PookaDeathState() = default;
+	virtual ~PookaDeathState() = default;
+	PookaDeathState(const PookaDeathState& other) = delete;
+	PookaDeathState(PookaDeathState&& other) = delete;
+	PookaDeathState& operator=(const PookaDeathState& other) = delete;
+	PookaDeathState& operator=(PookaDeathState&& other) = delete;
+
+	virtual void OnEnter(Twengine::GameObject* stateOwner) override;
+	virtual std::unique_ptr<PookaState> Update(Twengine::GameObject* stateOwner) override;
+};

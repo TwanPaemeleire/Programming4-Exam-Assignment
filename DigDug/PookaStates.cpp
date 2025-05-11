@@ -6,7 +6,7 @@
 #include "GameManager.h"
 #include <iostream>
 
-// IDLE
+// Idle
 void PookaIdleState::OnEnter(Twengine::GameObject* stateOwner)
 {
 	m_MovementComp = stateOwner->GetComponent<EnemyMovementComponent>();
@@ -31,7 +31,7 @@ std::unique_ptr<PookaState> PookaIdleState::Update(Twengine::GameObject*)
 	return nullptr;
 }
 
-// TRACKING
+// Tracking
 void PookaTrackingState::OnEnter(Twengine::GameObject* stateOwner)
 {
 	m_MovementComp = stateOwner->GetComponent<EnemyMovementComponent>();
@@ -52,7 +52,7 @@ std::unique_ptr<PookaState> PookaTrackingState::Update(Twengine::GameObject*)
 	return nullptr;
 }
 
-// GHOST
+// Ghost
 void PookaGhostState::OnEnter(Twengine::GameObject* stateOwner)
 {
 	m_MovementComp = stateOwner->GetComponent<EnemyMovementComponent>();
@@ -75,5 +75,28 @@ std::unique_ptr<PookaState> PookaGhostState::Update(Twengine::GameObject* stateO
 		}
 		return std::make_unique<PookaIdleState>();
 	}
+	return nullptr;
+}
+
+// Pumping (WIP)
+void PookaPumpingState::OnEnter(Twengine::GameObject* stateOwner)
+{
+	m_AnimationComponent = stateOwner->GetComponent<Twengine::AnimationComponent>();
+	m_AnimationComponent->PlayAnimation(make_sdbm_hash("PookaPump"), 0.f, false);
+}
+
+std::unique_ptr<PookaState> PookaPumpingState::Update(Twengine::GameObject*)
+{
+	return nullptr;
+}
+
+// Death (WIP)
+void PookaDeathState::OnEnter(Twengine::GameObject*)
+{
+	// Send out an event to increase score
+}
+
+std::unique_ptr<PookaState> PookaDeathState::Update(Twengine::GameObject*)
+{
 	return nullptr;
 }

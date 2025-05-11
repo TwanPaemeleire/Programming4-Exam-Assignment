@@ -69,3 +69,17 @@ private:
 	bool m_HasStartedIdleAnimation{ false };
 };
 
+class PlayerPumpingState final : public PlayerState
+{
+public:
+	PlayerPumpingState() = default;
+	virtual ~PlayerPumpingState() = default;
+	PlayerPumpingState(const PlayerPumpingState& other) = delete;
+	PlayerPumpingState(PlayerPumpingState&& other) = delete;
+	PlayerPumpingState& operator=(const PlayerPumpingState& other) = delete;
+	PlayerPumpingState& operator=(PlayerPumpingState&& other) = delete;
+
+	virtual void OnEnter(Twengine::GameObject*) override;
+	virtual std::unique_ptr<PlayerState> Update(Twengine::GameObject* stateOwner) override;
+};
+

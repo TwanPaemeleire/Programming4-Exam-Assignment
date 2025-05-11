@@ -1,11 +1,13 @@
 #include "PlayerStates.h"
 #include "GameObject.h"
 #include "AnimationComponent.h"
+#include "DigDugPumpComponent.h"
 #include "GridComponent.h"
 #include "GroundComponent.h"
 #include "GameManager.h"
 #include "MyTime.h"
 #include "Renderer.h"
+#include "SceneManager.h"
 #include <memory>
 
 // MOVING
@@ -251,4 +253,22 @@ void PlayerMoving::UpdateFlipAndRotation()
 		m_AnimationComponent->SetRotationAngle(90);
 		m_AnimationComponent->SetFlipHorizontal(true);
 	}
+}
+
+// WIP
+void PlayerPumpingState::OnEnter(Twengine::GameObject*)
+{
+	//Twengine::AnimationComponent* animationComponent = stateOwner->GetComponent<Twengine::AnimationComponent>();
+	// Check rotation and flipping to determine position to spawn at
+
+	std::unique_ptr<Twengine::GameObject> pump = std::make_unique<Twengine::GameObject>();
+	pump->AddComponent<DigDugPumpComponent>();
+
+	//pump->GetTransform()
+	Twengine::SceneManager::GetInstance().GetCurrentScene().Add(std::move(pump));
+}
+
+std::unique_ptr<PlayerState> PlayerPumpingState::Update(Twengine::GameObject*)
+{
+	return nullptr;
 }

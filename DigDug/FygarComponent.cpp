@@ -7,6 +7,7 @@
 FygarComponent::FygarComponent(Twengine::GameObject* owner)
 	:Component(owner)
 {
+	GetOwner()->SetTag(make_sdbm_hash("Enemy"));
 }
 
 void FygarComponent::Start()

@@ -6,7 +6,7 @@
 
 namespace Twengine
 {
-	class AnimationComponent;
+	class Texture2D;
 	class RectColliderComponent;
 };
 

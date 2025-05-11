@@ -14,20 +14,23 @@ Twengine::AnimationComponent::AnimationComponent(GameObject* owner)
 
 void Twengine::AnimationComponent::Update()
 {
-	m_DelayCounter += Time::GetInstance().deltaTime;
-	if (m_DelayCounter >= m_FrameDelay) // New frame should be triggered
+	if (m_PlaysAutomatically)
 	{
-		if (m_CurrentColumn >= m_MaxColumnIndex) // Animation reached the end frame
+		m_DelayCounter += Time::GetInstance().deltaTime;
+		if (m_DelayCounter >= m_FrameDelay) // New frame should be triggered
 		{
-			m_CurrentColumn = m_RepeatStartFrame;
-			m_HasFinishedPlayingOnce = true;
-		}
-		else // Go to next frame
-		{
-			++m_CurrentColumn;
-		}
+			if (m_CurrentColumn >= m_MaxColumnIndex) // Animation reached the end frame
+			{
+				m_CurrentColumn = m_RepeatStartFrame;
+				m_HasFinishedPlayingOnce = true;
+			}
+			else // Go to next frame
+			{
+				++m_CurrentColumn;
+			}
 
-		m_DelayCounter -= m_FrameDelay;
+			m_DelayCounter -= m_FrameDelay;
+		}
 	}
 }
 
@@ -55,7 +58,7 @@ void Twengine::AnimationComponent::AddAnimation(const std::string& filePath, Ani
 	m_Animations.emplace(id, std::move(tempAnimation));
 }
 
-void Twengine::AnimationComponent::PlayAnimation(AnimationId id, float frameDelay)
+void Twengine::AnimationComponent::PlayAnimation(AnimationId id, float frameDelay, bool playAutomatically)
 {
 	m_CurrentColumn = 0;
 	m_DelayCounter = 0.f;
@@ -65,6 +68,20 @@ void Twengine::AnimationComponent::PlayAnimation(AnimationId id, float frameDela
 	m_FrameWidth = m_CurrentAnimation->frameWidth;
 	m_FrameHeight = m_CurrentAnimation->frameHeight;
 	m_HasFinishedPlayingOnce = false;
+	m_PlaysAutomatically = playAutomatically;
+}
+
+void Twengine::AnimationComponent::GoToNextFrame()
+{
+	if (m_CurrentColumn >= m_MaxColumnIndex) // Animation reached the end frame
+	{
+		m_CurrentColumn = m_RepeatStartFrame;
+		m_HasFinishedPlayingOnce = true;
+	}
+	else // Go to next frame
+	{
+		++m_CurrentColumn;
+	}
 }
 
 bool Twengine::AnimationComponent::IsPlayingAnimation(AnimationId id)

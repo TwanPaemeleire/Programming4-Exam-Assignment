@@ -34,7 +34,8 @@ namespace Twengine
 		virtual void Render() const override;
 
 		void AddAnimation(const std::string& filePath, AnimationId id, int columns, int repeatStartColumn = 0);
-		void PlayAnimation(AnimationId id, float frameDelay = 0.2f);
+		void PlayAnimation(AnimationId id, float frameDelay = 0.2f, bool playAutomatically = true);
+		void GoToNextFrame();
 		bool IsPlayingAnimation(AnimationId id);
 
 		float GetAnimationFrameWidth() const { return m_FrameWidth; }
@@ -63,6 +64,7 @@ namespace Twengine
 		int m_RepeatStartFrame{};
 		bool m_HasFinishedPlayingOnce{ false };
 		float m_FrameDelay{ 0.2f };
+		bool m_PlaysAutomatically{};
 
 		float m_DelayCounter{};
 	};
