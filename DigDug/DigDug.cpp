@@ -12,16 +12,15 @@
 
 void load()
 {
-	auto& devScene = Twengine::SceneManager::GetInstance().CreateScene("DevScene");
-	devScene.SetLoadFunction(LevelFactory::LoadDevScene);
-	auto& mainMenuScene = Twengine::SceneManager::GetInstance().CreateScene("MainMenu");
-	mainMenuScene.SetLoadFunction(LevelFactory::LoadMainMenu);
-	auto& level1Scene = Twengine::SceneManager::GetInstance().CreateScene("Level1");
-	level1Scene.SetLoadFunction(LevelFactory::LoadLevel1);
-	auto& level2Scene = Twengine::SceneManager::GetInstance().CreateScene("Level2");
-	level2Scene.SetLoadFunction(LevelFactory::LoadLevel2);
-	auto& level3Scene = Twengine::SceneManager::GetInstance().CreateScene("Level3");
-	level3Scene.SetLoadFunction(LevelFactory::LoadLevel3);
+
+	/*auto& devScene = */Twengine::SceneManager::GetInstance().CreateScene("DevScene", LevelFactory::LoadDevScene);
+	//auto& mainMenuScene = Twengine::SceneManager::GetInstance().CreateScene("MainMenu", LevelFactory::LoadMainMenu);
+
+	/*auto& persistentScene = */Twengine::SceneManager::GetInstance().CreateScene("PersistentScene", LevelFactory::LoadPersistentScene, true);
+
+	//auto& level1Scene = Twengine::SceneManager::GetInstance().CreateScene("Level1", LevelFactory::LoadLevel1);
+	//auto& level2Scene = Twengine::SceneManager::GetInstance().CreateScene("Level2", LevelFactory::LoadLevel2);
+	//auto& level3Scene = Twengine::SceneManager::GetInstance().CreateScene("Level3", LevelFactory::LoadLevel3);
 	Twengine::SceneManager::GetInstance().SetCurrentScene("DevScene");
 }
 

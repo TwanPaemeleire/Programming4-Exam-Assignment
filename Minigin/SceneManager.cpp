@@ -2,32 +2,62 @@
 
 void Twengine::SceneManager::Start()
 {
-	if (m_CurrentScene != nullptr) m_CurrentScene->Start();
+	//if (m_CurrentScene != nullptr) m_CurrentScene->Start();
+	m_PersistentScene->Start();
+	for (auto& scene : m_Scenes)
+	{
+		scene->Start();
+	}
 }
 
 void Twengine::SceneManager::Update()
 {
-	if (m_CurrentScene != nullptr) m_CurrentScene->Update();
+	m_PersistentScene->Update();
+	//if (m_CurrentScene != nullptr) m_CurrentScene->Update();
+	for (auto& scene : m_Scenes)
+	{
+		scene->Update();
+	}
 }
 
 void Twengine::SceneManager::FixedUpdate()
 {
-	if (m_CurrentScene != nullptr) m_CurrentScene->FixedUpdate();
+	m_PersistentScene->FixedUpdate();
+	//if (m_CurrentScene != nullptr) m_CurrentScene->FixedUpdate();
+	for (auto& scene : m_Scenes)
+	{
+		scene->FixedUpdate();
+	}
 }
 
 void Twengine::SceneManager::LateUpdate()
 {
-	if (m_CurrentScene != nullptr) m_CurrentScene->LateUpdate();
+	m_PersistentScene->LateUpdate();
+	//if (m_CurrentScene != nullptr) m_CurrentScene->LateUpdate();
+	for (auto& scene : m_Scenes)
+	{
+		scene->LateUpdate();
+	}
 }
 
 void Twengine::SceneManager::Render() const
 {
-	if (m_CurrentScene != nullptr) m_CurrentScene->Render();
+	m_PersistentScene->Render();
+	//if (m_CurrentScene != nullptr) m_CurrentScene->Render();
+	for (auto& scene : m_Scenes)
+	{
+		scene->Render();
+	}
 }
 
 void Twengine::SceneManager::RenderUI()
 {
-	if (m_CurrentScene != nullptr) m_CurrentScene->RenderUI();
+	m_PersistentScene->RenderUI();
+	//if (m_CurrentScene != nullptr) m_CurrentScene->RenderUI();
+	for (auto& scene : m_Scenes)
+	{
+		scene->RenderUI();
+	}
 }
 
 void Twengine::SceneManager::SetCurrentScene(const std::string& name)
@@ -45,13 +75,24 @@ void Twengine::SceneManager::SetCurrentScene(const std::string& name)
 				prevScene->RemoveAll();
 			}
 			m_CurrentScene->Start();
+			m_PersistentScene->Start();
 			return;
 		}
 	}
 }
 
-Twengine::Scene& Twengine::SceneManager::CreateScene(const std::string& name)
+Twengine::Scene& Twengine::SceneManager::CreateScene(const std::string& name, std::function<void()> loadFunction, bool isPersistent)
 {
-	m_Scenes.emplace_back(std::make_unique<Scene>(name));
+	if (isPersistent)
+	{
+		m_PersistentScene = std::make_unique<Scene>(name, loadFunction, isPersistent);
+		m_PersistentScene->Load();
+	}
+	else m_Scenes.emplace_back(std::make_unique<Scene>(name, loadFunction, isPersistent));
 	return *m_Scenes.back().get();
+}
+
+void Twengine::SceneManager::ClearPersistentScene()
+{
+	if(m_PersistentScene) m_PersistentScene->RemoveAll();
 }

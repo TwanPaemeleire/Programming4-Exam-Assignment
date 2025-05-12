@@ -20,9 +20,12 @@ namespace Twengine
 
 		void SetCurrentScene(const std::string& name);
 		Scene& GetCurrentScene() const { return *m_CurrentScene; }
-		Scene& CreateScene(const std::string& name);
+		Scene& GetPersistentScene() const { return *m_PersistentScene; }
+		Scene& CreateScene(const std::string& name, std::function<void()> loadFunction, bool isPersistent = false);
+		void ClearPersistentScene();
 	private:
 		Scene* m_CurrentScene{ nullptr };
+		std::unique_ptr<Scene> m_PersistentScene{};
 		friend class Singleton<SceneManager>;
 		SceneManager() = default;
 		std::vector<std::unique_ptr<Scene>> m_Scenes;

@@ -14,6 +14,7 @@ class LevelFactory
 public:
 	static void LoadDevScene();
 	static void LoadMainMenu();
+	static void LoadPersistentScene();
 	static void LoadLevel1();
 	static void LoadLevel2();
 	static void LoadLevel3();

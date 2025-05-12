@@ -8,7 +8,7 @@ namespace Twengine
 	class Scene final
 	{
 	public:
-		explicit Scene(const std::string& name);
+		explicit Scene(const std::string& name, std::function<void()> loadFunction, bool isPersistent);
 		~Scene();
 		Scene(const Scene& other) = delete;
 		Scene(Scene&& other) = delete;
@@ -28,11 +28,11 @@ namespace Twengine
 		void RenderUI();
 
 		const std::string& GetName() const { return m_Name; }
-		void SetLoadFunction(std::function<void()> loadFunction) { m_LoadFunction = loadFunction; }
 		void ResetHasStarted() { m_HasStarted = false; }
 
 	private:
 		bool m_HasStarted = false;
+		bool m_IsPersistent = false;
 		std::string m_Name;
 		std::vector <std::unique_ptr<GameObject>> m_Objects{};
 		std::function<void()> m_LoadFunction{};

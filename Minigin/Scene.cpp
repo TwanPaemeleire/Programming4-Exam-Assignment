@@ -5,7 +5,9 @@
 
 unsigned int Twengine::Scene::m_idCounter = 0;
 
-Twengine::Scene::Scene(const std::string& name) : m_Name(name) {}
+Twengine::Scene::Scene(const std::string& name, std::function<void()> loadFunction, bool isPersistent)
+	: m_Name(name), m_IsPersistent{isPersistent}, m_LoadFunction{loadFunction}
+{}
 
 Twengine::Scene::~Scene() = default;
 
