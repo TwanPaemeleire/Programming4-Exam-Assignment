@@ -52,12 +52,18 @@ void DigDugComponent::SetDirection(glm::vec2 dir)
 	CheckAndTransitionStates(m_CurrentState->SetYDirection(GetOwner(), dir.y, dir.x));
 }
 
-void DigDugComponent::Notify(const GameEvent& event, Twengine::GameObject* observedObject)
+void DigDugComponent::OnPumpButtonInteraction(bool pressBound)
 {
-	if (event.id == make_sdbm_hash("OnCollision") && observedObject->GetComponent<EnemyMovementComponent>())
-	{
-		//std::cout << "Collision with enemy" << std::endl;
-	}
+	CheckAndTransitionStates(m_CurrentState->OnPumpButtonInteraction(GetOwner(), pressBound));
+}
+
+void DigDugComponent::Notify(const GameEvent& event, Twengine::GameObject*)
+{
+	//if (event.id == make_sdbm_hash("OnCollision") && observedObject->GetComponent<EnemyMovementComponent>())
+	//{
+	//	//std::cout << "Collision with enemy" << std::endl;
+	//}
+	CheckAndTransitionStates(m_CurrentState->Notify(GetOwner(), event));
 }
 
 void DigDugComponent::CheckAndTransitionStates(std::unique_ptr<PlayerState> newState)

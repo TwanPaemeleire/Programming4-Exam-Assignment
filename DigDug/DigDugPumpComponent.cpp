@@ -5,11 +5,13 @@
 #include "GameObject.h"
 #include "Renderer.h"
 #include "MyTime.h"
+#include "Event.h"
 
 // WIP
 DigDugPumpComponent::DigDugPumpComponent(Twengine::GameObject* owner)
 	:Component(owner)
 {
+	m_OnPumpRetractedEvent = std::make_unique<Twengine::Event>();
 }
 
 void DigDugPumpComponent::Start()
@@ -24,6 +26,7 @@ void DigDugPumpComponent::Update()
 {
 	float speed = (m_IsReturning) ? -m_PumpShootSpeed : m_PumpShootSpeed;
 	m_ExposedAmount += speed * Twengine::Time::GetInstance().deltaTime;
+	m_RectColliderComponent->SetHitBox(m_Transform->GetWorldPosition(), m_ExposedAmount, m_TextureSize.y);
 	if (m_ExposedAmount >= m_TextureSize.x)
 	{
 		if (!m_IsReturning)
@@ -34,6 +37,7 @@ void DigDugPumpComponent::Update()
 	}
 	else if (m_ExposedAmount <= 0.f)
 	{
+		m_OnPumpRetractedEvent->NotifyObservers(GameEvent(make_sdbm_hash("OnPumpRetracted")), GetOwner());
 		GetOwner()->MarkForDestruction();
 	}
 }

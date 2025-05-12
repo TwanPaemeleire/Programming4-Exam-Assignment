@@ -1,6 +1,5 @@
 #pragma once
 #include "Component.h"
-#include "Observer.h"
 #include <memory>
 #include "PlayerStates.h"
 
@@ -9,6 +8,8 @@ namespace Twengine
 	class Texture2D;
 	class RectColliderComponent;
 };
+
+struct GameEvent;
 
 class DigDugComponent : public Twengine::Component, public Twengine::Observer
 {
@@ -25,6 +26,7 @@ public:
 	virtual void RenderUI() override;
 
 	void SetDirection(glm::vec2 dir);
+	void OnPumpButtonInteraction(bool pressBound);
 	virtual void Notify(const GameEvent& event, Twengine::GameObject* observedObject) override;
 
 private:

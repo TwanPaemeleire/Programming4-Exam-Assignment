@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "AnimationComponent.h"
 #include "DigDugPumpComponent.h"
+#include "DigDugComponent.h"
 #include "GridComponent.h"
 #include "GroundComponent.h"
 #include "GameManager.h"
@@ -93,6 +94,11 @@ std::unique_ptr<PlayerState> PlayerMoving::SetYDirection(Twengine::GameObject*, 
 	if (switchedOrientation) CalculateNextTarget();
 	m_IsMoving = true;
 	return nullptr;
+}
+
+std::unique_ptr<PlayerState> PlayerMoving::OnPumpButtonInteraction(Twengine::GameObject*, bool)
+{
+	return std::make_unique<PlayerPumpingState>();
 }
 
 void PlayerMoving::CalculateNextTarget()
@@ -256,19 +262,35 @@ void PlayerMoving::UpdateFlipAndRotation()
 }
 
 // WIP
-void PlayerPumpingState::OnEnter(Twengine::GameObject*)
+void PlayerPumpingState::OnEnter(Twengine::GameObject* stateOwner)
 {
-	//Twengine::AnimationComponent* animationComponent = stateOwner->GetComponent<Twengine::AnimationComponent>();
+	Twengine::AnimationComponent* animationComponent = stateOwner->GetComponent<Twengine::AnimationComponent>();
 	// Check rotation and flipping to determine position to spawn at
 
 	std::unique_ptr<Twengine::GameObject> pump = std::make_unique<Twengine::GameObject>();
-	pump->AddComponent<DigDugPumpComponent>();
+	pump->AddComponent<DigDugPumpComponent>()->GetOnPumpRetractedEvent()->AddObserver(stateOwner->GetComponent<DigDugComponent>());
 
-	//pump->GetTransform()
+	glm::vec2 posToSpawn = stateOwner->GetTransform()->GetWorldPosition();
+	posToSpawn.x += animationComponent->GetAnimationFrameWidth();
+	pump->GetTransform()->SetLocalPosition(posToSpawn);
 	Twengine::SceneManager::GetInstance().GetCurrentScene().Add(std::move(pump));
 }
 
 std::unique_ptr<PlayerState> PlayerPumpingState::Update(Twengine::GameObject*)
 {
+	return nullptr;
+}
+
+std::unique_ptr<PlayerState> PlayerPumpingState::OnPumpButtonInteraction(Twengine::GameObject*, bool)
+{
+	return nullptr;
+}
+
+std::unique_ptr<PlayerState> PlayerPumpingState::Notify(Twengine::GameObject*, const GameEvent& event)
+{
+	if (event.id == make_sdbm_hash("OnPumpRetracted"))
+	{
+		return std::make_unique<PlayerMoving>();
+	}
 	return nullptr;
 }

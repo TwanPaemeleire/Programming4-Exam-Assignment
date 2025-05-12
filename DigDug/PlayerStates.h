@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include <glm.hpp>
+#include "Observer.h"
 
 namespace Twengine
 {
@@ -27,6 +28,8 @@ public:
 	virtual void RenderDebugDrawing() const {};
 	virtual std::unique_ptr<PlayerState> SetXDirection(Twengine::GameObject*, float, float) { return nullptr; }
 	virtual std::unique_ptr<PlayerState> SetYDirection(Twengine::GameObject*, float, float) { return nullptr; }
+	virtual std::unique_ptr<PlayerState> OnPumpButtonInteraction(Twengine::GameObject*, bool) { return nullptr; }
+	virtual std::unique_ptr<PlayerState> Notify(Twengine::GameObject*, const GameEvent&) { return nullptr; }
 };
 
 class PlayerMoving final : public PlayerState
@@ -44,6 +47,7 @@ public:
 	virtual void RenderDebugDrawing() const override;
 	virtual std::unique_ptr<PlayerState> SetXDirection(Twengine::GameObject* stateOwner, float x, float yToSet) override;
 	virtual std::unique_ptr<PlayerState> SetYDirection(Twengine::GameObject* stateOwner, float y, float xToSet) override;
+	virtual std::unique_ptr<PlayerState> OnPumpButtonInteraction(Twengine::GameObject* stateOwner, bool isPressBound) override;
 private:
 	void CalculateNextTarget();
 	void SetIdleAnimation();
@@ -81,5 +85,8 @@ public:
 
 	virtual void OnEnter(Twengine::GameObject*) override;
 	virtual std::unique_ptr<PlayerState> Update(Twengine::GameObject* stateOwner) override;
+	virtual std::unique_ptr<PlayerState> OnPumpButtonInteraction(Twengine::GameObject* stateOwner, bool isPressBound) override;
+
+	virtual std::unique_ptr<PlayerState> Notify(Twengine::GameObject*, const GameEvent&) override;
 };
 
