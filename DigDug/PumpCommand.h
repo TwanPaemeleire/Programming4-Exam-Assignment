@@ -9,7 +9,7 @@ public:
 	PumpCommand(Twengine::GameObject* gameObject);
 	virtual void Execute() override;
 	void IsPressBound() { m_IsPressBound = true; }
-	void IsHeldBound() { m_IsPressBound = false; }
+	void IsReleaseBound() { m_IsPressBound = false; }
 
 private:
 	bool m_IsPressBound{};

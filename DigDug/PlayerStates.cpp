@@ -265,11 +265,13 @@ void PlayerMoving::UpdateFlipAndRotation()
 void PlayerPumpingState::OnEnter(Twengine::GameObject* stateOwner)
 {
 	Twengine::AnimationComponent* animationComponent = stateOwner->GetComponent<Twengine::AnimationComponent>();
+	animationComponent->PlayAnimation(make_sdbm_hash("DigDugPump"), 0.0f, false);
 	// Check rotation and flipping to determine position to spawn at
-
+	
 	std::unique_ptr<Twengine::GameObject> pump = std::make_unique<Twengine::GameObject>();
-	pump->AddComponent<DigDugPumpComponent>()->GetOnPumpRetractedEvent()->AddObserver(stateOwner->GetComponent<DigDugComponent>());
-
+	m_DigDugPumpComponent = pump->AddComponent<DigDugPumpComponent>();
+	m_DigDugPumpComponent->GetOnPumpRetractedEvent()->AddObserver(stateOwner->GetComponent<DigDugComponent>());
+	
 	glm::vec2 posToSpawn = stateOwner->GetTransform()->GetWorldPosition();
 	posToSpawn.x += animationComponent->GetAnimationFrameWidth();
 	pump->GetTransform()->SetLocalPosition(posToSpawn);
@@ -281,8 +283,9 @@ std::unique_ptr<PlayerState> PlayerPumpingState::Update(Twengine::GameObject*)
 	return nullptr;
 }
 
-std::unique_ptr<PlayerState> PlayerPumpingState::OnPumpButtonInteraction(Twengine::GameObject*, bool)
+std::unique_ptr<PlayerState> PlayerPumpingState::OnPumpButtonInteraction(Twengine::GameObject*, bool isPressBound)
 {
+	m_DigDugPumpComponent->OnPumpButtonInteraction(isPressBound);
 	return nullptr;
 }
 

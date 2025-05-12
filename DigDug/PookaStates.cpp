@@ -4,6 +4,7 @@
 #include "GroundComponent.h"
 #include "GameObject.h"
 #include "GameManager.h"
+#include "DigDugPumpComponent.h"
 #include <iostream>
 
 // Idle
@@ -31,6 +32,16 @@ std::unique_ptr<PookaState> PookaIdleState::Update(Twengine::GameObject*)
 	return nullptr;
 }
 
+std::unique_ptr<PookaState> PookaIdleState::GetNotifiedByOwner(const GameEvent& event, Twengine::GameObject* observedObject)
+{
+	DigDugPumpComponent* digDugPumpComponent = observedObject->GetComponent<DigDugPumpComponent>();
+	if (event.id == make_sdbm_hash("OnCollision") && digDugPumpComponent)
+	{
+		return std::make_unique<PookaPumpingState>(digDugPumpComponent);
+	}
+	return nullptr;
+}
+
 // Tracking
 void PookaTrackingState::OnEnter(Twengine::GameObject* stateOwner)
 {
@@ -48,6 +59,16 @@ std::unique_ptr<PookaState> PookaTrackingState::Update(Twengine::GameObject*)
 	if (m_MovementComp->GhostCoolDownHasFinished()) // Pooka can enter ghost form
 	{
 		return std::make_unique<PookaGhostState>();
+	}
+	return nullptr;
+}
+
+std::unique_ptr<PookaState> PookaTrackingState::GetNotifiedByOwner(const GameEvent& event, Twengine::GameObject* observedObject)
+{
+	DigDugPumpComponent* digDugPumpComponent = observedObject->GetComponent<DigDugPumpComponent>();
+	if (event.id == make_sdbm_hash("OnCollision") && digDugPumpComponent)
+	{
+		return std::make_unique<PookaPumpingState>(digDugPumpComponent);
 	}
 	return nullptr;
 }
@@ -78,6 +99,22 @@ std::unique_ptr<PookaState> PookaGhostState::Update(Twengine::GameObject* stateO
 	return nullptr;
 }
 
+std::unique_ptr<PookaState> PookaGhostState::GetNotifiedByOwner(const GameEvent& event, Twengine::GameObject* observedObject)
+{
+	DigDugPumpComponent* digDugPumpComponent = observedObject->GetComponent<DigDugPumpComponent>();
+	if (event.id == make_sdbm_hash("OnCollision") && digDugPumpComponent)
+	{
+		return std::make_unique<PookaPumpingState>(digDugPumpComponent);
+	}
+	return nullptr;
+}
+
+PookaPumpingState::PookaPumpingState(DigDugPumpComponent* digDugPumpComponent)
+{
+	m_DigDugPumpComponent = digDugPumpComponent;
+	m_DigDugPumpComponent->GetOnPumpEvent()->AddObserver(this);
+}
+
 // Pumping (WIP)
 void PookaPumpingState::OnEnter(Twengine::GameObject* stateOwner)
 {
@@ -88,6 +125,20 @@ void PookaPumpingState::OnEnter(Twengine::GameObject* stateOwner)
 std::unique_ptr<PookaState> PookaPumpingState::Update(Twengine::GameObject*)
 {
 	return nullptr;
+}
+
+void PookaPumpingState::Notify(const GameEvent& event, Twengine::GameObject*)
+{
+	if (event.id == make_sdbm_hash("OnPump"))
+	{
+		m_AnimationComponent->GoToNextFrame();
+		if (m_AnimationComponent->HasFinishedPlayingOnce())
+		{
+			// play SFX
+			int i = 0;
+			i;
+		}
+	}
 }
 
 // Death (WIP)

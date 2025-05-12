@@ -15,7 +15,7 @@ DigDugComponent::DigDugComponent(Twengine::GameObject* owner)
 	:Component(owner)
 {
 	m_AnimationComponent = GetOwner()->AddComponent<Twengine::AnimationComponent>();
-	m_RectColliderComponent =  GetOwner()->AddComponent<Twengine::RectColliderComponent>();
+	m_RectColliderComponent = GetOwner()->AddComponent<Twengine::RectColliderComponent>();
 	m_RectColliderComponent->GetOnCollisionEvent()->AddObserver(this);
 }
 
@@ -26,9 +26,10 @@ void DigDugComponent::Start()
 	m_AnimationComponent->AddAnimation("DigDug/DigDugMove.png", make_sdbm_hash("DigDugMove"),2);
 	m_AnimationComponent->AddAnimation("DigDug/DigDugDigging.png", make_sdbm_hash("DigDugDigging"), 2);
 	m_AnimationComponent->AddAnimation("DigDug/DigDugIdle.png", make_sdbm_hash("DigDugIdle"), 1);
+	m_AnimationComponent->AddAnimation("DigDug/DigDugPump.png", make_sdbm_hash("DigDugPump"), 2);
 
 	m_AnimationComponent->PlayAnimation(make_sdbm_hash("DigDugIdle"));
-	glm::vec2 pos = GetOwner()->GetTransform()->GetLocalPosition();
+	glm::vec2 pos = GetOwner()->GetTransform()->GetWorldPosition();
 	m_RectColliderComponent->SetHitBox(pos, m_AnimationComponent->GetAnimationFrameWidth(), m_AnimationComponent->GetAnimationFrameHeight());
 	Twengine::ServiceLocator::get_sound_system().RequestLoadMusic("Level/LevelMusic.wav", SoundId(make_sdbm_hash("LevelMusic")));
 	Twengine::ServiceLocator::get_sound_system().RequestPlayMusic(SoundId(make_sdbm_hash("LevelMusic")), 0.9f);
@@ -57,12 +58,12 @@ void DigDugComponent::OnPumpButtonInteraction(bool pressBound)
 	CheckAndTransitionStates(m_CurrentState->OnPumpButtonInteraction(GetOwner(), pressBound));
 }
 
-void DigDugComponent::Notify(const GameEvent& event, Twengine::GameObject*)
+void DigDugComponent::Notify(const GameEvent& event, Twengine::GameObject* observedObject)
 {
-	//if (event.id == make_sdbm_hash("OnCollision") && observedObject->GetComponent<EnemyMovementComponent>())
-	//{
-	//	//std::cout << "Collision with enemy" << std::endl;
-	//}
+	if (event.id == make_sdbm_hash("OnCollision") && observedObject->GetTag() == make_sdbm_hash("Enemy"))
+	{
+		std::cout << "Collision with enemy" << std::endl;
+	}
 	CheckAndTransitionStates(m_CurrentState->Notify(GetOwner(), event));
 }
 

@@ -2,8 +2,9 @@
 #include "Component.h"
 #include <memory>
 #include "PookaStates.h"
+#include "Observer.h"
 
-class PookaComponent final : public Twengine::Component
+class PookaComponent final : public Twengine::Component, public Twengine::Observer
 {
 public:
 	PookaComponent(Twengine::GameObject* owner);
@@ -16,8 +17,11 @@ public:
 	virtual void Start() override;
 	virtual void Update() override;
 
+	void Notify(const GameEvent& event, Twengine::GameObject* observedObject) override;
+
 private:
 	void CheckAndTransitionStates(std::unique_ptr<PookaState> newState);
 	std::unique_ptr<PookaState> m_CurrentState{};
+
 };
 

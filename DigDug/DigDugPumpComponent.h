@@ -25,17 +25,26 @@ public:
 	virtual void Update() override;
 	virtual void Render() const override;
 
+	void OnPumpButtonInteraction(bool isPressBound);
+
 	Twengine::Event* GetOnPumpRetractedEvent() const { return m_OnPumpRetractedEvent.get(); }
+	Twengine::Event* GetOnPumpEvent() const { return m_OnPumpEvent.get(); }
 	virtual void Notify(const GameEvent& event, Twengine::GameObject* observedObject) override;
 
 private:
 	std::unique_ptr<Twengine::Event> m_OnPumpRetractedEvent{};
+	std::unique_ptr<Twengine::Event> m_OnPumpEvent{};
 	Twengine::RectColliderComponent* m_RectColliderComponent{};
 	Twengine::Texture2D* m_PumpTexture{};
 
 	glm::vec2 m_TextureSize{};
 	float m_ExposedAmount{};
-	float m_PumpShootSpeed{10.f};
+	float m_PumpShootSpeed{20.f};
 	bool m_IsReturning{ false };
+	bool m_PumpButtonIsPressed{ false };
+	bool m_IsStuckInEnemy{false};
+
+	float m_PumpDelay{ 0.5f };
+	float m_PumpDelayCounter{};
 };
 

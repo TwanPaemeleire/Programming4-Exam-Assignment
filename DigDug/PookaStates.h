@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include "Observer.h"
 
 namespace Twengine
 {
@@ -8,6 +9,8 @@ namespace Twengine
 }
 
 class EnemyMovementComponent;
+class DigDugPumpComponent;
+struct GameEvent;
 
 class PookaState
 {
@@ -23,6 +26,7 @@ public:
 	virtual void OnExit(Twengine::GameObject*) {};
 	virtual std::unique_ptr<PookaState> Update(Twengine::GameObject* stateOwner) = 0;
 	virtual void RenderDebugDrawing() const {};
+	virtual std::unique_ptr<PookaState> GetNotifiedByOwner(const GameEvent&, Twengine::GameObject*) { return nullptr; }
 };
 
 class PookaIdleState final : public PookaState
@@ -37,6 +41,8 @@ public:
 
 	virtual void OnEnter(Twengine::GameObject* stateOwner) override;
 	virtual std::unique_ptr<PookaState> Update(Twengine::GameObject* stateOwner) override;
+
+	virtual std::unique_ptr<PookaState> GetNotifiedByOwner(const GameEvent& event, Twengine::GameObject* observedObject) override;
 
 private:
 	EnemyMovementComponent* m_MovementComp{};
@@ -55,6 +61,8 @@ public:
 	virtual void OnEnter(Twengine::GameObject* stateOwner) override;
 	virtual std::unique_ptr<PookaState> Update(Twengine::GameObject* stateOwner) override;
 
+	virtual std::unique_ptr<PookaState> GetNotifiedByOwner(const GameEvent& event, Twengine::GameObject* observedObject) override;
+
 private:
 	EnemyMovementComponent* m_MovementComp{};
 };
@@ -72,15 +80,16 @@ public:
 	virtual void OnEnter(Twengine::GameObject* stateOwner) override;
 	virtual void OnExit(Twengine::GameObject* stateOwner) override;
 	virtual std::unique_ptr<PookaState> Update(Twengine::GameObject* stateOwner) override;
+	virtual std::unique_ptr<PookaState> GetNotifiedByOwner(const GameEvent& event, Twengine::GameObject* observedObject) override;
 
 private:
 	EnemyMovementComponent* m_MovementComp{};
 };
 
-class PookaPumpingState final : public PookaState
+class PookaPumpingState final : public PookaState, public Twengine::Observer
 {
 public:
-	PookaPumpingState() = default;
+	PookaPumpingState(DigDugPumpComponent* digDugPumpComponent);
 	virtual ~PookaPumpingState() = default;
 	PookaPumpingState(const PookaPumpingState& other) = delete;
 	PookaPumpingState(PookaPumpingState&& other) = delete;
@@ -89,8 +98,11 @@ public:
 
 	virtual void OnEnter(Twengine::GameObject* stateOwner) override;
 	virtual std::unique_ptr<PookaState> Update(Twengine::GameObject* stateOwner) override;
+
+	void Notify(const GameEvent& event, Twengine::GameObject* observedObject) override;
 private:
 	Twengine::AnimationComponent* m_AnimationComponent{};
+	DigDugPumpComponent* m_DigDugPumpComponent;
 };
 
 class PookaDeathState final : public PookaState

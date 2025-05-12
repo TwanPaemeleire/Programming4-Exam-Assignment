@@ -189,8 +189,8 @@ void LevelFactory::LoadPersistentScene()
 	Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_d, Twengine::InteractionStates::up, digdug.get(), -1)->SetDirection(0, 0);
 
 	Twengine::InputManager::GetInstance().BindCommandToInput<PumpCommand>(SDLK_SPACE, Twengine::InteractionStates::pressed, digdug.get(), -1)->IsPressBound();
-	Twengine::InputManager::GetInstance().BindCommandToInput<PumpCommand>(SDLK_SPACE, Twengine::InteractionStates::down, digdug.get(), -1)->IsHeldBound();
-
+	Twengine::InputManager::GetInstance().BindCommandToInput<PumpCommand>(SDLK_SPACE, Twengine::InteractionStates::down, digdug.get(), -1)->IsPressBound();
+	Twengine::InputManager::GetInstance().BindCommandToInput<PumpCommand>(SDLK_SPACE, Twengine::InteractionStates::up, digdug.get(), -1)->IsReleaseBound();
 
 
 	scene.Add(std::move(digdugLivesText));

@@ -11,6 +11,7 @@ namespace Twengine
 }
 class GroundComponent;
 class GridComponent;
+class DigDugPumpComponent;
 
 class PlayerState
 {
@@ -88,5 +89,7 @@ public:
 	virtual std::unique_ptr<PlayerState> OnPumpButtonInteraction(Twengine::GameObject* stateOwner, bool isPressBound) override;
 
 	virtual std::unique_ptr<PlayerState> Notify(Twengine::GameObject*, const GameEvent&) override;
+private:
+	DigDugPumpComponent* m_DigDugPumpComponent{};
 };
 
