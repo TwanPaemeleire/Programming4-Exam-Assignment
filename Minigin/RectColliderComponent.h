@@ -4,6 +4,7 @@
 #include "glm.hpp"
 #include <memory>
 #include "Event.h"
+#include <utility>
 
 namespace Twengine
 {
@@ -25,7 +26,6 @@ namespace Twengine
 		RectColliderComponent& operator=(RectColliderComponent&& other) = delete;
 
 		virtual void Render() const override;
-		virtual void FixedUpdate() override;
 
 		virtual void Notify(const GameEvent& event, GameObject* observedObject) override;
 
@@ -37,8 +37,10 @@ namespace Twengine
 
 		Event* GetOnCollisionEvent() const { return m_OnCollisionEvent.get(); }
 
+		static void ProcessCollisions();
 	private:
 		static std::vector<RectColliderComponent*> s_Colliders;
+		static std::vector<std::pair<RectColliderComponent*, RectColliderComponent*>> s_LastFrameCollisions;
 
 		std::unique_ptr<RectHitbox> m_HitBox;
 		std::unique_ptr<Twengine::Event> m_OnCollisionEvent;

@@ -1,5 +1,6 @@
 #include "Scene.h"
 #include "GameObject.h"
+#include "RectColliderComponent.h"
 
 #include <algorithm>
 
@@ -52,6 +53,7 @@ void Twengine::Scene::Update()
 
 void Twengine::Scene::FixedUpdate()
 {
+	Twengine::RectColliderComponent::ProcessCollisions();
 	for (auto& object : m_Objects)
 	{
 		object->FixedUpdate();

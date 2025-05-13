@@ -75,9 +75,14 @@ void DigDugPumpComponent::OnPumpButtonInteraction(bool isPressBound)
 	m_PumpButtonIsPressed = isPressBound;
 	if (!m_PumpButtonIsPressed && m_IsStuckInEnemy)
 	{
-		m_IsStuckInEnemy = false;
-		m_IsReturning = true;
+		Retract();
 	}
+}
+
+void DigDugPumpComponent::Retract()
+{
+	m_IsReturning = true;
+	m_IsStuckInEnemy = false;
 }
 
 void DigDugPumpComponent::Notify(const GameEvent& event, Twengine::GameObject* observedObject)

@@ -5,7 +5,9 @@
 #include "GameObject.h"
 #include "GameManager.h"
 #include "DigDugPumpComponent.h"
+#include "PookaComponent.h"
 #include <iostream>
+#include "MyTime.h"
 
 // Idle
 void PookaIdleState::OnEnter(Twengine::GameObject* stateOwner)
@@ -32,7 +34,7 @@ std::unique_ptr<PookaState> PookaIdleState::Update(Twengine::GameObject*)
 	return nullptr;
 }
 
-std::unique_ptr<PookaState> PookaIdleState::GetNotifiedByOwner(const GameEvent& event, Twengine::GameObject* observedObject)
+std::unique_ptr<PookaState> PookaIdleState::GetNotifiedByOwner(const GameEvent& event, Twengine::GameObject* observedObject, Twengine::GameObject*)
 {
 	DigDugPumpComponent* digDugPumpComponent = observedObject->GetComponent<DigDugPumpComponent>();
 	if (event.id == make_sdbm_hash("OnCollision") && digDugPumpComponent)
@@ -63,7 +65,7 @@ std::unique_ptr<PookaState> PookaTrackingState::Update(Twengine::GameObject*)
 	return nullptr;
 }
 
-std::unique_ptr<PookaState> PookaTrackingState::GetNotifiedByOwner(const GameEvent& event, Twengine::GameObject* observedObject)
+std::unique_ptr<PookaState> PookaTrackingState::GetNotifiedByOwner(const GameEvent& event, Twengine::GameObject* observedObject, Twengine::GameObject*)
 {
 	DigDugPumpComponent* digDugPumpComponent = observedObject->GetComponent<DigDugPumpComponent>();
 	if (event.id == make_sdbm_hash("OnCollision") && digDugPumpComponent)
@@ -99,7 +101,7 @@ std::unique_ptr<PookaState> PookaGhostState::Update(Twengine::GameObject* stateO
 	return nullptr;
 }
 
-std::unique_ptr<PookaState> PookaGhostState::GetNotifiedByOwner(const GameEvent& event, Twengine::GameObject* observedObject)
+std::unique_ptr<PookaState> PookaGhostState::GetNotifiedByOwner(const GameEvent& event, Twengine::GameObject* observedObject, Twengine::GameObject*)
 {
 	DigDugPumpComponent* digDugPumpComponent = observedObject->GetComponent<DigDugPumpComponent>();
 	if (event.id == make_sdbm_hash("OnCollision") && digDugPumpComponent)
@@ -112,39 +114,64 @@ std::unique_ptr<PookaState> PookaGhostState::GetNotifiedByOwner(const GameEvent&
 PookaPumpingState::PookaPumpingState(DigDugPumpComponent* digDugPumpComponent)
 {
 	m_DigDugPumpComponent = digDugPumpComponent;
-	m_DigDugPumpComponent->GetOnPumpEvent()->AddObserver(this);
 }
 
 // Pumping (WIP)
 void PookaPumpingState::OnEnter(Twengine::GameObject* stateOwner)
 {
+	m_DigDugPumpComponent->GetOnPumpEvent()->AddObserver(stateOwner->GetComponent<PookaComponent>());
 	m_AnimationComponent = stateOwner->GetComponent<Twengine::AnimationComponent>();
 	m_AnimationComponent->PlayAnimation(make_sdbm_hash("PookaPump"), 0.f, false);
 }
 
 std::unique_ptr<PookaState> PookaPumpingState::Update(Twengine::GameObject*)
 {
+	if (!m_IsBeingPumped)
+	{
+		m_DeflateDelayCounter += Twengine::Time::GetInstance().deltaTime;
+		if (m_DeflateDelayCounter >= m_DeflateDelay)
+		{
+			if (m_AnimationComponent->GetCurrentFrameIndex() == 0)
+			{
+				return std::make_unique<PookaTrackingState>();
+			}
+			m_AnimationComponent->GoToPreviousFrame();
+			m_DeflateDelayCounter -= m_DeflateDelay;
+		}
+	}
 	return nullptr;
 }
 
-void PookaPumpingState::Notify(const GameEvent& event, Twengine::GameObject*)
+std::unique_ptr<PookaState> PookaPumpingState::GetNotifiedByOwner(const GameEvent& event, Twengine::GameObject* observedObject, Twengine::GameObject* stateOwner)
 {
 	if (event.id == make_sdbm_hash("OnPump"))
 	{
+		m_DeflateDelayCounter = 0.0f;
 		m_AnimationComponent->GoToNextFrame();
 		if (m_AnimationComponent->HasFinishedPlayingOnce())
 		{
-			// play SFX
-			int i = 0;
-			i;
+			return std::make_unique<PookaDeathState>();
 		}
 	}
+
+	if (event.id == make_sdbm_hash("OnCollisionEnter") && observedObject->GetTag() == make_sdbm_hash("DigDugPump"))
+	{
+		m_DigDugPumpComponent = observedObject->GetComponent<DigDugPumpComponent>();
+		m_DigDugPumpComponent->GetOnPumpEvent()->AddObserver(stateOwner->GetComponent<PookaComponent>());
+		m_IsBeingPumped = true;
+	}
+	if (event.id == make_sdbm_hash("OnCollisionExit") && observedObject->GetTag() == make_sdbm_hash("DigDugPump"))
+	{
+		m_IsBeingPumped = false;
+	}
+	return nullptr;
 }
 
 // Death (WIP)
-void PookaDeathState::OnEnter(Twengine::GameObject*)
+void PookaDeathState::OnEnter(Twengine::GameObject* stateOwner)
 {
-	// Send out an event to increase score
+	// Send out an event to increase score & play a sound
+	stateOwner->MarkForDestruction();
 }
 
 std::unique_ptr<PookaState> PookaDeathState::Update(Twengine::GameObject*)

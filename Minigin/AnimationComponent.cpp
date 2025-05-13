@@ -84,6 +84,11 @@ void Twengine::AnimationComponent::GoToNextFrame()
 	}
 }
 
+void Twengine::AnimationComponent::GoToPreviousFrame()
+{
+	m_CurrentColumn = std::max(m_CurrentColumn - 1, 0);
+}
+
 bool Twengine::AnimationComponent::IsPlayingAnimation(AnimationId id)
 {
 	return (m_Animations.find(id)->second.get() == m_CurrentAnimation);

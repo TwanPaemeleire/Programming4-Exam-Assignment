@@ -31,7 +31,7 @@ void PookaComponent::Update()
 
 void PookaComponent::Notify(const GameEvent& event, Twengine::GameObject* observedObject)
 {
-	CheckAndTransitionStates(m_CurrentState->GetNotifiedByOwner(event, observedObject));
+	CheckAndTransitionStates(m_CurrentState->GetNotifiedByOwner(event, observedObject, GetOwner()));
 }
 
 void PookaComponent::CheckAndTransitionStates(std::unique_ptr<PookaState> newState)

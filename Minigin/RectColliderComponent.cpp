@@ -3,6 +3,7 @@
 #include "GameObject.h"
 
 std::vector<Twengine::RectColliderComponent*> Twengine::RectColliderComponent::s_Colliders = {};
+std::vector<std::pair<Twengine::RectColliderComponent*, Twengine::RectColliderComponent*>> Twengine::RectColliderComponent::s_LastFrameCollisions = {};
 
 Twengine::RectColliderComponent::RectColliderComponent(GameObject* owner)
 	:Component(owner)
@@ -16,27 +17,21 @@ Twengine::RectColliderComponent::RectColliderComponent(GameObject* owner)
 Twengine::RectColliderComponent::~RectColliderComponent()
 {
 	s_Colliders.erase(std::remove(s_Colliders.begin(), s_Colliders.end(), this), s_Colliders.end());
+
+	// Make sure no dangling pointers remain in the last frame collisions vector
+	s_LastFrameCollisions.erase(
+		std::remove_if(s_LastFrameCollisions.begin(), s_LastFrameCollisions.end(),
+			[this](const std::pair<RectColliderComponent*, RectColliderComponent*>& pair)
+			{
+				return pair.first == this || pair.second == this;
+			}),
+		s_LastFrameCollisions.end());
 }
 
 void Twengine::RectColliderComponent::Render() const
 {
 	glm::vec2& topLeft = m_HitBox->topLeft;
 	Renderer::GetInstance().DrawRectangle(topLeft.x, topLeft.y, m_HitBox->width, m_HitBox->height, SDL_Color(0, 255, 0, 255));
-}
-
-void Twengine::RectColliderComponent::FixedUpdate()
-{
-	if (!m_Enabled) return;
-	for (std::size_t colliderIdx{ 0 }; colliderIdx < s_Colliders.size(); ++colliderIdx)
-	{
-		if (this == s_Colliders[colliderIdx] || !s_Colliders[colliderIdx]->GetEnabled()) continue;
-
-		if (IsOverlapping(s_Colliders[colliderIdx]))
-		{
-			m_OnCollisionEvent->NotifyObservers(GameEvent(make_sdbm_hash("OnCollision")), s_Colliders[colliderIdx]->GetOwner());
-			s_Colliders[colliderIdx]->GetOnCollisionEvent()->NotifyObservers(GameEvent(make_sdbm_hash("OnCollision")), GetOwner());
-		}
-	}
 }
 
 void Twengine::RectColliderComponent::Notify(const GameEvent& event, GameObject* observedObject)
@@ -63,4 +58,59 @@ void Twengine::RectColliderComponent::SetHitBox(glm::vec2 topLeft, float width, 
 	m_HitBox->topLeft = topLeft;
 	m_HitBox->width = width;
 	m_HitBox->height = height;
+}
+
+void Twengine::RectColliderComponent::ProcessCollisions()
+{
+	std::vector<std::pair<RectColliderComponent*, RectColliderComponent*>> currentCollisions;
+
+	for (size_t firstIndex = 0; firstIndex < s_Colliders.size(); ++firstIndex)
+	{
+		RectColliderComponent* first = s_Colliders[firstIndex];
+		if (!first->GetEnabled()) continue;
+
+		for (size_t secondIndex = firstIndex + 1; secondIndex < s_Colliders.size(); ++secondIndex)
+		{
+			RectColliderComponent* second = s_Colliders[secondIndex];
+			if (!second->GetEnabled()) continue;
+
+			if (first->IsOverlapping(second))
+			{
+				auto pair = std::make_pair(first, second);
+				currentCollisions.push_back(pair);
+
+				// Called every frame when colliding
+				first->m_OnCollisionEvent->NotifyObservers(GameEvent(make_sdbm_hash("OnCollision")), second->GetOwner());
+				second->m_OnCollisionEvent->NotifyObservers(GameEvent(make_sdbm_hash("OnCollision")), first->GetOwner());
+
+				// Called only when starting collision
+				if (std::find(s_LastFrameCollisions.begin(), s_LastFrameCollisions.end(), pair) == s_LastFrameCollisions.end())
+				{
+					first->m_OnCollisionEvent->NotifyObservers(GameEvent(make_sdbm_hash("OnCollisionEnter")), second->GetOwner());
+					second->m_OnCollisionEvent->NotifyObservers(GameEvent(make_sdbm_hash("OnCollisionEnter")), first->GetOwner());
+				}
+			}
+		}
+	}
+	// Called only when ending collision
+	for (const auto& lastFramePair : s_LastFrameCollisions)
+	{
+		if (std::find(currentCollisions.begin(), currentCollisions.end(), lastFramePair) == currentCollisions.end())
+		{
+			RectColliderComponent* first = lastFramePair.first;
+			RectColliderComponent* second = lastFramePair.second;
+
+			if (first->GetEnabled())
+			{
+				first->m_OnCollisionEvent->NotifyObservers(GameEvent(make_sdbm_hash("OnCollisionExit")), second->GetOwner());
+			}
+			if (second->GetEnabled())
+			{
+				second->m_OnCollisionEvent->NotifyObservers(GameEvent(make_sdbm_hash("OnCollisionExit")), first->GetOwner());
+			}
+		}
+	}
+
+	// Update vector with last frame collisions
+	s_LastFrameCollisions = std::move(currentCollisions);
 }

@@ -26,6 +26,8 @@ public:
 	virtual void Render() const override;
 
 	void OnPumpButtonInteraction(bool isPressBound);
+	void Retract();
+	bool IsStuckInEnemy() const { return m_IsStuckInEnemy; }
 
 	Twengine::Event* GetOnPumpRetractedEvent() const { return m_OnPumpRetractedEvent.get(); }
 	Twengine::Event* GetOnPumpEvent() const { return m_OnPumpEvent.get(); }
@@ -39,7 +41,7 @@ private:
 
 	glm::vec2 m_TextureSize{};
 	float m_ExposedAmount{};
-	float m_PumpShootSpeed{20.f};
+	float m_PumpShootSpeed{80.f};
 	bool m_IsReturning{ false };
 	bool m_PumpButtonIsPressed{ false };
 	bool m_IsStuckInEnemy{false};

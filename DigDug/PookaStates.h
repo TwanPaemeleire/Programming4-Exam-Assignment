@@ -1,6 +1,5 @@
 #pragma once
 #include <memory>
-#include "Observer.h"
 
 namespace Twengine
 {
@@ -26,7 +25,7 @@ public:
 	virtual void OnExit(Twengine::GameObject*) {};
 	virtual std::unique_ptr<PookaState> Update(Twengine::GameObject* stateOwner) = 0;
 	virtual void RenderDebugDrawing() const {};
-	virtual std::unique_ptr<PookaState> GetNotifiedByOwner(const GameEvent&, Twengine::GameObject*) { return nullptr; }
+	virtual std::unique_ptr<PookaState> GetNotifiedByOwner(const GameEvent&, Twengine::GameObject*, Twengine::GameObject*) { return nullptr; }
 };
 
 class PookaIdleState final : public PookaState
@@ -42,7 +41,7 @@ public:
 	virtual void OnEnter(Twengine::GameObject* stateOwner) override;
 	virtual std::unique_ptr<PookaState> Update(Twengine::GameObject* stateOwner) override;
 
-	virtual std::unique_ptr<PookaState> GetNotifiedByOwner(const GameEvent& event, Twengine::GameObject* observedObject) override;
+	virtual std::unique_ptr<PookaState> GetNotifiedByOwner(const GameEvent& event, Twengine::GameObject* observedObject, Twengine::GameObject* stateOwner) override;
 
 private:
 	EnemyMovementComponent* m_MovementComp{};
@@ -61,7 +60,7 @@ public:
 	virtual void OnEnter(Twengine::GameObject* stateOwner) override;
 	virtual std::unique_ptr<PookaState> Update(Twengine::GameObject* stateOwner) override;
 
-	virtual std::unique_ptr<PookaState> GetNotifiedByOwner(const GameEvent& event, Twengine::GameObject* observedObject) override;
+	virtual std::unique_ptr<PookaState> GetNotifiedByOwner(const GameEvent& event, Twengine::GameObject* observedObject, Twengine::GameObject* stateOwner) override;
 
 private:
 	EnemyMovementComponent* m_MovementComp{};
@@ -80,13 +79,13 @@ public:
 	virtual void OnEnter(Twengine::GameObject* stateOwner) override;
 	virtual void OnExit(Twengine::GameObject* stateOwner) override;
 	virtual std::unique_ptr<PookaState> Update(Twengine::GameObject* stateOwner) override;
-	virtual std::unique_ptr<PookaState> GetNotifiedByOwner(const GameEvent& event, Twengine::GameObject* observedObject) override;
+	virtual std::unique_ptr<PookaState> GetNotifiedByOwner(const GameEvent& event, Twengine::GameObject* observedObject, Twengine::GameObject* stateOwner) override;
 
 private:
 	EnemyMovementComponent* m_MovementComp{};
 };
 
-class PookaPumpingState final : public PookaState, public Twengine::Observer
+class PookaPumpingState final : public PookaState
 {
 public:
 	PookaPumpingState(DigDugPumpComponent* digDugPumpComponent);
@@ -98,11 +97,15 @@ public:
 
 	virtual void OnEnter(Twengine::GameObject* stateOwner) override;
 	virtual std::unique_ptr<PookaState> Update(Twengine::GameObject* stateOwner) override;
+	virtual std::unique_ptr<PookaState> GetNotifiedByOwner(const GameEvent& event, Twengine::GameObject* observedObject, Twengine::GameObject* stateOwner) override;
 
-	void Notify(const GameEvent& event, Twengine::GameObject* observedObject) override;
 private:
 	Twengine::AnimationComponent* m_AnimationComponent{};
 	DigDugPumpComponent* m_DigDugPumpComponent;
+
+	float m_DeflateDelay{0.8f};
+	float m_DeflateDelayCounter{};
+	bool m_IsBeingPumped{true};
 };
 
 class PookaDeathState final : public PookaState
