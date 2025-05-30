@@ -126,7 +126,7 @@ void Twengine::Renderer::RenderTextureRect(const Texture2D& texture, float x, fl
 	dstRect.y = static_cast<int>(y);
 	dstRect.w = static_cast<int>(srcWidth);
 	dstRect.h = static_cast<int>(srcHeight);
-
+	
 	SDL_RendererFlip flip = SDL_FLIP_NONE;
 	if (flipHorizontal) flip = SDL_FLIP_HORIZONTAL;
 	if (flipVertical) flip = static_cast<SDL_RendererFlip>(flip | SDL_FLIP_VERTICAL);

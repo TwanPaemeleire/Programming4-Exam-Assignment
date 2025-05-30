@@ -77,7 +77,7 @@ private:
 class PlayerPumpingState final : public PlayerState
 {
 public:
-	PlayerPumpingState() = default;
+	PlayerPumpingState(const glm::vec2& facingDir);
 	virtual ~PlayerPumpingState() = default;
 	PlayerPumpingState(const PlayerPumpingState& other) = delete;
 	PlayerPumpingState(PlayerPumpingState&& other) = delete;
@@ -90,6 +90,9 @@ public:
 
 	virtual std::unique_ptr<PlayerState> Notify(Twengine::GameObject*, const GameEvent&) override;
 private:
+	void SetPositionAndDirectionOfPump(Twengine::GameObject* stateOwner, Twengine::GameObject* pumpObject, float frameWidth, float frameHeight);
+
 	DigDugPumpComponent* m_DigDugPumpComponent{};
+	glm::vec2 m_FacingDirection{};
 };
 

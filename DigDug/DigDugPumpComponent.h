@@ -11,6 +11,8 @@ namespace Twengine
 	class Event;
 }
 
+class GroundComponent;
+
 class DigDugPumpComponent final : public Twengine::Component, public Twengine::Observer
 {
 public:
@@ -24,16 +26,23 @@ public:
 	virtual void Start() override;
 	virtual void Update() override;
 	virtual void Render() const override;
+	virtual void RenderUI() override;
 
 	void OnPumpButtonInteraction(bool isPressBound);
 	void Retract();
 	bool IsStuckInEnemy() const { return m_IsStuckInEnemy; }
+	void FlipHorizontally() { m_HorizontallyFlipped = true; }
+	void ShotVertically() { m_ShotVertically = true; }
 
 	Twengine::Event* GetOnPumpRetractedEvent() const { return m_OnPumpRetractedEvent.get(); }
 	Twengine::Event* GetOnPumpEvent() const { return m_OnPumpEvent.get(); }
 	virtual void Notify(const GameEvent& event, Twengine::GameObject* observedObject) override;
 
 private:
+	void SetHitBoxBasedOnDirection();
+	bool NextPosIsDugOut();
+	void SetDrawPosition();
+
 	std::unique_ptr<Twengine::Event> m_OnPumpRetractedEvent{};
 	std::unique_ptr<Twengine::Event> m_OnPumpEvent{};
 	Twengine::RectColliderComponent* m_RectColliderComponent{};
@@ -48,5 +57,11 @@ private:
 
 	float m_PumpDelay{ 0.5f };
 	float m_PumpDelayCounter{};
+	glm::vec2 m_DrawPosition{};
+
+	GroundComponent* m_GroundComponent{};
+	bool m_HorizontallyFlipped{ false };
+	bool m_ShotVertically{false};
+	float m_ExposedAmountToCheck{};
 };
 

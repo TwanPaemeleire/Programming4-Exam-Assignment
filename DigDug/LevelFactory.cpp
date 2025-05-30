@@ -42,7 +42,8 @@ void LevelFactory::LoadDevScene()
 	auto* grid = gridObject->AddComponent<GridComponent>();
 	GameManager::GetInstance().SetGrid(grid);
 
-	std::unique_ptr<Twengine::SDLSoundSystem> soundSystem = std::make_unique<Twengine::SDLSoundSystem>();
+	//std::unique_ptr<Twengine::SDLSoundSystem> soundSystem = std::make_unique<Twengine::SDLSoundSystem>();
+	std::unique_ptr<Twengine::NullSoundSystem> soundSystem = std::make_unique<Twengine::NullSoundSystem>();
 	Twengine::ServiceLocator::register_sound_system(std::move(soundSystem));
 
 	auto levelDrawObject = std::make_unique<Twengine::GameObject>();
@@ -267,7 +268,7 @@ void LevelFactory::LoadLevelFromFile(Twengine::Scene& scene, GroundComponent* gr
 		{
 			input.read(reinterpret_cast<char*>(&indices.first), sizeof(indices.first));
 			input.read(reinterpret_cast<char*>(&indices.second), sizeof(indices.second));
-			CreateAndAddPooka(scene, indices.first, indices.second, gridComponent);
+			//CreateAndAddPooka(scene, indices.first, indices.second, gridComponent);
 		}
 
 		// Reading and spawning Fygars
@@ -278,7 +279,7 @@ void LevelFactory::LoadLevelFromFile(Twengine::Scene& scene, GroundComponent* gr
 		{
 			input.read(reinterpret_cast<char*>(&indices.first), sizeof(indices.first));
 			input.read(reinterpret_cast<char*>(&indices.second), sizeof(indices.second));
-			CreateAndAddFygar(scene, indices.first, indices.second, gridComponent);
+			//CreateAndAddFygar(scene, indices.first, indices.second, gridComponent);
 		}
 
 		// Reading and spawning Rocks

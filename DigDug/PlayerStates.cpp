@@ -10,6 +10,7 @@
 #include "Renderer.h"
 #include "SceneManager.h"
 #include <memory>
+#include <iostream>
 
 // MOVING
 void PlayerMoving::OnEnter(Twengine::GameObject* stateOwner)
@@ -98,7 +99,7 @@ std::unique_ptr<PlayerState> PlayerMoving::SetYDirection(Twengine::GameObject*, 
 
 std::unique_ptr<PlayerState> PlayerMoving::OnPumpButtonInteraction(Twengine::GameObject*, bool)
 {
-	return std::make_unique<PlayerPumpingState>();
+	return std::make_unique<PlayerPumpingState>(m_Direction);
 }
 
 void PlayerMoving::CalculateNextTarget()
@@ -261,20 +262,24 @@ void PlayerMoving::UpdateFlipAndRotation()
 	}
 }
 
-// WIP
+PlayerPumpingState::PlayerPumpingState(const glm::vec2& facingDir)
+	:m_FacingDirection{facingDir}
+{
+}
+
 void PlayerPumpingState::OnEnter(Twengine::GameObject* stateOwner)
 {
 	Twengine::AnimationComponent* animationComponent = stateOwner->GetComponent<Twengine::AnimationComponent>();
 	animationComponent->PlayAnimation(make_sdbm_hash("DigDugPump"), 0.0f, false);
-	// Check rotation and flipping to determine position to spawn at
 	
 	std::unique_ptr<Twengine::GameObject> pump = std::make_unique<Twengine::GameObject>();
 	m_DigDugPumpComponent = pump->AddComponent<DigDugPumpComponent>();
 	m_DigDugPumpComponent->GetOnPumpRetractedEvent()->AddObserver(stateOwner->GetComponent<DigDugComponent>());
 	
-	glm::vec2 posToSpawn = stateOwner->GetTransform()->GetWorldPosition();
-	posToSpawn.x += animationComponent->GetAnimationFrameWidth();
-	pump->GetTransform()->SetLocalPosition(posToSpawn);
+	SetPositionAndDirectionOfPump(stateOwner, pump.get(), 
+								animationComponent->GetAnimationFrameWidth(), 
+								animationComponent->GetAnimationFrameHeight());
+	
 	Twengine::SceneManager::GetInstance().GetCurrentScene().Add(std::move(pump));
 }
 
@@ -296,4 +301,46 @@ std::unique_ptr<PlayerState> PlayerPumpingState::Notify(Twengine::GameObject*, c
 		return std::make_unique<PlayerMoving>();
 	}
 	return nullptr;
+}
+
+void PlayerPumpingState::SetPositionAndDirectionOfPump(Twengine::GameObject* stateOwner, Twengine::GameObject* pumpObject, float frameWidth, float frameHeight)
+{
+	auto& stateOwnerPos = stateOwner->GetTransform()->GetWorldPosition();
+	glm::vec2 posToSet{};
+	bool flippedHorizontal{};
+	bool vertical{};
+	if (m_FacingDirection == glm::vec2(1.f, 0.f)) // Right
+	{
+		posToSet = stateOwnerPos;
+		posToSet.x += frameWidth;
+		posToSet.y += frameHeight / 2.f;
+		flippedHorizontal = false;
+		vertical = false;
+	}
+	else if (m_FacingDirection == glm::vec2(-1.f, 0.f)) // Left
+	{
+		posToSet = stateOwnerPos;
+		posToSet.y += frameHeight / 2.f;
+		flippedHorizontal = true;
+		vertical = false;
+	}
+	else if (m_FacingDirection == glm::vec2(0.f, -1.f)) // Up
+	{
+		posToSet = stateOwnerPos;
+		posToSet.x += frameWidth / 2.f;
+		flippedHorizontal = true;
+		vertical = true;
+	}
+	else if (m_FacingDirection == glm::vec2(0.f, 1.f)) // Down
+	{
+		posToSet = stateOwnerPos;
+		posToSet.x += frameWidth / 2.f;
+		posToSet.y += frameHeight;
+		flippedHorizontal = false;
+		vertical = true;
+	}
+
+	if (flippedHorizontal) m_DigDugPumpComponent->FlipHorizontally();
+	if (vertical) m_DigDugPumpComponent->ShotVertically();
+	pumpObject->GetTransform()->SetLocalPosition(posToSet);
 }
