@@ -13,10 +13,10 @@
 void load()
 {
 
+	/*auto& persistentScene = */Twengine::SceneManager::GetInstance().CreateScene("PersistentScene", LevelFactory::LoadPersistentScene, true);
 	/*auto& devScene = */Twengine::SceneManager::GetInstance().CreateScene("DevScene", LevelFactory::LoadDevScene);
 	//auto& mainMenuScene = Twengine::SceneManager::GetInstance().CreateScene("MainMenu", LevelFactory::LoadMainMenu);
 
-	/*auto& persistentScene = */Twengine::SceneManager::GetInstance().CreateScene("PersistentScene", LevelFactory::LoadPersistentScene, true);
 
 	//auto& level1Scene = Twengine::SceneManager::GetInstance().CreateScene("Level1", LevelFactory::LoadLevel1);
 	//auto& level2Scene = Twengine::SceneManager::GetInstance().CreateScene("Level2", LevelFactory::LoadLevel2);

@@ -2,6 +2,7 @@
 #include "Component.h"
 #include <memory>
 #include "FygarStates.h"
+#include "Event.h"
 
 class FygarComponent final : public Twengine::Component
 {
@@ -17,8 +18,11 @@ public:
 	virtual void Update() override;
 	virtual void LateUpdate() override;
 
+	Twengine::Event* GetOnDeathEvent() const { return m_OnDeathEvent.get(); }
+
 private:
 	void CheckAndTransitionStates(std::unique_ptr<FygarState> newState);
 	std::unique_ptr<FygarState> m_CurrentState{};
+	std::unique_ptr<Twengine::Event> m_OnDeathEvent{};
 };
 

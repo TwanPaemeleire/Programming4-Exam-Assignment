@@ -8,6 +8,7 @@ namespace Twengine
 
 class GridComponent;
 class GroundComponent;
+class ScoreComponent;
 
 class GameManager final : public Twengine::Singleton<GameManager>
 {
@@ -20,6 +21,9 @@ public:
 
 	void SetPlayerTransform(Twengine::TransformComponent* playerTransform) { m_PlayerTransform = playerTransform; }
 	Twengine::TransformComponent* GetPlayerTransform() const { return m_PlayerTransform; }
+
+	void SetScoreComponent(ScoreComponent* scoreComponent) { m_ScoreComponent = scoreComponent; }
+	ScoreComponent* GetScoreComponent() const { return m_ScoreComponent; }
 private:
 	friend class Singleton<GameManager>;
 	GameManager() = default;
@@ -27,5 +31,6 @@ private:
 	GridComponent* m_GridComponent{};
 	GroundComponent* m_GroundComponent{};
 	Twengine::TransformComponent* m_PlayerTransform{};
+	ScoreComponent* m_ScoreComponent{};
 };
 

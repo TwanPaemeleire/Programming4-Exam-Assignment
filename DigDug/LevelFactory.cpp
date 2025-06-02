@@ -61,22 +61,6 @@ void LevelFactory::LoadDevScene()
 	fpsDisplayer->AddComponent<Twengine::FPSComponent>();
 	scene.Add(std::move(fpsDisplayer));
 
-	auto* smallFont = Twengine::ResourceManager::GetInstance().LoadFont("GameFont.otf", 8);
-	// Tutorial 
-	auto enemyTutorial = std::make_unique<Twengine::GameObject>();
-	auto* enemyTutorialText = enemyTutorial->AddComponent<Twengine::TextComponent>();
-	enemyTutorialText->SetText("Use WASD To Move DigDug");
-	enemyTutorialText->SetFont(smallFont);
-	enemyTutorial->GetTransform()->SetLocalPosition(5, 20);
-	scene.Add(std::move(enemyTutorial));
-
-	auto soundTutorial = std::make_unique<Twengine::GameObject>();
-	auto* soundTutorialText = soundTutorial->AddComponent<Twengine::TextComponent>();
-	soundTutorialText->SetText("Press Z To Trigger A Sound");
-	soundTutorialText->SetFont(smallFont);
-	soundTutorial->GetTransform()->SetLocalPosition(5, 36);
-	scene.Add(std::move(soundTutorial));
-
 	// Display DigDug lives
 	//auto digdugLivesText = std::make_unique<Twengine::GameObject>();
 	//auto* digDugLivesDisplayComp = digdugLivesText->AddComponent<DisplayLivesComponent>();
@@ -162,7 +146,7 @@ void LevelFactory::LoadPersistentScene()
 	auto digdugScoreText = std::make_unique<Twengine::GameObject>();
 	digdugScoreText->AddComponent<Twengine::TextComponent>()->SetFont(smallFont);
 	auto* digdugPointsDisplayComp = digdugScoreText->AddComponent<DisplayPointsComponent>();
-	digdugScoreText->GetTransform()->SetLocalPosition(5, 190);
+	digdugScoreText->GetTransform()->SetLocalPosition(128, 5);
 
 	// DIGDUG
 	auto digdug = std::make_unique<Twengine::GameObject>();
@@ -175,6 +159,7 @@ void LevelFactory::LoadPersistentScene()
 
 	auto* digDugScore = digdug->AddComponent<ScoreComponent>();
 	digDugScore->GetScoreChangedEvent()->AddObserver(digdugPointsDisplayComp);
+	GameManager::GetInstance().SetScoreComponent(digDugScore);
 
 	digdug->AddComponent<DigDugComponent>();
 
@@ -269,7 +254,7 @@ void LevelFactory::LoadLevelFromFile(Twengine::Scene& scene, GroundComponent* gr
 		{
 			input.read(reinterpret_cast<char*>(&indices.first), sizeof(indices.first));
 			input.read(reinterpret_cast<char*>(&indices.second), sizeof(indices.second));
-			//CreateAndAddPooka(scene, indices.first, indices.second, gridComponent);
+			CreateAndAddPooka(scene, indices.first, indices.second, gridComponent);
 		}
 
 		// Reading and spawning Fygars
@@ -303,7 +288,7 @@ void LevelFactory::CreateAndAddPooka(Twengine::Scene& scene, int row, int column
 	pooka->AddComponent<EnemyMovementComponent>();
 	pooka->GetTransform()->SetLocalPosition(gridComponent->GetPositionFromIndex(row, column));
 	pooka->AddComponent<Twengine::RectColliderComponent>();
-	pooka->AddComponent<PookaComponent>();
+	pooka->AddComponent<PookaComponent>()->GetOnDeathEvent()->AddObserver(GameManager::GetInstance().GetScoreComponent());
 	scene.Add(std::move(pooka));
 }
 
@@ -314,7 +299,7 @@ void LevelFactory::CreateAndAddFygar(Twengine::Scene& scene, int row, int column
 	fygar->AddComponent<EnemyMovementComponent>();
 	fygar->GetTransform()->SetLocalPosition(gridComponent->GetPositionFromIndex(row, column));
 	fygar->AddComponent<Twengine::RectColliderComponent>();
-	fygar->AddComponent<FygarComponent>();
+	fygar->AddComponent<FygarComponent>()->GetOnDeathEvent()->AddObserver(GameManager::GetInstance().GetScoreComponent());
 	scene.Add(std::move(fygar));
 }
 

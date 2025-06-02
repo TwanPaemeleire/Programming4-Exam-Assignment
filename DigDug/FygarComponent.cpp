@@ -8,6 +8,7 @@ FygarComponent::FygarComponent(Twengine::GameObject* owner)
 	:Component(owner)
 {
 	GetOwner()->SetTag(make_sdbm_hash("Enemy"));
+	m_OnDeathEvent = std::make_unique<Twengine::Event>();
 }
 
 void FygarComponent::Start()

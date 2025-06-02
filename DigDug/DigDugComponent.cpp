@@ -62,7 +62,7 @@ void DigDugComponent::Notify(const GameEvent& event, Twengine::GameObject* obser
 {
 	if (event.id == make_sdbm_hash("OnCollision") && observedObject->GetTag() == make_sdbm_hash("Enemy"))
 	{
-		std::cout << "Collision with enemy" << std::endl;
+		//std::cout << "Collision with enemy" << std::endl;
 	}
 	CheckAndTransitionStates(m_CurrentState->Notify(GetOwner(), event));
 }

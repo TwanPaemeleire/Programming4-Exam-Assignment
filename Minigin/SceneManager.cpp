@@ -87,8 +87,9 @@ Twengine::Scene& Twengine::SceneManager::CreateScene(const std::string& name, st
 	{
 		m_PersistentScene = std::make_unique<Scene>(name, loadFunction, isPersistent);
 		m_PersistentScene->Load();
+		return *m_PersistentScene.get();
 	}
-	else m_Scenes.emplace_back(std::make_unique<Scene>(name, loadFunction, isPersistent));
+	m_Scenes.emplace_back(std::make_unique<Scene>(name, loadFunction, isPersistent));
 	return *m_Scenes.back().get();
 }
 

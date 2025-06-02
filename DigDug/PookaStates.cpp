@@ -172,6 +172,7 @@ void PookaDeathState::OnEnter(Twengine::GameObject* stateOwner)
 {
 	// Send out an event to increase score & play a sound
 	stateOwner->MarkForDestruction();
+	stateOwner->GetComponent<PookaComponent>()->GetOnDeathEvent()->NotifyObservers(GameEvent(make_sdbm_hash("OnEnemyKilled")), stateOwner);
 }
 
 std::unique_ptr<PookaState> PookaDeathState::Update(Twengine::GameObject*)

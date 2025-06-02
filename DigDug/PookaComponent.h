@@ -3,6 +3,7 @@
 #include <memory>
 #include "PookaStates.h"
 #include "Observer.h"
+#include "Event.h"
 
 class PookaComponent final : public Twengine::Component, public Twengine::Observer
 {
@@ -18,10 +19,10 @@ public:
 	virtual void Update() override;
 
 	void Notify(const GameEvent& event, Twengine::GameObject* observedObject) override;
-
+	Twengine::Event* GetOnDeathEvent() const { return m_OnDeathEvent.get(); }
 private:
 	void CheckAndTransitionStates(std::unique_ptr<PookaState> newState);
 	std::unique_ptr<PookaState> m_CurrentState{};
-
+	std::unique_ptr<Twengine::Event> m_OnDeathEvent{};
 };
 
