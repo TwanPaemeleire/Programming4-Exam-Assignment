@@ -2,6 +2,7 @@
 #include "Renderer.h"
 #include <algorithm>
 #include "SDL_rect.h"
+#include "RectColliderComponent.h"
 
 GridComponent::GridComponent(Twengine::GameObject* owner)
 	:Component(owner)
@@ -59,4 +60,14 @@ std::vector<Cell*> GridComponent::GetCellsInRect(const SDL_Rect& rect)
 		}
 	}
 	return cellsInRect;
+}
+
+std::vector<Cell*> GridComponent::GetCellsInRect(const Twengine::RectHitbox& rect)
+{
+	SDL_Rect sdlRect = {};
+	sdlRect.x = static_cast<int>(rect.topLeft.x);
+	sdlRect.y = static_cast<int>(rect.topLeft.y);
+	sdlRect.w = static_cast<int>(rect.width);
+	sdlRect.h = static_cast<int>(rect.height);
+	return GetCellsInRect(sdlRect);
 }

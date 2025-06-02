@@ -69,6 +69,7 @@ void Twengine::AnimationComponent::PlayAnimation(AnimationId id, float frameDela
 	m_FrameHeight = m_CurrentAnimation->frameHeight;
 	m_HasFinishedPlayingOnce = false;
 	m_PlaysAutomatically = playAutomatically;
+	m_RepeatStartFrame = m_CurrentAnimation->repeatStartColumn;
 }
 
 void Twengine::AnimationComponent::GoToNextFrame()

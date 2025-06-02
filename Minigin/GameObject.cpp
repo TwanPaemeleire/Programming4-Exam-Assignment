@@ -1,9 +1,5 @@
 #include <string>
 #include "GameObject.h"
-#include "ResourceManager.h"
-#include "Renderer.h"
-
-#include "Time.h"
 #include "Component.h"
 
 Twengine::GameObject::GameObject()
@@ -56,6 +52,11 @@ void Twengine::GameObject::LateUpdate()
 	// Delete the components marked for destruction
 	std::erase_if(m_Components, [](const auto& component)
 		{
+			if (component->IsMarkedForDestruction())
+			{
+				int i = 0;
+				i;
+			}
 			return component->IsMarkedForDestruction();
 		});
 

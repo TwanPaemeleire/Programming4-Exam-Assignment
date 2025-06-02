@@ -65,7 +65,7 @@ namespace Twengine
 		int m_RepeatStartFrame{};
 		bool m_HasFinishedPlayingOnce{ false };
 		float m_FrameDelay{ 0.2f };
-		bool m_PlaysAutomatically{};
+		bool m_PlaysAutomatically{false};
 
 		float m_DelayCounter{};
 	};

@@ -24,9 +24,9 @@ namespace Twengine
 
 		void MarkForDestruction() { m_MarkedForDestruction = true; }
 		bool IsMarkedForDestruction() const { return m_MarkedForDestruction; }
+		GameObject* GetOwner() const { return m_Owner; }
 
 	protected:
-		GameObject* GetOwner() const { return m_Owner; }
 		// For easy access to the owner's transform
 		TransformComponent* m_Transform = nullptr;
 

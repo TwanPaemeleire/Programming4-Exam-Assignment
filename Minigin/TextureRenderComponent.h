@@ -21,6 +21,7 @@ namespace Twengine
 		virtual void Render() const override;
 
 		void SetTexture(const std::string& imgPath);
+		const Texture2D* GetTexture() const { return m_Texture; }
 
 	private:
 		Texture2D* m_Texture;

@@ -6,6 +6,11 @@
 
 struct SDL_Rect;
 
+namespace Twengine
+{
+	struct RectHitbox;
+}
+
 struct Cell
 {
 	glm::vec2 topLeft{};
@@ -38,6 +43,7 @@ public:
 	glm::vec2 GetPositionFromIndex(int row, int column) const { return m_Grid[row][column].topLeft; }
 	glm::vec2 GetPositionFromIndex(std::pair<int, int> index) const { return m_Grid[index.first][index.second].topLeft; }
 	std::vector<Cell*> GetCellsInRect(const SDL_Rect& rect);
+	std::vector<Cell*> GetCellsInRect(const Twengine::RectHitbox& rect);
 
 private:
 	static constexpr int m_Rows{18};

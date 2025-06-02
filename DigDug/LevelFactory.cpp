@@ -31,6 +31,7 @@
 #include "FygarComponent.h"
 #include "EnemyMovementComponent.h"
 #include "PumpCommand.h"
+#include "RockComponent.h"
 
 #include "Event.h"
 #include <fstream>
@@ -323,6 +324,9 @@ void LevelFactory::CreateAndAddRock(Twengine::Scene& scene, int row, int column,
 	Twengine::TextureRenderComponent* texture = rock->AddComponent<Twengine::TextureRenderComponent>();
 	texture->SetTexture("Level/Rock.png");
 	auto pos = gridComponent->GetPositionFromIndex(row, column);
+	rock->AddComponent<RockComponent>();
+	rock->AddComponent<Twengine::RectColliderComponent>();
+	rock->AddComponent<Twengine::AnimationComponent>();
 	rock->GetTransform()->SetLocalPosition(gridComponent->GetPositionFromIndex(row, column));
 	scene.Add(std::move(rock));
 }
