@@ -40,6 +40,7 @@ public:
 
 	virtual void OnEnter(Twengine::GameObject* stateOwner) override;
 	virtual std::unique_ptr<RockState> Update(Twengine::GameObject* stateOwner) override;
+	void OnExit(Twengine::GameObject*) override;
 
 private:
 	bool PlayerIsUnderRock();

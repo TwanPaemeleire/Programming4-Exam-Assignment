@@ -11,6 +11,7 @@
 #include "SceneManager.h"
 #include <memory>
 #include <iostream>
+#include <algorithm>
 
 // MOVING
 void PlayerMoving::OnEnter(Twengine::GameObject* stateOwner)
@@ -112,6 +113,9 @@ void PlayerMoving::CalculateNextTarget()
 	if (m_CurrentInputDirection.x > 0) ++nextIndex.second;
 	if (m_CurrentInputDirection.y < 0) --nextIndex.first;
 	if (m_CurrentInputDirection.y > 0) ++nextIndex.first;
+
+	nextIndex = m_GridComponent->ClampToPlayfieldIndex(nextIndex.first, nextIndex.second);
+	if (m_GridComponent->IndexHoldsRock(nextIndex)) return;
 
 	glm::vec2 currentCellPos = m_GridComponent->GetPositionFromIndex(m_CurrentIndex.first, m_CurrentIndex.second);
 	glm::vec2 nextCellPosition = m_GridComponent->GetPositionFromIndex(nextIndex.first, nextIndex.second);

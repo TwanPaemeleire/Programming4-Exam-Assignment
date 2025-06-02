@@ -11,9 +11,18 @@ GridComponent::GridComponent(Twengine::GameObject* owner)
 	// Create the grid
 	for (int rowIndex{}; rowIndex < m_Rows; ++rowIndex)
 	{
+		int layer;
+		if (rowIndex < 2) layer = 0;
+		else if (rowIndex < 6) layer = 1;
+		else if (rowIndex < 10) layer = 2;
+		else if (rowIndex < 14) layer = 3;
+		else if (rowIndex < 17) layer = 4;
+		else layer = 0;
+
 		for (int columnIndex{}; columnIndex < m_Columns; ++columnIndex)
 		{
 			m_Grid[rowIndex][columnIndex].topLeft = glm::vec2(m_CellSize * columnIndex, m_CellSize * rowIndex);
+			m_Grid[rowIndex][columnIndex].layer = layer;
 		}
 	}
 }
@@ -70,4 +79,11 @@ std::vector<Cell*> GridComponent::GetCellsInRect(const Twengine::RectHitbox& rec
 	sdlRect.w = static_cast<int>(rect.width);
 	sdlRect.h = static_cast<int>(rect.height);
 	return GetCellsInRect(sdlRect);
+}
+
+std::pair<int, int> GridComponent::ClampToPlayfieldIndex(int row, int column) const
+{
+	column = std::clamp(column, 0, m_Columns - 1);
+	row = std::clamp(row, 2, m_Rows - 2);
+	return { row, column };
 }

@@ -19,6 +19,7 @@ struct Cell
 	bool canGoDown{ false };
 	bool canGoLeft{ false };
 	bool canGoRight{ false };
+	bool containsRock{ false };
 };
 
 class GridComponent : public Twengine::Component
@@ -44,6 +45,11 @@ public:
 	glm::vec2 GetPositionFromIndex(std::pair<int, int> index) const { return m_Grid[index.first][index.second].topLeft; }
 	std::vector<Cell*> GetCellsInRect(const SDL_Rect& rect);
 	std::vector<Cell*> GetCellsInRect(const Twengine::RectHitbox& rect);
+
+	std::pair<int, int> ClampToPlayfieldIndex(int row, int column) const;
+	void PutRockInCell(std::pair<int, int> index) { m_Grid[index.first][index.second].containsRock = true; }
+	void RemoveRockFromCell(std::pair<int, int> index) { m_Grid[index.first][index.second].containsRock = false; }
+	bool IndexHoldsRock(std::pair<int, int> index) const { return m_Grid[index.first][index.second].containsRock; }
 
 private:
 	static constexpr int m_Rows{18};

@@ -328,5 +328,6 @@ void LevelFactory::CreateAndAddRock(Twengine::Scene& scene, int row, int column,
 	rock->AddComponent<Twengine::RectColliderComponent>();
 	rock->AddComponent<Twengine::AnimationComponent>();
 	rock->GetTransform()->SetLocalPosition(gridComponent->GetPositionFromIndex(row, column));
+	gridComponent->PutRockInCell(std::pair<int, int>(row, column));
 	scene.Add(std::move(rock));
 }

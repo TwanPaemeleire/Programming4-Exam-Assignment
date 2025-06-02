@@ -33,6 +33,12 @@ std::unique_ptr<RockState> RockIdleState::Update(Twengine::GameObject*)
 	return nullptr;
 }
 
+void RockIdleState::OnExit(Twengine::GameObject*)
+{
+	--m_IndexUnderRock.first;
+	GameManager::GetInstance().GetGrid()->RemoveRockFromCell(m_IndexUnderRock);
+}
+
 bool RockIdleState::PlayerIsUnderRock()
 {
 	std::vector<Cell*> cells = GameManager::GetInstance().GetGrid()->GetCellsInRect(*m_PlayerRectColliderComponent->GetHitBox());
