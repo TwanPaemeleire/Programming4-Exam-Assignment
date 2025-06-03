@@ -19,8 +19,10 @@ void FygarComponent::Start()
 	animationComp->AddAnimation("Fygar/FygarGhost.png", make_sdbm_hash("FygarGhost"), 2);
 	animationComp->AddAnimation("Fygar/FygarCrushed.png", make_sdbm_hash("FygarCrushed"), 2);
 	animationComp->PlayAnimation(make_sdbm_hash("FygarMove")); // To make sure we have a valid width and height for the hitbox
-	GetOwner()->GetComponent<Twengine::RectColliderComponent>()->SetHitBox(m_Transform->GetWorldPosition(), animationComp->GetAnimationFrameWidth(), animationComp->GetAnimationFrameHeight());
-	m_CurrentState = std::make_unique<FygarFireBreathingState>();
+	Twengine::RectColliderComponent* rectColliderComponent = GetOwner()->GetComponent<Twengine::RectColliderComponent>();
+	rectColliderComponent->SetHitBox(m_Transform->GetWorldPosition(), animationComp->GetAnimationFrameWidth(), animationComp->GetAnimationFrameHeight());
+	rectColliderComponent->GetOnCollisionEvent()->AddObserver(this);
+	m_CurrentState = std::make_unique<FygarIdleState>();
 	m_CurrentState->OnEnter(GetOwner());
 }
 
@@ -32,6 +34,11 @@ void FygarComponent::Update()
 void FygarComponent::LateUpdate()
 {
 	CheckAndTransitionStates(m_CurrentState->LateUpdate(GetOwner()));
+}
+
+void FygarComponent::Notify(const GameEvent& event, Twengine::GameObject* observedObject)
+{
+	CheckAndTransitionStates(m_CurrentState->GetNotifiedByOwner(event, observedObject, GetOwner()));
 }
 
 void FygarComponent::CheckAndTransitionStates(std::unique_ptr<FygarState> newState)

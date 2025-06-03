@@ -116,7 +116,6 @@ PookaPumpingState::PookaPumpingState(DigDugPumpComponent* digDugPumpComponent)
 	m_DigDugPumpComponent = digDugPumpComponent;
 }
 
-// Pumping (WIP)
 void PookaPumpingState::OnEnter(Twengine::GameObject* stateOwner)
 {
 	m_DigDugPumpComponent->GetOnPumpEvent()->AddObserver(stateOwner->GetComponent<PookaComponent>());

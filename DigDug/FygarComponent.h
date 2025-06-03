@@ -3,8 +3,9 @@
 #include <memory>
 #include "FygarStates.h"
 #include "Event.h"
+#include "Observer.h"
 
-class FygarComponent final : public Twengine::Component
+class FygarComponent final : public Twengine::Component, public Twengine::Observer
 {
 public:
 	FygarComponent(Twengine::GameObject* owner);
@@ -18,6 +19,7 @@ public:
 	virtual void Update() override;
 	virtual void LateUpdate() override;
 
+	void Notify(const GameEvent& event, Twengine::GameObject* observedObject) override;
 	Twengine::Event* GetOnDeathEvent() const { return m_OnDeathEvent.get(); }
 
 private:

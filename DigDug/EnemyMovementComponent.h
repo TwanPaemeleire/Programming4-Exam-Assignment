@@ -37,8 +37,8 @@ public:
 
 private:
 	// Ghost movement
-	float m_MinimumGhostFormCooldown{5.f};
-	float m_MaximumGhostFormCooldown{20.f};
+	float m_MinimumGhostFormCooldown{20.f};
+	float m_MaximumGhostFormCooldown{40.f};
 	float m_GhostCooldown{};
 	float m_GhostCoolDownTimer{};
 	bool m_GhostCooldownHasFinished{false};

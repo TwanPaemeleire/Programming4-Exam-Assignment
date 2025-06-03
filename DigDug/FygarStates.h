@@ -4,9 +4,12 @@
 namespace Twengine
 {
 	class GameObject;
+	class AnimationComponent;
 }
 
+struct GameEvent;
 class EnemyMovementComponent;
+class GridComponent;
 
 class FygarState
 {
@@ -22,6 +25,7 @@ public:
 	virtual void OnExit(Twengine::GameObject*) {};
 	virtual std::unique_ptr<FygarState> Update(Twengine::GameObject* stateOwner) = 0;
 	virtual std::unique_ptr<FygarState> LateUpdate(Twengine::GameObject*) { return nullptr; }
+	virtual std::unique_ptr<FygarState> GetNotifiedByOwner(const GameEvent&, Twengine::GameObject*, Twengine::GameObject*) { return nullptr; }
 	virtual void RenderDebugDrawing() const {};
 };
 
@@ -37,6 +41,7 @@ public:
 
 	virtual void OnEnter(Twengine::GameObject* stateOwner) override;
 	virtual std::unique_ptr<FygarState> Update(Twengine::GameObject* stateOwner) override;
+	virtual std::unique_ptr<FygarState> GetNotifiedByOwner(const GameEvent&, Twengine::GameObject*, Twengine::GameObject*) override;
 
 private:
 	EnemyMovementComponent* m_MovementComp{};
@@ -54,9 +59,14 @@ public:
 
 	virtual void OnEnter(Twengine::GameObject* stateOwner) override;
 	virtual std::unique_ptr<FygarState> Update(Twengine::GameObject* stateOwner) override;
+	virtual std::unique_ptr<FygarState> GetNotifiedByOwner(const GameEvent&, Twengine::GameObject*, Twengine::GameObject*) override;
 
 private:
 	EnemyMovementComponent* m_MovementComp{};
+	GridComponent* m_GridComponent{};
+	float m_DistanceToTriggerFire{86.f};
+	float m_FireCooldown{ 5.f };
+	float m_FireCooldownCounter{0.f};
 };
 
 class FygarGhostState final : public FygarState
@@ -72,6 +82,7 @@ public:
 	virtual void OnEnter(Twengine::GameObject* stateOwner) override;
 	virtual void OnExit(Twengine::GameObject* stateOwner) override;
 	virtual std::unique_ptr<FygarState> Update(Twengine::GameObject* stateOwner) override;
+	virtual std::unique_ptr<FygarState> GetNotifiedByOwner(const GameEvent&, Twengine::GameObject*, Twengine::GameObject*) override;
 
 private:
 	EnemyMovementComponent* m_MovementComp{};
@@ -90,8 +101,45 @@ public:
 	virtual void OnEnter(Twengine::GameObject* stateOwner) override;
 	virtual std::unique_ptr<FygarState> Update(Twengine::GameObject* stateOwner) override;
 	virtual std::unique_ptr<FygarState> LateUpdate(Twengine::GameObject* stateOwner) override;
+	virtual std::unique_ptr<FygarState> GetNotifiedByOwner(const GameEvent&, Twengine::GameObject*, Twengine::GameObject*) override;
 
 private:
 	EnemyMovementComponent* m_MovementComp{};
 	Twengine::GameObject* m_FireGameObject{};
+};
+
+class FygarPumpingState final : public FygarState
+{
+public:
+	FygarPumpingState() = default;
+	virtual ~FygarPumpingState() = default;
+	FygarPumpingState(const FygarPumpingState& other) = delete;
+	FygarPumpingState(FygarPumpingState&& other) = delete;
+	FygarPumpingState& operator=(const FygarPumpingState& other) = delete;
+	FygarPumpingState& operator=(FygarPumpingState&& other) = delete;
+
+	virtual void OnEnter(Twengine::GameObject* stateOwner) override;
+	virtual std::unique_ptr<FygarState> Update(Twengine::GameObject* stateOwner) override;
+	virtual std::unique_ptr<FygarState> GetNotifiedByOwner(const GameEvent&, Twengine::GameObject*, Twengine::GameObject*) override;
+
+private:
+	Twengine::AnimationComponent* m_AnimationComponent{};
+
+	float m_DeflateDelay{ 0.8f };
+	float m_DeflateDelayCounter{};
+	bool m_IsBeingPumped{ true };
+};
+
+class FygarDeathState final : public FygarState
+{
+public:
+	FygarDeathState() = default;
+	virtual ~FygarDeathState() = default;
+	FygarDeathState(const FygarDeathState& other) = delete;
+	FygarDeathState(FygarDeathState&& other) = delete;
+	FygarDeathState& operator=(const FygarDeathState& other) = delete;
+	FygarDeathState& operator=(FygarDeathState&& other) = delete;
+
+	virtual void OnEnter(Twengine::GameObject* stateOwner) override;
+	virtual std::unique_ptr<FygarState> Update(Twengine::GameObject* stateOwner) override;
 };
