@@ -128,6 +128,7 @@ private:
 	float m_DeflateDelay{ 0.8f };
 	float m_DeflateDelayCounter{};
 	bool m_IsBeingPumped{ true };
+	bool m_HasBeenPumpedOnce{false};
 };
 
 class FygarDeathState final : public FygarState

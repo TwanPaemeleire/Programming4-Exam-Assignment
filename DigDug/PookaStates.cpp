@@ -118,7 +118,7 @@ PookaPumpingState::PookaPumpingState(DigDugPumpComponent* digDugPumpComponent)
 
 void PookaPumpingState::OnEnter(Twengine::GameObject* stateOwner)
 {
-	m_DigDugPumpComponent->GetOnPumpEvent()->AddObserver(stateOwner->GetComponent<PookaComponent>());
+	//m_DigDugPumpComponent->GetOnPumpEvent()->AddObserver(stateOwner->GetComponent<PookaComponent>());
 	m_AnimationComponent = stateOwner->GetComponent<Twengine::AnimationComponent>();
 	m_AnimationComponent->PlayAnimation(make_sdbm_hash("PookaPump"), 0.f, false);
 }
@@ -158,6 +158,17 @@ std::unique_ptr<PookaState> PookaPumpingState::GetNotifiedByOwner(const GameEven
 		m_DigDugPumpComponent = observedObject->GetComponent<DigDugPumpComponent>();
 		m_DigDugPumpComponent->GetOnPumpEvent()->AddObserver(stateOwner->GetComponent<PookaComponent>());
 		m_IsBeingPumped = true;
+
+		if (m_HasBeenPumpedOnce)
+		{
+			m_DeflateDelayCounter = 0.0f;
+			m_AnimationComponent->GoToNextFrame();
+			if (m_AnimationComponent->HasFinishedPlayingOnce())
+			{
+				return std::make_unique<PookaDeathState>();
+			}
+		}
+		else m_HasBeenPumpedOnce = true;
 	}
 	if (event.id == make_sdbm_hash("OnCollisionExit") && observedObject->GetTag() == make_sdbm_hash("DigDugPump"))
 	{

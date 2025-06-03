@@ -38,12 +38,11 @@ std::unique_ptr<FygarState> FygarIdleState::Update(Twengine::GameObject*)
 	return nullptr;
 }
 
-std::unique_ptr<FygarState> FygarIdleState::GetNotifiedByOwner(const GameEvent& event, Twengine::GameObject* observedObject, Twengine::GameObject* stateOwner)
+std::unique_ptr<FygarState> FygarIdleState::GetNotifiedByOwner(const GameEvent& event, Twengine::GameObject* observedObject, Twengine::GameObject*)
 {
 	DigDugPumpComponent* digDugPumpComponent = observedObject->GetComponent<DigDugPumpComponent>();
 	if (event.id == make_sdbm_hash("OnCollision") && digDugPumpComponent)
 	{
-		digDugPumpComponent->GetOnPumpEvent()->AddObserver(stateOwner->GetComponent<FygarComponent>());
 		return std::make_unique<FygarPumpingState>();
 	}
 	return nullptr;
@@ -90,12 +89,11 @@ std::unique_ptr<FygarState> FygarTrackingState::Update(Twengine::GameObject* sta
 	return nullptr;
 }
 
-std::unique_ptr<FygarState> FygarTrackingState::GetNotifiedByOwner(const GameEvent& event, Twengine::GameObject* observedObject, Twengine::GameObject* stateOwner)
+std::unique_ptr<FygarState> FygarTrackingState::GetNotifiedByOwner(const GameEvent& event, Twengine::GameObject* observedObject, Twengine::GameObject*)
 {
 	DigDugPumpComponent* digDugPumpComponent = observedObject->GetComponent<DigDugPumpComponent>();
 	if (event.id == make_sdbm_hash("OnCollision") && digDugPumpComponent)
 	{
-		digDugPumpComponent->GetOnPumpEvent()->AddObserver(stateOwner->GetComponent<FygarComponent>());
 		return std::make_unique<FygarPumpingState>();
 	}
 	return nullptr;
@@ -113,12 +111,11 @@ void FygarGhostState::OnExit(Twengine::GameObject*)
 	m_MovementComp->ResetGhostStateValues();
 }
 
-std::unique_ptr<FygarState> FygarGhostState::GetNotifiedByOwner(const GameEvent& event, Twengine::GameObject* observedObject, Twengine::GameObject* stateOwner)
+std::unique_ptr<FygarState> FygarGhostState::GetNotifiedByOwner(const GameEvent& event, Twengine::GameObject* observedObject, Twengine::GameObject*)
 {
 	DigDugPumpComponent* digDugPumpComponent = observedObject->GetComponent<DigDugPumpComponent>();
 	if (event.id == make_sdbm_hash("OnCollision") && digDugPumpComponent)
 	{
-		digDugPumpComponent->GetOnPumpEvent()->AddObserver(stateOwner->GetComponent<FygarComponent>());
 		return std::make_unique<FygarPumpingState>();
 	}
 	return nullptr;
@@ -172,13 +169,11 @@ std::unique_ptr<FygarState> FygarFireBreathingState::LateUpdate(Twengine::GameOb
 	return nullptr;
 }
 
-std::unique_ptr<FygarState> FygarFireBreathingState::GetNotifiedByOwner(const GameEvent& event, Twengine::GameObject* observedObject, Twengine::GameObject* stateOwner)
+std::unique_ptr<FygarState> FygarFireBreathingState::GetNotifiedByOwner(const GameEvent& event, Twengine::GameObject* observedObject, Twengine::GameObject*)
 {
-	std::cout << "collision in fire breathing state" << std::endl;
 	DigDugPumpComponent* digDugPumpComponent = observedObject->GetComponent<DigDugPumpComponent>();
 	if (event.id == make_sdbm_hash("OnCollision") && digDugPumpComponent)
 	{
-		digDugPumpComponent->GetOnPumpEvent()->AddObserver(stateOwner->GetComponent<FygarComponent>());
 		return std::make_unique<FygarPumpingState>();
 	}
 	return nullptr;
@@ -225,6 +220,18 @@ std::unique_ptr<FygarState> FygarPumpingState::GetNotifiedByOwner(const GameEven
 		DigDugPumpComponent* pumpComponent = observedObject->GetComponent<DigDugPumpComponent>();
 		pumpComponent->GetOnPumpEvent()->AddObserver(stateOwner->GetComponent<FygarComponent>());
 		m_IsBeingPumped = true;
+
+		if (m_HasBeenPumpedOnce)
+		{
+			m_DeflateDelayCounter = 0.0f;
+			m_AnimationComponent->GoToNextFrame();
+			if (m_AnimationComponent->HasFinishedPlayingOnce())
+			{
+				return std::make_unique<FygarDeathState>();
+			}
+		}
+		else m_HasBeenPumpedOnce = true;
+
 	}
 	if (event.id == make_sdbm_hash("OnCollisionExit") && observedObject->GetTag() == make_sdbm_hash("DigDugPump"))
 	{

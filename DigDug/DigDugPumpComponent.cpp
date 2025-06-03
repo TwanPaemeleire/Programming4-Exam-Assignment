@@ -7,8 +7,8 @@
 #include "GameObject.h"
 #include "Renderer.h"
 #include "MyTime.h"
-#include "Event.h"
 #include <iostream>
+#include "Event.h"
 
 DigDugPumpComponent::DigDugPumpComponent(Twengine::GameObject* owner)
 	:Component(owner)

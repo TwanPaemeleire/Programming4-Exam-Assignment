@@ -55,7 +55,7 @@ private:
 	bool m_PumpButtonIsPressed{ false };
 	bool m_IsStuckInEnemy{false};
 
-	float m_PumpDelay{ 0.5f };
+	float m_PumpDelay{ 1.0f };
 	float m_PumpDelayCounter{};
 	glm::vec2 m_DrawPosition{};
 
