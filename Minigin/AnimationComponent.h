@@ -48,6 +48,8 @@ namespace Twengine
 		void SetFlipVertical(bool flipped) { m_FlipVertical = flipped; }
 		void SetRotationAngle(double angle) { m_RotationAngle = angle; }
 
+		const Texture2D* GetTexture2D() const { return m_CurrentAnimation->spriteSheet; }
+
 	private:
 
 		// General

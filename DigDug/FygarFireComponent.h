@@ -19,12 +19,18 @@ public:
 
 	virtual void Start() override;
 	virtual void Update() override;
+	virtual void RenderUI() override;
+	void ShotToRight() { m_ShotToRight = true; }
 
 private:
+	void AdjustHitBox(float newWidth);
+	bool IsGoingToHitWall(float newWidth);
+
 	Twengine::AnimationComponent* m_AnimationComponent{};
 	Twengine::RectColliderComponent* m_RectColliderComponent{};
 	int m_CurrentFrameIndex{};
 	float m_FrameWidth{};
 	float m_FrameHeight{};
+	bool m_ShotToRight{false};
 };
 

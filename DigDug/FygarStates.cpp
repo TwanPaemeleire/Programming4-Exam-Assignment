@@ -12,6 +12,8 @@
 #include "DigDugPumpComponent.h"
 #include "FygarComponent.h"
 
+float FygarTrackingState::m_FireCooldownCounter = 5.f;
+
 void FygarIdleState::OnEnter(Twengine::GameObject* stateOwner)
 {
 	m_MovementComp = stateOwner->GetComponent<EnemyMovementComponent>();
@@ -138,9 +140,20 @@ std::unique_ptr<FygarState> FygarGhostState::Update(Twengine::GameObject* stateO
 void FygarFireBreathingState::OnEnter(Twengine::GameObject* stateOwner)
 {
 	std::unique_ptr<Twengine::GameObject> fire = std::make_unique<Twengine::GameObject>();
-	fire->AddComponent<FygarFireComponent>();
+	FygarFireComponent* fireComponent = fire->AddComponent<FygarFireComponent>();
 	m_FireGameObject = fire.get();
 	fire->SetParent(stateOwner, false);
+
+	glm::vec2 playerPos = GameManager::GetInstance().GetPlayerTransform()->GetWorldPosition();
+	glm::vec2 fygarPos = stateOwner->GetTransform()->GetWorldPosition();
+	int playerColumn = GameManager::GetInstance().GetGrid()->GetIndexFromPosition(playerPos).second;
+	int fygarColumn = GameManager::GetInstance().GetGrid()->GetIndexFromPosition(fygarPos).second;
+
+	if (playerColumn >= fygarColumn) // Should shoot the fire to the right
+	{
+		fireComponent->ShotToRight();
+	}
+
 	//m_FireGameObject->Start(); // TEMP, REMOVE LATER, THIS IS CURRENTLY BEING ADDED IN GAME "START" AND THEREFORE NOT ACTUALLY CALLING START ON THIS OBJECT
 	Twengine::SceneManager::GetInstance().GetCurrentScene().Add(std::move(fire));
 }

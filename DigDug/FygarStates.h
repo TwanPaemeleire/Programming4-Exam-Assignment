@@ -66,7 +66,7 @@ private:
 	GridComponent* m_GridComponent{};
 	float m_DistanceToTriggerFire{86.f};
 	float m_FireCooldown{ 5.f };
-	float m_FireCooldownCounter{0.f};
+	static float m_FireCooldownCounter;
 };
 
 class FygarGhostState final : public FygarState
