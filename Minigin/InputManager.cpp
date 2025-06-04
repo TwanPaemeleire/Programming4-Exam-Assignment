@@ -9,12 +9,24 @@ void Twengine::InputManager::Init()
 	{
 		m_Controllers.emplace_back(std::make_unique<Controller>(controllerIdx));
 	}
+	m_CurrentMap = make_sdbm_hash("Default");
 }
 
 bool Twengine::InputManager::ProcessInput()
 {
 	HandleControllerInput();
 	return HandleKeyBoardInput();
+}
+
+void Twengine::InputManager::SetCommandMap(MapId id)
+{
+	m_CurrentMap = id;
+}
+
+void Twengine::InputManager::ClearCommandMap(MapId id)
+{
+	m_BindedCommandMaps[id].clear();
+	m_JoystickCommandMaps[id].clear();
 }
 
 void Twengine::InputManager::HandleControllerInput()
@@ -28,7 +40,7 @@ void Twengine::InputManager::HandleControllerInput()
 		float leftX = controller->GetLeftStickX();
 		float leftY = controller->GetLeftStickY();
 
-		for (const auto& joystickCommand : m_BindedJoystickCommands)
+		for (const auto& joystickCommand : m_JoystickCommandMaps[m_CurrentMap])
 		{
 			if (joystickCommand->controllerIndex == controllerIndex)
 			{
@@ -36,7 +48,7 @@ void Twengine::InputManager::HandleControllerInput()
 			}
 		}
 
-		for (const auto& command : m_BindedCommands)
+		for (const auto& command : m_BindedCommandMaps[m_CurrentMap])
 		{
 			if (command->controllerIndex == -1) // If index is -1 then this command is binded to the keyboard
 				continue;
@@ -80,7 +92,7 @@ bool Twengine::InputManager::HandleKeyBoardInput()
 
 		if (e.type == SDL_KEYUP || e.type == SDL_KEYDOWN)
 		{
-			for (const auto& command : m_BindedCommands)
+			for (const auto& command : m_BindedCommandMaps[m_CurrentMap])
 			{
 				if (command->controllerIndex != -1) // If index is not -1 then this command is binded to a controller
 					continue;
@@ -111,10 +123,9 @@ bool Twengine::InputManager::HandleKeyBoardInput()
 		ImGui_ImplSDL2_ProcessEvent(&e);
 	}
 
-
 	const Uint8* keyStates = SDL_GetKeyboardState(NULL);
 
-	for (const auto& command : m_BindedCommands)
+	for (const auto& command : m_BindedCommandMaps[m_CurrentMap])
 	{
 		if (command->controllerIndex != -1) continue;  // If index is not -1 then this command is binded to a controller
 		if (command->interactionState != InteractionStates::pressed) continue; // Check if this command has the "Pressed" InteractionState

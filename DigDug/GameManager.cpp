@@ -5,9 +5,11 @@
 #include "GridComponent.h"
 #include "GroundComponent.h"
 #include "DigDugComponent.h"
+#include "InputManager.h"
 
 void GameManager::StartGameFromMenu(GameMode)
 {
+	Twengine::InputManager::GetInstance().ClearCommandMap(make_sdbm_hash("MainMenu"));
 	Twengine::SceneManager::GetInstance().GetPersistentScene().ActivateAllObjects();
 	Twengine::SceneManager::GetInstance().SetCurrentScene("Level1");
 }
@@ -17,11 +19,13 @@ void GameManager::Notify(const GameEvent& event, Twengine::GameObject* observedO
 	if (event.id == make_sdbm_hash("PlayerDied"))
 	{
 		LivesComponent* digDugLives = observedObject->GetComponent<LivesComponent>();
-		// full death -> go to score
+		// Player has no more lives left, so go to the scene for saving the score
 		if (digDugLives->GetLives() <= 0)
 		{
 			if (m_GameMode == GameMode::SinglePlayer)
 			{
+				Twengine::SceneManager::GetInstance().GetPersistentScene().DeactivateAllObjects();
+				Twengine::InputManager::GetInstance().ClearCommandMap(make_sdbm_hash("Game"));
 				Twengine::SceneManager::GetInstance().SetCurrentScene("HighScoreScreen");
 			}
 			else
@@ -29,7 +33,7 @@ void GameManager::Notify(const GameEvent& event, Twengine::GameObject* observedO
 				Twengine::SceneManager::GetInstance().SetCurrentScene("MainMenu");
 			}
 		}
-		// lives left -> reload scene
+		// Player has lives left, so reload the scene
 		else
 		{
 			m_GridComponent->Reset();

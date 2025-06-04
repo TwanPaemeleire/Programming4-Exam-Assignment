@@ -1,13 +1,15 @@
 #pragma once
 #include "Singleton.h"
-
 #include <vector>
 #include <memory>
+#include <unordered_map>
 
 class GameObject;
 #include "Controller.h"
 #include "GameObjectCommand.h"
 #include "JoystickCommand.h"
+#include "SdbmHash.h"
+using MapId = unsigned int;
 
 namespace Twengine
 {
@@ -44,17 +46,21 @@ namespace Twengine
 		template <typename command>
 		void RemoveBindedCommand(int controllerIndex);
 
+		void SetCommandMap(MapId id);
+		void ClearCommandMap(MapId id);
+
 	private:
 		void HandleControllerInput();
 		bool HandleKeyBoardInput();
 
 		std::vector<std::unique_ptr<Controller>> m_Controllers;
-		std::vector<std::unique_ptr<BindedCommand>> m_BindedCommands;
-		std::vector<std::unique_ptr<BindedJoystickCommand>> m_BindedJoystickCommands;
+
+		std::unordered_map<MapId, std::vector<std::unique_ptr<BindedCommand>>> m_BindedCommandMaps;
+		std::unordered_map<MapId, std::vector<std::unique_ptr<BindedJoystickCommand>>> m_JoystickCommandMaps;
+
+		MapId m_CurrentMap{};
 	};
 }
-
-
 
 template<typename T>
 inline T* Twengine::InputManager::BindCommandToInput(unsigned int button, Twengine::InteractionStates interactionState, GameObject* gameObject, int controllerIndex)
@@ -70,7 +76,7 @@ inline T* Twengine::InputManager::BindCommandToInput(unsigned int button, Twengi
 
 	newBindedCommand->interactionState = interactionState;
 	newBindedCommand->controllerIndex = controllerIndex;
-	m_BindedCommands.emplace_back(std::move(newBindedCommand));
+	m_BindedCommandMaps[m_CurrentMap].emplace_back(std::move(newBindedCommand));
 	return tempRawPointer;
 }
 
@@ -86,7 +92,7 @@ inline command* Twengine::InputManager::BindJoystickCommandToInput(InteractionSt
 
 	newBindedCommand->interactionState = interactionState;
 	newBindedCommand->controllerIndex = controllerIndex;
-	m_BindedJoystickCommands.emplace_back(std::move(newBindedCommand));
+	m_JoystickCommandMaps[m_CurrentMap].emplace_back(std::move(newBindedCommand));
 	return tempRawPointer;
 }
 
@@ -94,13 +100,14 @@ template<typename T>
 inline void Twengine::InputManager::RemoveBindedCommand(int controllerIndex)
 {
 	static_assert(std::is_base_of<GameObjectCommand, T>::value, "Type passed to RemoveBindedCommand<>() does NOT inherit from GameObjectCommand");
-	for (const auto& command : m_BindedCommands)
+	for (const auto& command : m_BindedCommandMaps[m_CurrentMap])
 	{
 		if (command->controllerIndex != controllerIndex) continue;
 		T* tempCommand = dynamic_cast<T*>(command->command.get());
 		if (tempCommand != nullptr) // If this goes through, this is the command that should be removed
 		{
-			m_BindedCommands.erase(std::remove(m_BindedCommands.begin(), m_BindedCommands.end(), command), m_BindedCommands.end());
+			m_BindedCommandMaps[m_CurrentMap].erase(std::remove(m_BindedCommandMaps[m_CurrentMap].begin(), m_BindedCommandMaps[m_CurrentMap].end(), command), m_BindedCommandMaps[m_CurrentMap].end());
+			//m_BindedCommands.erase(std::remove(m_BindedCommands.begin(), m_BindedCommands.end(), command), m_BindedCommands.end());
 		}
 	}	
 }

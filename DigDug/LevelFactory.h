@@ -18,6 +18,7 @@ public:
 	static void LoadLevel1();
 	static void LoadLevel2();
 	static void LoadLevel3();
+	static void LoadHighScoreScene();
 
 private:
 	static void LoadLevelFromFile(Twengine::Scene& scene, GroundComponent* groundComponent, GridComponent* gridComponent, const std::string& filePath);

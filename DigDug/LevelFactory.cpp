@@ -36,6 +36,7 @@
 #include "MainMenuComponent.h"
 #include "ButtonSwitchCommand.h"
 #include "ButtonPressCommand.h"
+#include "ScoreSavingComponent.h"
 
 #include "Event.h"
 #include <fstream>
@@ -94,6 +95,7 @@ void LevelFactory::LoadMainMenu()
 	auto menuObject = std::make_unique<Twengine::GameObject>();
 	menuObject->AddComponent<MainMenuComponent>();
 
+	Twengine::InputManager::GetInstance().SetCommandMap(make_sdbm_hash("MainMenu"));
 	Twengine::InputManager::GetInstance().BindCommandToInput<ButtonSwitchCommand>(SDLK_DOWN, Twengine::InteractionStates::down, menuObject.get(), -1)->SetDirection(1);
 	Twengine::InputManager::GetInstance().BindCommandToInput<ButtonSwitchCommand>(SDLK_UP, Twengine::InteractionStates::down, menuObject.get(), -1)->SetDirection(-1);
 	Twengine::InputManager::GetInstance().BindCommandToInput<ButtonPressCommand>(SDLK_SPACE, Twengine::InteractionStates::down, menuObject.get(), -1);
@@ -142,6 +144,7 @@ void LevelFactory::LoadPersistentScene()
 
 	digdug->AddComponent<DigDugComponent>();
 
+	Twengine::InputManager::GetInstance().SetCommandMap(make_sdbm_hash("Game"));
 	Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_w, Twengine::InteractionStates::pressed, digdug.get(), -1)->SetDirection(0, -1);
 	Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_s, Twengine::InteractionStates::pressed, digdug.get(), -1)->SetDirection(0, 1);
 	Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_a, Twengine::InteractionStates::pressed, digdug.get(), -1)->SetDirection(-1, 0);
@@ -164,19 +167,27 @@ void LevelFactory::LoadPersistentScene()
 void LevelFactory::LoadLevel1()
 {
 	Twengine::Scene& scene = Twengine::SceneManager::GetInstance().GetCurrentScene();
+	Twengine::InputManager::GetInstance().SetCommandMap(make_sdbm_hash("Game"));
 	LoadLevelFromFile(scene, GameManager::GetInstance().GetGround(), GameManager::GetInstance().GetGrid(), "Level/Level1.bin");
 }
 
 void LevelFactory::LoadLevel2()
 {
 	Twengine::Scene& scene = Twengine::SceneManager::GetInstance().GetCurrentScene();
+	Twengine::InputManager::GetInstance().SetCommandMap(make_sdbm_hash("Game"));
 	LoadLevelFromFile(scene, GameManager::GetInstance().GetGround(), GameManager::GetInstance().GetGrid(), "Level/Level2.bin");
 }
 
 void LevelFactory::LoadLevel3()
 {
 	Twengine::Scene& scene = Twengine::SceneManager::GetInstance().GetCurrentScene();
+	Twengine::InputManager::GetInstance().SetCommandMap(make_sdbm_hash("Game"));
 	LoadLevelFromFile(scene, GameManager::GetInstance().GetGround(), GameManager::GetInstance().GetGrid(), "Level/Level3.bin");
+}
+
+void LevelFactory::LoadHighScoreScene()
+{
+
 }
 
 void LevelFactory::LoadLevelFromFile(Twengine::Scene& scene, GroundComponent* groundComponent, GridComponent* gridComponent, const std::string& filePath)
