@@ -5,11 +5,13 @@ namespace Twengine
 {
 	class GameObject;
 	class AnimationComponent;
+	class Event;
 }
 
 struct GameEvent;
 class EnemyMovementComponent;
 class GridComponent;
+class RockComponent;
 
 class FygarState
 {
@@ -129,6 +131,25 @@ private:
 	float m_DeflateDelayCounter{};
 	bool m_IsBeingPumped{ true };
 	bool m_HasBeenPumpedOnce{false};
+};
+
+class FygarRockDragState final : public FygarState
+{
+public:
+	FygarRockDragState(RockComponent* rockComponent);
+	virtual ~FygarRockDragState() = default;
+	FygarRockDragState(const FygarRockDragState& other) = delete;
+	FygarRockDragState(FygarRockDragState&& other) = delete;
+	FygarRockDragState& operator=(const FygarRockDragState& other) = delete;
+	FygarRockDragState& operator=(FygarRockDragState&& other) = delete;
+
+	virtual void OnEnter(Twengine::GameObject* stateOwner) override;
+	virtual std::unique_ptr<FygarState> Update(Twengine::GameObject* stateOwner) override;
+private:
+	Twengine::AnimationComponent* m_AnimationComponent{};
+	RockComponent* m_RockComponent{};
+	float m_AmountUnderRockToCheck{};
+	std::unique_ptr<Twengine::Event> m_EnemyCrushedEvent{};
 };
 
 class FygarDeathState final : public FygarState

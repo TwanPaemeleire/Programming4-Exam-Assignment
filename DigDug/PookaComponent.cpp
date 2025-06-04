@@ -16,7 +16,7 @@ void PookaComponent::Start()
 	animationComp->AddAnimation("Pooka/PookaMove.png", make_sdbm_hash("PookaMove"), 2);
 	animationComp->AddAnimation("Pooka/PookaPump.png", make_sdbm_hash("PookaPump"), 4, 3);
 	animationComp->AddAnimation("Pooka/PookaGhost.png", make_sdbm_hash("PookaGhost"), 2);
-	animationComp->AddAnimation("Pooka/PookaCrushed.png", make_sdbm_hash("PookaCrushed"), 2, 1);
+	animationComp->AddAnimation("Pooka/PookaCrushed.png", make_sdbm_hash("PookaCrushed"), 1, 0);
 	animationComp->PlayAnimation(make_sdbm_hash("PookaMove")); // To make sure we have a valid width and height for the hitbox
 	Twengine::RectColliderComponent* rectColliderComponent = GetOwner()->GetComponent<Twengine::RectColliderComponent>();
 	rectColliderComponent->SetHitBox(m_Transform->GetWorldPosition(), animationComp->GetAnimationFrameWidth(), animationComp->GetAnimationFrameHeight());

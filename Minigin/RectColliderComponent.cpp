@@ -1,6 +1,7 @@
 #include "RectColliderComponent.h"
 #include "Renderer.h"
 #include "GameObject.h"
+#include "TransformComponent.h"
 
 std::vector<Twengine::RectColliderComponent*> Twengine::RectColliderComponent::s_Colliders = {};
 std::vector<std::pair<Twengine::RectColliderComponent*, Twengine::RectColliderComponent*>> Twengine::RectColliderComponent::s_LastFrameCollisions = {};

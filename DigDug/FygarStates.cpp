@@ -11,6 +11,8 @@
 #include "MyTime.h"
 #include "DigDugPumpComponent.h"
 #include "FygarComponent.h"
+#include "RockComponent.h"
+#include "RectColliderComponent.h"
 
 float FygarTrackingState::m_FireCooldownCounter = 5.f;
 
@@ -44,6 +46,11 @@ std::unique_ptr<FygarState> FygarIdleState::GetNotifiedByOwner(const GameEvent& 
 	if (event.id == make_sdbm_hash("OnCollision") && digDugPumpComponent)
 	{
 		return std::make_unique<FygarPumpingState>();
+	}
+	else if (event.id == make_sdbm_hash("OnCollisionEnter") && observedObject->GetTag() == make_sdbm_hash("Rock"))
+	{
+		RockComponent* rock = observedObject->GetComponent<RockComponent>();
+		return std::make_unique<FygarRockDragState>(rock);
 	}
 	return nullptr;
 }
@@ -96,6 +103,11 @@ std::unique_ptr<FygarState> FygarTrackingState::GetNotifiedByOwner(const GameEve
 	{
 		return std::make_unique<FygarPumpingState>();
 	}
+	else if (event.id == make_sdbm_hash("OnCollisionEnter") && observedObject->GetTag() == make_sdbm_hash("Rock"))
+	{
+		RockComponent* rock = observedObject->GetComponent<RockComponent>();
+		return std::make_unique<FygarRockDragState>(rock);
+	}
 	return nullptr;
 }
 
@@ -117,6 +129,11 @@ std::unique_ptr<FygarState> FygarGhostState::GetNotifiedByOwner(const GameEvent&
 	if (event.id == make_sdbm_hash("OnCollision") && digDugPumpComponent)
 	{
 		return std::make_unique<FygarPumpingState>();
+	}
+	else if (event.id == make_sdbm_hash("OnCollisionEnter") && observedObject->GetTag() == make_sdbm_hash("Rock"))
+	{
+		RockComponent* rock = observedObject->GetComponent<RockComponent>();
+		return std::make_unique<FygarRockDragState>(rock);
 	}
 	return nullptr;
 }
@@ -175,6 +192,11 @@ std::unique_ptr<FygarState> FygarFireBreathingState::GetNotifiedByOwner(const Ga
 	if (event.id == make_sdbm_hash("OnCollision") && digDugPumpComponent)
 	{
 		return std::make_unique<FygarPumpingState>();
+	}
+	else if (event.id == make_sdbm_hash("OnCollisionEnter") && observedObject->GetTag() == make_sdbm_hash("Rock"))
+	{
+		RockComponent* rock = observedObject->GetComponent<RockComponent>();
+		return std::make_unique<FygarRockDragState>(rock);
 	}
 	return nullptr;
 }
@@ -237,6 +259,11 @@ std::unique_ptr<FygarState> FygarPumpingState::GetNotifiedByOwner(const GameEven
 	{
 		m_IsBeingPumped = false;
 	}
+	else if (event.id == make_sdbm_hash("OnCollisionEnter") && observedObject->GetTag() == make_sdbm_hash("Rock"))
+	{
+		RockComponent* rock = observedObject->GetComponent<RockComponent>();
+		return std::make_unique<FygarRockDragState>(rock);
+	}
 	return nullptr;
 }
 
@@ -249,5 +276,32 @@ void FygarDeathState::OnEnter(Twengine::GameObject* stateOwner)
 
 std::unique_ptr<FygarState> FygarDeathState::Update(Twengine::GameObject*)
 {
+	return nullptr;
+}
+
+FygarRockDragState::FygarRockDragState(RockComponent* rockComponent)
+	:m_RockComponent{rockComponent}
+{
+	m_EnemyCrushedEvent = std::make_unique<Twengine::Event>();
+	m_EnemyCrushedEvent->AddObserver(rockComponent);
+}
+
+void FygarRockDragState::OnEnter(Twengine::GameObject* stateOwner)
+{
+	m_AnimationComponent = stateOwner->GetComponent<Twengine::AnimationComponent>();
+	m_AnimationComponent->PlayAnimation(make_sdbm_hash("FygarCrushed"), 0.f, false);
+	stateOwner->SetParent(m_RockComponent->GetOwner(), true);
+	m_AmountUnderRockToCheck = m_AnimationComponent->GetAnimationFrameHeight();
+	stateOwner->GetComponent<Twengine::RectColliderComponent>()->SetEnabled(false);
+}
+
+std::unique_ptr<FygarState> FygarRockDragState::Update(Twengine::GameObject* stateOwner)
+{
+	glm::vec2 posToCheck = m_RockComponent->GetBottomMiddle();
+	posToCheck.y += m_AmountUnderRockToCheck;
+	if (!GameManager::GetInstance().GetGround()->PositionIsDugOut(posToCheck))
+	{
+		m_EnemyCrushedEvent->NotifyObservers(GameEvent(make_sdbm_hash("OnEnemyCrushed")), stateOwner);
+	}
 	return nullptr;
 }

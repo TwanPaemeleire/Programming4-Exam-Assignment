@@ -17,7 +17,7 @@ void FygarComponent::Start()
 	animationComp->AddAnimation("Fygar/FygarMove.png", make_sdbm_hash("FygarMove"), 2);
 	animationComp->AddAnimation("Fygar/FygarPump.png", make_sdbm_hash("FygarPump"), 4);
 	animationComp->AddAnimation("Fygar/FygarGhost.png", make_sdbm_hash("FygarGhost"), 2);
-	animationComp->AddAnimation("Fygar/FygarCrushed.png", make_sdbm_hash("FygarCrushed"), 2);
+	animationComp->AddAnimation("Fygar/FygarCrushed.png", make_sdbm_hash("FygarCrushed"), 1, 0);
 	animationComp->PlayAnimation(make_sdbm_hash("FygarMove")); // To make sure we have a valid width and height for the hitbox
 	Twengine::RectColliderComponent* rectColliderComponent = GetOwner()->GetComponent<Twengine::RectColliderComponent>();
 	rectColliderComponent->SetHitBox(m_Transform->GetWorldPosition(), animationComp->GetAnimationFrameWidth(), animationComp->GetAnimationFrameHeight());

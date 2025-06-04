@@ -61,6 +61,25 @@ void ScoreComponent::Notify(const GameEvent& event, Twengine::GameObject* eventS
 		m_Score += 50;
 		m_ScoreChangedEvent->NotifyObservers(GameEvent(make_sdbm_hash("ScoreChanged")), GetOwner());
 	}
+	else if (event.id == make_sdbm_hash("RockCrushedEnemies"))
+	{
+		int scoreIncrease = 0;
+		size_t amountOfEnemies = eventSender->GetChildCount();
+
+		switch (amountOfEnemies)
+		{
+		case 1: scoreIncrease = 1000; break;
+		case 2: scoreIncrease = 2500; break;
+		case 3: scoreIncrease = 4000; break;
+		case 4: scoreIncrease = 6000; break;
+		case 5: scoreIncrease = 8000; break;
+		case 6: scoreIncrease = 10000; break;
+		case 7: scoreIncrease = 12000; break;
+		case 8: scoreIncrease = 15000; break;
+		default: scoreIncrease = 0; break;
+		}
+		IncreaseScore(scoreIncrease);
+	}
 }
 
 int ScoreComponent::GetEnemyLayer(const glm::vec2& pos) const

@@ -5,10 +5,12 @@ namespace Twengine
 {
 	class GameObject;
 	class AnimationComponent;
+	class Event;
 }
 
 class EnemyMovementComponent;
 class DigDugPumpComponent;
+class RockComponent;
 struct GameEvent;
 
 class PookaState
@@ -107,6 +109,25 @@ private:
 	float m_DeflateDelayCounter{0.f};
 	bool m_IsBeingPumped{true};
 	bool m_HasBeenPumpedOnce{false};
+};
+
+class PookaRockDragState final : public PookaState
+{
+public:
+	PookaRockDragState(RockComponent* rockComponent);
+	virtual ~PookaRockDragState() = default;
+	PookaRockDragState(const PookaRockDragState& other) = delete;
+	PookaRockDragState(PookaRockDragState&& other) = delete;
+	PookaRockDragState& operator=(const PookaRockDragState& other) = delete;
+	PookaRockDragState& operator=(PookaRockDragState&& other) = delete;
+
+	virtual void OnEnter(Twengine::GameObject* stateOwner) override;
+	virtual std::unique_ptr<PookaState> Update(Twengine::GameObject* stateOwner) override;
+private:
+	Twengine::AnimationComponent* m_AnimationComponent{};
+	RockComponent* m_RockComponent{};
+	float m_AmountUnderRockToCheck{};
+	std::unique_ptr<Twengine::Event> m_EnemyCrushedEvent{};
 };
 
 class PookaDeathState final : public PookaState
