@@ -16,15 +16,37 @@
 // MOVING
 void PlayerMoving::OnEnter(Twengine::GameObject* stateOwner)
 {
+	PlayerMovingData* movingData = stateOwner->GetComponent<DigDugComponent>()->GetPlayerMovingData();
+
+	m_Direction = movingData->direction;
+	m_LastNonNullDirection = movingData->lastNonNullDirection;
+	m_TargetPosition = movingData->targetPosition;
+	m_CurrentInputDirection = movingData->currentInputDirection;
+	m_DistanceToTarget = movingData->distanceToTarget;
+	m_DistanceTracker = movingData->distanceTracker;
+	m_CurrentIndex = movingData->currentIndex;
+	m_IsMoving = movingData->isMoving;
+
+
 	m_AnimationComponent = stateOwner->GetComponent<Twengine::AnimationComponent>();
+	if(!m_AnimationComponent->IsPlayingAnimation(make_sdbm_hash("DigDugMove")))
+	{ 
+		m_AnimationComponent->PlayAnimation(make_sdbm_hash("DigDugMove"));
+	}
 	m_GridComponent = GameManager::GetInstance().GetGrid();
 	m_GroundComponent = GameManager::GetInstance().GetGround();
 	m_Transform = stateOwner->GetTransform();
 	m_CurrentIndex = m_GridComponent->GetIndexFromPosition(m_Transform->GetWorldPosition());
+	m_Direction = m_LastNonNullDirection;
 }
 
 std::unique_ptr<PlayerState> PlayerMoving::Update(Twengine::GameObject*)
 {
+	if (m_ShouldStartPumping)
+	{
+		return std::make_unique<PlayerPumpingState>(m_LastNonNullDirection);
+	}
+
 	// Not moving and no input
 	if (m_CurrentInputDirection == glm::vec2(0.f, 0.f) && !m_IsMoving)
 	{
@@ -57,6 +79,20 @@ std::unique_ptr<PlayerState> PlayerMoving::Update(Twengine::GameObject*)
 		}
 	}
 	return nullptr;
+}
+
+void PlayerMoving::OnExit(Twengine::GameObject* stateOwner)
+{
+	PlayerMovingData* movingData = stateOwner->GetComponent<DigDugComponent>()->GetPlayerMovingData();
+
+	movingData->direction = m_Direction;
+	movingData->lastNonNullDirection = m_LastNonNullDirection;
+	movingData->targetPosition = m_TargetPosition;
+	movingData->currentInputDirection = m_CurrentInputDirection;
+	movingData->distanceToTarget = m_DistanceToTarget;
+	movingData->distanceTracker = m_DistanceTracker;
+	movingData->currentIndex = m_CurrentIndex;
+	movingData->isMoving = m_IsMoving;
 }
 
 void PlayerMoving::RenderDebugDrawing() const
@@ -100,7 +136,9 @@ std::unique_ptr<PlayerState> PlayerMoving::SetYDirection(Twengine::GameObject*, 
 
 std::unique_ptr<PlayerState> PlayerMoving::OnPumpButtonInteraction(Twengine::GameObject*, bool)
 {
-	return std::make_unique<PlayerPumpingState>(m_Direction);
+	//return std::make_unique<PlayerPumpingState>(m_Direction);
+	m_ShouldStartPumping = true;
+	return nullptr;
 }
 
 void PlayerMoving::CalculateNextTarget()
@@ -168,6 +206,7 @@ void PlayerMoving::CalculateNextTarget()
 	}
 
 	m_Direction = m_CurrentInputDirection;
+	m_LastNonNullDirection = m_Direction;
 	UpdateFlipAndRotation();
 	m_DistanceTracker = 0.f;
 }

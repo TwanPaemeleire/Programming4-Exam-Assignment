@@ -14,6 +14,7 @@
 DigDugComponent::DigDugComponent(Twengine::GameObject* owner)
 	:Component(owner)
 {
+	m_PlayerMovingData = std::make_unique<PlayerMovingData>();
 	m_AnimationComponent = GetOwner()->AddComponent<Twengine::AnimationComponent>();
 	m_RectColliderComponent = GetOwner()->AddComponent<Twengine::RectColliderComponent>();
 	m_RectColliderComponent->GetOnCollisionEvent()->AddObserver(this);

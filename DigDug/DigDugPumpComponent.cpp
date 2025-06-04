@@ -72,6 +72,10 @@ void DigDugPumpComponent::Update()
 		{
 			m_PumpDelayCounter -= m_PumpDelay;
 			m_OnPumpEvent->NotifyObservers(GameEvent(make_sdbm_hash("OnPump")), GetOwner());
+			if (m_OnPumpEvent->GetObserverCount() == 0)
+			{
+				Retract();
+			}
 		}
 	}
 	SetDrawPosition();

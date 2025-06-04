@@ -45,6 +45,7 @@ public:
 
 	virtual void OnEnter(Twengine::GameObject* stateOwner) override;
 	virtual std::unique_ptr<PlayerState> Update(Twengine::GameObject* stateOwner) override;
+	virtual void OnExit(Twengine::GameObject* stateOwner) override;
 	virtual void RenderDebugDrawing() const override;
 	virtual std::unique_ptr<PlayerState> SetXDirection(Twengine::GameObject* stateOwner, float x, float yToSet) override;
 	virtual std::unique_ptr<PlayerState> SetYDirection(Twengine::GameObject* stateOwner, float y, float xToSet) override;
@@ -62,12 +63,14 @@ private:
 	Twengine::TransformComponent* m_Transform{};
 
 	glm::vec2 m_Direction = { 0.f, 0.f };
+	glm::vec2 m_LastNonNullDirection;
 	glm::vec2 m_TargetPosition = { -1.f, -1.f };
 	glm::vec2 m_CurrentInputDirection = { 0.f, 0.f };
 	float m_DistanceToTarget{};
 	float m_DistanceTracker{};
 	std::pair<int, int> m_CurrentIndex{};
-	bool m_IsMoving = false;
+	bool m_IsMoving{ false };
+	bool m_ShouldStartPumping{ false };
 
 	bool m_HasStartedDiggingAnimation{ false };
 	bool m_HasStartedWalkingAnimation{ false };

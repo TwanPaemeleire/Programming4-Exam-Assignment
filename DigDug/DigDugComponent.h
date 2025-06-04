@@ -11,6 +11,18 @@ namespace Twengine
 
 struct GameEvent;
 
+struct PlayerMovingData
+{
+	glm::vec2 direction = { 0.f, 0.f };
+	glm::vec2 lastNonNullDirection;
+	glm::vec2 targetPosition = { -1.f, -1.f };
+	glm::vec2 currentInputDirection = { 0.f, 0.f };
+	float distanceToTarget{};
+	float distanceTracker{};
+	std::pair<int, int> currentIndex{};
+	bool isMoving{ false };
+};
+
 class DigDugComponent : public Twengine::Component, public Twengine::Observer
 {
 public:
@@ -29,9 +41,12 @@ public:
 	void OnPumpButtonInteraction(bool pressBound);
 	virtual void Notify(const GameEvent& event, Twengine::GameObject* observedObject) override;
 
+	PlayerMovingData* GetPlayerMovingData() const { return m_PlayerMovingData.get(); }
+
 private:
 	void CheckAndTransitionStates(std::unique_ptr<PlayerState> newState);
 	std::unique_ptr<PlayerState> m_CurrentState{};
+	std::unique_ptr<PlayerMovingData> m_PlayerMovingData{};
 	Twengine::AnimationComponent* m_AnimationComponent{};
 	Twengine::RectColliderComponent* m_RectColliderComponent{};
 };
