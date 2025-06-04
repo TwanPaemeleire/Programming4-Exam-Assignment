@@ -47,7 +47,7 @@ void Twengine::Scene::Update()
 {
 	for(auto& object : m_Objects)
 	{
-		object->Update();
+		if(object->IsActive()) object->Update();
 	}
 }
 
@@ -56,7 +56,7 @@ void Twengine::Scene::FixedUpdate()
 	Twengine::RectColliderComponent::ProcessCollisions();
 	for (auto& object : m_Objects)
 	{
-		object->FixedUpdate();
+		if (object->IsActive()) object->FixedUpdate();
 	}
 }
 
@@ -64,7 +64,7 @@ void Twengine::Scene::LateUpdate()
 {
 	for (auto& object : m_Objects)
 	{
-		object->LateUpdate();
+		if (object->IsActive()) object->LateUpdate();
 	}
 
 	// Delete the objects marked for destruction
@@ -88,6 +88,14 @@ void Twengine::Scene::RenderUI()
 	for (const auto& object : m_Objects)
 	{
 		object->RenderUI();
+	}
+}
+
+void Twengine::Scene::DeactivateAllObjects()
+{
+	for (const auto& object : m_Objects)
+	{
+		object->Deactivate();
 	}
 }
 

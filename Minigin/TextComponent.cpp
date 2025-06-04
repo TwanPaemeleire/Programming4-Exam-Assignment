@@ -63,4 +63,9 @@ void Twengine::TextComponent::SetColor(int r, int g, int b, int a)
 	m_NeedsUpdate = true;
 }
 
+void Twengine::TextComponent::SetColor(SDL_Color color)
+{
+	SetColor(color.r, color.g, color.b, color.a);
+}
+
 

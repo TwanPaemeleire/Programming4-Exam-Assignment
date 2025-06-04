@@ -25,6 +25,7 @@ namespace Twengine
 		void SetText(const std::string& text);
 		void SetFont(Font* font);
 		void SetColor(int r, int g, int b, int a = 255);
+		void SetColor(SDL_Color color);
 
 	private:
 		bool m_NeedsUpdate;

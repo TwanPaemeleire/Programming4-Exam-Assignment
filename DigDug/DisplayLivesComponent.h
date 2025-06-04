@@ -25,7 +25,7 @@ public:
 
 private:
 	Twengine::Texture2D* m_LifeTexture{};
-	float m_LifeDrawOffset{};
+	float m_LifeDrawOffset{32.f};
 	int m_LivesLeft{3};
 };
 

@@ -33,6 +33,10 @@
 #include "PumpCommand.h"
 #include "RockComponent.h"
 
+#include "MainMenuComponent.h"
+#include "ButtonSwitchCommand.h"
+#include "ButtonPressCommand.h"
+
 #include "Event.h"
 #include <fstream>
 
@@ -130,12 +134,23 @@ void LevelFactory::LoadMainMenu()
 	fygarIconObject->AddComponent<Twengine::TextureRenderComponent>()->SetTexture("StartScreen/FygarIcon.png");
 	fygarIconObject->GetTransform()->SetLocalPosition(304, 320);
 	scene.Add(std::move(fygarIconObject));
+
+	auto menuObject = std::make_unique<Twengine::GameObject>();
+	menuObject->AddComponent<MainMenuComponent>();
+
+	Twengine::InputManager::GetInstance().BindCommandToInput<ButtonSwitchCommand>(SDLK_DOWN, Twengine::InteractionStates::down, menuObject.get(), -1)->SetDirection(1);
+	Twengine::InputManager::GetInstance().BindCommandToInput<ButtonSwitchCommand>(SDLK_UP, Twengine::InteractionStates::down, menuObject.get(), -1)->SetDirection(-1);
+	Twengine::InputManager::GetInstance().BindCommandToInput<ButtonPressCommand>(SDLK_SPACE, Twengine::InteractionStates::down, menuObject.get(), -1);
+
+	scene.Add(std::move(menuObject));
 }
 
 void LevelFactory::LoadPersistentScene()
 {
 	Twengine::Scene& scene = Twengine::SceneManager::GetInstance().GetPersistentScene();
-
+	auto gridObject = std::make_unique<Twengine::GameObject>();
+	auto* grid = gridObject->AddComponent<GridComponent>();
+	GameManager::GetInstance().SetGrid(grid);
 	auto* smallFont = Twengine::ResourceManager::GetInstance().LoadFont("GameFont.otf", 8);
 
 	// Display DigDug lives
@@ -163,8 +178,6 @@ void LevelFactory::LoadPersistentScene()
 
 	digdug->AddComponent<DigDugComponent>();
 
-	Twengine::InputManager::GetInstance().BindCommandToInput<KillEnemyCommand>(SDLK_z, Twengine::InteractionStates::up, digdug.get(), -1)->GetEnemyKilledEvent()->AddObserver(digDugScore);
-
 	Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_w, Twengine::InteractionStates::pressed, digdug.get(), -1)->SetDirection(0, -1);
 	Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_s, Twengine::InteractionStates::pressed, digdug.get(), -1)->SetDirection(0, 1);
 	Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_a, Twengine::InteractionStates::pressed, digdug.get(), -1)->SetDirection(-1, 0);
@@ -178,7 +191,6 @@ void LevelFactory::LoadPersistentScene()
 	Twengine::InputManager::GetInstance().BindCommandToInput<PumpCommand>(SDLK_SPACE, Twengine::InteractionStates::pressed, digdug.get(), -1)->IsPressBound();
 	Twengine::InputManager::GetInstance().BindCommandToInput<PumpCommand>(SDLK_SPACE, Twengine::InteractionStates::down, digdug.get(), -1)->IsPressBound();
 	Twengine::InputManager::GetInstance().BindCommandToInput<PumpCommand>(SDLK_SPACE, Twengine::InteractionStates::up, digdug.get(), -1)->IsReleaseBound();
-
 
 	scene.Add(std::move(digdugLivesText));
 	scene.Add(std::move(digdug));

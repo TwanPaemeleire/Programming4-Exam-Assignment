@@ -45,12 +45,17 @@ namespace Twengine
 		void SetTag(TagId newTag) {m_TagId = newTag; }
 		TagId GetTag() const { return m_TagId; }
 
+		void Deactivate() { m_IsActive = false; }
+		void Activate() { m_IsActive = true; }
+		bool IsActive() const { return m_IsActive; }
+
 	private:
 		void AddChild(GameObject* child);
 		void RemoveChild(GameObject* child);
 		bool IsChild(GameObject* objectToCheck);
 
 		bool m_MarkedForDestruction{ false };
+		bool m_IsActive{true};
 
 		TransformComponent* m_Transform{};
 

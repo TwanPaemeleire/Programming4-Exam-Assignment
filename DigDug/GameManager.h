@@ -10,6 +10,13 @@ class GridComponent;
 class GroundComponent;
 class ScoreComponent;
 
+enum class GameMode
+{
+	SinglePlayer,
+	Coop,
+	Versus
+};
+
 class GameManager final : public Twengine::Singleton<GameManager>
 {
 public:
@@ -24,6 +31,9 @@ public:
 
 	void SetScoreComponent(ScoreComponent* scoreComponent) { m_ScoreComponent = scoreComponent; }
 	ScoreComponent* GetScoreComponent() const { return m_ScoreComponent; }
+
+	void SetGameMode(GameMode gameMode) { m_GameMode = gameMode; }
+
 private:
 	friend class Singleton<GameManager>;
 	GameManager() = default;
@@ -32,5 +42,5 @@ private:
 	GroundComponent* m_GroundComponent{};
 	Twengine::TransformComponent* m_PlayerTransform{};
 	ScoreComponent* m_ScoreComponent{};
+	GameMode m_GameMode{};
 };
-

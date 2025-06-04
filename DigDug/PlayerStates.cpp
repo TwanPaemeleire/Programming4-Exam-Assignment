@@ -13,7 +13,6 @@
 #include <iostream>
 #include <algorithm>
 
-// MOVING
 void PlayerMoving::OnEnter(Twengine::GameObject* stateOwner)
 {
 	PlayerMovingData* movingData = stateOwner->GetComponent<DigDugComponent>()->GetPlayerMovingData();
@@ -26,7 +25,6 @@ void PlayerMoving::OnEnter(Twengine::GameObject* stateOwner)
 	m_DistanceTracker = movingData->distanceTracker;
 	m_CurrentIndex = movingData->currentIndex;
 	m_IsMoving = movingData->isMoving;
-
 
 	m_AnimationComponent = stateOwner->GetComponent<Twengine::AnimationComponent>();
 	if(!m_AnimationComponent->IsPlayingAnimation(make_sdbm_hash("DigDugMove")))
