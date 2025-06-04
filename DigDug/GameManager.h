@@ -32,7 +32,7 @@ public:
 	void SetScoreComponent(ScoreComponent* scoreComponent) { m_ScoreComponent = scoreComponent; }
 	ScoreComponent* GetScoreComponent() const { return m_ScoreComponent; }
 
-	void SetGameMode(GameMode gameMode) { m_GameMode = gameMode; }
+	void StartGameFromMenu(GameMode gameMode);
 
 private:
 	friend class Singleton<GameManager>;

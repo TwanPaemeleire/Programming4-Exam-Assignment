@@ -27,15 +27,15 @@ void PlayerMoving::OnEnter(Twengine::GameObject* stateOwner)
 	m_IsMoving = movingData->isMoving;
 
 	m_AnimationComponent = stateOwner->GetComponent<Twengine::AnimationComponent>();
-	if(!m_AnimationComponent->IsPlayingAnimation(make_sdbm_hash("DigDugMove")))
+	if(!m_AnimationComponent->IsPlayingAnimation(make_sdbm_hash("DigDugIdle")))
 	{ 
-		m_AnimationComponent->PlayAnimation(make_sdbm_hash("DigDugMove"));
+		m_AnimationComponent->PlayAnimation(make_sdbm_hash("DigDugIdle"));
 	}
 	m_GridComponent = GameManager::GetInstance().GetGrid();
 	m_GroundComponent = GameManager::GetInstance().GetGround();
 	m_Transform = stateOwner->GetTransform();
 	m_CurrentIndex = m_GridComponent->GetIndexFromPosition(m_Transform->GetWorldPosition());
-	m_Direction = m_LastNonNullDirection;
+	//m_Direction = m_LastNonNullDirection;
 }
 
 std::unique_ptr<PlayerState> PlayerMoving::Update(Twengine::GameObject*)

@@ -36,6 +36,7 @@ void MainMenuComponent::AddButton(const std::string& text, GameMode gameMode, Tw
 
 void MainMenuComponent::ButtonPressed()
 {
+	GameManager::GetInstance().StartGameFromMenu(m_Buttons[m_CurrentButtonIndex].second);
 }
 
 void MainMenuComponent::ButtonSwitched(int dir)

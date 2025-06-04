@@ -79,7 +79,7 @@ void Twengine::Scene::Render() const
 {
 	for (const auto& object : m_Objects)
 	{
-		object->Render();
+		if (object->IsActive()) object->Render();
 	}
 }
 
@@ -87,7 +87,7 @@ void Twengine::Scene::RenderUI()
 {
 	for (const auto& object : m_Objects)
 	{
-		object->RenderUI();
+		if (object->IsActive()) object->RenderUI();
 	}
 }
 
@@ -96,6 +96,14 @@ void Twengine::Scene::DeactivateAllObjects()
 	for (const auto& object : m_Objects)
 	{
 		object->Deactivate();
+	}
+}
+
+void Twengine::Scene::ActivateAllObjects()
+{
+	for (const auto& object : m_Objects)
+	{
+		object->Activate();
 	}
 }
 

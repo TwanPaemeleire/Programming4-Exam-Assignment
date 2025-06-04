@@ -14,7 +14,8 @@ void load()
 {
 
 	/*auto& persistentScene = */Twengine::SceneManager::GetInstance().CreateScene("PersistentScene", LevelFactory::LoadPersistentScene, true).DeactivateAllObjects();
-	/*auto& devScene = */Twengine::SceneManager::GetInstance().CreateScene("DevScene", LevelFactory::LoadDevScene);
+	///*auto& devScene = */Twengine::SceneManager::GetInstance().CreateScene("DevScene", LevelFactory::LoadDevScene);
+	Twengine::SceneManager::GetInstance().CreateScene("Level1", LevelFactory::LoadLevel1);
 	/*auto& mainMenuScene =*/ Twengine::SceneManager::GetInstance().CreateScene("MainMenu", LevelFactory::LoadMainMenu);
 
 

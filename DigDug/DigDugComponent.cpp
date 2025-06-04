@@ -22,14 +22,14 @@ DigDugComponent::DigDugComponent(Twengine::GameObject* owner)
 
 void DigDugComponent::Start()
 {
-	m_Transform->SetLocalPosition(GameManager::GetInstance().GetGrid()->GetPositionFromIndex(5, 5));
+	m_Transform->SetLocalPosition(GameManager::GetInstance().GetGrid()->GetPositionFromIndex(8, 5));
 
 	m_AnimationComponent->AddAnimation("DigDug/DigDugMove.png", make_sdbm_hash("DigDugMove"),2);
 	m_AnimationComponent->AddAnimation("DigDug/DigDugDigging.png", make_sdbm_hash("DigDugDigging"), 2);
 	m_AnimationComponent->AddAnimation("DigDug/DigDugIdle.png", make_sdbm_hash("DigDugIdle"), 1);
 	m_AnimationComponent->AddAnimation("DigDug/DigDugPump.png", make_sdbm_hash("DigDugPump"), 2);
-
 	m_AnimationComponent->PlayAnimation(make_sdbm_hash("DigDugIdle"));
+
 	glm::vec2 pos = GetOwner()->GetTransform()->GetWorldPosition();
 	m_RectColliderComponent->SetHitBox(pos, m_AnimationComponent->GetAnimationFrameWidth(), m_AnimationComponent->GetAnimationFrameHeight());
 	Twengine::ServiceLocator::get_sound_system().RequestLoadMusic("Level/LevelMusic.wav", SoundId(make_sdbm_hash("LevelMusic")));

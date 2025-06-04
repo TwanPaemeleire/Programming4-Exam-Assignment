@@ -30,6 +30,7 @@ namespace Twengine
 		const std::string& GetName() const { return m_Name; }
 		void ResetHasStarted() { m_HasStarted = false; }
 		void DeactivateAllObjects();
+		void ActivateAllObjects();
 
 	private:
 		bool m_HasStarted = false;
