@@ -50,6 +50,7 @@ public:
 	virtual std::unique_ptr<PlayerState> SetXDirection(Twengine::GameObject* stateOwner, float x, float yToSet) override;
 	virtual std::unique_ptr<PlayerState> SetYDirection(Twengine::GameObject* stateOwner, float y, float xToSet) override;
 	virtual std::unique_ptr<PlayerState> OnPumpButtonInteraction(Twengine::GameObject* stateOwner, bool isPressBound) override;
+	virtual std::unique_ptr<PlayerState> Notify(Twengine::GameObject*, const GameEvent&) override;
 private:
 	void CalculateNextTarget();
 	void SetIdleAnimation();
@@ -97,5 +98,22 @@ private:
 
 	DigDugPumpComponent* m_DigDugPumpComponent{};
 	glm::vec2 m_FacingDirection{};
+};
+
+class PlayerDeathState final : public PlayerState
+{
+public:
+	PlayerDeathState() = default;
+	virtual ~PlayerDeathState() = default;
+	PlayerDeathState(const PlayerDeathState& other) = delete;
+	PlayerDeathState(PlayerDeathState&& other) = delete;
+	PlayerDeathState& operator=(const PlayerDeathState& other) = delete;
+	PlayerDeathState& operator=(PlayerDeathState&& other) = delete;
+
+	virtual void OnEnter(Twengine::GameObject*) override;
+	virtual std::unique_ptr<PlayerState> Update(Twengine::GameObject* stateOwner) override;
+
+private:
+	Twengine::AnimationComponent* m_AnimationComponent{};
 };
 

@@ -133,9 +133,8 @@ void LevelFactory::LoadPersistentScene()
 	digdug->GetTransform()->SetLocalPosition(200, 350);
 	GameManager::GetInstance().SetPlayerTransform(digdug->GetTransform());
 
-	auto* diDugHealth = digdug->AddComponent<HealthComponent>();
+	auto* diDugHealth = digdug->AddComponent<LivesComponent>();
 	diDugHealth->GetObjectDiedEvent()->AddObserver(digDugLivesDisplayComp);
-	diDugHealth->SetMaxLives(3);
 
 	auto* digDugScore = digdug->AddComponent<ScoreComponent>();
 	digDugScore->GetScoreChangedEvent()->AddObserver(digdugPointsDisplayComp);

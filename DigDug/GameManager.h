@@ -1,9 +1,11 @@
 #pragma once
 #include "Singleton.h"
+#include "Observer.h"
 
 namespace Twengine
 {
 	class TransformComponent;
+	class GameObject;
 }
 
 class GridComponent;
@@ -17,7 +19,7 @@ enum class GameMode
 	Versus
 };
 
-class GameManager final : public Twengine::Singleton<GameManager>
+class GameManager final : public Twengine::Singleton<GameManager>, public Twengine::Observer
 {
 public:
 	void SetGrid(GridComponent* grid) { m_GridComponent = grid; }
@@ -33,6 +35,7 @@ public:
 	ScoreComponent* GetScoreComponent() const { return m_ScoreComponent; }
 
 	void StartGameFromMenu(GameMode gameMode);
+	void Notify(const GameEvent& event, Twengine::GameObject* observedObject) override;
 
 private:
 	friend class Singleton<GameManager>;
@@ -43,4 +46,5 @@ private:
 	Twengine::TransformComponent* m_PlayerTransform{};
 	ScoreComponent* m_ScoreComponent{};
 	GameMode m_GameMode{};
+
 };

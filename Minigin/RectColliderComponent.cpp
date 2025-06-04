@@ -73,7 +73,7 @@ void Twengine::RectColliderComponent::ProcessCollisions()
 		for (size_t secondIndex = firstIndex + 1; secondIndex < s_Colliders.size(); ++secondIndex)
 		{
 			RectColliderComponent* second = s_Colliders[secondIndex];
-			if (!second->GetEnabled()) continue;
+			if (!second->GetEnabled() || second == first) continue;
 
 			if (first->IsOverlapping(second))
 			{

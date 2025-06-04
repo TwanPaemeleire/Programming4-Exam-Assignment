@@ -10,6 +10,7 @@
 #include "GridComponent.h"
 #include "EnemyMovementComponent.h"
 #include "PlayerStates.h"
+#include "Event.h"
 
 DigDugComponent::DigDugComponent(Twengine::GameObject* owner)
 	:Component(owner)
@@ -28,6 +29,7 @@ void DigDugComponent::Start()
 	m_AnimationComponent->AddAnimation("DigDug/DigDugDigging.png", make_sdbm_hash("DigDugDigging"), 2);
 	m_AnimationComponent->AddAnimation("DigDug/DigDugIdle.png", make_sdbm_hash("DigDugIdle"), 1);
 	m_AnimationComponent->AddAnimation("DigDug/DigDugPump.png", make_sdbm_hash("DigDugPump"), 2);
+	m_AnimationComponent->AddAnimation("DigDug/DigDugDeath.png", make_sdbm_hash("DigDugDeath"), 5, 4);
 	m_AnimationComponent->PlayAnimation(make_sdbm_hash("DigDugIdle"));
 
 	glm::vec2 pos = GetOwner()->GetTransform()->GetWorldPosition();
@@ -61,11 +63,27 @@ void DigDugComponent::OnPumpButtonInteraction(bool pressBound)
 
 void DigDugComponent::Notify(const GameEvent& event, Twengine::GameObject* observedObject)
 {
-	if (event.id == make_sdbm_hash("OnCollision") && observedObject->GetTag() == make_sdbm_hash("Enemy"))
-	{
-		//std::cout << "Collision with enemy" << std::endl;
-	}
-	CheckAndTransitionStates(m_CurrentState->Notify(GetOwner(), event));
+	CheckAndTransitionStates(m_CurrentState->Notify(observedObject, event));
+}
+
+void DigDugComponent::Reset()
+{
+	m_Transform->SetLocalPosition(GameManager::GetInstance().GetGrid()->GetPositionFromIndex(8, 5));
+	glm::vec2 pos = GetOwner()->GetTransform()->GetWorldPosition();
+	m_AnimationComponent->PlayAnimation(make_sdbm_hash("DigDugIdle"));
+	m_RectColliderComponent->SetHitBox(pos, m_AnimationComponent->GetAnimationFrameWidth(), m_AnimationComponent->GetAnimationFrameHeight());
+	
+	m_PlayerMovingData->direction = {0.f, 0.f};
+	m_PlayerMovingData->lastNonNullDirection = {};
+	m_PlayerMovingData->targetPosition = { -1.f, -1.f };
+	m_PlayerMovingData->currentInputDirection = { 0.f, 0.f };
+	m_PlayerMovingData->distanceToTarget = {};
+	m_PlayerMovingData->distanceTracker = {};
+	m_PlayerMovingData->currentIndex = {};
+	m_PlayerMovingData->isMoving = false;
+
+	m_CurrentState = std::make_unique<PlayerMoving>();
+	m_CurrentState->OnEnter(GetOwner());
 }
 
 void DigDugComponent::CheckAndTransitionStates(std::unique_ptr<PlayerState> newState)

@@ -42,6 +42,7 @@ public:
 	virtual void Notify(const GameEvent& event, Twengine::GameObject* observedObject) override;
 
 	PlayerMovingData* GetPlayerMovingData() const { return m_PlayerMovingData.get(); }
+	void Reset();
 
 private:
 	void CheckAndTransitionStates(std::unique_ptr<PlayerState> newState);

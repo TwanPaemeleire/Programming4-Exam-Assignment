@@ -51,7 +51,10 @@ public:
 	void RemoveRockFromCell(std::pair<int, int> index) { m_Grid[index.first][index.second].containsRock = false; }
 	bool IndexHoldsRock(std::pair<int, int> index) const { return m_Grid[index.first][index.second].containsRock; }
 
+	void Reset();
+
 private:
+	void CreateGrid();
 	static constexpr int m_Rows{18};
 	static constexpr int m_Columns{14};
 	Cell m_Grid[m_Rows][m_Columns];

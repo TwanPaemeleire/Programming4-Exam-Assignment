@@ -34,6 +34,6 @@ void DisplayLivesComponent::Notify(const GameEvent& event, Twengine::GameObject*
 {
 	if (event.id == make_sdbm_hash("PlayerDied"))
 	{
-		m_LivesLeft = observedObject->GetComponent<HealthComponent>()->GetLives();
+		m_LivesLeft = observedObject->GetComponent<LivesComponent>()->GetLives();
 	}
 }

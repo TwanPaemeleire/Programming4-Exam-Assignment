@@ -107,3 +107,9 @@ void Twengine::Scene::ActivateAllObjects()
 	}
 }
 
+void Twengine::Scene::Reload()
+{
+	RemoveAll();
+	Load();
+}
+

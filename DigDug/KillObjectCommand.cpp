@@ -5,7 +5,7 @@
 KillObjectCommand::KillObjectCommand(Twengine::GameObject* gameObject)
 	:GameObjectCommand(gameObject)
 {
-	m_HealthComponent = gameObject->GetComponent<HealthComponent>();
+	m_HealthComponent = gameObject->GetComponent<LivesComponent>();
 }
 
 void KillObjectCommand::Execute()

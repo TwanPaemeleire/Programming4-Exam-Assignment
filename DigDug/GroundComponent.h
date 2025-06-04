@@ -29,7 +29,11 @@ public:
 	glm::vec2 GetCellTargetToGetCloserToPlayer(const glm::vec2& enemyPos) const;
 	bool CanMoveBetween(const glm::vec2& startPos, const glm::vec2& targetPos, int dirtLeeway = 0) const; // Dirt leeway will be used for pump & fygar fire
 	bool EnemyCanReachPlayer(const glm::vec2& enemyPos) const;
+
+	void Reset();
 private:
+	void CreateSurface();
+
 	SDL_Surface* m_Surface{};
 	SDL_Texture* m_Texture{};
 	Uint32 m_TransparentValue{};

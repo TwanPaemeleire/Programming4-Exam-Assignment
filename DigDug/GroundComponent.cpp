@@ -15,12 +15,7 @@ GroundComponent::GroundComponent(Twengine::GameObject* owner)
 	m_HalfGridCellSize = m_GridCellSize / 2.f;
 
 	m_Transform->SetLocalPosition(m_GridComponent->GetPositionFromIndex(2, 0));
-	m_Surface = IMG_Load("Level/FullLevel.png");
-	// Make sure the blend mode is set correctly so we can "erase" parts of the texture
-	SDL_SetSurfaceBlendMode(m_Surface, SDL_BLENDMODE_BLEND);
-	m_Texture = SDL_CreateTextureFromSurface(Twengine::Renderer::GetInstance().GetSDLRenderer(), m_Surface);
-	SDL_SetTextureBlendMode(m_Texture, SDL_BLENDMODE_BLEND);
-
+	CreateSurface();
 	m_TransparentValue = SDL_MapRGBA(m_Surface->format, 0, 0, 0, 0);
 }
 
@@ -254,6 +249,20 @@ bool GroundComponent::EnemyCanReachPlayer(const glm::vec2& enemyPos) const
 	Cell* playerCell = m_GridComponent->GetCell(m_GridComponent->GetIndexFromPosition(playerPos));
 	std::unordered_map<Cell*, Cell*> reachableCellTree = BuildReachableCellTree(enemyPos);
 	return reachableCellTree.find(playerCell) != reachableCellTree.end();
+}
+
+void GroundComponent::Reset()
+{
+	CreateSurface();
+}
+
+void GroundComponent::CreateSurface()
+{
+	m_Surface = IMG_Load("Level/FullLevel.png");
+	// Make sure the blend mode is set correctly so we can "erase" parts of the texture
+	SDL_SetSurfaceBlendMode(m_Surface, SDL_BLENDMODE_BLEND);
+	m_Texture = SDL_CreateTextureFromSurface(Twengine::Renderer::GetInstance().GetSDLRenderer(), m_Surface);
+	SDL_SetTextureBlendMode(m_Texture, SDL_BLENDMODE_BLEND);
 }
 
 std::unordered_map<Cell*, Cell*> GroundComponent::BuildReachableCellTree(const glm::vec2& enemyPos) const

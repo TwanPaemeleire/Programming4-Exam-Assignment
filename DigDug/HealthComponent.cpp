@@ -1,25 +1,19 @@
 #include "HealthComponent.h"
 #include "Event.h"
+#include "DigDugComponent.h"
+#include "GameObject.h"
+#include "GameManager.h"
 
-HealthComponent::HealthComponent(Twengine::GameObject* owner)
+LivesComponent::LivesComponent(Twengine::GameObject* owner)
 	:Component(owner)
 {
 	m_ObjectDiedEvent = std::make_unique<Twengine::Event>();
+	m_ObjectDiedEvent->AddObserver(&GameManager::GetInstance());
 }
 
-void HealthComponent::TakeDamage(int amount)
+void LivesComponent::Kill()
 {
-	if (m_Lives <= 0) return; // Object is out of lives
-	m_CurrentHealth -= amount;
-	if (m_CurrentHealth <= 0) // Object has died
-	{
-		m_CurrentHealth = 0;
-		--m_Lives;
-		m_ObjectDiedEvent->NotifyObservers(GameEvent(make_sdbm_hash("PlayerDied")), GetOwner());
-	}
-}
-
-void HealthComponent::Kill()
-{
-	TakeDamage(m_MaxHealth);
+	if (m_Lives <= 0) return;
+	--m_Lives;
+	m_ObjectDiedEvent->NotifyObservers(GameEvent(make_sdbm_hash("PlayerDied")), GetOwner());
 }

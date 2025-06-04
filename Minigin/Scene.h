@@ -31,6 +31,7 @@ namespace Twengine
 		void ResetHasStarted() { m_HasStarted = false; }
 		void DeactivateAllObjects();
 		void ActivateAllObjects();
+		void Reload();
 
 	private:
 		bool m_HasStarted = false;

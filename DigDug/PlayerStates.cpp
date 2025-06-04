@@ -12,6 +12,7 @@
 #include <memory>
 #include <iostream>
 #include <algorithm>
+#include "HealthComponent.h"
 
 void PlayerMoving::OnEnter(Twengine::GameObject* stateOwner)
 {
@@ -136,6 +137,15 @@ std::unique_ptr<PlayerState> PlayerMoving::OnPumpButtonInteraction(Twengine::Gam
 {
 	//return std::make_unique<PlayerPumpingState>(m_Direction);
 	m_ShouldStartPumping = true;
+	return nullptr;
+}
+
+std::unique_ptr<PlayerState> PlayerMoving::Notify(Twengine::GameObject* observedObject, const GameEvent& event)
+{
+	if (event.id == make_sdbm_hash("OnCollisionEnter") && observedObject->GetTag() == make_sdbm_hash("Enemy"))
+	{
+		return std::make_unique<PlayerDeathState>();
+	}
 	return nullptr;
 }
 
@@ -384,4 +394,20 @@ void PlayerPumpingState::SetPositionAndDirectionOfPump(Twengine::GameObject* sta
 	if (flippedHorizontal) m_DigDugPumpComponent->FlipHorizontally();
 	if (vertical) m_DigDugPumpComponent->ShotVertically();
 	pumpObject->GetTransform()->SetLocalPosition(posToSet);
+}
+
+void PlayerDeathState::OnEnter(Twengine::GameObject* stateOwner)
+{
+	m_AnimationComponent = stateOwner->GetComponent<Twengine::AnimationComponent>();
+	m_AnimationComponent->PlayAnimation(make_sdbm_hash("DigDugDeath"), 0.3f);
+}
+
+
+std::unique_ptr<PlayerState> PlayerDeathState::Update(Twengine::GameObject* stateOwner)
+{
+	if (m_AnimationComponent->HasFinishedPlayingOnce())
+	{
+		stateOwner->GetComponent<LivesComponent>()->Kill();
+	}
+	return nullptr;
 }
