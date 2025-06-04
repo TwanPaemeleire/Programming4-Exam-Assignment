@@ -254,7 +254,7 @@ void LevelFactory::LoadLevelFromFile(Twengine::Scene& scene, GroundComponent* gr
 		{
 			input.read(reinterpret_cast<char*>(&indices.first), sizeof(indices.first));
 			input.read(reinterpret_cast<char*>(&indices.second), sizeof(indices.second));
-			//CreateAndAddPooka(scene, indices.first, indices.second, gridComponent);
+			CreateAndAddPooka(scene, indices.first, indices.second, gridComponent);
 		}
 
 		// Reading and spawning Fygars

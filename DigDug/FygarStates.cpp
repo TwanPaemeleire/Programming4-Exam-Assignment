@@ -233,6 +233,7 @@ std::unique_ptr<FygarState> FygarPumpingState::GetNotifiedByOwner(const GameEven
 		m_AnimationComponent->GoToNextFrame();
 		if (m_AnimationComponent->HasFinishedPlayingOnce())
 		{
+			observedObject->GetComponent<DigDugPumpComponent>()->GetOnPumpEvent()->RemoveObserver(stateOwner->GetComponent<FygarComponent>());
 			return std::make_unique<FygarDeathState>();
 		}
 	}
@@ -240,7 +241,7 @@ std::unique_ptr<FygarState> FygarPumpingState::GetNotifiedByOwner(const GameEven
 	if (event.id == make_sdbm_hash("OnCollisionEnter") && observedObject->GetTag() == make_sdbm_hash("DigDugPump"))
 	{
 		DigDugPumpComponent* pumpComponent = observedObject->GetComponent<DigDugPumpComponent>();
-		pumpComponent->GetOnPumpEvent()->AddObserver(stateOwner->GetComponent<FygarComponent>());
+		pumpComponent->GetOnPumpEvent()->AddObserver(stateOwner->GetComponent<FygarComponent>()); 
 		m_IsBeingPumped = true;
 
 		if (m_HasBeenPumpedOnce)

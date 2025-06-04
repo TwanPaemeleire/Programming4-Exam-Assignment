@@ -167,6 +167,7 @@ std::unique_ptr<PookaState> PookaPumpingState::GetNotifiedByOwner(const GameEven
 		m_AnimationComponent->GoToNextFrame();
 		if (m_AnimationComponent->HasFinishedPlayingOnce())
 		{
+			observedObject->GetComponent<DigDugPumpComponent>()->GetOnPumpEvent()->RemoveObserver(stateOwner->GetComponent<PookaComponent>());
 			return std::make_unique<PookaDeathState>();
 		}
 	}
