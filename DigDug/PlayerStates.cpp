@@ -35,7 +35,6 @@ void PlayerMoving::OnEnter(Twengine::GameObject* stateOwner)
 	m_GroundComponent = GameManager::GetInstance().GetGround();
 	m_Transform = stateOwner->GetTransform();
 	m_CurrentIndex = m_GridComponent->GetIndexFromPosition(m_Transform->GetWorldPosition());
-	//m_Direction = m_LastNonNullDirection;
 }
 
 std::unique_ptr<PlayerState> PlayerMoving::Update(Twengine::GameObject*)

@@ -23,7 +23,7 @@ DigDugComponent::DigDugComponent(Twengine::GameObject* owner)
 
 void DigDugComponent::Start()
 {
-	m_Transform->SetLocalPosition(GameManager::GetInstance().GetGrid()->GetPositionFromIndex(8, 5));
+	m_Transform->SetLocalPosition(GameManager::GetInstance().GetGrid()->GetPositionFromIndex(9, 5));
 
 	m_AnimationComponent->AddAnimation("DigDug/DigDugMove.png", make_sdbm_hash("DigDugMove"),2);
 	m_AnimationComponent->AddAnimation("DigDug/DigDugDigging.png", make_sdbm_hash("DigDugDigging"), 2);
@@ -68,7 +68,7 @@ void DigDugComponent::Notify(const GameEvent& event, Twengine::GameObject* obser
 
 void DigDugComponent::Reset()
 {
-	m_Transform->SetLocalPosition(GameManager::GetInstance().GetGrid()->GetPositionFromIndex(8, 5));
+	m_Transform->SetLocalPosition(GameManager::GetInstance().GetGrid()->GetPositionFromIndex(9, 5));
 	glm::vec2 pos = GetOwner()->GetTransform()->GetWorldPosition();
 	m_AnimationComponent->PlayAnimation(make_sdbm_hash("DigDugIdle"));
 	m_RectColliderComponent->SetHitBox(pos, m_AnimationComponent->GetAnimationFrameWidth(), m_AnimationComponent->GetAnimationFrameHeight());
