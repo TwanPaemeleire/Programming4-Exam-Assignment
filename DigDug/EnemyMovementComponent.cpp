@@ -73,9 +73,10 @@ bool EnemyMovementComponent::MovementInGhostForm()
 	if (!m_IsGettingPositionedInCell)
 	{
 		// Move enemy towards player
-		glm::vec2 playerPos = GameManager::GetInstance().GetPlayerTransform()->GetWorldPosition();
+		//glm::vec2 playerPos = GameManager::GetInstance().GetPlayerTransform()->GetWorldPosition();
 		glm::vec2 currentPos = GetOwner()->GetTransform()->GetWorldPosition();
-		glm::vec2 direction = glm::normalize(glm::vec2(GameManager::GetInstance().GetPlayerTransform()->GetWorldPosition()) - currentPos);
+		glm::vec2 playerPos = GameManager::GetInstance().GetClosestPlayerTransform(currentPos)->GetWorldPosition();
+		glm::vec2 direction = glm::normalize(playerPos - currentPos);
 		glm::vec2 newPos = currentPos + direction * m_MovementSpeed * Twengine::Time::GetInstance().deltaTime;
 		GetOwner()->GetTransform()->SetLocalPosition(newPos);
 

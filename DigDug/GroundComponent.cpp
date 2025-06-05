@@ -171,7 +171,7 @@ bool GroundComponent::PositionIsDugOut(const glm::vec2& pos)
 
 glm::vec2 GroundComponent::GetCellTargetToGetCloserToPlayer(const glm::vec2& enemyPos) const
 {
-	glm::vec2 playerPos = GameManager::GetInstance().GetPlayerTransform()->GetWorldPosition();
+	glm::vec2 playerPos = GameManager::GetInstance().GetClosestPlayerTransform(enemyPos)->GetWorldPosition();
 
 	glm::vec2 right = glm::vec2(enemyPos.x + m_GridCellSize, enemyPos.y);
 	glm::vec2 down = glm::vec2(enemyPos.x, enemyPos.y + m_GridCellSize);
@@ -245,7 +245,7 @@ bool GroundComponent::CanMoveBetween(const glm::vec2& startPos, const glm::vec2&
 
 bool GroundComponent::EnemyCanReachPlayer(const glm::vec2& enemyPos) const
 {
-	glm::vec2 playerPos = GameManager::GetInstance().GetPlayerTransform()->GetWorldPosition();
+	glm::vec2 playerPos = GameManager::GetInstance().GetClosestPlayerTransform(enemyPos)->GetWorldPosition();
 	Cell* playerCell = m_GridComponent->GetCell(m_GridComponent->GetIndexFromPosition(playerPos));
 	std::unordered_map<Cell*, Cell*> reachableCellTree = BuildReachableCellTree(enemyPos);
 	return reachableCellTree.find(playerCell) != reachableCellTree.end();

@@ -124,6 +124,8 @@ void LevelFactory::LoadMainMenu()
 
 void LevelFactory::LoadPersistentScene()
 {
+	GameManager::GetInstance().ClearPlayerTransforms();
+
 	Twengine::Scene& scene = Twengine::SceneManager::GetInstance().GetPersistentScene();
 
 	auto gridObject = std::make_unique<Twengine::GameObject>();
@@ -144,6 +146,24 @@ void LevelFactory::LoadPersistentScene()
 
 	auto* smallFont = Twengine::ResourceManager::GetInstance().LoadFont("GameFont.otf", 8);
 
+	switch (GameManager::GetInstance().CurrentGameMode())
+	{
+		case GameMode::SinglePlayer:
+		{
+
+		}
+			break;
+		case GameMode::Coop:
+		{
+
+		}
+			break;
+		case GameMode::Versus:
+		{
+
+		}
+			break;
+	}
 	// Display DigDug lives
 	auto digdugLivesText = std::make_unique<Twengine::GameObject>();
 	auto* digDugLivesDisplayComp = digdugLivesText->AddComponent<DisplayLivesComponent>();
@@ -156,8 +176,9 @@ void LevelFactory::LoadPersistentScene()
 
 	// DIGDUG
 	auto digdug = std::make_unique<Twengine::GameObject>();
-	digdug->GetTransform()->SetLocalPosition(200, 350);
+	//digdug->GetTransform()->SetLocalPosition(200, 350);
 	GameManager::GetInstance().SetPlayerTransform(digdug->GetTransform());
+	GameManager::GetInstance().AddPlayerTransform(digdug->GetTransform());
 
 	auto* diDugHealth = digdug->AddComponent<LivesComponent>();
 	diDugHealth->GetObjectDiedEvent()->AddObserver(digDugLivesDisplayComp);

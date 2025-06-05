@@ -73,8 +73,8 @@ std::unique_ptr<FygarState> FygarTrackingState::Update(Twengine::GameObject* sta
 
 	if (m_FireCooldownCounter >= m_FireCooldown)
 	{
-		glm::vec2 playerPos = GameManager::GetInstance().GetPlayerTransform()->GetWorldPosition();
 		glm::vec2 fygarPos = stateOwner->GetTransform()->GetWorldPosition();
+		glm::vec2 playerPos = GameManager::GetInstance().GetClosestPlayerTransform(fygarPos)->GetWorldPosition();
 		int playerRow = m_GridComponent->GetIndexFromPosition(playerPos).first;
 		int fygarRow = m_GridComponent->GetIndexFromPosition(fygarPos).first;
 
@@ -158,8 +158,8 @@ void FygarFireBreathingState::OnEnter(Twengine::GameObject* stateOwner)
 	m_FireGameObject = fire.get();
 	fire->SetParent(stateOwner, false);
 
-	glm::vec2 playerPos = GameManager::GetInstance().GetPlayerTransform()->GetWorldPosition();
 	glm::vec2 fygarPos = stateOwner->GetTransform()->GetWorldPosition();
+	glm::vec2 playerPos = GameManager::GetInstance().GetClosestPlayerTransform(fygarPos)->GetWorldPosition();
 	int playerColumn = GameManager::GetInstance().GetGrid()->GetIndexFromPosition(playerPos).second;
 	int fygarColumn = GameManager::GetInstance().GetGrid()->GetIndexFromPosition(fygarPos).second;
 
@@ -168,7 +168,6 @@ void FygarFireBreathingState::OnEnter(Twengine::GameObject* stateOwner)
 		fireComponent->ShotToRight();
 	}
 
-	//m_FireGameObject->Start(); // TEMP, REMOVE LATER, THIS IS CURRENTLY BEING ADDED IN GAME "START" AND THEREFORE NOT ACTUALLY CALLING START ON THIS OBJECT
 	Twengine::SceneManager::GetInstance().GetCurrentScene().Add(std::move(fire));
 }
 

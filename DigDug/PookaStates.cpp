@@ -136,7 +136,6 @@ PookaPumpingState::PookaPumpingState(DigDugPumpComponent* digDugPumpComponent)
 
 void PookaPumpingState::OnEnter(Twengine::GameObject* stateOwner)
 {
-	//m_DigDugPumpComponent->GetOnPumpEvent()->AddObserver(stateOwner->GetComponent<PookaComponent>());
 	m_AnimationComponent = stateOwner->GetComponent<Twengine::AnimationComponent>();
 	m_AnimationComponent->PlayAnimation(make_sdbm_hash("PookaPump"), 0.f, false);
 }

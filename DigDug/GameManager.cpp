@@ -9,10 +9,24 @@
 #include "ScoreFileComponent.h"
 #include <iostream>
 
-void GameManager::StartGameFromMenu(GameMode)
+Twengine::TransformComponent* GameManager::GetClosestPlayerTransform(glm::vec2 pos) const
 {
+	if (GameManager::GetInstance().CurrentGameMode() != GameMode::Coop) return m_PlayerTransforms[0];
+	else
+	{
+		float player1Dist = glm::distance(pos, glm::vec2(m_PlayerTransforms[0]->GetWorldPosition()));
+		float player2Dist = glm::distance(pos, glm::vec2(m_PlayerTransforms[1]->GetWorldPosition()));
+
+		return (player1Dist < player2Dist) ? m_PlayerTransforms[0] : m_PlayerTransforms[1];
+	}
+}
+
+void GameManager::StartGameFromMenu(GameMode gameMode)
+{
+	m_GameMode = gameMode;
 	Twengine::InputManager::GetInstance().ClearCommandMap(make_sdbm_hash("MainMenu"));
-	Twengine::SceneManager::GetInstance().GetPersistentScene().ActivateAllObjects();
+	Twengine::InputManager::GetInstance().ClearCommandMap(make_sdbm_hash("Game"));
+	Twengine::SceneManager::GetInstance().GetPersistentScene().Reload();
 	Twengine::SceneManager::GetInstance().RequestSetCurrentScene("Level1");
 }
 
