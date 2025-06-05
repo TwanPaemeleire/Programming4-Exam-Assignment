@@ -1,7 +1,7 @@
 #include "GameManager.h"
 #include "SceneManager.h"
 #include "GameObject.h"
-#include "HealthComponent.h"
+#include "LivesComponent.h"
 #include "GridComponent.h"
 #include "GroundComponent.h"
 #include "DigDugComponent.h"

@@ -1,7 +1,7 @@
 #include "DisplayLivesComponent.h"
 #include "GameObject.h"
 #include "TextComponent.h"
-#include "HealthComponent.h"
+#include "LivesComponent.h"
 #include "Renderer.h"
 #include "ResourceManager.h"
 #include "GridComponent.h"

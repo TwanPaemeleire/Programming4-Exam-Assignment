@@ -1,6 +1,6 @@
 #include "KillObjectCommand.h"
 #include "GameObject.h"
-#include "HealthComponent.h"
+#include "LivesComponent.h"
 
 KillObjectCommand::KillObjectCommand(Twengine::GameObject* gameObject)
 	:GameObjectCommand(gameObject)

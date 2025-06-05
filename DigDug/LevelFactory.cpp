@@ -7,7 +7,7 @@
 #include "TextComponent.h"
 #include "FPSComponent.h"
 #include "TextureRenderComponent.h"
-#include "HealthComponent.h"
+#include "LivesComponent.h"
 #include "DisplayLivesComponent.h"
 #include "ScoreComponent.h"
 #include "DisplayPointsComponent.h"

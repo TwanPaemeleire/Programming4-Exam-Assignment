@@ -12,7 +12,7 @@
 #include <memory>
 #include <iostream>
 #include <algorithm>
-#include "HealthComponent.h"
+#include "LivesComponent.h"
 
 void PlayerMoving::OnEnter(Twengine::GameObject* stateOwner)
 {

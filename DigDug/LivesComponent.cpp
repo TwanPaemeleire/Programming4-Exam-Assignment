@@ -1,4 +1,4 @@
-#include "HealthComponent.h"
+#include "LivesComponent.h"
 #include "Event.h"
 #include "DigDugComponent.h"
 #include "GameObject.h"
