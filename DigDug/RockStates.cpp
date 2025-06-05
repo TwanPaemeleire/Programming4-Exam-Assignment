@@ -17,7 +17,10 @@ void RockIdleState::OnEnter(Twengine::GameObject* stateOwner)
 	m_PositionToCheckIfFree = GameManager::GetInstance().GetGrid()->GetPositionFromIndex(m_IndexUnderRock);
 	float halfCellSize = GameManager::GetInstance().GetGrid()->GetCellSize() / 2;
 	m_PositionToCheckIfFree += glm::vec2(halfCellSize, halfCellSize);
-	m_PlayerRectColliderComponent = GameManager::GetInstance().GetPlayerTransform()->GetOwner()->GetComponent<Twengine::RectColliderComponent>();
+	auto playerTransforms = GameManager::GetInstance().GetPlayerTransforms();
+
+	m_PlayerRectColliderComponents.emplace_back(playerTransforms[0]->GetOwner()->GetComponent<Twengine::RectColliderComponent>());
+	if (GameManager::GetInstance().CurrentGameMode() == GameMode::Coop) m_PlayerRectColliderComponents.emplace_back(playerTransforms[1]->GetOwner()->GetComponent<Twengine::RectColliderComponent>());
 	stateOwner->GetComponent<Twengine::RectColliderComponent>()->SetEnabled(false);
 }
 
@@ -42,14 +45,17 @@ void RockIdleState::OnExit(Twengine::GameObject*)
 
 bool RockIdleState::PlayerIsUnderRock()
 {
-	std::vector<Cell*> cells = GameManager::GetInstance().GetGrid()->GetCellsInRect(*m_PlayerRectColliderComponent->GetHitBox());
-	auto it = std::find_if(cells.begin(), cells.end(), [&](const Cell* cell)
-		{
-			return GameManager::GetInstance().GetGrid()->GetIndexFromPosition(cell->topLeft) == m_IndexUnderRock;
-		});
-	if (it != cells.end()) // Player not found in cell beneath
+	for (auto& colliderComponent : m_PlayerRectColliderComponents)
 	{
-		return true;
+		std::vector<Cell*> cells = GameManager::GetInstance().GetGrid()->GetCellsInRect(*colliderComponent->GetHitBox());
+		auto it = std::find_if(cells.begin(), cells.end(), [&](const Cell* cell)
+			{
+				return GameManager::GetInstance().GetGrid()->GetIndexFromPosition(cell->topLeft) == m_IndexUnderRock;
+			});
+		if (it != cells.end())
+		{
+			return true;
+		}
 	}
 	return false;
 }

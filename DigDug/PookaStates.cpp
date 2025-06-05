@@ -227,7 +227,7 @@ std::unique_ptr<PookaState> PookaRockDragState::Update(Twengine::GameObject* sta
 	return nullptr;
 }
 
-// Death (WIP)
+// Death
 void PookaDeathState::OnEnter(Twengine::GameObject* stateOwner)
 {
 	// Send out an event to increase score & play a sound

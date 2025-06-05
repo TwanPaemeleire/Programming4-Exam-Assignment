@@ -176,8 +176,6 @@ void LevelFactory::LoadPersistentScene()
 
 	// DIGDUG
 	auto digdug = std::make_unique<Twengine::GameObject>();
-	//digdug->GetTransform()->SetLocalPosition(200, 350);
-	GameManager::GetInstance().SetPlayerTransform(digdug->GetTransform());
 	GameManager::GetInstance().AddPlayerTransform(digdug->GetTransform());
 
 	auto* diDugHealth = digdug->AddComponent<LivesComponent>();

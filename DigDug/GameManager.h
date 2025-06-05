@@ -34,6 +34,7 @@ public:
 	void SetPlayerTransform(Twengine::TransformComponent* playerTransform) { m_PlayerTransform = playerTransform; }
 	Twengine::TransformComponent* GetPlayerTransform() const { return m_PlayerTransform; }
 
+	std::vector<Twengine::TransformComponent*> GetPlayerTransforms() const { return m_PlayerTransforms; }
 	Twengine::TransformComponent* GetClosestPlayerTransform(glm::vec2 pos) const;
 	void AddPlayerTransform(Twengine::TransformComponent* playerTransform) { m_PlayerTransforms.emplace_back(playerTransform); }
 	void ClearPlayerTransforms() { m_PlayerTransforms.clear(); }

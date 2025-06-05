@@ -2,6 +2,7 @@
 #include <memory>
 #include <glm.hpp>
 #include <utility>
+#include <vector>
 
 namespace Twengine
 {
@@ -45,7 +46,7 @@ public:
 private:
 	bool PlayerIsUnderRock();
 
-	Twengine::RectColliderComponent* m_PlayerRectColliderComponent{};
+	std::vector<Twengine::RectColliderComponent*> m_PlayerRectColliderComponents{};
 	std::pair<int, int> m_IndexUnderRock{};
 	glm::vec2 m_PositionToCheckIfFree{};
 	bool m_PlayerIsBeneath{ false };
