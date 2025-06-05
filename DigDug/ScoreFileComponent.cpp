@@ -15,16 +15,22 @@ std::vector<ScoreInfo>& ScoreFileComponent::GetHighScores() const
 
 void ScoreFileComponent::AddHighScore(ScoreInfo score)
 {
-	auto it = std::find_if(m_HighScores.begin(), m_HighScores.end(), [&](const ScoreInfo& scoreInfo)
+	m_HighScores.emplace_back(score);
+
+	std::sort(m_HighScores.begin(), m_HighScores.end(), [](const ScoreInfo& first, const ScoreInfo& second)
 		{
-			return (score.score >= scoreInfo.score);
+			return (first.score > second.score);
 		});
 
-	if(it!= m_HighScores.end()) *it = score;
+	if (m_HighScores.size() > m_AmountOfScoresToSave)
+	{
+		m_HighScores.resize(m_AmountOfScoresToSave);
+	}
 }
 
 void ScoreFileComponent::ReadHighScores() const
 {
+	m_HighScores.clear();
 	std::ifstream input;
 	input.open("HighScores.bin", std::ios::binary);
 	if (input.is_open())
@@ -40,16 +46,26 @@ void ScoreFileComponent::ReadHighScores() const
 		{
 			m_HighScores.emplace_back(ScoreInfo({ 'X', 'X', 'X' }, 0));
 		}
+		input.clear();
+		input.close();
 	}
-	input.close();
+	if (m_HighScores.size() > m_AmountOfScoresToSave)
+	{
+		m_HighScores.resize(m_AmountOfScoresToSave);
+	}
 }
 
 void ScoreFileComponent::WriteHighScores() const
 {
+	if (m_HighScores.size() > m_AmountOfScoresToSave)
+	{
+		m_HighScores.resize(m_AmountOfScoresToSave);
+	}
 	std::ofstream output("HighScores.bin", std::ios::binary);
 
 	if (output.is_open())
 	{
+		output.clear();
 		for (const ScoreInfo& score : m_HighScores)
 		{
 			output.write(reinterpret_cast<const char*>(&score.name[0]), sizeof(char));
@@ -58,7 +74,6 @@ void ScoreFileComponent::WriteHighScores() const
 			output.write(reinterpret_cast<const char*>(&score.score), sizeof(int));
 		}
 	}
-
 	output.close();
 }
 

@@ -36,15 +36,11 @@ void Twengine::Scene::RemoveAll()
 void Twengine::Scene::Start()
 {
 	if (m_HasStarted) return;
-	//for (auto& object : m_Objects)
-	//{
-	//	object->Start();
-	//}
-	size_t i = 0;
-	while (i < m_Objects.size())
+	size_t objectIndex = 0;
+	while (objectIndex < m_Objects.size()) // Doing it like this to make sure I can safely create and add objects to the scene in another object's start function
 	{
-		m_Objects[i]->Start();
-		++i;
+		m_Objects[objectIndex]->Start();
+		++objectIndex;
 	}
 	m_HasStarted = true;
 }
