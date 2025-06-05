@@ -37,6 +37,8 @@
 #include "ButtonSwitchCommand.h"
 #include "ButtonPressCommand.h"
 #include "ScoreSavingComponent.h"
+#include "ScoreCharCycleCommand.h"
+#include "ScoreLetterSwitchCommand.h"
 
 #include "Event.h"
 #include <fstream>
@@ -187,7 +189,17 @@ void LevelFactory::LoadLevel3()
 
 void LevelFactory::LoadHighScoreScene()
 {
+	Twengine::Scene& scene = Twengine::SceneManager::GetInstance().GetCurrentScene();
+	auto scoreSaveObj = std::make_unique<Twengine::GameObject>();
+	scoreSaveObj->AddComponent<ScoreSavingComponent>();
 
+	Twengine::InputManager::GetInstance().SetCommandMap(make_sdbm_hash("ScoreSaving"));
+	Twengine::InputManager::GetInstance().BindCommandToInput<ScoreCharCycleCommand>(SDLK_DOWN, Twengine::InteractionStates::down, scoreSaveObj.get(), -1)->SetDirection(1);
+	Twengine::InputManager::GetInstance().BindCommandToInput<ScoreCharCycleCommand>(SDLK_UP, Twengine::InteractionStates::down, scoreSaveObj.get(), -1)->SetDirection(-1);
+	Twengine::InputManager::GetInstance().BindCommandToInput<ScoreLetterSwitchCommand>(SDLK_RIGHT, Twengine::InteractionStates::down, scoreSaveObj.get(), -1)->SetDirection(1);
+	Twengine::InputManager::GetInstance().BindCommandToInput<ScoreLetterSwitchCommand>(SDLK_LEFT, Twengine::InteractionStates::down, scoreSaveObj.get(), -1)->SetDirection(-1);
+
+	scene.Add(std::move(scoreSaveObj));
 }
 
 void LevelFactory::LoadLevelFromFile(Twengine::Scene& scene, GroundComponent* groundComponent, GridComponent* gridComponent, const std::string& filePath)

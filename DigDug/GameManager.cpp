@@ -14,19 +14,19 @@ void GameManager::StartGameFromMenu(GameMode)
 	Twengine::SceneManager::GetInstance().SetCurrentScene("Level1");
 }
 
-void GameManager::Notify(const GameEvent& event, Twengine::GameObject* observedObject)
+void GameManager::Notify(const GameEvent& event, Twengine::GameObject* /*observedObject*/)
 {
 	if (event.id == make_sdbm_hash("PlayerDied"))
 	{
-		LivesComponent* digDugLives = observedObject->GetComponent<LivesComponent>();
+		//LivesComponent* digDugLives = observedObject->GetComponent<LivesComponent>();
 		// Player has no more lives left, so go to the scene for saving the score
-		if (digDugLives->GetLives() <= 0)
+		if (true/*digDugLives->GetLives() <= 0*/)
 		{
 			if (m_GameMode == GameMode::SinglePlayer)
 			{
 				Twengine::SceneManager::GetInstance().GetPersistentScene().DeactivateAllObjects();
 				Twengine::InputManager::GetInstance().ClearCommandMap(make_sdbm_hash("Game"));
-				Twengine::SceneManager::GetInstance().SetCurrentScene("HighScoreScreen");
+				Twengine::SceneManager::GetInstance().SetCurrentScene("HighScoreScene");
 			}
 			else
 			{

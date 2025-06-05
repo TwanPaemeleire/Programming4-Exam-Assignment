@@ -142,7 +142,7 @@ std::unique_ptr<PlayerState> PlayerMoving::OnPumpButtonInteraction(Twengine::Gam
 
 std::unique_ptr<PlayerState> PlayerMoving::Notify(Twengine::GameObject* observedObject, const GameEvent& event)
 {
-	if (event.id == make_sdbm_hash("OnCollisionEnter") && observedObject->GetTag() == make_sdbm_hash("Enemy"))
+	if (event.id == make_sdbm_hash("OnCollisionEnter") && (observedObject->GetTag() == make_sdbm_hash("Enemy") || observedObject->GetTag() == make_sdbm_hash("FygarFire")))
 	{
 		return std::make_unique<PlayerDeathState>();
 	}
