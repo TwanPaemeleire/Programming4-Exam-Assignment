@@ -188,6 +188,8 @@
     <ClCompile Include="RockStates.cpp" />
     <ClCompile Include="ScoreCharCycleCommand.cpp" />
     <ClCompile Include="ScoreComponent.cpp" />
+    <ClCompile Include="ScoreConfirmSaveCommand.cpp" />
+    <ClCompile Include="ScoreFileComponent.cpp" />
     <ClCompile Include="ScoreLetterSwitchCommand.cpp" />
     <ClCompile Include="ScoreSavingComponent.cpp" />
   </ItemGroup>
@@ -220,6 +222,8 @@
     <ClInclude Include="RockStates.h" />
     <ClInclude Include="ScoreCharCycleCommand.h" />
     <ClInclude Include="ScoreComponent.h" />
+    <ClInclude Include="ScoreConfirmSaveCommand.h" />
+    <ClInclude Include="ScoreFileComponent.h" />
     <ClInclude Include="ScoreLetterSwitchCommand.h" />
     <ClInclude Include="ScoreSavingComponent.h" />
   </ItemGroup>

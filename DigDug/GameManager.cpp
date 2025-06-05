@@ -6,6 +6,7 @@
 #include "GroundComponent.h"
 #include "DigDugComponent.h"
 #include "InputManager.h"
+#include "ScoreFileComponent.h"
 
 void GameManager::StartGameFromMenu(GameMode)
 {
@@ -41,5 +42,17 @@ void GameManager::Notify(const GameEvent& event, Twengine::GameObject* /*observe
 			m_PlayerTransform->GetOwner()->GetComponent<DigDugComponent>()->Reset();
 			Twengine::SceneManager::GetInstance().GetCurrentScene().Reload();
 		}
+	}
+	else if (event.id == make_sdbm_hash("GameFinished"))
+	{
+		if (m_GameMode == GameMode::SinglePlayer)
+		{
+			m_ScoreFileComponent->WriteHighScores();
+		}
+		Twengine::SceneManager::GetInstance().GetPersistentScene().Reload();
+		Twengine::SceneManager::GetInstance().GetPersistentScene().DeactivateAllObjects();
+		Twengine::InputManager::GetInstance().ClearCommandMap(make_sdbm_hash("Game"));
+		Twengine::InputManager::GetInstance().ClearCommandMap(make_sdbm_hash("HighScoreScene"));
+		Twengine::SceneManager::GetInstance().SetCurrentScene("MainMenu");
 	}
 }

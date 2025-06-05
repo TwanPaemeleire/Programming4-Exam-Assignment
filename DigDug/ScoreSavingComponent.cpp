@@ -6,10 +6,15 @@
 #include "GameManager.h"
 #include "ScoreComponent.h"
 #include <string>
+#include "ScoreFileComponent.h"
+#include "Event.h"
 
 ScoreSavingComponent::ScoreSavingComponent(Twengine::GameObject* owner)
 	:Component(owner)
 {
+	m_OnScoreSavedEvent = std::make_unique<Twengine::Event>();
+	m_OnScoreSavedEvent->AddObserver(&GameManager::GetInstance());
+
 	auto* font = Twengine::ResourceManager::GetInstance().LoadFont("GameFont.otf", 36);
 	CreateLetterDisplayer(font);
 	CreateLetterDisplayer(font);
@@ -36,6 +41,17 @@ void ScoreSavingComponent::CycleLetterIndex(int dir)
 	else if (m_CurrentIndex == m_Letters.size() - 1 && dir > 0) m_CurrentIndex = 0;
 	else m_CurrentIndex += dir;
 	m_Letters[m_CurrentIndex].first->SetColor(m_SelectedColor);
+}
+
+void ScoreSavingComponent::ConfirmSave()
+{
+	ScoreInfo scoreInfo{};
+	scoreInfo.name[0] = m_Letters[0].second;
+	scoreInfo.name[1] = m_Letters[1].second;
+	scoreInfo.name[2] = m_Letters[2].second;
+	scoreInfo.score = m_ScoreToSave;
+	GameManager::GetInstance().GetScoreFileComponent()->AddHighScore(scoreInfo);
+	m_OnScoreSavedEvent->NotifyObservers(GameEvent(make_sdbm_hash("GameFinished")), GetOwner());
 }
 
 void ScoreSavingComponent::CreateLetterDisplayer(Twengine::Font* font)

@@ -3,11 +3,13 @@
 #include <vector>
 #include <SDL_image.h>
 #include <glm.hpp>
+#include <memory>
 
 namespace Twengine
 {
 	class TextComponent;
 	class Font;
+	class Event;
 }
 
 class ScoreSavingComponent final : public Twengine::Component
@@ -23,6 +25,7 @@ public:
 	void CycleCharacter(int dir);
 	void CycleLetterIndex(int dir);
 	void SetScoreToSave(int score) { m_ScoreToSave = score; }
+	void ConfirmSave();
 
 private:
 	void CreateLetterDisplayer(Twengine::Font* font);
@@ -41,5 +44,6 @@ private:
 	Twengine::TextComponent* m_ScoreDisplayer{};
 	const glm::vec2 m_ScoreDisplayerPos{25.f, 25.f};
 	int m_ScoreToSave{};
+	std::unique_ptr<Twengine::Event> m_OnScoreSavedEvent{};
 };
 

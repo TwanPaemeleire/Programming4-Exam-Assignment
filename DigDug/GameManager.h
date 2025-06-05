@@ -11,6 +11,7 @@ namespace Twengine
 class GridComponent;
 class GroundComponent;
 class ScoreComponent;
+class ScoreFileComponent;
 
 enum class GameMode
 {
@@ -34,6 +35,9 @@ public:
 	void SetScoreComponent(ScoreComponent* scoreComponent) { m_ScoreComponent = scoreComponent; }
 	ScoreComponent* GetScoreComponent() const { return m_ScoreComponent; }
 
+	void SetScoreFileComponent(ScoreFileComponent* scoreFileComponent) { m_ScoreFileComponent = scoreFileComponent; }
+	ScoreFileComponent* GetScoreFileComponent() const { return m_ScoreFileComponent; }
+
 	void StartGameFromMenu(GameMode gameMode);
 	void Notify(const GameEvent& event, Twengine::GameObject* observedObject) override;
 
@@ -45,6 +49,7 @@ private:
 	GroundComponent* m_GroundComponent{};
 	Twengine::TransformComponent* m_PlayerTransform{};
 	ScoreComponent* m_ScoreComponent{};
+	ScoreFileComponent* m_ScoreFileComponent{};
 	GameMode m_GameMode{};
 
 };

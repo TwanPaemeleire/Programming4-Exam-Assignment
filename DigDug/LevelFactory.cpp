@@ -39,6 +39,8 @@
 #include "ScoreSavingComponent.h"
 #include "ScoreCharCycleCommand.h"
 #include "ScoreLetterSwitchCommand.h"
+#include "ScoreFileComponent.h"
+#include "ScoreConfirmSaveCommand.h"
 
 #include "Event.h"
 #include <fstream>
@@ -117,8 +119,13 @@ void LevelFactory::LoadPersistentScene()
 	auto* ground = levelDrawObject->AddComponent<GroundComponent>();
 	GameManager::GetInstance().SetGround(ground);
 
+	auto scoreFileObj = std::make_unique<Twengine::GameObject>();
+	auto* scoreFileComponent = scoreFileObj->AddComponent<ScoreFileComponent>();
+	GameManager::GetInstance().SetScoreFileComponent(scoreFileComponent);
+
 	scene.Add(std::move(levelDrawObject));
 	scene.Add(std::move(gridObject));
+	scene.Add(std::move(scoreFileObj));
 
 	auto* smallFont = Twengine::ResourceManager::GetInstance().LoadFont("GameFont.otf", 8);
 
@@ -198,6 +205,7 @@ void LevelFactory::LoadHighScoreScene()
 	Twengine::InputManager::GetInstance().BindCommandToInput<ScoreCharCycleCommand>(SDLK_UP, Twengine::InteractionStates::down, scoreSaveObj.get(), -1)->SetDirection(-1);
 	Twengine::InputManager::GetInstance().BindCommandToInput<ScoreLetterSwitchCommand>(SDLK_RIGHT, Twengine::InteractionStates::down, scoreSaveObj.get(), -1)->SetDirection(1);
 	Twengine::InputManager::GetInstance().BindCommandToInput<ScoreLetterSwitchCommand>(SDLK_LEFT, Twengine::InteractionStates::down, scoreSaveObj.get(), -1)->SetDirection(-1);
+	Twengine::InputManager::GetInstance().BindCommandToInput<ScoreConfirmSaveCommand>(SDLK_SPACE, Twengine::InteractionStates::up, scoreSaveObj.get(), -1);
 
 	scene.Add(std::move(scoreSaveObj));
 }
