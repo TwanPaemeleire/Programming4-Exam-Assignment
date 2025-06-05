@@ -18,6 +18,7 @@ void RockIdleState::OnEnter(Twengine::GameObject* stateOwner)
 	float halfCellSize = GameManager::GetInstance().GetGrid()->GetCellSize() / 2;
 	m_PositionToCheckIfFree += glm::vec2(halfCellSize, halfCellSize);
 	m_PlayerRectColliderComponent = GameManager::GetInstance().GetPlayerTransform()->GetOwner()->GetComponent<Twengine::RectColliderComponent>();
+	stateOwner->GetComponent<Twengine::RectColliderComponent>()->SetEnabled(false);
 }
 
 std::unique_ptr<RockState> RockIdleState::Update(Twengine::GameObject*)
@@ -62,6 +63,7 @@ void RockFallingState::OnEnter(Twengine::GameObject* stateOwner)
 	glm::vec2 bottomCenter = stateOwner->GetTransform()->GetLocalPosition();
 	bottomCenter += m_Size / 2.f;
 	m_StartCellIndex = GameManager::GetInstance().GetGrid()->GetIndexFromPosition(bottomCenter);
+	stateOwner->GetComponent<Twengine::RectColliderComponent>()->SetEnabled(true);
 }
 
 std::unique_ptr<RockState> RockFallingState::Update(Twengine::GameObject* stateOwner)
