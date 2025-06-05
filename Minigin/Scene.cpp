@@ -1,14 +1,16 @@
 #include "Scene.h"
 #include "GameObject.h"
 #include "RectColliderComponent.h"
-
 #include <algorithm>
 
-unsigned int Twengine::Scene::m_idCounter = 0;
+unsigned int Twengine::Scene::s_IdCounter = 0;
 
 Twengine::Scene::Scene(const std::string& name, std::function<void()> loadFunction, bool isPersistent)
 	: m_Name(name), m_IsPersistent{isPersistent}, m_LoadFunction{loadFunction}
-{}
+{
+	m_Id = s_IdCounter;
+	++s_IdCounter;
+}
 
 Twengine::Scene::~Scene() = default;
 

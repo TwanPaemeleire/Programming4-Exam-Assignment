@@ -191,6 +191,7 @@ void LevelFactory::LoadPersistentScene()
 void LevelFactory::LoadLevel1()
 {
 	Twengine::Scene& scene = Twengine::SceneManager::GetInstance().GetCurrentScene();
+	GameManager::GetInstance().ResetEnemyCount();
 	Twengine::InputManager::GetInstance().SetCommandMap(make_sdbm_hash("Game"));
 	LoadLevelFromFile(scene, GameManager::GetInstance().GetGround(), GameManager::GetInstance().GetGrid(), "Level/Level1.bin");
 }
@@ -198,6 +199,7 @@ void LevelFactory::LoadLevel1()
 void LevelFactory::LoadLevel2()
 {
 	Twengine::Scene& scene = Twengine::SceneManager::GetInstance().GetCurrentScene();
+	GameManager::GetInstance().ResetEnemyCount();
 	Twengine::InputManager::GetInstance().SetCommandMap(make_sdbm_hash("Game"));
 	LoadLevelFromFile(scene, GameManager::GetInstance().GetGround(), GameManager::GetInstance().GetGrid(), "Level/Level2.bin");
 }
@@ -205,6 +207,7 @@ void LevelFactory::LoadLevel2()
 void LevelFactory::LoadLevel3()
 {
 	Twengine::Scene& scene = Twengine::SceneManager::GetInstance().GetCurrentScene();
+	GameManager::GetInstance().ResetEnemyCount();
 	Twengine::InputManager::GetInstance().SetCommandMap(make_sdbm_hash("Game"));
 	LoadLevelFromFile(scene, GameManager::GetInstance().GetGround(), GameManager::GetInstance().GetGrid(), "Level/Level3.bin");
 }
@@ -257,6 +260,7 @@ void LevelFactory::LoadLevelFromFile(Twengine::Scene& scene, GroundComponent* gr
 			input.read(reinterpret_cast<char*>(&indices.first), sizeof(indices.first));
 			input.read(reinterpret_cast<char*>(&indices.second), sizeof(indices.second));
 			CreateAndAddPooka(scene, indices.first, indices.second, gridComponent);
+			GameManager::GetInstance().IncreaseEnemyCount();
 		}
 
 		// Reading and spawning Fygars
@@ -268,6 +272,7 @@ void LevelFactory::LoadLevelFromFile(Twengine::Scene& scene, GroundComponent* gr
 			input.read(reinterpret_cast<char*>(&indices.first), sizeof(indices.first));
 			input.read(reinterpret_cast<char*>(&indices.second), sizeof(indices.second));
 			CreateAndAddFygar(scene, indices.first, indices.second, gridComponent);
+			GameManager::GetInstance().IncreaseEnemyCount();
 		}
 
 		// Reading and spawning Rocks
@@ -290,7 +295,9 @@ void LevelFactory::CreateAndAddPooka(Twengine::Scene& scene, int row, int column
 	pooka->AddComponent<EnemyMovementComponent>();
 	pooka->GetTransform()->SetLocalPosition(gridComponent->GetPositionFromIndex(row, column));
 	pooka->AddComponent<Twengine::RectColliderComponent>();
-	pooka->AddComponent<PookaComponent>()->GetOnDeathEvent()->AddObserver(GameManager::GetInstance().GetScoreComponent());
+	PookaComponent* pookaComp = pooka->AddComponent<PookaComponent>();
+	pookaComp->GetOnDeathEvent()->AddObserver(GameManager::GetInstance().GetScoreComponent());
+	pookaComp->GetOnDeathEvent()->AddObserver(&GameManager::GetInstance());
 	scene.Add(std::move(pooka));
 }
 
@@ -301,7 +308,9 @@ void LevelFactory::CreateAndAddFygar(Twengine::Scene& scene, int row, int column
 	fygar->AddComponent<EnemyMovementComponent>();
 	fygar->GetTransform()->SetLocalPosition(gridComponent->GetPositionFromIndex(row, column));
 	fygar->AddComponent<Twengine::RectColliderComponent>();
-	fygar->AddComponent<FygarComponent>()->GetOnDeathEvent()->AddObserver(GameManager::GetInstance().GetScoreComponent());
+	FygarComponent* fygarComp = fygar->AddComponent<FygarComponent>();
+	fygarComp->GetOnDeathEvent()->AddObserver(GameManager::GetInstance().GetScoreComponent());
+	fygarComp->GetOnDeathEvent()->AddObserver(&GameManager::GetInstance());
 	scene.Add(std::move(fygar));
 }
 

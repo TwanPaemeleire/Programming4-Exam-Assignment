@@ -41,6 +41,10 @@ public:
 	void StartGameFromMenu(GameMode gameMode);
 	void Notify(const GameEvent& event, Twengine::GameObject* observedObject) override;
 
+	void IncreaseEnemyCount(){++m_AmountOfEnemiesAlive;}
+	void ResetEnemyCount() { m_AmountOfEnemiesAlive = 0; }
+	int AmountOfEnemiesAlive() const { return m_AmountOfEnemiesAlive; }
+
 private:
 	friend class Singleton<GameManager>;
 	GameManager() = default;
@@ -52,4 +56,5 @@ private:
 	ScoreFileComponent* m_ScoreFileComponent{};
 	GameMode m_GameMode{};
 
+	int m_AmountOfEnemiesAlive{0};
 };

@@ -32,6 +32,9 @@ namespace Twengine
 		void DeactivateAllObjects();
 		void ActivateAllObjects();
 		void Reload();
+		int GetId() const { return m_Id; }
+
+		static unsigned int s_IdCounter;
 
 	private:
 		bool m_HasStarted = false;
@@ -39,7 +42,7 @@ namespace Twengine
 		std::string m_Name;
 		std::vector <std::unique_ptr<GameObject>> m_Objects{};
 		std::function<void()> m_LoadFunction{};
+		int m_Id;
 
-		static unsigned int m_idCounter;
 	};
 }

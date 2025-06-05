@@ -72,6 +72,10 @@ void DigDugPumpComponent::Update()
 		{
 			m_PumpDelayCounter -= m_PumpDelay;
 			m_OnPumpEvent->NotifyObservers(GameEvent(make_sdbm_hash("OnPump")), GetOwner());
+			if (GameManager::GetInstance().AmountOfEnemiesAlive() <= 0)
+			{
+				return;
+			}
 			if (m_OnPumpEvent->GetObserverCount() == 0)
 			{
 				Retract();
