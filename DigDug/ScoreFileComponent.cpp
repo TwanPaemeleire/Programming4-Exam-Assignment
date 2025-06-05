@@ -5,8 +5,12 @@
 ScoreFileComponent::ScoreFileComponent(Twengine::GameObject* owner)
 	:Component(owner)
 {
-	ReadHighScores();
-	WriteHighScores();
+}
+
+std::vector<ScoreInfo>& ScoreFileComponent::GetHighScores() const
+{
+	if (m_HighScores.size() == 0) ReadHighScores();
+	return m_HighScores;
 }
 
 void ScoreFileComponent::AddHighScore(ScoreInfo score)
@@ -16,7 +20,7 @@ void ScoreFileComponent::AddHighScore(ScoreInfo score)
 			return (score.score >= scoreInfo.score);
 		});
 
-	*it = score;
+	if(it!= m_HighScores.end()) *it = score;
 }
 
 void ScoreFileComponent::ReadHighScores() const
@@ -25,9 +29,12 @@ void ScoreFileComponent::ReadHighScores() const
 	input.open("HighScores.bin", std::ios::binary);
 	if (input.is_open())
 	{
-		while (!input.eof())
+		if (input.peek() != std::ifstream::traits_type::eof()) // Check to make sure file isn't fully empty
 		{
-			ReadOneHighScore(&input);
+			while (!input.eof())
+			{
+				ReadOneHighScore(&input);
+			}
 		}
 		while (m_HighScores.size() < m_AmountOfScoresToSave)
 		{

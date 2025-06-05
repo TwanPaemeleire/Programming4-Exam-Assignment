@@ -29,9 +29,9 @@ void MainMenuComponent::AddButton(const std::string& text, GameMode gameMode, Tw
 	glm::vec2 pos = m_ButtonBasePos;
 	pos.y += m_ButtonSpacing * m_Buttons.size();
 	buttonObj->GetTransform()->SetLocalPosition(pos);
+	buttonObj->SetParent(GetOwner(), false);
 	m_Buttons.emplace_back(std::pair{ textComp, gameMode });
 	scene.Add(std::move(buttonObj));
-
 }
 
 void MainMenuComponent::ButtonPressed()

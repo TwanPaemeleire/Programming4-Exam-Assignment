@@ -36,9 +36,15 @@ void Twengine::Scene::RemoveAll()
 void Twengine::Scene::Start()
 {
 	if (m_HasStarted) return;
-	for (auto& object : m_Objects)
+	//for (auto& object : m_Objects)
+	//{
+	//	object->Start();
+	//}
+	size_t i = 0;
+	while (i < m_Objects.size())
 	{
-		object->Start();
+		m_Objects[i]->Start();
+		++i;
 	}
 	m_HasStarted = true;
 }

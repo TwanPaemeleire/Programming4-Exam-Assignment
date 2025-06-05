@@ -130,7 +130,10 @@
       <Filter>Source Files\Components</Filter>
     </ClCompile>
     <ClCompile Include="ScoreConfirmSaveCommand.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="HighScoresDisplayComponent.cpp">
+      <Filter>Source Files\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -228,7 +231,10 @@
       <Filter>Header Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="ScoreConfirmSaveCommand.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="HighScoresDisplayComponent.h">
+      <Filter>Header Files\Components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

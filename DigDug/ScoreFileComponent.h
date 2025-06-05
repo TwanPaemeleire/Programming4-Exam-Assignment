@@ -20,14 +20,14 @@ public:
 	ScoreFileComponent& operator=(const ScoreFileComponent& other) = delete;
 	ScoreFileComponent& operator=(ScoreFileComponent&& other) = delete;
 
-	const std::vector<ScoreInfo>* GetHighScores() const { return &m_HighScores; }
+	std::vector<ScoreInfo>& GetHighScores() const;
 	void AddHighScore(ScoreInfo score);
 	void ReadHighScores() const;
 	void WriteHighScores() const;
 
 private:
 	void ReadOneHighScore(std::ifstream* input)  const;
-	int m_AmountOfScoresToSave{10};
+	size_t m_AmountOfScoresToSave{5};
 	mutable std::vector<ScoreInfo> m_HighScores{};
 };
 

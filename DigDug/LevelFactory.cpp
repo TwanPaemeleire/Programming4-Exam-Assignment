@@ -41,6 +41,7 @@
 #include "ScoreLetterSwitchCommand.h"
 #include "ScoreFileComponent.h"
 #include "ScoreConfirmSaveCommand.h"
+#include "HighScoresDisplayComponent.h"
 
 #include "Event.h"
 #include <fstream>
@@ -76,35 +77,49 @@ void LevelFactory::LoadDevScene()
 void LevelFactory::LoadMainMenu()
 {
 	Twengine::Scene& scene = Twengine::SceneManager::GetInstance().GetCurrentScene();
+
+	auto menuGraphicsObj = std::make_unique<Twengine::GameObject>();
+	menuGraphicsObj->GetTransform()->SetLocalPosition(0.f, 50.f);
+
 	auto titleObject = std::make_unique<Twengine::GameObject>();
 	titleObject->AddComponent<Twengine::TextureRenderComponent>()->SetTexture("StartScreen/DigDugLogo.png");
 	titleObject->GetTransform()->SetLocalPosition(64, 128);
+	titleObject->SetParent(menuGraphicsObj.get(), false);
 	scene.Add(std::move(titleObject));
 
 	auto digDugIconObject = std::make_unique<Twengine::GameObject>();
 	digDugIconObject->AddComponent<Twengine::TextureRenderComponent>()->SetTexture("StartScreen/DigDugIcon.png");
 	digDugIconObject->GetTransform()->SetLocalPosition(32, 320);
+	digDugIconObject->SetParent(menuGraphicsObj.get(), false);
 	scene.Add(std::move(digDugIconObject));
 
 	auto pookaIconObject = std::make_unique<Twengine::GameObject>();
 	pookaIconObject->AddComponent<Twengine::TextureRenderComponent>()->SetTexture("StartScreen/PookaIcon.png");
 	pookaIconObject->GetTransform()->SetLocalPosition(240, 384);
+	pookaIconObject->SetParent(menuGraphicsObj.get(), false);
 	scene.Add(std::move(pookaIconObject));
 
 	auto fygarIconObject = std::make_unique<Twengine::GameObject>();
 	fygarIconObject->AddComponent<Twengine::TextureRenderComponent>()->SetTexture("StartScreen/FygarIcon.png");
 	fygarIconObject->GetTransform()->SetLocalPosition(304, 320);
+	fygarIconObject->SetParent(menuGraphicsObj.get(), false);
 	scene.Add(std::move(fygarIconObject));
 
 	auto menuObject = std::make_unique<Twengine::GameObject>();
 	menuObject->AddComponent<MainMenuComponent>();
+	menuObject->SetParent(menuGraphicsObj.get(), false);
 
 	Twengine::InputManager::GetInstance().SetCommandMap(make_sdbm_hash("MainMenu"));
 	Twengine::InputManager::GetInstance().BindCommandToInput<ButtonSwitchCommand>(SDLK_DOWN, Twengine::InteractionStates::down, menuObject.get(), -1)->SetDirection(1);
 	Twengine::InputManager::GetInstance().BindCommandToInput<ButtonSwitchCommand>(SDLK_UP, Twengine::InteractionStates::down, menuObject.get(), -1)->SetDirection(-1);
 	Twengine::InputManager::GetInstance().BindCommandToInput<ButtonPressCommand>(SDLK_SPACE, Twengine::InteractionStates::down, menuObject.get(), -1);
 
+	auto highScoreDisplayerObj = std::make_unique<Twengine::GameObject>();
+	highScoreDisplayerObj->AddComponent<HighScoresDisplayComponent>();
+	scene.Add(std::move(highScoreDisplayerObj));
+
 	scene.Add(std::move(menuObject));
+	scene.Add(std::move(menuGraphicsObj));
 }
 
 void LevelFactory::LoadPersistentScene()
@@ -206,8 +221,12 @@ void LevelFactory::LoadHighScoreScene()
 	Twengine::InputManager::GetInstance().BindCommandToInput<ScoreLetterSwitchCommand>(SDLK_RIGHT, Twengine::InteractionStates::down, scoreSaveObj.get(), -1)->SetDirection(1);
 	Twengine::InputManager::GetInstance().BindCommandToInput<ScoreLetterSwitchCommand>(SDLK_LEFT, Twengine::InteractionStates::down, scoreSaveObj.get(), -1)->SetDirection(-1);
 	Twengine::InputManager::GetInstance().BindCommandToInput<ScoreConfirmSaveCommand>(SDLK_SPACE, Twengine::InteractionStates::up, scoreSaveObj.get(), -1);
-
 	scene.Add(std::move(scoreSaveObj));
+
+	auto highScoreDisplayerObj = std::make_unique<Twengine::GameObject>();
+	highScoreDisplayerObj->AddComponent<HighScoresDisplayComponent>()->ChangeBaseDrawPosition({ 20.f, 250.f });
+	scene.Add(std::move(highScoreDisplayerObj));
+
 }
 
 void LevelFactory::LoadLevelFromFile(Twengine::Scene& scene, GroundComponent* groundComponent, GridComponent* gridComponent, const std::string& filePath)
