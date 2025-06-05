@@ -10,5 +10,5 @@ PumpCommand::PumpCommand(Twengine::GameObject* gameObject)
 
 void PumpCommand::Execute()
 {
-	m_DigDugComponent->OnPumpButtonInteraction(m_IsPressBound);
+	m_DigDugComponent->OnPumpButtonInteraction(m_InteractionState);
 }

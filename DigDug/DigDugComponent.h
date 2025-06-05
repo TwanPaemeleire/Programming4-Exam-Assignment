@@ -14,7 +14,7 @@ struct GameEvent;
 struct PlayerMovingData
 {
 	glm::vec2 direction = { 0.f, 0.f };
-	glm::vec2 lastNonNullDirection;
+	glm::vec2 lastNonNullDirection{};
 	glm::vec2 targetPosition = { -1.f, -1.f };
 	glm::vec2 currentInputDirection = { 0.f, 0.f };
 	float distanceToTarget{};
@@ -38,7 +38,7 @@ public:
 	virtual void RenderUI() override;
 
 	void SetDirection(glm::vec2 dir);
-	void OnPumpButtonInteraction(bool pressBound);
+	void OnPumpButtonInteraction(Twengine::InteractionStates interactionState);
 	virtual void Notify(const GameEvent& event, Twengine::GameObject* observedObject) override;
 
 	PlayerMovingData* GetPlayerMovingData() const { return m_PlayerMovingData.get(); }

@@ -56,9 +56,9 @@ void DigDugComponent::SetDirection(glm::vec2 dir)
 	CheckAndTransitionStates(m_CurrentState->SetYDirection(GetOwner(), dir.y, dir.x));
 }
 
-void DigDugComponent::OnPumpButtonInteraction(bool pressBound)
+void DigDugComponent::OnPumpButtonInteraction(Twengine::InteractionStates interactionState)
 {
-	CheckAndTransitionStates(m_CurrentState->OnPumpButtonInteraction(GetOwner(), pressBound));
+	CheckAndTransitionStates(m_CurrentState->OnPumpButtonInteraction(GetOwner(), interactionState));
 }
 
 void DigDugComponent::Notify(const GameEvent& event, Twengine::GameObject* observedObject)

@@ -21,7 +21,6 @@ void PlayerMoving::OnEnter(Twengine::GameObject* stateOwner)
 	m_Direction = movingData->direction;
 	m_LastNonNullDirection = movingData->lastNonNullDirection;
 	m_TargetPosition = movingData->targetPosition;
-	m_CurrentInputDirection = movingData->currentInputDirection;
 	m_DistanceToTarget = movingData->distanceToTarget;
 	m_DistanceTracker = movingData->distanceTracker;
 	m_CurrentIndex = movingData->currentIndex;
@@ -133,10 +132,12 @@ std::unique_ptr<PlayerState> PlayerMoving::SetYDirection(Twengine::GameObject*, 
 	return nullptr;
 }
 
-std::unique_ptr<PlayerState> PlayerMoving::OnPumpButtonInteraction(Twengine::GameObject*, bool)
+std::unique_ptr<PlayerState> PlayerMoving::OnPumpButtonInteraction(Twengine::GameObject*, Twengine::InteractionStates interactionState)
 {
-	//return std::make_unique<PlayerPumpingState>(m_Direction);
-	m_ShouldStartPumping = true;
+	if (interactionState == Twengine::InteractionStates::down)
+	{
+		m_ShouldStartPumping = true;
+	}
 	return nullptr;
 }
 
@@ -339,9 +340,10 @@ std::unique_ptr<PlayerState> PlayerPumpingState::Update(Twengine::GameObject*)
 	return nullptr;
 }
 
-std::unique_ptr<PlayerState> PlayerPumpingState::OnPumpButtonInteraction(Twengine::GameObject*, bool isPressBound)
+std::unique_ptr<PlayerState> PlayerPumpingState::OnPumpButtonInteraction(Twengine::GameObject*, Twengine::InteractionStates interactionState)
 {
-	m_DigDugPumpComponent->OnPumpButtonInteraction(isPressBound);
+	bool pressBound = (interactionState == Twengine::InteractionStates::down || interactionState == Twengine::InteractionStates::pressed);
+	m_DigDugPumpComponent->OnPumpButtonInteraction(pressBound);
 	return nullptr;
 }
 

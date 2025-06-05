@@ -49,10 +49,10 @@ void GameManager::Notify(const GameEvent& event, Twengine::GameObject* /*observe
 		{
 			m_ScoreFileComponent->WriteHighScores();
 		}
-		Twengine::SceneManager::GetInstance().GetPersistentScene().Reload();
-		Twengine::SceneManager::GetInstance().GetPersistentScene().DeactivateAllObjects();
 		Twengine::InputManager::GetInstance().ClearCommandMap(make_sdbm_hash("Game"));
 		Twengine::InputManager::GetInstance().ClearCommandMap(make_sdbm_hash("HighScoreScene"));
+		Twengine::SceneManager::GetInstance().GetPersistentScene().Reload();
+		Twengine::SceneManager::GetInstance().GetPersistentScene().DeactivateAllObjects();
 		Twengine::SceneManager::GetInstance().SetCurrentScene("MainMenu");
 	}
 }

@@ -2,12 +2,14 @@
 #include <memory>
 #include <glm.hpp>
 #include "Observer.h"
+#include "InputManager.h"
 
 namespace Twengine
 {
 	class GameObject;
 	class AnimationComponent;
 	class TransformComponent;
+	//struct InteractionStates;
 }
 class GroundComponent;
 class GridComponent;
@@ -29,7 +31,7 @@ public:
 	virtual void RenderDebugDrawing() const {};
 	virtual std::unique_ptr<PlayerState> SetXDirection(Twengine::GameObject*, float, float) { return nullptr; }
 	virtual std::unique_ptr<PlayerState> SetYDirection(Twengine::GameObject*, float, float) { return nullptr; }
-	virtual std::unique_ptr<PlayerState> OnPumpButtonInteraction(Twengine::GameObject*, bool) { return nullptr; }
+	virtual std::unique_ptr<PlayerState> OnPumpButtonInteraction(Twengine::GameObject*, Twengine::InteractionStates) { return nullptr; }
 	virtual std::unique_ptr<PlayerState> Notify(Twengine::GameObject*, const GameEvent&) { return nullptr; }
 };
 
@@ -49,7 +51,7 @@ public:
 	virtual void RenderDebugDrawing() const override;
 	virtual std::unique_ptr<PlayerState> SetXDirection(Twengine::GameObject* stateOwner, float x, float yToSet) override;
 	virtual std::unique_ptr<PlayerState> SetYDirection(Twengine::GameObject* stateOwner, float y, float xToSet) override;
-	virtual std::unique_ptr<PlayerState> OnPumpButtonInteraction(Twengine::GameObject* stateOwner, bool isPressBound) override;
+	virtual std::unique_ptr<PlayerState> OnPumpButtonInteraction(Twengine::GameObject* stateOwner, Twengine::InteractionStates) override;
 	virtual std::unique_ptr<PlayerState> Notify(Twengine::GameObject*, const GameEvent&) override;
 private:
 	void CalculateNextTarget();
@@ -90,7 +92,7 @@ public:
 
 	virtual void OnEnter(Twengine::GameObject*) override;
 	virtual std::unique_ptr<PlayerState> Update(Twengine::GameObject* stateOwner) override;
-	virtual std::unique_ptr<PlayerState> OnPumpButtonInteraction(Twengine::GameObject* stateOwner, bool isPressBound) override;
+	virtual std::unique_ptr<PlayerState> OnPumpButtonInteraction(Twengine::GameObject* stateOwner, Twengine::InteractionStates) override;
 
 	virtual std::unique_ptr<PlayerState> Notify(Twengine::GameObject*, const GameEvent&) override;
 private:
