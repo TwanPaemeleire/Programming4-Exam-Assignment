@@ -47,8 +47,9 @@ void ScoreComponent::Notify(const GameEvent& event, Twengine::GameObject* eventS
 		{
 			scoreIncrease = 400;
 			increasePerLayer = 200;
-			int playerRow = GameManager::GetInstance().GetGrid()->GetIndexFromPosition(GameManager::GetInstance().GetPlayerTransform()->GetWorldPosition()).first;
-			int fygarRow = GameManager::GetInstance().GetGrid()->GetIndexFromPosition(eventSender->GetTransform()->GetWorldPosition()).first;
+			auto fygarPos = eventSender->GetTransform()->GetWorldPosition();
+			int playerRow = GameManager::GetInstance().GetGrid()->GetIndexFromPosition(GameManager::GetInstance().GetClosestPlayerTransform(fygarPos)->GetWorldPosition()).first;
+			int fygarRow = GameManager::GetInstance().GetGrid()->GetIndexFromPosition(fygarPos).first;
 			if (playerRow == fygarRow) scoreMultiplier = 2;
 		}
 		int adjustedLayer = std::max(0, layer - 1);

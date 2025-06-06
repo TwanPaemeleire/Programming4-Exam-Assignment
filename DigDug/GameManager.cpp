@@ -54,7 +54,10 @@ void GameManager::Notify(const GameEvent& event, Twengine::GameObject* observedO
 		{
 			m_GridComponent->Reset();
 			m_GroundComponent->Reset();
-			m_PlayerTransform->GetOwner()->GetComponent<DigDugComponent>()->Reset();
+			for (const Twengine::TransformComponent* playerTransform : m_PlayerTransforms)
+			{
+				playerTransform->GetOwner()->GetComponent<DigDugComponent>()->Reset();
+			}
 			Twengine::SceneManager::GetInstance().GetCurrentScene().Reload();
 		}
 	}
@@ -94,7 +97,10 @@ void GameManager::Notify(const GameEvent& event, Twengine::GameObject* observedO
 			{
 				m_GridComponent->Reset();
 				m_GroundComponent->Reset();
-				m_PlayerTransform->GetOwner()->GetComponent<DigDugComponent>()->Reset();
+				for (const Twengine::TransformComponent* playerTransform : m_PlayerTransforms)
+				{
+					playerTransform->GetOwner()->GetComponent<DigDugComponent>()->Reset();
+				}
 				Twengine::SceneManager::GetInstance().RequestSetCurrentScene(currentSceneId + 1);
 			}
 

@@ -31,9 +31,6 @@ public:
 	void SetGround(GroundComponent* ground) { m_GroundComponent = ground; }
 	GroundComponent* GetGround() const { return m_GroundComponent; }
 
-	void SetPlayerTransform(Twengine::TransformComponent* playerTransform) { m_PlayerTransform = playerTransform; }
-	Twengine::TransformComponent* GetPlayerTransform() const { return m_PlayerTransform; }
-
 	std::vector<Twengine::TransformComponent*> GetPlayerTransforms() const { return m_PlayerTransforms; }
 	Twengine::TransformComponent* GetClosestPlayerTransform(glm::vec2 pos) const;
 	void AddPlayerTransform(Twengine::TransformComponent* playerTransform) { m_PlayerTransforms.emplace_back(playerTransform); }
@@ -60,7 +57,6 @@ private:
 
 	GridComponent* m_GridComponent{};
 	GroundComponent* m_GroundComponent{};
-	Twengine::TransformComponent* m_PlayerTransform{};
 	ScoreComponent* m_ScoreComponent{};
 	ScoreFileComponent* m_ScoreFileComponent{};
 	GameMode m_GameMode{};

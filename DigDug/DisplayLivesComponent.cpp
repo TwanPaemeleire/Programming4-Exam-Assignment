@@ -16,8 +16,6 @@ DisplayLivesComponent::DisplayLivesComponent(Twengine::GameObject* owner)
 void DisplayLivesComponent::Start()
 {
 	GridComponent* gridComp = GameManager::GetInstance().GetGrid();
-	auto& pos = gridComp->GetCell(gridComp->GetRows() - 1, 0)->topLeft;
-	GetOwner()->GetTransform()->SetLocalPosition(pos.x, pos.y);
 	m_LifeDrawOffset = gridComp->GetCellSize();
 }
 

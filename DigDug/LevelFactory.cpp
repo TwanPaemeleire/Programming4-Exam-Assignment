@@ -128,6 +128,7 @@ void LevelFactory::LoadPersistentScene()
 
 	Twengine::Scene& scene = Twengine::SceneManager::GetInstance().GetPersistentScene();
 
+	///// LEVEL /////////////////////////////////////////////////////////////////////////
 	auto gridObject = std::make_unique<Twengine::GameObject>();
 	auto* grid = gridObject->AddComponent<GridComponent>();
 	GameManager::GetInstance().SetGrid(grid);
@@ -143,68 +144,77 @@ void LevelFactory::LoadPersistentScene()
 	scene.Add(std::move(levelDrawObject));
 	scene.Add(std::move(gridObject));
 	scene.Add(std::move(scoreFileObj));
+	///// LEVEL /////////////////////////////////////////////////////////////////////////
 
 	auto* smallFont = Twengine::ResourceManager::GetInstance().LoadFont("GameFont.otf", 8);
 
-	switch (GameManager::GetInstance().CurrentGameMode())
-	{
-		case GameMode::SinglePlayer:
-		{
-
-		}
-			break;
-		case GameMode::Coop:
-		{
-
-		}
-			break;
-		case GameMode::Versus:
-		{
-
-		}
-			break;
-	}
-	// Display DigDug lives
-	auto digdugLivesText = std::make_unique<Twengine::GameObject>();
-	auto* digDugLivesDisplayComp = digdugLivesText->AddComponent<DisplayLivesComponent>();
-
-	// Display DigDug score
+	///// SCORE /////////////////////////////////////////////////////////////////////////
 	auto digdugScoreText = std::make_unique<Twengine::GameObject>();
 	digdugScoreText->AddComponent<Twengine::TextComponent>()->SetFont(smallFont);
 	auto* digdugPointsDisplayComp = digdugScoreText->AddComponent<DisplayPointsComponent>();
 	digdugScoreText->GetTransform()->SetLocalPosition(128, 5);
 
-	// DIGDUG
+	auto scoreObj = std::make_unique<Twengine::GameObject>();
+	auto* scoreComponent = scoreObj->AddComponent<ScoreComponent>();
+	scoreComponent->GetScoreChangedEvent()->AddObserver(digdugPointsDisplayComp);
+	GameManager::GetInstance().SetScoreComponent(scoreComponent);
+
+	scene.Add(std::move(digdugScoreText));
+	scene.Add(std::move(scoreObj));
+	///// SCORE /////////////////////////////////////////////////////////////////////////
+
+	///// PLAYER 1 /////////////////////////////////////////////////////////////////////////
+	auto digdugLivesText = std::make_unique<Twengine::GameObject>();
+	auto* digDugLivesDisplayComp = digdugLivesText->AddComponent<DisplayLivesComponent>();
+	digDugLivesDisplayComp->GetOwner()->GetTransform()->SetLocalPosition(grid->GetPositionFromIndex(grid->GetRows() - 1, 0));
+
 	auto digdug = std::make_unique<Twengine::GameObject>();
 	GameManager::GetInstance().AddPlayerTransform(digdug->GetTransform());
 
 	auto* diDugHealth = digdug->AddComponent<LivesComponent>();
 	diDugHealth->GetObjectDiedEvent()->AddObserver(digDugLivesDisplayComp);
-
-	auto* digDugScore = digdug->AddComponent<ScoreComponent>();
-	digDugScore->GetScoreChangedEvent()->AddObserver(digdugPointsDisplayComp);
-	GameManager::GetInstance().SetScoreComponent(digDugScore);
+	scene.Add(std::move(digdugLivesText));
 
 	digdug->AddComponent<DigDugComponent>();
 
 	Twengine::InputManager::GetInstance().SetCommandMap(make_sdbm_hash("Game"));
-	Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_w, Twengine::InteractionStates::pressed, digdug.get(), -1)->SetDirection(0, -1);
-	Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_s, Twengine::InteractionStates::pressed, digdug.get(), -1)->SetDirection(0, 1);
-	Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_a, Twengine::InteractionStates::pressed, digdug.get(), -1)->SetDirection(-1, 0);
-	Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_d, Twengine::InteractionStates::pressed, digdug.get(), -1)->SetDirection(1, 0);
-
-	Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_w, Twengine::InteractionStates::up, digdug.get(), -1)->SetDirection(0, 0);
-	Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_s, Twengine::InteractionStates::up, digdug.get(), -1)->SetDirection(0, 0);
-	Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_a, Twengine::InteractionStates::up, digdug.get(), -1)->SetDirection(0, 0);
-	Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_d, Twengine::InteractionStates::up, digdug.get(), -1)->SetDirection(0, 0);
-
-	Twengine::InputManager::GetInstance().BindCommandToInput<PumpCommand>(SDLK_SPACE, Twengine::InteractionStates::pressed, digdug.get(), -1)->IsPressBound();
-	Twengine::InputManager::GetInstance().BindCommandToInput<PumpCommand>(SDLK_SPACE, Twengine::InteractionStates::down, digdug.get(), -1)->IsDownBound();
-	Twengine::InputManager::GetInstance().BindCommandToInput<PumpCommand>(SDLK_SPACE, Twengine::InteractionStates::up, digdug.get(), -1)->IsReleaseBound();
-
-	scene.Add(std::move(digdugLivesText));
+	SetupKeyboardCommands(digdug.get());
+	//SetupControllerCommands(digdug.get(), 0);
 	scene.Add(std::move(digdug));
-	scene.Add(std::move(digdugScoreText));
+	///// PLAYER 1 /////////////////////////////////////////////////////////////////////////
+
+
+	switch (GameManager::GetInstance().CurrentGameMode())
+	{
+	case GameMode::Coop:
+	{
+		///// PLAYER 2 /////////////////////////////////////////////////////////////////////////
+
+		auto secondDigdugLivesText = std::make_unique<Twengine::GameObject>();
+		auto* secondDigDugLivesDisplayComp = secondDigdugLivesText->AddComponent<DisplayLivesComponent>();
+		secondDigdugLivesText->GetTransform()->SetLocalPosition(grid->GetPositionFromIndex(grid->GetRows() - 1, grid->GetColumns() - 3));
+
+		auto secondDigDug = std::make_unique<Twengine::GameObject>();
+		GameManager::GetInstance().AddPlayerTransform(secondDigDug->GetTransform());
+
+		auto* secondDigDugHealth = secondDigDug->AddComponent<LivesComponent>();
+		secondDigDugHealth->GetObjectDiedEvent()->AddObserver(secondDigDugLivesDisplayComp);
+
+		secondDigDug->AddComponent<DigDugComponent>();
+		SetupControllerCommands(secondDigDug.get(), 0);
+		///// PLAYER 2 /////////////////////////////////////////////////////////////////////////
+
+		scene.Add(std::move(secondDigDug));
+		scene.Add(std::move(secondDigdugLivesText));
+	}
+	break;
+	case GameMode::Versus:
+	{
+
+	}
+	break;
+	}
+
 }
 
 void LevelFactory::LoadLevel1()
@@ -249,6 +259,40 @@ void LevelFactory::LoadHighScoreScene()
 	highScoreDisplayerObj->AddComponent<HighScoresDisplayComponent>()->ChangeBaseDrawPosition({ 20.f, 250.f });
 	scene.Add(std::move(highScoreDisplayerObj));
 
+}
+
+void LevelFactory::SetupKeyboardCommands(Twengine::GameObject* object)
+{
+	Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_w, Twengine::InteractionStates::pressed, object, -1)->SetDirection(0, -1);
+	Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_s, Twengine::InteractionStates::pressed, object, -1)->SetDirection(0, 1);
+	Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_a, Twengine::InteractionStates::pressed, object, -1)->SetDirection(-1, 0);
+	Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_d, Twengine::InteractionStates::pressed, object, -1)->SetDirection(1, 0);
+
+	Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_w, Twengine::InteractionStates::up, object, -1)->SetDirection(0, 0);
+	Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_s, Twengine::InteractionStates::up, object, -1)->SetDirection(0, 0);
+	Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_a, Twengine::InteractionStates::up, object, -1)->SetDirection(0, 0);
+	Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(SDLK_d, Twengine::InteractionStates::up, object, -1)->SetDirection(0, 0);
+
+	Twengine::InputManager::GetInstance().BindCommandToInput<PumpCommand>(SDLK_SPACE, Twengine::InteractionStates::pressed, object, -1)->IsPressBound();
+	Twengine::InputManager::GetInstance().BindCommandToInput<PumpCommand>(SDLK_SPACE, Twengine::InteractionStates::down, object, -1)->IsDownBound();
+	Twengine::InputManager::GetInstance().BindCommandToInput<PumpCommand>(SDLK_SPACE, Twengine::InteractionStates::up, object, -1)->IsReleaseBound();
+}
+
+void LevelFactory::SetupControllerCommands(Twengine::GameObject* object, int controllerIdx)
+{
+	Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(0x0001, Twengine::InteractionStates::pressed, object, controllerIdx)->SetDirection(0, -1);
+	Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(0x0002, Twengine::InteractionStates::pressed, object, controllerIdx)->SetDirection(0, 1);
+	Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(0x0004, Twengine::InteractionStates::pressed, object, controllerIdx)->SetDirection(-1, 0);
+	Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(0x0008, Twengine::InteractionStates::pressed, object, controllerIdx)->SetDirection(1, 0);
+
+	Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(0x0001, Twengine::InteractionStates::up, object, controllerIdx)->SetDirection(0, 0);
+	Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(0x0002, Twengine::InteractionStates::up, object, controllerIdx)->SetDirection(0, 0);
+	Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(0x0004, Twengine::InteractionStates::up, object, controllerIdx)->SetDirection(0, 0);
+	Twengine::InputManager::GetInstance().BindCommandToInput<MoveCommand>(0x0008, Twengine::InteractionStates::up, object, controllerIdx)->SetDirection(0, 0);
+
+	Twengine::InputManager::GetInstance().BindCommandToInput<PumpCommand>(0x4000, Twengine::InteractionStates::pressed, object, controllerIdx)->IsPressBound();
+	Twengine::InputManager::GetInstance().BindCommandToInput<PumpCommand>(0x4000, Twengine::InteractionStates::down, object, controllerIdx)->IsDownBound();
+	Twengine::InputManager::GetInstance().BindCommandToInput<PumpCommand>(0x4000, Twengine::InteractionStates::up, object, controllerIdx)->IsReleaseBound();
 }
 
 void LevelFactory::LoadLevelFromFile(Twengine::Scene& scene, GroundComponent* groundComponent, GridComponent* gridComponent, const std::string& filePath)

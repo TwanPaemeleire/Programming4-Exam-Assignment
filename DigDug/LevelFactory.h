@@ -4,6 +4,7 @@
 namespace Twengine
 {
 	class Scene;
+	class GameObject;
 }
 
 class GroundComponent;
@@ -21,6 +22,8 @@ public:
 	static void LoadHighScoreScene();
 
 private:
+	static void SetupKeyboardCommands(Twengine::GameObject* object);
+	static void SetupControllerCommands(Twengine::GameObject* object, int controllerIdx);
 	static void LoadLevelFromFile(Twengine::Scene& scene, GroundComponent* groundComponent, GridComponent* gridComponent, const std::string& filePath);
 	static void CreateAndAddPooka(Twengine::Scene& scene, int row, int column, GridComponent* gridComponent);
 	static void CreateAndAddFygar(Twengine::Scene& scene, int row, int column, GridComponent* gridComponent);
