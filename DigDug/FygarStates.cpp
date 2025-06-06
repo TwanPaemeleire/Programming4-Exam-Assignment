@@ -13,6 +13,7 @@
 #include "FygarComponent.h"
 #include "RockComponent.h"
 #include "RectColliderComponent.h"
+#include "FygarFireCommand.h"
 
 float FygarTrackingState::m_FireCooldownCounter = 5.f;
 
@@ -153,22 +154,8 @@ std::unique_ptr<FygarState> FygarGhostState::Update(Twengine::GameObject* stateO
 
 void FygarFireBreathingState::OnEnter(Twengine::GameObject* stateOwner)
 {
-	std::unique_ptr<Twengine::GameObject> fire = std::make_unique<Twengine::GameObject>();
-	FygarFireComponent* fireComponent = fire->AddComponent<FygarFireComponent>();
-	m_FireGameObject = fire.get();
-	fire->SetParent(stateOwner, false);
-
-	glm::vec2 fygarPos = stateOwner->GetTransform()->GetWorldPosition();
-	glm::vec2 playerPos = GameManager::GetInstance().GetClosestPlayerTransform(fygarPos)->GetWorldPosition();
-	int playerColumn = GameManager::GetInstance().GetGrid()->GetIndexFromPosition(playerPos).second;
-	int fygarColumn = GameManager::GetInstance().GetGrid()->GetIndexFromPosition(fygarPos).second;
-
-	if (playerColumn >= fygarColumn) // Should shoot the fire to the right
-	{
-		fireComponent->ShotToRight();
-	}
-
-	Twengine::SceneManager::GetInstance().GetCurrentScene().Add(std::move(fire));
+	m_FireCommand = std::make_unique<FygarFireCommand>(stateOwner);
+	m_FireCommand->Execute();
 }
 
 std::unique_ptr<FygarState> FygarFireBreathingState::Update(Twengine::GameObject*)
@@ -178,7 +165,7 @@ std::unique_ptr<FygarState> FygarFireBreathingState::Update(Twengine::GameObject
 
 std::unique_ptr<FygarState> FygarFireBreathingState::LateUpdate(Twengine::GameObject*)
 {
-	if (m_FireGameObject->IsMarkedForDestruction()) 
+	if (m_FireCommand->GetFireObject()->IsMarkedForDestruction())
 	{
 		return std::make_unique<FygarTrackingState>();
 	}

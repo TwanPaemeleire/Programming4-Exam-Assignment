@@ -12,6 +12,7 @@ struct GameEvent;
 class EnemyMovementComponent;
 class GridComponent;
 class RockComponent;
+class FygarFireCommand;
 
 class FygarState
 {
@@ -106,8 +107,9 @@ public:
 	virtual std::unique_ptr<FygarState> GetNotifiedByOwner(const GameEvent&, Twengine::GameObject*, Twengine::GameObject*) override;
 
 private:
-	EnemyMovementComponent* m_MovementComp{};
-	Twengine::GameObject* m_FireGameObject{};
+	std::unique_ptr< FygarFireCommand> m_FireCommand{};
+	//EnemyMovementComponent* m_MovementComp{};
+	//Twengine::GameObject* m_FireGameObject{};
 };
 
 class FygarPumpingState final : public FygarState
