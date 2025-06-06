@@ -38,10 +38,10 @@ void GameManager::Notify(const GameEvent& event, Twengine::GameObject* observedO
 		//Player has no more lives left, so go to the scene for saving the score
 		if (digDugLives->GetLives() <= 0)
 		{
+			Twengine::InputManager::GetInstance().ClearCommandMap(make_sdbm_hash("Game"));
+			Twengine::SceneManager::GetInstance().GetPersistentScene().DeactivateAllObjects();
 			if (m_GameMode == GameMode::SinglePlayer)
 			{
-				Twengine::SceneManager::GetInstance().GetPersistentScene().DeactivateAllObjects();
-				Twengine::InputManager::GetInstance().ClearCommandMap(make_sdbm_hash("Game"));
 				Twengine::SceneManager::GetInstance().RequestSetCurrentScene("HighScoreScene");
 			}
 			else
@@ -82,10 +82,10 @@ void GameManager::Notify(const GameEvent& event, Twengine::GameObject* observedO
 			// Current level was final level, so game is done
 			if (currentSceneId + 1 >= Twengine::Scene::s_IdCounter)
 			{
+				Twengine::InputManager::GetInstance().ClearCommandMap(make_sdbm_hash("Game"));
+				Twengine::SceneManager::GetInstance().GetPersistentScene().DeactivateAllObjects();
 				if (m_GameMode == GameMode::SinglePlayer)
 				{
-					Twengine::SceneManager::GetInstance().GetPersistentScene().DeactivateAllObjects();
-					Twengine::InputManager::GetInstance().ClearCommandMap(make_sdbm_hash("Game"));
 					Twengine::SceneManager::GetInstance().RequestSetCurrentScene("HighScoreScene");
 				}
 				else
