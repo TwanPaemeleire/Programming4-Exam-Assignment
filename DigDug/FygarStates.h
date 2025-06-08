@@ -48,6 +48,7 @@ public:
 
 private:
 	EnemyMovementComponent* m_MovementComp{};
+	bool m_PlayerControlled{false};
 };
 
 class FygarTrackingState final : public FygarState
@@ -70,6 +71,7 @@ private:
 	float m_DistanceToTriggerFire{86.f};
 	float m_FireCooldown{ 5.f };
 	static float m_FireCooldownCounter;
+	bool m_PlayerControlled{ false };
 };
 
 class FygarGhostState final : public FygarState
@@ -89,6 +91,7 @@ public:
 
 private:
 	EnemyMovementComponent* m_MovementComp{};
+	bool m_PlayerControlled{ false };
 };
 
 class FygarFireBreathingState final : public FygarState
@@ -108,8 +111,6 @@ public:
 
 private:
 	std::unique_ptr< FygarFireCommand> m_FireCommand{};
-	//EnemyMovementComponent* m_MovementComp{};
-	//Twengine::GameObject* m_FireGameObject{};
 };
 
 class FygarPumpingState final : public FygarState

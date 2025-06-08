@@ -194,6 +194,7 @@
     <ClCompile Include="ScoreFileComponent.cpp" />
     <ClCompile Include="ScoreLetterSwitchCommand.cpp" />
     <ClCompile Include="ScoreSavingComponent.cpp" />
+    <ClCompile Include="SoundMuteCommand.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ButtonPressCommand.h" />
@@ -230,6 +231,7 @@
     <ClInclude Include="ScoreFileComponent.h" />
     <ClInclude Include="ScoreLetterSwitchCommand.h" />
     <ClInclude Include="ScoreSavingComponent.h" />
+    <ClInclude Include="SoundMuteCommand.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

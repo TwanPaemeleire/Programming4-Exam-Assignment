@@ -42,6 +42,7 @@
 #include "ScoreFileComponent.h"
 #include "ScoreConfirmSaveCommand.h"
 #include "HighScoresDisplayComponent.h"
+#include "SoundMuteCommand.h"
 
 #include "Event.h"
 #include <fstream>
@@ -110,6 +111,11 @@ void LevelFactory::LoadMainMenu()
 	menuObject->SetParent(menuGraphicsObj.get(), false);
 
 	Twengine::InputManager::GetInstance().SetCommandMap(make_sdbm_hash("MainMenu"));
+
+	auto soundMuteObj = std::make_unique<Twengine::GameObject>();
+	Twengine::InputManager::GetInstance().BindCommandToInput<SoundMuteCommand>(SDLK_F2, Twengine::InteractionStates::up, soundMuteObj.get(), -1);
+	scene.Add(std::move(soundMuteObj));
+
 	Twengine::InputManager::GetInstance().BindCommandToInput<ButtonSwitchCommand>(SDLK_DOWN, Twengine::InteractionStates::down, menuObject.get(), -1)->SetDirection(1);
 	Twengine::InputManager::GetInstance().BindCommandToInput<ButtonSwitchCommand>(SDLK_UP, Twengine::InteractionStates::down, menuObject.get(), -1)->SetDirection(-1);
 	Twengine::InputManager::GetInstance().BindCommandToInput<ButtonPressCommand>(SDLK_SPACE, Twengine::InteractionStates::down, menuObject.get(), -1);
@@ -210,7 +216,20 @@ void LevelFactory::LoadPersistentScene()
 	break;
 	case GameMode::Versus:
 	{
+		///// PLAYER CONTROLLED ENEMY /////////////////////////////////////////////////////////////////////////
+		std::unique_ptr<Twengine::GameObject> fygar = std::make_unique<Twengine::GameObject>();
+		fygar->AddComponent<Twengine::AnimationComponent>();
+		fygar->AddComponent<EnemyMovementComponent>();
+		fygar->GetTransform()->SetLocalPosition(grid->GetPositionFromIndex(9, 7));
+		fygar->AddComponent<Twengine::RectColliderComponent>();
+		FygarComponent* fygarComp = fygar->AddComponent<FygarComponent>();
+		fygarComp->EnablePlayerControlled();
 
+		fygarComp->GetOnDeathEvent()->AddObserver(GameManager::GetInstance().GetScoreComponent());
+		fygarComp->GetOnDeathEvent()->AddObserver(&GameManager::GetInstance());
+
+		scene.Add(std::move(fygar));
+		///// PLAYER CONTROLLED ENEMY /////////////////////////////////////////////////////////////////////////
 	}
 	break;
 	}
@@ -220,8 +239,13 @@ void LevelFactory::LoadPersistentScene()
 void LevelFactory::LoadLevel1()
 {
 	Twengine::Scene& scene = Twengine::SceneManager::GetInstance().GetCurrentScene();
+
 	GameManager::GetInstance().ResetEnemyCount();
+
 	Twengine::InputManager::GetInstance().SetCommandMap(make_sdbm_hash("Game"));
+	auto soundMuteObj = std::make_unique<Twengine::GameObject>();
+	Twengine::InputManager::GetInstance().BindCommandToInput<SoundMuteCommand>(SDLK_F2, Twengine::InteractionStates::up, soundMuteObj.get(), -1);
+	scene.Add(std::move(soundMuteObj));
 	LoadLevelFromFile(scene, GameManager::GetInstance().GetGround(), GameManager::GetInstance().GetGrid(), "Level/Level1.bin");
 }
 
@@ -230,6 +254,9 @@ void LevelFactory::LoadLevel2()
 	Twengine::Scene& scene = Twengine::SceneManager::GetInstance().GetCurrentScene();
 	GameManager::GetInstance().ResetEnemyCount();
 	Twengine::InputManager::GetInstance().SetCommandMap(make_sdbm_hash("Game"));
+	auto soundMuteObj = std::make_unique<Twengine::GameObject>();
+	Twengine::InputManager::GetInstance().BindCommandToInput<SoundMuteCommand>(SDLK_F2, Twengine::InteractionStates::up, soundMuteObj.get(), -1);
+	scene.Add(std::move(soundMuteObj));
 	LoadLevelFromFile(scene, GameManager::GetInstance().GetGround(), GameManager::GetInstance().GetGrid(), "Level/Level2.bin");
 }
 
@@ -238,12 +265,19 @@ void LevelFactory::LoadLevel3()
 	Twengine::Scene& scene = Twengine::SceneManager::GetInstance().GetCurrentScene();
 	GameManager::GetInstance().ResetEnemyCount();
 	Twengine::InputManager::GetInstance().SetCommandMap(make_sdbm_hash("Game"));
+	auto soundMuteObj = std::make_unique<Twengine::GameObject>();
+	Twengine::InputManager::GetInstance().BindCommandToInput<SoundMuteCommand>(SDLK_F2, Twengine::InteractionStates::up, soundMuteObj.get(), -1);
+	scene.Add(std::move(soundMuteObj));
 	LoadLevelFromFile(scene, GameManager::GetInstance().GetGround(), GameManager::GetInstance().GetGrid(), "Level/Level3.bin");
 }
 
 void LevelFactory::LoadHighScoreScene()
 {
 	Twengine::Scene& scene = Twengine::SceneManager::GetInstance().GetCurrentScene();
+
+	auto soundMuteObj = std::make_unique<Twengine::GameObject>();
+	Twengine::InputManager::GetInstance().BindCommandToInput<SoundMuteCommand>(SDLK_F2, Twengine::InteractionStates::up, soundMuteObj.get(), -1);
+	scene.Add(std::move(soundMuteObj));
 	auto scoreSaveObj = std::make_unique<Twengine::GameObject>();
 	scoreSaveObj->AddComponent<ScoreSavingComponent>();
 

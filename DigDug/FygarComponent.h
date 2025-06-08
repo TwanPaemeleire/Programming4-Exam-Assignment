@@ -22,9 +22,13 @@ public:
 	void Notify(const GameEvent& event, Twengine::GameObject* observedObject) override;
 	Twengine::Event* GetOnDeathEvent() const { return m_OnDeathEvent.get(); }
 
+	void EnablePlayerControlled() { m_ControlledByPlayer = true; }
+	bool IsPlayerControlled() const { return m_ControlledByPlayer; }
+
 private:
 	void CheckAndTransitionStates(std::unique_ptr<FygarState> newState);
 	std::unique_ptr<FygarState> m_CurrentState{};
 	std::unique_ptr<Twengine::Event> m_OnDeathEvent{};
+	bool m_ControlledByPlayer{false};
 };
 

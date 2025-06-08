@@ -26,17 +26,25 @@ void FygarIdleState::OnEnter(Twengine::GameObject* stateOwner)
 	{
 		animationComp->PlayAnimation(make_sdbm_hash("FygarMove"));
 	}
+	m_PlayerControlled = stateOwner->GetComponent<FygarComponent>()->IsPlayerControlled();
 }
 
 std::unique_ptr<FygarState> FygarIdleState::Update(Twengine::GameObject*)
 {
-	if (m_MovementComp->MovementIfNoPathToPlayer()) // Fygar can now reach player
+	if (m_PlayerControlled)
 	{
-		return std::make_unique<FygarTrackingState>();
+
 	}
-	if (m_MovementComp->GhostCoolDownHasFinished()) // Fygar can enter ghost form
+	else
 	{
-		return std::make_unique<FygarGhostState>();
+		if (m_MovementComp->MovementIfNoPathToPlayer()) // Fygar can now reach player
+		{
+			return std::make_unique<FygarTrackingState>();
+		}
+		if (m_MovementComp->GhostCoolDownHasFinished()) // Fygar can enter ghost form
+		{
+			return std::make_unique<FygarGhostState>();
+		}
 	}
 	return nullptr;
 }
@@ -65,35 +73,43 @@ void FygarTrackingState::OnEnter(Twengine::GameObject* stateOwner)
 		animationComp->PlayAnimation(make_sdbm_hash("FygarMove"));
 	}
 	m_GridComponent = GameManager::GetInstance().GetGrid();
+	m_PlayerControlled = stateOwner->GetComponent<FygarComponent>()->IsPlayerControlled();
 }
 
 std::unique_ptr<FygarState> FygarTrackingState::Update(Twengine::GameObject* stateOwner)
 {
-	m_FireCooldownCounter += Twengine::Time::GetInstance().deltaTime;
-	m_MovementComp->PathFindingToPlayer();
-
-	if (m_FireCooldownCounter >= m_FireCooldown)
+	if (m_PlayerControlled)
 	{
-		glm::vec2 fygarPos = stateOwner->GetTransform()->GetWorldPosition();
-		glm::vec2 playerPos = GameManager::GetInstance().GetClosestPlayerTransform(fygarPos)->GetWorldPosition();
-		int playerRow = m_GridComponent->GetIndexFromPosition(playerPos).first;
-		int fygarRow = m_GridComponent->GetIndexFromPosition(fygarPos).first;
 
-		if (playerRow == fygarRow)
+	}
+	else
+	{
+		m_FireCooldownCounter += Twengine::Time::GetInstance().deltaTime;
+		m_MovementComp->PathFindingToPlayer();
+
+		if (m_FireCooldownCounter >= m_FireCooldown)
 		{
-			// Check if close enough to breathe fire
-			if (abs(playerPos.x - fygarPos.x) <= m_DistanceToTriggerFire)
+			glm::vec2 fygarPos = stateOwner->GetTransform()->GetWorldPosition();
+			glm::vec2 playerPos = GameManager::GetInstance().GetClosestPlayerTransform(fygarPos)->GetWorldPosition();
+			int playerRow = m_GridComponent->GetIndexFromPosition(playerPos).first;
+			int fygarRow = m_GridComponent->GetIndexFromPosition(fygarPos).first;
+
+			if (playerRow == fygarRow)
 			{
-				m_FireCooldownCounter = 0.f;
-				return std::make_unique<FygarFireBreathingState>();
+				// Check if close enough to breathe fire
+				if (abs(playerPos.x - fygarPos.x) <= m_DistanceToTriggerFire)
+				{
+					m_FireCooldownCounter = 0.f;
+					return std::make_unique<FygarFireBreathingState>();
+				}
 			}
 		}
-	}	
 
-	if (m_MovementComp->GhostCoolDownHasFinished()) // Fygar can enter ghost form
-	{
-		return std::make_unique<FygarGhostState>();
-	}
+		if (m_MovementComp->GhostCoolDownHasFinished()) // Fygar can enter ghost form
+		{
+			return std::make_unique<FygarGhostState>();
+		}
+	}	
 	return nullptr;
 }
 
@@ -117,6 +133,7 @@ void FygarGhostState::OnEnter(Twengine::GameObject* stateOwner)
 	m_MovementComp = stateOwner->GetComponent<EnemyMovementComponent>();
 	Twengine::AnimationComponent* animationComp = stateOwner->GetComponent<Twengine::AnimationComponent>();
 	animationComp->PlayAnimation(make_sdbm_hash("FygarGhost"));
+	m_PlayerControlled = stateOwner->GetComponent<FygarComponent>()->IsPlayerControlled();
 }
 
 void FygarGhostState::OnExit(Twengine::GameObject*)
@@ -141,13 +158,20 @@ std::unique_ptr<FygarState> FygarGhostState::GetNotifiedByOwner(const GameEvent&
 
 std::unique_ptr<FygarState> FygarGhostState::Update(Twengine::GameObject* stateOwner)
 {
-	if (m_MovementComp->MovementInGhostForm()) // Has found place to go out of ghost form
+	if (m_PlayerControlled)
 	{
-		if (GameManager::GetInstance().GetGround()->EnemyCanReachPlayer(stateOwner->GetTransform()->GetWorldPosition()))
+
+	}
+	else
+	{
+		if (m_MovementComp->MovementInGhostForm()) // Has found place to go out of ghost form
 		{
-			return std::make_unique<FygarTrackingState>();
+			if (GameManager::GetInstance().GetGround()->EnemyCanReachPlayer(stateOwner->GetTransform()->GetWorldPosition()))
+			{
+				return std::make_unique<FygarTrackingState>();
+			}
+			return std::make_unique<FygarIdleState>();
 		}
-		return std::make_unique<FygarIdleState>();
 	}
 	return nullptr;
 }
