@@ -8,6 +8,8 @@
 #include "MyTime.h"
 #include "AnimationComponent.h"
 #include "TextureRenderComponent.h"
+#include "ServiceLocator.h"
+#include "SoundSystem.h"
 #include "Texture2D.h"
 
 void RockIdleState::OnEnter(Twengine::GameObject* stateOwner)
@@ -98,10 +100,11 @@ void RockBreakingState::OnEnter(Twengine::GameObject* stateOwner)
 	m_AnimationComponent = stateOwner->GetComponent<Twengine::AnimationComponent>();
 	m_AnimationComponent->AddAnimation("Level/RockBreaking.png", make_sdbm_hash("RockBreaking"), 3, 2);
 	m_AnimationComponent->PlayAnimation(make_sdbm_hash("RockBreaking"), 0.5f);
+	Twengine::ServiceLocator::get_sound_system().RequestPlaySound(make_sdbm_hash("RockBroken"), 0.2f);
 }
 
 std::unique_ptr<RockState> RockBreakingState::Update(Twengine::GameObject* stateOwner)
 {
-	if (m_AnimationComponent->HasFinishedPlayingOnce()) stateOwner->MarkForDestruction();
+	if (m_AnimationComponent->HasFinishedPlayingOnce())  stateOwner->MarkForDestruction();
 	return nullptr;
 }

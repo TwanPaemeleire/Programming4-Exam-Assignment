@@ -10,9 +10,13 @@
 #include <iostream>
 #include "Event.h"
 
+#include "ServiceLocator.h"
+#include "SoundSystem.h"
+
 DigDugPumpComponent::DigDugPumpComponent(Twengine::GameObject* owner)
 	:Component(owner)
 {
+	Twengine::ServiceLocator::get_sound_system().RequestLoadSound("DigDug/DigDugShot.wav", make_sdbm_hash("DigDugShot"));
 	m_OnPumpRetractedEvent = std::make_unique<Twengine::Event>();
 	m_OnPumpEvent = std::make_unique<Twengine::Event>();
 	GetOwner()->SetTag(make_sdbm_hash("DigDugPump"));
@@ -34,6 +38,7 @@ void DigDugPumpComponent::Start()
 	m_RectColliderComponent->SetHitBox(m_Transform->GetWorldPosition(), 0.f, 0.f);
 	m_RectColliderComponent->GetOnCollisionEvent()->AddObserver(this);
 	m_GroundComponent = GameManager::GetInstance().GetGround();
+	Twengine::ServiceLocator::get_sound_system().RequestPlaySound(make_sdbm_hash("DigDugShot"), 0.05f);
 }
 
 void DigDugPumpComponent::Update()
