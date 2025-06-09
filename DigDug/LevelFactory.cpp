@@ -17,7 +17,7 @@
 #include "MoveCommand.h"
 #include "KillObjectCommand.h"
 #include "KillEnemyCommand.h"
-#include "JoystickMoveCommand.h"
+#include "JoystickMoveCommand.h"                            
 #include "RectColliderComponent.h"
 
 #include "DigDugComponent.h"
@@ -43,41 +43,18 @@
 #include "ScoreConfirmSaveCommand.h"
 #include "HighScoresDisplayComponent.h"
 #include "SoundMuteCommand.h"
+#include "SoundSystem.h"
 
 #include "Event.h"
 #include <fstream>
 
-void LevelFactory::LoadDevScene()
-{
-	Twengine::Scene& scene = Twengine::SceneManager::GetInstance().GetCurrentScene();
-	auto gridObject = std::make_unique<Twengine::GameObject>();
-	auto* grid = gridObject->AddComponent<GridComponent>();
-	GameManager::GetInstance().SetGrid(grid);
-
-	//std::unique_ptr<Twengine::SDLSoundSystem> soundSystem = std::make_unique<Twengine::SDLSoundSystem>();
-	std::unique_ptr<Twengine::NullSoundSystem> soundSystem = std::make_unique<Twengine::NullSoundSystem>();
-	Twengine::ServiceLocator::register_sound_system(std::move(soundSystem));
-
-	auto levelDrawObject = std::make_unique<Twengine::GameObject>();
-	auto* ground = levelDrawObject->AddComponent<GroundComponent>();
-	scene.Add(std::move(levelDrawObject));
-	LoadLevelFromFile(scene, ground, grid, "Level/Level1.bin");
-	GameManager::GetInstance().SetGround(ground);
-
-	auto* font = Twengine::ResourceManager::GetInstance().LoadFont("GameFont.otf", 12);
-
-	auto fpsDisplayer = std::make_unique<Twengine::GameObject>();
-	Twengine::TextComponent* fpsText = fpsDisplayer->AddComponent<Twengine::TextComponent>();
-	fpsText->SetFont(font);
-	fpsDisplayer->AddComponent<Twengine::FPSComponent>();
-
-	scene.Add(std::move(fpsDisplayer));
-	scene.Add(std::move(gridObject));
-}
-
 void LevelFactory::LoadMainMenu()
 {
 	Twengine::Scene& scene = Twengine::SceneManager::GetInstance().GetCurrentScene();
+	Twengine::ServiceLocator::get_sound_system().RequestStopAllSound();
+	Twengine::ServiceLocator::get_sound_system().RequestLoadMusic("StartScreen/StartScreenMusic.wav", make_sdbm_hash("StartScreenMusic"));
+	Twengine::ServiceLocator::get_sound_system().RequestPlayMusic(make_sdbm_hash("StartScreenMusic"), 0.1f);
+
 
 	auto menuGraphicsObj = std::make_unique<Twengine::GameObject>();
 	menuGraphicsObj->GetTransform()->SetLocalPosition(0.f, 50.f);
@@ -239,6 +216,9 @@ void LevelFactory::LoadPersistentScene()
 void LevelFactory::LoadLevel1()
 {
 	Twengine::Scene& scene = Twengine::SceneManager::GetInstance().GetCurrentScene();
+	Twengine::ServiceLocator::get_sound_system().RequestStopAllSound();
+	Twengine::ServiceLocator::get_sound_system().RequestLoadMusic("Level/LevelMusic.wav", make_sdbm_hash("LevelMusic"));
+	Twengine::ServiceLocator::get_sound_system().RequestPlayMusic(make_sdbm_hash("LevelMusic"), 0.1f);
 
 	GameManager::GetInstance().ResetEnemyCount();
 
@@ -252,6 +232,10 @@ void LevelFactory::LoadLevel1()
 void LevelFactory::LoadLevel2()
 {
 	Twengine::Scene& scene = Twengine::SceneManager::GetInstance().GetCurrentScene();
+	Twengine::ServiceLocator::get_sound_system().RequestStopAllSound();
+	Twengine::ServiceLocator::get_sound_system().RequestLoadMusic("Level/LevelMusic.wav", make_sdbm_hash("LevelMusic"));
+	Twengine::ServiceLocator::get_sound_system().RequestPlayMusic(make_sdbm_hash("LevelMusic"), 0.1f);
+
 	GameManager::GetInstance().ResetEnemyCount();
 	Twengine::InputManager::GetInstance().SetCommandMap(make_sdbm_hash("Game"));
 	auto soundMuteObj = std::make_unique<Twengine::GameObject>();
@@ -263,6 +247,10 @@ void LevelFactory::LoadLevel2()
 void LevelFactory::LoadLevel3()
 {
 	Twengine::Scene& scene = Twengine::SceneManager::GetInstance().GetCurrentScene();
+	Twengine::ServiceLocator::get_sound_system().RequestStopAllSound();
+	Twengine::ServiceLocator::get_sound_system().RequestLoadMusic("Level/LevelMusic.wav", make_sdbm_hash("LevelMusic"));
+	Twengine::ServiceLocator::get_sound_system().RequestPlayMusic(make_sdbm_hash("LevelMusic"), 0.1f);
+
 	GameManager::GetInstance().ResetEnemyCount();
 	Twengine::InputManager::GetInstance().SetCommandMap(make_sdbm_hash("Game"));
 	auto soundMuteObj = std::make_unique<Twengine::GameObject>();
@@ -274,6 +262,9 @@ void LevelFactory::LoadLevel3()
 void LevelFactory::LoadHighScoreScene()
 {
 	Twengine::Scene& scene = Twengine::SceneManager::GetInstance().GetCurrentScene();
+	Twengine::ServiceLocator::get_sound_system().RequestStopAllSound();
+	Twengine::ServiceLocator::get_sound_system().RequestLoadMusic("HighScoreScreen/HighScoreScreenMusic.wav", make_sdbm_hash("HighScoreScreenMusic"));
+	Twengine::ServiceLocator::get_sound_system().RequestPlayMusic(make_sdbm_hash("HighScoreScreenMusic"), 0.1f);
 
 	auto soundMuteObj = std::make_unique<Twengine::GameObject>();
 	Twengine::InputManager::GetInstance().BindCommandToInput<SoundMuteCommand>(SDLK_F2, Twengine::InteractionStates::up, soundMuteObj.get(), -1);

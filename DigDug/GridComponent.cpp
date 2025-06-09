@@ -93,6 +93,12 @@ void GridComponent::CreateGrid()
 		{
 			m_Grid[rowIndex][columnIndex].topLeft = glm::vec2(m_CellSize * columnIndex, m_CellSize * rowIndex);
 			m_Grid[rowIndex][columnIndex].layer = layer;
+			m_Grid[rowIndex][columnIndex].containsRock = false;
+
+			m_Grid[rowIndex][columnIndex].canGoRight = false;
+			m_Grid[rowIndex][columnIndex].canGoLeft = false;
+			m_Grid[rowIndex][columnIndex].canGoDown = false;
+			m_Grid[rowIndex][columnIndex].canGoUp = false;
 		}
 	}
 }
