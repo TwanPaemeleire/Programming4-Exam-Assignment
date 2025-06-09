@@ -3,6 +3,8 @@
 #include "EnemyMovementComponent.h"
 #include "RectColliderComponent.h"
 #include "AnimationComponent.h"
+#include "ServiceLocator.h"
+#include "SoundSystem.h"
 
 FygarComponent::FygarComponent(Twengine::GameObject* owner)
 	:Component(owner)
@@ -13,6 +15,7 @@ FygarComponent::FygarComponent(Twengine::GameObject* owner)
 
 void FygarComponent::Start()
 {
+	Twengine::ServiceLocator::get_sound_system().RequestLoadSound("Level/EnemyPop.wav", make_sdbm_hash("EnemyPop"));
 	Twengine::AnimationComponent* animationComp = GetOwner()->GetComponent<Twengine::AnimationComponent>();
 	animationComp->AddAnimation("Fygar/FygarMove.png", make_sdbm_hash("FygarMove"), 2);
 	animationComp->AddAnimation("Fygar/FygarPump.png", make_sdbm_hash("FygarPump"), 4);

@@ -11,6 +11,8 @@
 #include "MyTime.h"
 #include "Event.h"
 #include "RectColliderComponent.h"
+#include "ServiceLocator.h"
+#include "SoundSystem.h"
 
 // Idle
 void PookaIdleState::OnEnter(Twengine::GameObject* stateOwner)
@@ -233,6 +235,7 @@ void PookaDeathState::OnEnter(Twengine::GameObject* stateOwner)
 	// Send out an event to increase score & play a sound
 	stateOwner->MarkForDestruction();
 	stateOwner->GetComponent<PookaComponent>()->GetOnDeathEvent()->NotifyObservers(GameEvent(make_sdbm_hash("OnEnemyKilled")), stateOwner);
+	Twengine::ServiceLocator::get_sound_system().RequestPlaySound( make_sdbm_hash("EnemyPop"), 0.2f);
 }
 
 std::unique_ptr<PookaState> PookaDeathState::Update(Twengine::GameObject*)

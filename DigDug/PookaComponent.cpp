@@ -2,6 +2,8 @@
 #include "GameObject.h"
 #include "AnimationComponent.h"
 #include "RectColliderComponent.h"
+#include "ServiceLocator.h"
+#include "SoundSystem.h"
 
 PookaComponent::PookaComponent(Twengine::GameObject* owner)
 	: Component(owner)
@@ -12,6 +14,7 @@ PookaComponent::PookaComponent(Twengine::GameObject* owner)
 
 void PookaComponent::Start()
 {
+	Twengine::ServiceLocator::get_sound_system().RequestLoadSound("Level/EnemyPop.wav", make_sdbm_hash("EnemyPop"));
 	Twengine::AnimationComponent* animationComp = GetOwner()->GetComponent<Twengine::AnimationComponent>();
 	animationComp->AddAnimation("Pooka/PookaMove.png", make_sdbm_hash("PookaMove"), 2);
 	animationComp->AddAnimation("Pooka/PookaPump.png", make_sdbm_hash("PookaPump"), 4, 3);

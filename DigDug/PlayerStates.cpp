@@ -13,6 +13,8 @@
 #include <iostream>
 #include <algorithm>
 #include "LivesComponent.h"
+#include "ServiceLocator.h"
+#include "SoundSystem.h"
 
 void PlayerMoving::OnEnter(Twengine::GameObject* stateOwner)
 {
@@ -400,7 +402,8 @@ void PlayerPumpingState::SetPositionAndDirectionOfPump(Twengine::GameObject* sta
 void PlayerDeathState::OnEnter(Twengine::GameObject* stateOwner)
 {
 	m_AnimationComponent = stateOwner->GetComponent<Twengine::AnimationComponent>();
-	m_AnimationComponent->PlayAnimation(make_sdbm_hash("DigDugDeath"), 0.3f);
+	m_AnimationComponent->PlayAnimation(make_sdbm_hash("DigDugDeath"), 0.5f);
+	Twengine::ServiceLocator::get_sound_system().RequestPlaySound(make_sdbm_hash("DigDugDeath"), 0.2f);
 }
 
 
