@@ -44,6 +44,7 @@
 #include "HighScoresDisplayComponent.h"
 #include "SoundMuteCommand.h"
 #include "SoundSystem.h"
+#include "GoToNextLevelCommand.h"
 
 #include "Event.h"
 #include <fstream>
@@ -223,9 +224,10 @@ void LevelFactory::LoadLevel1()
 	GameManager::GetInstance().ResetEnemyCount();
 
 	Twengine::InputManager::GetInstance().SetCommandMap(make_sdbm_hash("Game"));
-	auto soundMuteObj = std::make_unique<Twengine::GameObject>();
-	Twengine::InputManager::GetInstance().BindCommandToInput<SoundMuteCommand>(SDLK_F2, Twengine::InteractionStates::up, soundMuteObj.get(), -1);
-	scene.Add(std::move(soundMuteObj));
+	auto commandsObj = std::make_unique<Twengine::GameObject>();
+	Twengine::InputManager::GetInstance().BindCommandToInput<SoundMuteCommand>(SDLK_F2, Twengine::InteractionStates::up, commandsObj.get(), -1);
+	Twengine::InputManager::GetInstance().BindCommandToInput<GoToNextLevelCommand>(SDLK_F1, Twengine::InteractionStates::up, commandsObj.get(), -1);
+	scene.Add(std::move(commandsObj));
 	LoadLevelFromFile(scene, GameManager::GetInstance().GetGround(), GameManager::GetInstance().GetGrid(), "Level/Level1.bin");
 }
 
@@ -238,9 +240,10 @@ void LevelFactory::LoadLevel2()
 
 	GameManager::GetInstance().ResetEnemyCount();
 	Twengine::InputManager::GetInstance().SetCommandMap(make_sdbm_hash("Game"));
-	auto soundMuteObj = std::make_unique<Twengine::GameObject>();
-	Twengine::InputManager::GetInstance().BindCommandToInput<SoundMuteCommand>(SDLK_F2, Twengine::InteractionStates::up, soundMuteObj.get(), -1);
-	scene.Add(std::move(soundMuteObj));
+	auto commandsObj = std::make_unique<Twengine::GameObject>();
+	Twengine::InputManager::GetInstance().BindCommandToInput<SoundMuteCommand>(SDLK_F2, Twengine::InteractionStates::up, commandsObj.get(), -1);
+	Twengine::InputManager::GetInstance().BindCommandToInput<GoToNextLevelCommand>(SDLK_F1, Twengine::InteractionStates::up, commandsObj.get(), -1);
+	scene.Add(std::move(commandsObj));
 	LoadLevelFromFile(scene, GameManager::GetInstance().GetGround(), GameManager::GetInstance().GetGrid(), "Level/Level2.bin");
 }
 
@@ -253,9 +256,10 @@ void LevelFactory::LoadLevel3()
 
 	GameManager::GetInstance().ResetEnemyCount();
 	Twengine::InputManager::GetInstance().SetCommandMap(make_sdbm_hash("Game"));
-	auto soundMuteObj = std::make_unique<Twengine::GameObject>();
-	Twengine::InputManager::GetInstance().BindCommandToInput<SoundMuteCommand>(SDLK_F2, Twengine::InteractionStates::up, soundMuteObj.get(), -1);
-	scene.Add(std::move(soundMuteObj));
+	auto commandsObj = std::make_unique<Twengine::GameObject>();
+	Twengine::InputManager::GetInstance().BindCommandToInput<SoundMuteCommand>(SDLK_F2, Twengine::InteractionStates::up, commandsObj.get(), -1);
+	Twengine::InputManager::GetInstance().BindCommandToInput<GoToNextLevelCommand>(SDLK_F1, Twengine::InteractionStates::up, commandsObj.get(), -1);
+	scene.Add(std::move(commandsObj));
 	LoadLevelFromFile(scene, GameManager::GetInstance().GetGround(), GameManager::GetInstance().GetGrid(), "Level/Level3.bin");
 }
 

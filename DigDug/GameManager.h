@@ -54,6 +54,7 @@ public:
 private:
 	friend class Singleton<GameManager>;
 	GameManager() = default;
+	void GoToNextLevel();
 
 	GridComponent* m_GridComponent{};
 	GroundComponent* m_GroundComponent{};

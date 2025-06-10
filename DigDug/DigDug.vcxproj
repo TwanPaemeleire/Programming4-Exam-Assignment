@@ -172,6 +172,7 @@
     <ClCompile Include="FygarFireComponent.cpp" />
     <ClCompile Include="FygarStates.cpp" />
     <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="GoToNextLevelCommand.cpp" />
     <ClCompile Include="GridComponent.cpp" />
     <ClCompile Include="GroundComponent.cpp" />
     <ClCompile Include="LivesComponent.cpp" />
@@ -209,6 +210,7 @@
     <ClInclude Include="FygarFireComponent.h" />
     <ClInclude Include="FygarStates.h" />
     <ClInclude Include="GameManager.h" />
+    <ClInclude Include="GoToNextLevelCommand.h" />
     <ClInclude Include="GridComponent.h" />
     <ClInclude Include="GroundComponent.h" />
     <ClInclude Include="LivesComponent.h" />

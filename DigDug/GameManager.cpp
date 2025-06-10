@@ -78,32 +78,40 @@ void GameManager::Notify(const GameEvent& event, Twengine::GameObject* observedO
 		--m_AmountOfEnemiesAlive;
 		if (m_AmountOfEnemiesAlive <= 0)
 		{
-			unsigned int currentSceneId = Twengine::SceneManager::GetInstance().GetCurrentScene().GetId();
-			// Current level was final level, so game is done
-			if (currentSceneId + 1 >= Twengine::Scene::s_IdCounter)
-			{
-				Twengine::InputManager::GetInstance().ClearCommandMap(make_sdbm_hash("Game"));
-				Twengine::SceneManager::GetInstance().GetPersistentScene().DeactivateAllObjects();
-				if (m_GameMode == GameMode::SinglePlayer)
-				{
-					Twengine::SceneManager::GetInstance().RequestSetCurrentScene("HighScoreScene");
-				}
-				else
-				{
-					Twengine::SceneManager::GetInstance().RequestSetCurrentScene("MainMenu");
-				}
-			}
-			else // Go to the next level
-			{
-				m_GridComponent->Reset();
-				m_GroundComponent->Reset();
-				for (const Twengine::TransformComponent* playerTransform : m_PlayerTransforms)
-				{
-					playerTransform->GetOwner()->GetComponent<DigDugComponent>()->Reset();
-				}
-				Twengine::SceneManager::GetInstance().RequestSetCurrentScene(currentSceneId + 1);
-			}
-
+			GoToNextLevel();
 		}
+	}
+	if (event.id == make_sdbm_hash("GoToNextLevel"))
+	{
+		GoToNextLevel();
+	}
+}
+
+void GameManager::GoToNextLevel()
+{
+	unsigned int currentSceneId = Twengine::SceneManager::GetInstance().GetCurrentScene().GetId();
+	// Current level was final level, so game is done
+	if (currentSceneId >= Twengine::Scene::s_IdCounter - 2) // -2 Because persistent scene isn't in scenes vec and we want this to trigger when we want to go to the highscore scene
+	{
+		Twengine::InputManager::GetInstance().ClearCommandMap(make_sdbm_hash("Game"));
+		Twengine::SceneManager::GetInstance().GetPersistentScene().DeactivateAllObjects();
+		if (m_GameMode == GameMode::SinglePlayer)
+		{
+			Twengine::SceneManager::GetInstance().RequestSetCurrentScene("HighScoreScene");
+		}
+		else
+		{
+			Twengine::SceneManager::GetInstance().RequestSetCurrentScene("MainMenu");
+		}
+	}
+	else // Go to the next level
+	{
+		m_GridComponent->Reset();
+		m_GroundComponent->Reset();
+		for (const Twengine::TransformComponent* playerTransform : m_PlayerTransforms)
+		{
+			playerTransform->GetOwner()->GetComponent<DigDugComponent>()->Reset();
+		}
+		Twengine::SceneManager::GetInstance().RequestSetCurrentScene(currentSceneId);
 	}
 }
