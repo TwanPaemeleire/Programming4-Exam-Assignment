@@ -290,14 +290,20 @@ void Twengine::SDLSoundSystem::SDLSoundSystemImpl::LoadSound(const SoundData& so
 void Twengine::SDLSoundSystem::SDLSoundSystemImpl::PlayMusic(const SoundData& soundData)
 {
 	Mix_Music* music = m_LoadedMusic.at(soundData.id).get();
-	Mix_VolumeMusic(static_cast<int>(soundData.volume * MIX_MAX_VOLUME));
+	if (!m_IsMuted)
+	{
+		Mix_VolumeMusic(static_cast<int>(soundData.volume * MIX_MAX_VOLUME));
+		m_LastMusicVolume = soundData.volume;
+	}
+	else Mix_VolumeMusic(0);
 	Mix_PlayMusic(music, -1);
 }
 
 void Twengine::SDLSoundSystem::SDLSoundSystemImpl::PlaySound(const SoundData& soundData)
 {
 	Mix_Chunk* chunk = m_LoadedChunks.at(soundData.id).get();
-	Mix_VolumeChunk(chunk, static_cast<int>(soundData.volume * MIX_MAX_VOLUME));
+	if(!m_IsMuted) Mix_VolumeChunk(chunk, static_cast<int>(soundData.volume * MIX_MAX_VOLUME));
+	else Mix_VolumeChunk(chunk, 0);
 	int channel = Mix_PlayChannel(-1, chunk, 0);
 	m_ChunkSettings.insert(std::pair(soundData.id, ChunkSettings{channel, soundData.volume}));
 }
@@ -312,7 +318,6 @@ void Twengine::SDLSoundSystem::SDLSoundSystemImpl::MuteAll()
 			Mix_VolumeChunk(chunk.get(), 0);
 		}
 	}
-	m_LastMusicVolume = Mix_VolumeMusic(-1) / static_cast<float>(MIX_MAX_VOLUME);
 	Mix_VolumeMusic(0);
 }
 

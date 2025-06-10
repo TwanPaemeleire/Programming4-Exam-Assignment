@@ -23,8 +23,8 @@ public:
 	Twengine::Event* GetObjectDiedEvent() const { return m_ObjectDiedEvent.get(); }
 
 private:
-	int m_MaxLives{3};
-	int m_Lives{3};
+	int m_MaxLives{4};
+	int m_Lives{4};
 
 	std::unique_ptr<Twengine::Event> m_ObjectDiedEvent;
 };

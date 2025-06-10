@@ -270,13 +270,13 @@ void LevelFactory::LoadHighScoreScene()
 	Twengine::ServiceLocator::get_sound_system().RequestLoadMusic("HighScoreScreen/HighScoreScreenMusic.wav", make_sdbm_hash("HighScoreScreenMusic"));
 	Twengine::ServiceLocator::get_sound_system().RequestPlayMusic(make_sdbm_hash("HighScoreScreenMusic"), 0.1f);
 
-	auto soundMuteObj = std::make_unique<Twengine::GameObject>();
-	Twengine::InputManager::GetInstance().BindCommandToInput<SoundMuteCommand>(SDLK_F2, Twengine::InteractionStates::up, soundMuteObj.get(), -1);
-	scene.Add(std::move(soundMuteObj));
 	auto scoreSaveObj = std::make_unique<Twengine::GameObject>();
 	scoreSaveObj->AddComponent<ScoreSavingComponent>();
 
 	Twengine::InputManager::GetInstance().SetCommandMap(make_sdbm_hash("ScoreSaving"));
+	auto soundMuteObj = std::make_unique<Twengine::GameObject>();
+	Twengine::InputManager::GetInstance().BindCommandToInput<SoundMuteCommand>(SDLK_F2, Twengine::InteractionStates::up, soundMuteObj.get(), -1);
+	scene.Add(std::move(soundMuteObj));
 	Twengine::InputManager::GetInstance().BindCommandToInput<ScoreCharCycleCommand>(SDLK_DOWN, Twengine::InteractionStates::down, scoreSaveObj.get(), -1)->SetDirection(1);
 	Twengine::InputManager::GetInstance().BindCommandToInput<ScoreCharCycleCommand>(SDLK_UP, Twengine::InteractionStates::down, scoreSaveObj.get(), -1)->SetDirection(-1);
 	Twengine::InputManager::GetInstance().BindCommandToInput<ScoreLetterSwitchCommand>(SDLK_RIGHT, Twengine::InteractionStates::down, scoreSaveObj.get(), -1)->SetDirection(1);
