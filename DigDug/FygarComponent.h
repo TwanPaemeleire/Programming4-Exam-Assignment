@@ -25,6 +25,8 @@ public:
 	void EnablePlayerControlled() { m_ControlledByPlayer = true; }
 	bool IsPlayerControlled() const { return m_ControlledByPlayer; }
 
+	bool IsBeingPumped() const { return m_CurrentState->IsBeingPumped(); }
+
 private:
 	void CheckAndTransitionStates(std::unique_ptr<FygarState> newState);
 	std::unique_ptr<FygarState> m_CurrentState{};

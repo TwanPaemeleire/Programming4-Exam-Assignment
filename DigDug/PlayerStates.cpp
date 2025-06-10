@@ -15,6 +15,8 @@
 #include "LivesComponent.h"
 #include "ServiceLocator.h"
 #include "SoundSystem.h"
+#include "FygarComponent.h"
+#include "PookaComponent.h"
 
 void PlayerMoving::OnEnter(Twengine::GameObject* stateOwner)
 {
@@ -146,6 +148,10 @@ std::unique_ptr<PlayerState> PlayerMoving::Notify(Twengine::GameObject* observed
 {
 	if (event.id == make_sdbm_hash("OnCollisionEnter") && (observedObject->GetTag() == make_sdbm_hash("Enemy") || observedObject->GetTag() == make_sdbm_hash("FygarFire")))
 	{
+		auto* fygarComp = observedObject->GetComponent<FygarComponent>();
+		if (fygarComp && fygarComp->IsBeingPumped()) return nullptr;
+		auto* pookaComp = observedObject->GetComponent<PookaComponent>();
+		if (pookaComp && pookaComp->IsBeingPumped()) return nullptr;
 		return std::make_unique<PlayerDeathState>();
 	}
 	return nullptr;

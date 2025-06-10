@@ -20,6 +20,8 @@ public:
 
 	void Notify(const GameEvent& event, Twengine::GameObject* observedObject) override;
 	Twengine::Event* GetOnDeathEvent() const { return m_OnDeathEvent.get(); }
+
+	bool IsBeingPumped() const { return m_CurrentState->IsBeingPumped(); }
 private:
 	void CheckAndTransitionStates(std::unique_ptr<PookaState> newState);
 	std::unique_ptr<PookaState> m_CurrentState{};

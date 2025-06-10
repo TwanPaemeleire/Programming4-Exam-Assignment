@@ -30,6 +30,7 @@ public:
 	virtual std::unique_ptr<FygarState> LateUpdate(Twengine::GameObject*) { return nullptr; }
 	virtual std::unique_ptr<FygarState> GetNotifiedByOwner(const GameEvent&, Twengine::GameObject*, Twengine::GameObject*) { return nullptr; }
 	virtual void RenderDebugDrawing() const {};
+	virtual bool IsBeingPumped() const { return false; }
 };
 
 class FygarIdleState final : public FygarState
@@ -126,6 +127,7 @@ public:
 	virtual void OnEnter(Twengine::GameObject* stateOwner) override;
 	virtual std::unique_ptr<FygarState> Update(Twengine::GameObject* stateOwner) override;
 	virtual std::unique_ptr<FygarState> GetNotifiedByOwner(const GameEvent&, Twengine::GameObject*, Twengine::GameObject*) override;
+	virtual bool IsBeingPumped() const override { return true; }
 
 private:
 	Twengine::AnimationComponent* m_AnimationComponent{};

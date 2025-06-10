@@ -28,6 +28,7 @@ public:
 	virtual std::unique_ptr<PookaState> Update(Twengine::GameObject* stateOwner) = 0;
 	virtual void RenderDebugDrawing() const {};
 	virtual std::unique_ptr<PookaState> GetNotifiedByOwner(const GameEvent&, Twengine::GameObject*, Twengine::GameObject*) { return nullptr; }
+	virtual bool IsBeingPumped() const { return false; }
 };
 
 class PookaIdleState final : public PookaState
@@ -100,7 +101,7 @@ public:
 	virtual void OnEnter(Twengine::GameObject* stateOwner) override;
 	virtual std::unique_ptr<PookaState> Update(Twengine::GameObject* stateOwner) override;
 	virtual std::unique_ptr<PookaState> GetNotifiedByOwner(const GameEvent& event, Twengine::GameObject* observedObject, Twengine::GameObject* stateOwner) override;
-
+	virtual bool IsBeingPumped() const override { return true; }
 private:
 	Twengine::AnimationComponent* m_AnimationComponent{};
 	DigDugPumpComponent* m_DigDugPumpComponent;
