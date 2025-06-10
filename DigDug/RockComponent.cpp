@@ -13,6 +13,8 @@
 #include <glm.hpp>
 #include "ServiceLocator.h"
 #include "SoundSystem.h"
+#include "DigDugComponent.h"
+#include <algorithm>
 
 RockComponent::RockComponent(Twengine::GameObject* owner)
 	:Component(owner)
@@ -62,6 +64,21 @@ void RockComponent::Notify(const GameEvent& event, Twengine::GameObject*)
 	{
 		GameManager::GetInstance().GetScoreComponent()->Notify(GameEvent(make_sdbm_hash("RockCrushedEnemies")), GetOwner());
 		Twengine::ServiceLocator::get_sound_system().RequestPlaySound(make_sdbm_hash("RockBroken"), 0.2f);
+		size_t amountOfChildren = GetOwner()->GetChildCount();
+		std::vector<DigDugComponent*> digDugsUnderRock;
+		for (size_t childIdx = 0; childIdx < amountOfChildren; ++childIdx)
+		{
+			DigDugComponent* digDugComp = GetOwner()->GetChildAt(static_cast<int>(childIdx))->GetComponent<DigDugComponent>();
+			if (digDugComp)
+			{
+				digDugsUnderRock.emplace_back(digDugComp);
+			}
+		}
+
+		std::for_each(digDugsUnderRock.begin(), digDugsUnderRock.end(), [](DigDugComponent * digDugComp)
+		{
+				digDugComp->GetOwner()->SetParent(nullptr, true);
+		});
 		GetOwner()->MarkForDestruction();
 	}
 }

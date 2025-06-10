@@ -42,6 +42,7 @@ namespace Twengine
 		float GetAnimationFrameWidth() const { return m_FrameWidth; }
 		float GetAnimationFrameHeight() const { return m_FrameHeight; }
 		int GetCurrentFrameIndex() const { return m_CurrentColumn; }
+		int GetAmountOfFrames()  const { return m_MaxColumnIndex; }
 		bool HasFinishedPlayingOnce() const { return m_HasFinishedPlayingOnce; }
 
 		void SetFlipHorizontal(bool flipped) { m_FlipHorizontal = flipped; }

@@ -30,12 +30,11 @@ void DigDugComponent::Start()
 	m_AnimationComponent->AddAnimation("DigDug/DigDugIdle.png", make_sdbm_hash("DigDugIdle"), 1);
 	m_AnimationComponent->AddAnimation("DigDug/DigDugPump.png", make_sdbm_hash("DigDugPump"), 2);
 	m_AnimationComponent->AddAnimation("DigDug/DigDugDeath.png", make_sdbm_hash("DigDugDeath"), 5, 4);
+	m_AnimationComponent->AddAnimation("DigDug/DigDugCrushed.png", make_sdbm_hash("DigDugCrushed"), 1);
 	m_AnimationComponent->PlayAnimation(make_sdbm_hash("DigDugIdle"));
 
 	glm::vec2 pos = GetOwner()->GetTransform()->GetWorldPosition();
 	m_RectColliderComponent->SetHitBox(pos, m_AnimationComponent->GetAnimationFrameWidth(), m_AnimationComponent->GetAnimationFrameHeight());
-	//Twengine::ServiceLocator::get_sound_system().RequestLoadMusic("Level/LevelMusic.wav", SoundId(make_sdbm_hash("LevelMusic")));
-	//Twengine::ServiceLocator::get_sound_system().RequestPlayMusic(SoundId(make_sdbm_hash("LevelMusic")), 0.9f);
 	Twengine::ServiceLocator::get_sound_system().RequestLoadSound("DigDug/DigDugDeath.wav", make_sdbm_hash("DigDugDeath"));
 	m_CurrentState = std::make_unique<PlayerMoving>();
 	m_CurrentState->OnEnter(GetOwner());

@@ -17,6 +17,8 @@
 #include "SoundSystem.h"
 #include "FygarComponent.h"
 #include "PookaComponent.h"
+#include "RockComponent.h"
+#include "RectColliderComponent.h"
 
 void PlayerMoving::OnEnter(Twengine::GameObject* stateOwner)
 {
@@ -153,6 +155,11 @@ std::unique_ptr<PlayerState> PlayerMoving::Notify(Twengine::GameObject* observed
 		auto* pookaComp = observedObject->GetComponent<PookaComponent>();
 		if (pookaComp && pookaComp->IsBeingPumped()) return nullptr;
 		return std::make_unique<PlayerDeathState>();
+	}
+	else if (event.id == make_sdbm_hash("OnCollisionEnter") && observedObject->GetTag() == make_sdbm_hash("Rock"))
+	{
+		RockComponent* rock = observedObject->GetComponent<RockComponent>();
+		return std::make_unique<PlayerRockDraggingState>(rock);
 	}
 	return nullptr;
 }
@@ -354,11 +361,16 @@ std::unique_ptr<PlayerState> PlayerPumpingState::OnPumpButtonInteraction(Twengin
 	return nullptr;
 }
 
-std::unique_ptr<PlayerState> PlayerPumpingState::Notify(Twengine::GameObject*, const GameEvent& event)
+std::unique_ptr<PlayerState> PlayerPumpingState::Notify(Twengine::GameObject* observedObject, const GameEvent& event)
 {
 	if (event.id == make_sdbm_hash("OnPumpRetracted"))
 	{
 		return std::make_unique<PlayerMoving>();
+	}
+	else if (event.id == make_sdbm_hash("OnCollisionEnter") && observedObject->GetTag() == make_sdbm_hash("Rock"))
+	{
+		RockComponent* rock = observedObject->GetComponent<RockComponent>();
+		return std::make_unique<PlayerRockDraggingState>(rock);
 	}
 	return nullptr;
 }
@@ -418,6 +430,42 @@ std::unique_ptr<PlayerState> PlayerDeathState::Update(Twengine::GameObject* stat
 	if (m_AnimationComponent->HasFinishedPlayingOnce())
 	{
 		stateOwner->GetComponent<LivesComponent>()->Kill();
+	}
+	return nullptr;
+}
+
+PlayerRockDraggingState::PlayerRockDraggingState(RockComponent* rockComponent)
+	:m_RockComponent{rockComponent}
+{
+	m_EnemyCrushedEvent = std::make_unique<Twengine::Event>();
+	m_EnemyCrushedEvent->AddObserver(rockComponent);
+}
+
+void PlayerRockDraggingState::OnEnter(Twengine::GameObject* stateOwner)
+{
+	m_AnimationComponent = stateOwner->GetComponent<Twengine::AnimationComponent>();
+	m_AnimationComponent->SetRotationAngle(0.0);
+	m_AnimationComponent->SetFlipHorizontal(false);
+	m_AnimationComponent->SetFlipVertical(false);
+	m_AnimationComponent->PlayAnimation(make_sdbm_hash("DigDugCrushed"), 0.f, false);
+	stateOwner->SetParent(m_RockComponent->GetOwner(), true);
+	m_AmountUnderRockToCheck = m_AnimationComponent->GetAnimationFrameHeight();
+	stateOwner->GetComponent<Twengine::RectColliderComponent>()->SetEnabled(false);
+}
+
+std::unique_ptr<PlayerState> PlayerRockDraggingState::Update(Twengine::GameObject* stateOwner)
+{
+	glm::vec2 posToCheck = m_RockComponent->GetBottomMiddle();
+	posToCheck.y += m_AmountUnderRockToCheck;
+	if (!GameManager::GetInstance().GetGround()->PositionIsDugOut(posToCheck))
+	{
+		//glm::vec2 currentPos = stateOwner->GetTransform()->GetWorldPosition();
+		//transform.SetParent(rockTransform);
+		//transform.SetWorldPosition(worldPos);
+
+		stateOwner->GetComponent<Twengine::RectColliderComponent>()->SetEnabled(true);
+		m_EnemyCrushedEvent->NotifyObservers(GameEvent(make_sdbm_hash("OnEnemyCrushed")), stateOwner);
+		return std::make_unique<PlayerDeathState>();
 	}
 	return nullptr;
 }

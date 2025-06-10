@@ -232,7 +232,6 @@ std::unique_ptr<PookaState> PookaRockDragState::Update(Twengine::GameObject* sta
 // Death
 void PookaDeathState::OnEnter(Twengine::GameObject* stateOwner)
 {
-	// Send out an event to increase score & play a sound
 	stateOwner->MarkForDestruction();
 	stateOwner->GetComponent<PookaComponent>()->GetOnDeathEvent()->NotifyObservers(GameEvent(make_sdbm_hash("OnEnemyKilled")), stateOwner);
 	Twengine::ServiceLocator::get_sound_system().RequestPlaySound( make_sdbm_hash("EnemyPop"), 0.2f);

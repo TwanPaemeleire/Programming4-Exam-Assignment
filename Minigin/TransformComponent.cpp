@@ -5,14 +5,12 @@
 Twengine::TransformComponent::TransformComponent(GameObject* owner)
 	:Component(owner)
 {
-	m_OnPositionChangedEvent = std::make_unique<Event>();
 }
 
 void Twengine::TransformComponent::SetLocalPosition(const glm::vec3& localPos)
 {
 	m_LocalPosition = localPos;
 	SetPositionDirty();
-	m_OnPositionChangedEvent->NotifyObservers(GameEvent(make_sdbm_hash("TransformPositionChanged")), GetOwner());
 }
 
 void Twengine::TransformComponent::SetLocalPosition(const glm::vec2& localPos)

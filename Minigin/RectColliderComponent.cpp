@@ -11,7 +11,6 @@ Twengine::RectColliderComponent::RectColliderComponent(GameObject* owner)
 {
 	m_HitBox = std::make_unique<RectHitbox>();
 	m_OnCollisionEvent = std::make_unique<Event>();
-	owner->GetComponent<TransformComponent>()->GetOnPositionChangedEvent()->AddObserver(this);
 	s_Colliders.push_back(this);
 }
 
@@ -29,18 +28,15 @@ Twengine::RectColliderComponent::~RectColliderComponent()
 		s_LastFrameCollisions.end());
 }
 
+void Twengine::RectColliderComponent::FixedUpdate()
+{
+	m_HitBox->topLeft = GetOwner()->GetTransform()->GetWorldPosition();
+}
+
 void Twengine::RectColliderComponent::Render() const
 {
 	glm::vec2& topLeft = m_HitBox->topLeft;
 	Renderer::GetInstance().DrawRectangle(topLeft.x, topLeft.y, m_HitBox->width, m_HitBox->height, SDL_Color(0, 255, 0, 255));
-}
-
-void Twengine::RectColliderComponent::Notify(const GameEvent& event, GameObject* observedObject)
-{
-	if (event.id == make_sdbm_hash("TransformPositionChanged"))
-	{
-		m_HitBox->topLeft = observedObject->GetTransform()->GetWorldPosition();
-	}
 }
 
 bool Twengine::RectColliderComponent::IsOverlapping(RectColliderComponent* other) const

@@ -282,7 +282,6 @@ std::unique_ptr<FygarState> FygarPumpingState::GetNotifiedByOwner(const GameEven
 
 void FygarDeathState::OnEnter(Twengine::GameObject* stateOwner)
 {
-	// Send out an event to increase score & play a sound
 	stateOwner->MarkForDestruction();
 	stateOwner->GetComponent<FygarComponent>()->GetOnDeathEvent()->NotifyObservers(GameEvent(make_sdbm_hash("OnEnemyKilled")), stateOwner);
 	Twengine::ServiceLocator::get_sound_system().RequestPlaySound(make_sdbm_hash("EnemyPop"), 0.2f);

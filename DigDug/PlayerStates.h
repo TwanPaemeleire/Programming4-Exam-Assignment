@@ -9,11 +9,12 @@ namespace Twengine
 	class GameObject;
 	class AnimationComponent;
 	class TransformComponent;
-	//struct InteractionStates;
+	class Event;
 }
 class GroundComponent;
 class GridComponent;
 class DigDugPumpComponent;
+class RockComponent;
 
 class PlayerState
 {
@@ -66,7 +67,7 @@ private:
 	Twengine::TransformComponent* m_Transform{};
 
 	glm::vec2 m_Direction = { 0.f, 0.f };
-	glm::vec2 m_LastNonNullDirection;
+	glm::vec2 m_LastNonNullDirection{};
 	glm::vec2 m_TargetPosition = { -1.f, -1.f };
 	glm::vec2 m_CurrentInputDirection = { 0.f, 0.f };
 	float m_DistanceToTarget{};
@@ -100,6 +101,26 @@ private:
 
 	DigDugPumpComponent* m_DigDugPumpComponent{};
 	glm::vec2 m_FacingDirection{};
+};
+
+class PlayerRockDraggingState final : public PlayerState
+{
+public:
+	PlayerRockDraggingState(RockComponent* rockComponent);
+	virtual ~PlayerRockDraggingState() = default;
+	PlayerRockDraggingState(const PlayerRockDraggingState& other) = delete;
+	PlayerRockDraggingState(PlayerRockDraggingState&& other) = delete;
+	PlayerRockDraggingState& operator=(const PlayerRockDraggingState& other) = delete;
+	PlayerRockDraggingState& operator=(PlayerRockDraggingState&& other) = delete;
+
+	virtual void OnEnter(Twengine::GameObject*) override;
+	virtual std::unique_ptr<PlayerState> Update(Twengine::GameObject* stateOwner) override;
+
+private:
+	Twengine::AnimationComponent* m_AnimationComponent{};
+	RockComponent* m_RockComponent{};
+	float m_AmountUnderRockToCheck{};
+	std::unique_ptr<Twengine::Event> m_EnemyCrushedEvent{};
 };
 
 class PlayerDeathState final : public PlayerState
