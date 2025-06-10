@@ -69,8 +69,8 @@ public:
 private:
 	EnemyMovementComponent* m_MovementComp{};
 	GridComponent* m_GridComponent{};
-	float m_DistanceToTriggerFire{86.f};
-	float m_FireCooldown{ 5.f };
+	const float m_DistanceToTriggerFire{86.f};
+	const float m_FireCooldown{ 5.f };
 	static float m_FireCooldownCounter;
 	bool m_PlayerControlled{ false };
 };
@@ -132,7 +132,7 @@ public:
 private:
 	Twengine::AnimationComponent* m_AnimationComponent{};
 
-	float m_DeflateDelay{ 0.8f };
+	const float m_DeflateDelay{ 0.8f };
 	float m_DeflateDelayCounter{};
 	bool m_IsBeingPumped{ true };
 	bool m_HasBeenPumpedOnce{false};

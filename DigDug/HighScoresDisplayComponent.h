@@ -30,6 +30,6 @@ private:
 	std::vector<ScoreInfo>* m_Scores{};
 
 	glm::vec2 m_BaseDrawPosition{20.f, 20.f};
-	float m_DrawOffset{25.f};
+	const float m_DrawOffset{25.f};
 };
 

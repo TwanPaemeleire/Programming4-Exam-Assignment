@@ -60,7 +60,7 @@ private:
 	void UpdateGroundAndAnimation();
 	void UpdateFlipAndRotation();
 
-	float m_MovementSpeed{ 40.f };
+	const float m_MovementSpeed{ 40.f };
 	GridComponent* m_GridComponent{};
 	GroundComponent* m_GroundComponent{};
 	Twengine::AnimationComponent* m_AnimationComponent{};

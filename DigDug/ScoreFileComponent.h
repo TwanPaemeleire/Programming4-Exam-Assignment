@@ -27,7 +27,7 @@ public:
 
 private:
 	void ReadOneHighScore(std::ifstream* input)  const;
-	size_t m_AmountOfScoresToSave{5};
+	const size_t m_AmountOfScoresToSave{5};
 	mutable std::vector<ScoreInfo> m_HighScores{};
 };
 

@@ -29,11 +29,11 @@ public:
 private:
 	std::vector<std::pair<Twengine::TextComponent*, GameMode>> m_Buttons{};
 
-	glm::vec2 m_ButtonBasePos{150.f, 250.f};
-	float m_ButtonSpacing{40.f};
+	const glm::vec2 m_ButtonBasePos{150.f, 250.f};
+	const float m_ButtonSpacing{40.f};
 
-	SDL_Color m_SelectedColor{0, 255, 0, 255};
-	SDL_Color m_UnselectedColor{255, 255, 255, 255};
+	const SDL_Color m_SelectedColor{0, 255, 0, 255};
+	const SDL_Color m_UnselectedColor{255, 255, 255, 255};
 
 	size_t m_CurrentButtonIndex{0};
 };

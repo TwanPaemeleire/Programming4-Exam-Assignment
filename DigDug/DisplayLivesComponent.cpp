@@ -13,12 +13,6 @@ DisplayLivesComponent::DisplayLivesComponent(Twengine::GameObject* owner)
 	m_LifeTexture = Twengine::ResourceManager::GetInstance().LoadTexture("DigDug/LivesDisplay.png");
 }
 
-void DisplayLivesComponent::Start()
-{
-	GridComponent* gridComp = GameManager::GetInstance().GetGrid();
-	m_LifeDrawOffset = gridComp->GetCellSize();
-}
-
 void DisplayLivesComponent::Render() const
 {
 	for (int liveIndex{}; liveIndex < m_LivesLeft; ++liveIndex)

@@ -106,7 +106,7 @@ private:
 	Twengine::AnimationComponent* m_AnimationComponent{};
 	DigDugPumpComponent* m_DigDugPumpComponent;
 
-	float m_DeflateDelay{1.f};
+	const float m_DeflateDelay{1.f};
 	float m_DeflateDelayCounter{0.f};
 	bool m_IsBeingPumped{true};
 	bool m_HasBeenPumpedOnce{false};

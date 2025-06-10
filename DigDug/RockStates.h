@@ -68,7 +68,7 @@ public:
 private:
 	GroundComponent* m_GroundComponent{};
 	GridComponent* m_GridComponent{};
-	float m_DropSpeed{ 20.f };
+	const float m_DropSpeed{ 20.f };
 	glm::vec2 m_Size{};
 	bool m_HasLeftStartCell{ false };
 	std::pair<int, int> m_StartCellIndex{};

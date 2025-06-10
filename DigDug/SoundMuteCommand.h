@@ -6,6 +6,3 @@ public:
 	SoundMuteCommand(Twengine::GameObject* gameObject);
 	virtual void Execute() override;
 };
-
-
-

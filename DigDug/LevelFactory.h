@@ -13,7 +13,6 @@ class GridComponent;
 class LevelFactory
 {
 public:
-	static void LoadDevScene();
 	static void LoadMainMenu();
 	static void LoadPersistentScene();
 	static void LoadLevel1();

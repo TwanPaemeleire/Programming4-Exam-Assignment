@@ -27,8 +27,8 @@ public:
 	virtual void Notify(const GameEvent& event, Twengine::GameObject* observedObject) override;
 
 	Twengine::Event* GetScoreChangedEvent() const { return m_ScoreChangedEvent.get(); }
-private:
 
+private:
 	int GetEnemyLayer(const glm::vec2& pos) const;
 	int m_Score{};
 	std::unique_ptr<Twengine::Event> m_ScoreChangedEvent;

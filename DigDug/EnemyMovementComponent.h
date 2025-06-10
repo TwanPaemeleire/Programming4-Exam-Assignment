@@ -37,13 +37,13 @@ public:
 
 private:
 	// Ghost movement
-	float m_MinimumGhostFormCooldown{20.f};
-	float m_MaximumGhostFormCooldown{40.f};
+	const float m_MinimumGhostFormCooldown{20.f};
+	const float m_MaximumGhostFormCooldown{40.f};
 	float m_GhostCooldown{};
 	float m_GhostCoolDownTimer{};
 	bool m_GhostCooldownHasFinished{false};
 
-	float m_MinimumTimeInGhostForm{2.f};
+	const float m_MinimumTimeInGhostForm{2.f};
 	float m_GhostFormTimer{ 0.f };
 	glm::vec2 m_CellToPositionIn{};
 	bool m_IsGettingPositionedInCell{ false };
