@@ -80,7 +80,7 @@ void RockComponent::Notify(const GameEvent& event, Twengine::GameObject*)
 		});
 		GetOwner()->MarkForDestruction();
 
-		for (int childIdx =0; childIdx < amountOfChildren; ++childIdx)
+		for (size_t childIdx =0; childIdx < amountOfChildren; ++childIdx)
 		{
 			GameManager::GetInstance().Notify(GameEvent(make_sdbm_hash("OnEnemyKilled")), GetOwner());
 		}
