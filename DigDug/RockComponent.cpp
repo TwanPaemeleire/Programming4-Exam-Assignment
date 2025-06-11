@@ -79,5 +79,10 @@ void RockComponent::Notify(const GameEvent& event, Twengine::GameObject*)
 				digDugComp->GetOwner()->SetParent(nullptr, true);
 		});
 		GetOwner()->MarkForDestruction();
+
+		for (int childIdx =0; childIdx < amountOfChildren; ++childIdx)
+		{
+			GameManager::GetInstance().Notify(GameEvent(make_sdbm_hash("OnEnemyKilled")), GetOwner());
+		}
 	}
 }
