@@ -179,7 +179,6 @@
     <ClCompile Include="HighScoresDisplayComponent.cpp" />
     <ClCompile Include="JoystickMoveCommand.cpp" />
     <ClCompile Include="KillEnemyCommand.cpp" />
-    <ClCompile Include="KillObjectCommand.cpp" />
     <ClCompile Include="LevelFactory.cpp" />
     <ClCompile Include="MainMenuComponent.cpp" />
     <ClCompile Include="MoveCommand.cpp" />
@@ -217,7 +216,6 @@
     <ClInclude Include="HighScoresDisplayComponent.h" />
     <ClInclude Include="JoystickMoveCommand.h" />
     <ClInclude Include="KillEnemyCommand.h" />
-    <ClInclude Include="KillObjectCommand.h" />
     <ClInclude Include="LevelFactory.h" />
     <ClInclude Include="MainMenuComponent.h" />
     <ClInclude Include="MoveCommand.h" />

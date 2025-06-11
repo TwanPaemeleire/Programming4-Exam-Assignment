@@ -3,15 +3,14 @@
 #include "AnimationComponent.h"
 #include "GroundComponent.h"
 #include "ResourceManager.h"
+#include "ServiceLocator.h"
 #include "GameManager.h"
+#include "SoundSystem.h"
 #include "GameObject.h"
 #include "Renderer.h"
 #include "MyTime.h"
 #include <iostream>
 #include "Event.h"
-
-#include "ServiceLocator.h"
-#include "SoundSystem.h"
 
 DigDugPumpComponent::DigDugPumpComponent(Twengine::GameObject* owner)
 	:Component(owner)
@@ -45,7 +44,7 @@ void DigDugPumpComponent::Update()
 {
 	if (!m_IsStuckInEnemy)
 	{
-		float speed = (m_IsReturning) ? -m_PumpShootSpeed : m_PumpShootSpeed;
+		const float speed = (m_IsReturning) ? -m_PumpShootSpeed : m_PumpShootSpeed;
 		m_ExposedAmount += speed * Twengine::Time::GetInstance().deltaTime;
 		if(!NextPosIsDugOut())
 		{
@@ -79,6 +78,7 @@ void DigDugPumpComponent::Update()
 			m_OnPumpEvent->NotifyObservers(GameEvent(make_sdbm_hash("OnPump")), GetOwner());
 			if (GameManager::GetInstance().AmountOfEnemiesAlive() <= 0)
 			{
+				Retract();
 				return;
 			}
 			if (m_OnPumpEvent->GetObserverCount() == 0)
@@ -93,24 +93,22 @@ void DigDugPumpComponent::Update()
 void DigDugPumpComponent::Render() const
 {
 	float sourceX{};
-	float sourceY{};
+	float sourceY{0.f};
 	float sourceWidth{};
 	float sourceHeight{};
 	if (m_ShotVertically)
 	{
 		sourceX = 0.f;
-		sourceY = 0.f;
 		sourceWidth = m_TextureSize.x;
 		sourceHeight = m_ExposedAmount;
 	}
 	else
 	{
 		sourceX = m_TextureSize.x - m_ExposedAmount;
-		sourceY = 0.f;
 		sourceWidth = m_ExposedAmount;
 		sourceHeight = m_TextureSize.y;
 	}
-	bool verticalFlip = (m_ShotVertically && !m_HorizontallyFlipped);
+	const bool verticalFlip = (m_ShotVertically && !m_HorizontallyFlipped);
 
 	Twengine::Renderer::GetInstance().RenderTextureRect(*m_PumpTexture, m_DrawPosition.x, m_DrawPosition.y, sourceX,
 		sourceY, sourceWidth, sourceHeight,
@@ -120,7 +118,7 @@ void DigDugPumpComponent::Render() const
 
 void DigDugPumpComponent::RenderUI()
 {
-	auto& pos = m_Transform->GetWorldPosition();
+	const auto& pos = m_Transform->GetWorldPosition();
 	Twengine::Renderer::GetInstance().DrawPoint(pos.x, pos.y, SDL_Color(0, 0, 255), 5);
 }
 
@@ -154,22 +152,14 @@ void DigDugPumpComponent::Notify(const GameEvent& event, Twengine::GameObject* o
 void DigDugPumpComponent::SetHitBoxBasedOnDirection()
 {
 	glm::vec2 worldPos = m_Transform->GetWorldPosition();
-	if (!m_ShotVertically && !m_HorizontallyFlipped) // Right
+	if (!m_ShotVertically)
 	{
+		if(m_HorizontallyFlipped) worldPos.x -= m_ExposedAmount;
 		m_RectColliderComponent->SetHitBox(worldPos, m_ExposedAmount, m_TextureSize.y);
 	}
-	else if (!m_ShotVertically && m_HorizontallyFlipped) // Left
+	else
 	{
-		worldPos.x -= m_ExposedAmount;
-		m_RectColliderComponent->SetHitBox(worldPos, m_ExposedAmount, m_TextureSize.y);
-	}
-	else if (m_ShotVertically && m_HorizontallyFlipped) // Up
-	{
-		worldPos.y -= m_ExposedAmount;
-		m_RectColliderComponent->SetHitBox(worldPos, m_TextureSize.x, m_ExposedAmount);
-	}
-	else if (m_ShotVertically && !m_HorizontallyFlipped) // Down
-	{
+		if(m_HorizontallyFlipped) worldPos.y -= m_ExposedAmount;
 		m_RectColliderComponent->SetHitBox(worldPos, m_TextureSize.x, m_ExposedAmount);
 	}
 }
@@ -177,43 +167,29 @@ void DigDugPumpComponent::SetHitBoxBasedOnDirection()
 bool DigDugPumpComponent::NextPosIsDugOut()
 {
 	glm::vec2 worldPos = m_Transform->GetWorldPosition();
-	if (!m_ShotVertically && !m_HorizontallyFlipped) // Right
+	if (!m_ShotVertically)
 	{
-		return m_GroundComponent->PositionIsDugOut(glm::vec2(worldPos.x + m_ExposedAmount, worldPos.y));
+		worldPos.x += (m_HorizontallyFlipped) ? -m_ExposedAmount : m_ExposedAmount;
+		if (m_GroundComponent->PositionIsDugOut(worldPos)) return true;
+		worldPos.x += (m_HorizontallyFlipped) ? -m_DirtLeeway - 1.f : m_DirtLeeway + 1.f; // +1.f To make sure we're checking the position that could be right passed the dirt leeway
+		return m_GroundComponent->CanMoveBetween(m_Transform->GetWorldPosition(), worldPos, m_DirtLeeway);
 	}
-	else if (!m_ShotVertically && m_HorizontallyFlipped) // Left
+	else
 	{
-		return m_GroundComponent->PositionIsDugOut(glm::vec2(worldPos.x - m_ExposedAmount, worldPos.y));
+		worldPos.y += (m_HorizontallyFlipped) ? -m_ExposedAmount : m_ExposedAmount;
+		if (m_GroundComponent->PositionIsDugOut(worldPos)) return true;
+		worldPos.y += (m_HorizontallyFlipped) ? -m_DirtLeeway - 1.f : m_DirtLeeway + 1.f; // +1.f To make sure we're checking the position that could be right passed the dirt leeway
+		return m_GroundComponent->CanMoveBetween(m_Transform->GetWorldPosition(), worldPos, m_DirtLeeway);
 	}
-	else if (m_ShotVertically && m_HorizontallyFlipped) // Up
-	{
-		return m_GroundComponent->PositionIsDugOut(glm::vec2(worldPos.x, worldPos.y - m_ExposedAmount));
-	}
-	else if (m_ShotVertically && !m_HorizontallyFlipped) // Down
-	{
-		return m_GroundComponent->PositionIsDugOut(glm::vec2(worldPos.x, worldPos.y + m_ExposedAmount));
-	}
-	return false;
 }
 
 void DigDugPumpComponent::SetDrawPosition()
 {
-	auto worldPos = m_Transform->GetWorldPosition();
-
-	if (!m_ShotVertically && !m_HorizontallyFlipped) // Right
+	const auto& worldPos = m_Transform->GetWorldPosition();
+	m_DrawPosition = worldPos;
+	if (m_HorizontallyFlipped)
 	{
-		m_DrawPosition = worldPos;
-	}
-	else if (!m_ShotVertically && m_HorizontallyFlipped) // Left
-	{
-		m_DrawPosition = { worldPos.x - m_ExposedAmount, worldPos.y };
-	}
-	else if (m_ShotVertically && m_HorizontallyFlipped) // Up
-	{
-		m_DrawPosition = { worldPos.x, worldPos.y - m_ExposedAmount };
-	}
-	else if (m_ShotVertically && !m_HorizontallyFlipped) // Down
-	{
-		m_DrawPosition = worldPos;
+		if (m_ShotVertically) m_DrawPosition.y -= m_ExposedAmount;
+		else m_DrawPosition.x -= m_ExposedAmount;
 	}
 }

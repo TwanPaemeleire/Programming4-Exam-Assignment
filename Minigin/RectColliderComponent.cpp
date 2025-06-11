@@ -35,15 +35,15 @@ void Twengine::RectColliderComponent::FixedUpdate()
 
 void Twengine::RectColliderComponent::Render() const
 {
-	glm::vec2& topLeft = m_HitBox->topLeft;
+	const glm::vec2& topLeft = m_HitBox->topLeft;
 	Renderer::GetInstance().DrawRectangle(topLeft.x, topLeft.y, m_HitBox->width, m_HitBox->height, SDL_Color(0, 255, 0, 255));
 }
 
 bool Twengine::RectColliderComponent::IsOverlapping(RectColliderComponent* other) const
 {
 	RectHitbox* otherHitBox = other->GetHitBox();
-	glm::vec2& otherTopLeft = otherHitBox->topLeft;
-	glm::vec2& myTopLeft = m_HitBox->topLeft;
+	const glm::vec2& otherTopLeft = otherHitBox->topLeft;
+	const glm::vec2& myTopLeft = m_HitBox->topLeft;
 	return (myTopLeft.x < otherTopLeft.x + otherHitBox->width	&& // My left is left of other's right
 			myTopLeft.x + m_HitBox->width > otherTopLeft.x		&& // My right is right of other's left
 			myTopLeft.y < otherTopLeft.y + otherHitBox->height	&& // My top is above other's bottom
@@ -73,7 +73,7 @@ void Twengine::RectColliderComponent::ProcessCollisions()
 
 			if (first->IsOverlapping(second))
 			{
-				auto pair = std::make_pair(first, second);
+				const auto pair = std::make_pair(first, second);
 				currentCollisions.push_back(pair);
 
 				// Called every frame when colliding

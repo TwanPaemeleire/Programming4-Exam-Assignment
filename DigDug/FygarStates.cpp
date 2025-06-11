@@ -35,7 +35,7 @@ std::unique_ptr<FygarState> FygarIdleState::Update(Twengine::GameObject*)
 {
 	if (m_PlayerControlled)
 	{
-
+		return nullptr;
 	}
 	else
 	{
@@ -82,7 +82,7 @@ std::unique_ptr<FygarState> FygarTrackingState::Update(Twengine::GameObject* sta
 {
 	if (m_PlayerControlled)
 	{
-
+		return nullptr;
 	}
 	else
 	{
@@ -91,10 +91,10 @@ std::unique_ptr<FygarState> FygarTrackingState::Update(Twengine::GameObject* sta
 
 		if (m_FireCooldownCounter >= m_FireCooldown)
 		{
-			glm::vec2 fygarPos = stateOwner->GetTransform()->GetWorldPosition();
-			glm::vec2 playerPos = GameManager::GetInstance().GetClosestPlayerTransform(fygarPos)->GetWorldPosition();
-			int playerRow = m_GridComponent->GetIndexFromPosition(playerPos).first;
-			int fygarRow = m_GridComponent->GetIndexFromPosition(fygarPos).first;
+			const glm::vec2& fygarPos = stateOwner->GetTransform()->GetWorldPosition();
+			const glm::vec2& playerPos = GameManager::GetInstance().GetClosestPlayerTransform(fygarPos)->GetWorldPosition();
+			const int playerRow = m_GridComponent->GetIndexFromPosition(playerPos).first;
+			const int fygarRow = m_GridComponent->GetIndexFromPosition(fygarPos).first;
 
 			if (playerRow == fygarRow)
 			{
@@ -162,7 +162,7 @@ std::unique_ptr<FygarState> FygarGhostState::Update(Twengine::GameObject* stateO
 {
 	if (m_PlayerControlled)
 	{
-
+		return nullptr;
 	}
 	else
 	{

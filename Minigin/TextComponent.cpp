@@ -22,7 +22,7 @@ void Twengine::TextComponent::Update()
 		{
 			throw std::runtime_error(std::string("Render text failed: ") + SDL_GetError());
 		}
-		auto texture = SDL_CreateTextureFromSurface(Renderer::GetInstance().GetSDLRenderer(), surf);
+		const auto texture = SDL_CreateTextureFromSurface(Renderer::GetInstance().GetSDLRenderer(), surf);
 		if (texture == nullptr) 
 		{
 			throw std::runtime_error(std::string("Create text texture from surface failed: ") + SDL_GetError());
@@ -55,10 +55,10 @@ void Twengine::TextComponent::SetFont(Font* font)
 
 void Twengine::TextComponent::SetColor(int r, int g, int b, int a)
 {
-	Uint8 red = Uint8(std::clamp(r, 0, 255));
-	Uint8 green = Uint8(std::clamp(g, 0, 255));
-	Uint8 blue = Uint8(std::clamp(b, 0, 255));
-	Uint8 alpha = Uint8(std::clamp(a, 0, 255));
+	const Uint8 red = Uint8(std::clamp(r, 0, 255));
+	const Uint8 green = Uint8(std::clamp(g, 0, 255));
+	const Uint8 blue = Uint8(std::clamp(b, 0, 255));
+	const Uint8 alpha = Uint8(std::clamp(a, 0, 255));
 	m_TextColor = SDL_Color(red, green, blue, alpha);
 	m_NeedsUpdate = true;
 }

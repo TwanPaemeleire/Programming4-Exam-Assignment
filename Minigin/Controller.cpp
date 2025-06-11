@@ -116,6 +116,6 @@ float Twengine::Controller::XInputImpl::NormalizeJoyStickInput(SHORT input, SHOR
 	{
 		return 0.0f;
 	}
-	float normalizedInput = static_cast<float>(input) / 32768.0f;
+	const float normalizedInput = static_cast<float>(input) / 32768.0f;
 	return (input < 0) ? max(normalizedInput, -1.0f) : min(normalizedInput, 1.0f);
 }

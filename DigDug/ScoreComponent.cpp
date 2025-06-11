@@ -35,7 +35,7 @@ void ScoreComponent::Notify(const GameEvent& event, Twengine::GameObject* eventS
 	else if (event.id == make_sdbm_hash("OnEnemyKilled"))
 	{
 		int scoreIncrease = 0;
-		int layer = GetEnemyLayer(eventSender->GetTransform()->GetWorldPosition());
+		const int layer = GetEnemyLayer(eventSender->GetTransform()->GetWorldPosition());
 		int increasePerLayer = 0;
 		int scoreMultiplier = 1;
 		if (eventSender->GetComponent<PookaComponent>())
@@ -47,12 +47,12 @@ void ScoreComponent::Notify(const GameEvent& event, Twengine::GameObject* eventS
 		{
 			scoreIncrease = 400;
 			increasePerLayer = 200;
-			auto fygarPos = eventSender->GetTransform()->GetWorldPosition();
-			int playerRow = GameManager::GetInstance().GetGrid()->GetIndexFromPosition(GameManager::GetInstance().GetClosestPlayerTransform(fygarPos)->GetWorldPosition()).first;
-			int fygarRow = GameManager::GetInstance().GetGrid()->GetIndexFromPosition(fygarPos).first;
+			const auto& fygarPos = eventSender->GetTransform()->GetWorldPosition();
+			const int playerRow = GameManager::GetInstance().GetGrid()->GetIndexFromPosition(GameManager::GetInstance().GetClosestPlayerTransform(fygarPos)->GetWorldPosition()).first;
+			const int fygarRow = GameManager::GetInstance().GetGrid()->GetIndexFromPosition(fygarPos).first;
 			if (playerRow == fygarRow) scoreMultiplier = 2;
 		}
-		int adjustedLayer = std::max(0, layer - 1);
+		const int adjustedLayer = std::max(0, layer - 1);
 		scoreIncrease += (increasePerLayer * adjustedLayer);
 		scoreIncrease *= scoreMultiplier;
 		IncreaseScore(scoreIncrease);
@@ -65,7 +65,7 @@ void ScoreComponent::Notify(const GameEvent& event, Twengine::GameObject* eventS
 	else if (event.id == make_sdbm_hash("RockCrushedEnemies"))
 	{
 		int scoreIncrease = 0;
-		size_t amountOfEnemies = eventSender->GetChildCount();
+		const size_t amountOfEnemies = eventSender->GetChildCount();
 
 		switch (amountOfEnemies)
 		{

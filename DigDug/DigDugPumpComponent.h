@@ -56,6 +56,7 @@ private:
 	bool m_IsStuckInEnemy{false};
 
 	const float m_PumpDelay{ 1.0f };
+	const int m_DirtLeeway{ 5 };
 	float m_PumpDelayCounter{};
 	glm::vec2 m_DrawPosition{};
 

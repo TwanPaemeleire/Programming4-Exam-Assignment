@@ -11,7 +11,6 @@
 EnemyMovementComponent::EnemyMovementComponent(Twengine::GameObject* owner)
 	:Component(owner)
 {
-	
 }
 
 void EnemyMovementComponent::Start()
@@ -49,7 +48,7 @@ void EnemyMovementComponent::RenderUI()
 
 bool EnemyMovementComponent::MovementIfNoPathToPlayer()
 {
-	glm::vec2 movement = m_IdleDirection * m_MovementSpeed * Twengine::Time::GetInstance().deltaTime;
+	const glm::vec2 movement = m_IdleDirection * m_MovementSpeed * Twengine::Time::GetInstance().deltaTime;
 	m_Transform->SetLocalPosition(glm::vec2(m_Transform->GetWorldPosition()) + movement);
 
 	// When reaching new cell, check if path to player exists, otherwise pick new idle target
@@ -73,25 +72,22 @@ bool EnemyMovementComponent::MovementInGhostForm()
 	if (!m_IsGettingPositionedInCell)
 	{
 		// Move enemy towards player
-		//glm::vec2 playerPos = GameManager::GetInstance().GetPlayerTransform()->GetWorldPosition();
-		glm::vec2 currentPos = GetOwner()->GetTransform()->GetWorldPosition();
-		glm::vec2 playerPos = GameManager::GetInstance().GetClosestPlayerTransform(currentPos)->GetWorldPosition();
-		glm::vec2 direction = glm::normalize(playerPos - currentPos);
-		glm::vec2 newPos = currentPos + direction * m_MovementSpeed * Twengine::Time::GetInstance().deltaTime;
+		const glm::vec2& currentPos = GetOwner()->GetTransform()->GetWorldPosition();
+		const glm::vec2& playerPos = GameManager::GetInstance().GetClosestPlayerTransform(currentPos)->GetWorldPosition();
+		const glm::vec2 direction = glm::normalize(playerPos - currentPos);
+		const glm::vec2 newPos = currentPos + direction * m_MovementSpeed * Twengine::Time::GetInstance().deltaTime;
 		GetOwner()->GetTransform()->SetLocalPosition(newPos);
 
 		if (m_GhostFormTimer >= m_MinimumTimeInGhostForm)
 		{
-			glm::vec2 enemyPos = GetOwner()->GetTransform()->GetWorldPosition();
-
 			GridComponent* gridComponent = GameManager::GetInstance().GetGrid();
 			Twengine::RectHitbox* hitBox = m_RectColliderComponent->GetHitBox();
 			SDL_Rect enemyRect = SDL_Rect(static_cast<int>(hitBox->topLeft.x), static_cast<int>(hitBox->topLeft.y),
 										  static_cast<int>(hitBox->width), static_cast<int>(hitBox->height));
 			std::vector<Cell*> nearbyCells = gridComponent->GetCellsInRect(enemyRect);
-			for(Cell* cell : nearbyCells) // Check if any of the nearby cells are walkable
+			for(Cell* const cell : nearbyCells) // Check if any of the nearby cells are walkable
 			{
-				glm::vec2 cellCenter = glm::vec2(cell->topLeft.x + m_HalfGridCellSize, cell->topLeft.y + m_HalfGridCellSize);
+				const glm::vec2 cellCenter = glm::vec2(cell->topLeft.x + m_HalfGridCellSize, cell->topLeft.y + m_HalfGridCellSize);
 				if (m_GroundComponent->PositionIsDugOut(cellCenter))
 				{
 					m_CellToPositionIn = cell->topLeft;
@@ -104,13 +100,12 @@ bool EnemyMovementComponent::MovementInGhostForm()
 	}
 	else // Move towards the targeted cell
 	{
-		glm::vec2 currentPos = GetOwner()->GetTransform()->GetWorldPosition();
-		glm::vec2 direction = glm::normalize(m_CellToPositionIn - currentPos);
+		const glm::vec2& currentPos = GetOwner()->GetTransform()->GetWorldPosition();
+		const glm::vec2 direction = glm::normalize(m_CellToPositionIn - currentPos);
 		glm::vec2 newPos = currentPos + direction * m_MovementSpeed * Twengine::Time::GetInstance().deltaTime;
 
 		if (glm::distance(newPos, m_CellToPositionIn) < 1.0f) // Targeted cell reached
 		{
-			newPos = m_CellToPositionIn;
 			m_GhostFormTimer = 0.f;
 			m_IsGettingPositionedInCell = false;
 			GetOwner()->GetTransform()->SetLocalPosition(m_CellToPositionIn);
@@ -124,7 +119,7 @@ bool EnemyMovementComponent::MovementInGhostForm()
 
 void EnemyMovementComponent::SetNewIdleTarget()
 {
-	auto& pos = m_Transform->GetWorldPosition();
+	const auto& pos = m_Transform->GetWorldPosition();
 
 	m_IdleDirections[0].target = glm::vec2(pos.x + (m_GridCellSize * 2), pos.y);
 	m_IdleDirections[1].target = glm::vec2(pos.x, pos.y + (m_GridCellSize * 2));
@@ -187,8 +182,8 @@ void EnemyMovementComponent::PathFindingToPlayer()
 	}
 	else // Continue moving towards next node
 	{
-		glm::vec2 normalizedDir = glm::normalize(direction);
-		glm::vec2 movement = normalizedDir * m_MovementSpeed * Twengine::Time::GetInstance().deltaTime;
+		const glm::vec2 normalizedDir = glm::normalize(direction);
+		const glm::vec2 movement = normalizedDir * m_MovementSpeed * Twengine::Time::GetInstance().deltaTime;
 		m_Transform->SetLocalPosition(currentPosition + movement);
 	}
 }

@@ -67,7 +67,7 @@ std::unique_ptr<PlayerState> PlayerMoving::Update(Twengine::GameObject*)
 	{
 		glm::vec2 newPos = m_Transform->GetWorldPosition();
 
-		glm::vec2 moveDelta = m_Direction * m_MovementSpeed * Twengine::Time::GetInstance().deltaTime;
+		const glm::vec2 moveDelta = m_Direction * m_MovementSpeed * Twengine::Time::GetInstance().deltaTime;
 		m_DistanceTracker += (moveDelta.x + moveDelta.y);
 		newPos += moveDelta;
 		m_Transform->SetLocalPosition(newPos);
@@ -113,7 +113,7 @@ std::unique_ptr<PlayerState> PlayerMoving::SetXDirection(Twengine::GameObject*, 
 	}
 	if (x == 0.f) return nullptr;
 	// Switch orientations left -> right or right -> left
-	bool switchedOrientation = (m_CurrentInputDirection.x != 0.f && m_CurrentInputDirection.x != x && m_Direction.y == 0.f);
+	const bool switchedOrientation = (m_CurrentInputDirection.x != 0.f && m_CurrentInputDirection.x != x && m_Direction.y == 0.f);
 	m_CurrentInputDirection = glm::vec2(x, 0.f);
 	if (switchedOrientation) CalculateNextTarget();
 	m_IsMoving = true;
@@ -130,7 +130,7 @@ std::unique_ptr<PlayerState> PlayerMoving::SetYDirection(Twengine::GameObject*, 
 	}
 	if (y == 0.f) return nullptr;
 	// Switch orientations up -> down or down -> up
-	bool switchedOrientation = (m_CurrentInputDirection.y != 0.f && m_CurrentInputDirection.y != y && m_Direction.x == 0.f);
+	const bool switchedOrientation = (m_CurrentInputDirection.y != 0.f && m_CurrentInputDirection.y != y && m_Direction.x == 0.f);
 	m_CurrentInputDirection = glm::vec2(0.f, y);
 	if (switchedOrientation) CalculateNextTarget();
 	m_IsMoving = true;
@@ -178,12 +178,12 @@ void PlayerMoving::CalculateNextTarget()
 	nextIndex = m_GridComponent->ClampToPlayfieldIndex(nextIndex.first, nextIndex.second);
 	if (m_GridComponent->IndexHoldsRock(nextIndex)) return;
 
-	glm::vec2 currentCellPos = m_GridComponent->GetPositionFromIndex(m_CurrentIndex.first, m_CurrentIndex.second);
-	glm::vec2 nextCellPosition = m_GridComponent->GetPositionFromIndex(nextIndex.first, nextIndex.second);
-	glm::vec2 currentPosition = m_Transform->GetWorldPosition();
+	const glm::vec2 currentCellPos = m_GridComponent->GetPositionFromIndex(m_CurrentIndex.first, m_CurrentIndex.second);
+	const glm::vec2 nextCellPosition = m_GridComponent->GetPositionFromIndex(nextIndex.first, nextIndex.second);
+	const glm::vec2 currentPosition = m_Transform->GetWorldPosition();
 
-	float distanceToCurrentCell = glm::distance(currentPosition, currentCellPos);
-	float distanceToNextCell = glm::distance(currentPosition, nextCellPosition);
+	const float distanceToCurrentCell = glm::distance(currentPosition, currentCellPos);
+	const float distanceToNextCell = glm::distance(currentPosition, nextCellPosition);
 
 	bool targetNext{};
 	// Check if (nearly) on top left of current cell
@@ -306,26 +306,36 @@ void PlayerMoving::UpdateGroundAndAnimation()
 
 void PlayerMoving::UpdateFlipAndRotation()
 {
-	if (m_Direction.x > 0) // Moving right
+	if(m_Direction.x != 0.f)
 	{
 		m_AnimationComponent->SetRotationAngle(0);
-		m_AnimationComponent->SetFlipHorizontal(false);
+		m_AnimationComponent->SetFlipHorizontal((m_Direction.x < 0));
 	}
-	else if (m_Direction.x < 0) // Moving left
-	{
-		m_AnimationComponent->SetRotationAngle(0);
-		m_AnimationComponent->SetFlipHorizontal(true);
-	}
-	else if (m_Direction.y > 0) // Moving up
+	else if (m_Direction.y != 0.f)
 	{
 		m_AnimationComponent->SetRotationAngle(90);
-		m_AnimationComponent->SetFlipHorizontal(false);
+		m_AnimationComponent->SetFlipHorizontal((m_Direction.y < 0));
 	}
-	else if (m_Direction.y < 0) // Moving down
-	{
-		m_AnimationComponent->SetRotationAngle(90);
-		m_AnimationComponent->SetFlipHorizontal(true);
-	}
+	//if (m_Direction.x > 0) // Moving right
+	//{
+	//	m_AnimationComponent->SetRotationAngle(0);
+	//	m_AnimationComponent->SetFlipHorizontal(false);
+	//}
+	//else if (m_Direction.x < 0) // Moving left
+	//{
+	//	m_AnimationComponent->SetRotationAngle(0);
+	//	m_AnimationComponent->SetFlipHorizontal(true);
+	//}
+	//else if (m_Direction.y > 0) // Moving up
+	//{
+	//	m_AnimationComponent->SetRotationAngle(90);
+	//	m_AnimationComponent->SetFlipHorizontal(false);
+	//}
+	//else if (m_Direction.y < 0) // Moving down
+	//{
+	//	m_AnimationComponent->SetRotationAngle(90);
+	//	m_AnimationComponent->SetFlipHorizontal(true);
+	//}
 }
 
 PlayerPumpingState::PlayerPumpingState(const glm::vec2& facingDir)
@@ -356,7 +366,7 @@ std::unique_ptr<PlayerState> PlayerPumpingState::Update(Twengine::GameObject*)
 
 std::unique_ptr<PlayerState> PlayerPumpingState::OnPumpButtonInteraction(Twengine::GameObject*, Twengine::InteractionStates interactionState)
 {
-	bool pressBound = (interactionState == Twengine::InteractionStates::down || interactionState == Twengine::InteractionStates::pressed);
+	const bool pressBound = (interactionState == Twengine::InteractionStates::down || interactionState == Twengine::InteractionStates::pressed);
 	m_DigDugPumpComponent->OnPumpButtonInteraction(pressBound);
 	return nullptr;
 }
@@ -377,38 +387,22 @@ std::unique_ptr<PlayerState> PlayerPumpingState::Notify(Twengine::GameObject* ob
 
 void PlayerPumpingState::SetPositionAndDirectionOfPump(Twengine::GameObject* stateOwner, Twengine::GameObject* pumpObject, float frameWidth, float frameHeight)
 {
-	auto& stateOwnerPos = stateOwner->GetTransform()->GetWorldPosition();
-	glm::vec2 posToSet{};
+	const auto& stateOwnerPos = stateOwner->GetTransform()->GetWorldPosition();
+	glm::vec2 posToSet{stateOwnerPos};
 	bool flippedHorizontal{};
 	bool vertical{};
-	if (m_FacingDirection == glm::vec2(1.f, 0.f)) // Right
+	if (m_FacingDirection.x != 0.f)
 	{
-		posToSet = stateOwnerPos;
-		posToSet.x += frameWidth;
+		if (m_FacingDirection.x == 1.f) posToSet.x += frameWidth;
 		posToSet.y += frameHeight / 2.f;
-		flippedHorizontal = false;
+		flippedHorizontal = (m_FacingDirection.x == -1.f);
 		vertical = false;
 	}
-	else if (m_FacingDirection == glm::vec2(-1.f, 0.f)) // Left
+	else if (m_FacingDirection.y != 0.f)
 	{
-		posToSet = stateOwnerPos;
-		posToSet.y += frameHeight / 2.f;
-		flippedHorizontal = true;
-		vertical = false;
-	}
-	else if (m_FacingDirection == glm::vec2(0.f, -1.f)) // Up
-	{
-		posToSet = stateOwnerPos;
 		posToSet.x += frameWidth / 2.f;
-		flippedHorizontal = true;
-		vertical = true;
-	}
-	else if (m_FacingDirection == glm::vec2(0.f, 1.f)) // Down
-	{
-		posToSet = stateOwnerPos;
-		posToSet.x += frameWidth / 2.f;
-		posToSet.y += frameHeight;
-		flippedHorizontal = false;
+		if (m_FacingDirection.y == 1.f) posToSet.y += frameHeight;
+		flippedHorizontal = (m_FacingDirection.y == -1.f);
 		vertical = true;
 	}
 
@@ -459,10 +453,6 @@ std::unique_ptr<PlayerState> PlayerRockDraggingState::Update(Twengine::GameObjec
 	posToCheck.y += m_AmountUnderRockToCheck;
 	if (!GameManager::GetInstance().GetGround()->PositionIsDugOut(posToCheck))
 	{
-		//glm::vec2 currentPos = stateOwner->GetTransform()->GetWorldPosition();
-		//transform.SetParent(rockTransform);
-		//transform.SetWorldPosition(worldPos);
-
 		stateOwner->GetComponent<Twengine::RectColliderComponent>()->SetEnabled(true);
 		m_EnemyCrushedEvent->NotifyObservers(GameEvent(make_sdbm_hash("OnEnemyCrushed")), stateOwner);
 		return std::make_unique<PlayerDeathState>();

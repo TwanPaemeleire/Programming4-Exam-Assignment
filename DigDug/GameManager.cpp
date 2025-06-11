@@ -14,8 +14,8 @@ Twengine::TransformComponent* GameManager::GetClosestPlayerTransform(glm::vec2 p
 	if (GameManager::GetInstance().CurrentGameMode() != GameMode::Coop) return m_PlayerTransforms[0];
 	else
 	{
-		float player1Dist = glm::distance(pos, glm::vec2(m_PlayerTransforms[0]->GetWorldPosition()));
-		float player2Dist = glm::distance(pos, glm::vec2(m_PlayerTransforms[1]->GetWorldPosition()));
+		const float player1Dist = glm::distance(pos, glm::vec2(m_PlayerTransforms[0]->GetWorldPosition()));
+		const float player2Dist = glm::distance(pos, glm::vec2(m_PlayerTransforms[1]->GetWorldPosition()));
 
 		return (player1Dist < player2Dist) ? m_PlayerTransforms[0] : m_PlayerTransforms[1];
 	}
@@ -89,7 +89,7 @@ void GameManager::Notify(const GameEvent& event, Twengine::GameObject* observedO
 
 void GameManager::GoToNextLevel()
 {
-	unsigned int currentSceneId = Twengine::SceneManager::GetInstance().GetCurrentScene().GetId();
+	const unsigned int currentSceneId = Twengine::SceneManager::GetInstance().GetCurrentScene().GetId();
 	// Current level was final level, so game is done
 	if (currentSceneId >= Twengine::Scene::s_IdCounter - 2) // -2 Because persistent scene isn't in scenes vec and we want this to trigger when we want to go to the highscore scene
 	{

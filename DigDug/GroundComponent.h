@@ -19,7 +19,6 @@ public:
 	GroundComponent& operator=(GroundComponent&& other) = delete;
 
 	virtual void Render() const override;
-	virtual void RenderUI() override;
 
 	void ErasePlayerTrail(SDL_Rect playerRect, bool isInWorldSpace = true);
 	// Will be used if I have enough time left

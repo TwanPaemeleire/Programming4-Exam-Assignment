@@ -17,9 +17,9 @@ void RockIdleState::OnEnter(Twengine::GameObject* stateOwner)
 	m_IndexUnderRock = GameManager::GetInstance().GetGrid()->GetIndexFromPosition(stateOwner->GetTransform()->GetWorldPosition());
 	++m_IndexUnderRock.first;
 	m_PositionToCheckIfFree = GameManager::GetInstance().GetGrid()->GetPositionFromIndex(m_IndexUnderRock);
-	float halfCellSize = GameManager::GetInstance().GetGrid()->GetCellSize() / 2;
+	const float halfCellSize = GameManager::GetInstance().GetGrid()->GetCellSize() / 2;
 	m_PositionToCheckIfFree += glm::vec2(halfCellSize, halfCellSize);
-	auto playerTransforms = GameManager::GetInstance().GetPlayerTransforms();
+	const auto& playerTransforms = GameManager::GetInstance().GetPlayerTransforms();
 
 	m_PlayerRectColliderComponents.emplace_back(playerTransforms[0]->GetOwner()->GetComponent<Twengine::RectColliderComponent>());
 	if (GameManager::GetInstance().CurrentGameMode() == GameMode::Coop) m_PlayerRectColliderComponents.emplace_back(playerTransforms[1]->GetOwner()->GetComponent<Twengine::RectColliderComponent>());
@@ -79,10 +79,9 @@ std::unique_ptr<RockState> RockFallingState::Update(Twengine::GameObject* stateO
 	auto newPos = stateOwner->GetTransform()->GetLocalPosition();
 	newPos.x += m_Size.x / 2.f;
 	newPos.y += m_Size.y;
-	glm::vec2 bottomCenter = newPos;
+	const glm::vec2 bottomCenter = newPos;
 	
 	newPos.y += m_DropSpeed * Twengine::Time::GetInstance().deltaTime;
-
 
 	m_HasLeftStartCell = (m_GridComponent->GetIndexFromPosition(bottomCenter) != m_StartCellIndex);
 	if (m_HasLeftStartCell && !m_GroundComponent->CanMoveBetween(bottomCenter, newPos)) return std::make_unique<RockBreakingState>();

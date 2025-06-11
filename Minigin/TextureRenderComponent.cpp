@@ -11,7 +11,7 @@ Twengine::TextureRenderComponent::TextureRenderComponent(GameObject* owner)
 
 void Twengine::TextureRenderComponent::Render() const
 {
-	auto& pos = m_Transform->GetWorldPosition();
+	const auto& pos = m_Transform->GetWorldPosition();
 	Renderer::GetInstance().RenderTexture(*m_Texture, pos.x, pos.y);
 }
 

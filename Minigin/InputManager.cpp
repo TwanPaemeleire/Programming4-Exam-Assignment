@@ -34,11 +34,11 @@ void Twengine::InputManager::HandleControllerInput()
 	for (const auto& controller : m_Controllers)
 	{
 		controller->ProcessInput(); // Process input for every controller
-		int controllerIndex = controller->GetControllerIndex();
+		const int controllerIndex = controller->GetControllerIndex();
 
 		// JoyStick input
-		float leftX = controller->GetLeftStickX();
-		float leftY = controller->GetLeftStickY();
+		const float leftX = controller->GetLeftStickX();
+		const float leftY = controller->GetLeftStickY();
 
 		for (const auto& joystickCommand : m_JoystickCommandMaps[m_CurrentMap])
 		{

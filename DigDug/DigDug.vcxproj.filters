@@ -51,9 +51,6 @@
     <ClCompile Include="KillEnemyCommand.cpp">
       <Filter>Source Files\Commands</Filter>
     </ClCompile>
-    <ClCompile Include="KillObjectCommand.cpp">
-      <Filter>Source Files\Commands</Filter>
-    </ClCompile>
     <ClCompile Include="MoveCommand.cpp">
       <Filter>Source Files\Commands</Filter>
     </ClCompile>
@@ -159,9 +156,6 @@
       <Filter>Header Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="KillEnemyCommand.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="KillObjectCommand.h">
       <Filter>Header Files\Commands</Filter>
     </ClInclude>
     <ClInclude Include="MoveCommand.h">

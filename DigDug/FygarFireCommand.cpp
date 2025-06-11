@@ -18,10 +18,10 @@ void FygarFireCommand::Execute()
 	m_FireGameObject = fire.get();
 	fire->SetParent(GetGameObject(), false);
 
-	glm::vec2 fygarPos = GetGameObject()->GetTransform()->GetWorldPosition();
-	glm::vec2 playerPos = GameManager::GetInstance().GetClosestPlayerTransform(fygarPos)->GetWorldPosition();
-	int playerColumn = GameManager::GetInstance().GetGrid()->GetIndexFromPosition(playerPos).second;
-	int fygarColumn = GameManager::GetInstance().GetGrid()->GetIndexFromPosition(fygarPos).second;
+	const glm::vec2 fygarPos = GetGameObject()->GetTransform()->GetWorldPosition();
+	const glm::vec2 playerPos = GameManager::GetInstance().GetClosestPlayerTransform(fygarPos)->GetWorldPosition();
+	const int playerColumn = GameManager::GetInstance().GetGrid()->GetIndexFromPosition(playerPos).second;
+	const int fygarColumn = GameManager::GetInstance().GetGrid()->GetIndexFromPosition(fygarPos).second;
 
 	if (playerColumn >= fygarColumn) // Should shoot the fire to the right
 	{

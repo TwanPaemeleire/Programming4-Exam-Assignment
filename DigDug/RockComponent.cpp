@@ -26,7 +26,7 @@ void RockComponent::Start()
 {
 	Twengine::ServiceLocator::get_sound_system().RequestLoadSound("Level/RockBroken.wav", make_sdbm_hash("RockBroken"));
 	Twengine::TextureRenderComponent* textureRenderComponent = GetOwner()->GetComponent<Twengine::TextureRenderComponent>();
-	glm::ivec2 size = textureRenderComponent->GetTexture()->GetSize();
+	const glm::ivec2 size = textureRenderComponent->GetTexture()->GetSize();
 	GetOwner()->GetComponent<Twengine::RectColliderComponent>()->SetHitBox(m_Transform->GetWorldPosition(), static_cast<float>(size.x), static_cast<float>(size.y));
 	m_Size = textureRenderComponent->GetTexture()->GetSize();
 
@@ -36,7 +36,6 @@ void RockComponent::Start()
 
 void RockComponent::Update()
 {
-
 	CheckAndTransitionStates(m_CurrentState->Update(GetOwner()));
 }
 
@@ -64,7 +63,7 @@ void RockComponent::Notify(const GameEvent& event, Twengine::GameObject*)
 	{
 		GameManager::GetInstance().GetScoreComponent()->Notify(GameEvent(make_sdbm_hash("RockCrushedEnemies")), GetOwner());
 		Twengine::ServiceLocator::get_sound_system().RequestPlaySound(make_sdbm_hash("RockBroken"), 0.2f);
-		size_t amountOfChildren = GetOwner()->GetChildCount();
+		const size_t amountOfChildren = GetOwner()->GetChildCount();
 		std::vector<DigDugComponent*> digDugsUnderRock;
 		for (size_t childIdx = 0; childIdx < amountOfChildren; ++childIdx)
 		{

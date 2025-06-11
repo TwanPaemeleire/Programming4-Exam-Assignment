@@ -11,7 +11,7 @@ DisplayPointsComponent::DisplayPointsComponent(Twengine::GameObject* owner)
 void DisplayPointsComponent::Start()
 {
 	m_TextComponent = GetOwner()->GetComponent<Twengine::TextComponent>();
-	m_TextComponent->SetText("Score: 0");
+	m_TextComponent->SetText("Score 0");
 }
 
 void DisplayPointsComponent::Notify(const GameEvent& event, Twengine::GameObject* observedObject)

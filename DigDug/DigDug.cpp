@@ -14,8 +14,8 @@
 
 void load()
 {
-	std::unique_ptr<Twengine::SDLSoundSystem> soundSystem = std::make_unique<Twengine::SDLSoundSystem>();
-	//std::unique_ptr<Twengine::NullSoundSystem> soundSystem = std::make_unique<Twengine::NullSoundSystem>();
+	//std::unique_ptr<Twengine::SDLSoundSystem> soundSystem = std::make_unique<Twengine::SDLSoundSystem>();
+	std::unique_ptr<Twengine::NullSoundSystem> soundSystem = std::make_unique<Twengine::NullSoundSystem>();
 	Twengine::ServiceLocator::register_sound_system(std::move(soundSystem));
 	Twengine::SceneManager::GetInstance().CreateScene("PersistentScene", LevelFactory::LoadPersistentScene, true).DeactivateAllObjects();
 	Twengine::SceneManager::GetInstance().CreateScene("MainMenu", LevelFactory::LoadMainMenu);

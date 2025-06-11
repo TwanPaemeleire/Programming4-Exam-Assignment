@@ -95,7 +95,6 @@ void Twengine::GameObject::SetParent(GameObject* parent, bool keepWorldPosition)
 	if (parent == nullptr)
 	{
 		m_Transform->SetLocalPosition(m_Transform->GetWorldPosition());
-		//m_Transform->SetPositionDirty();
 	}
 	else
 	{

@@ -15,7 +15,6 @@
 
 #include "InputManager.h"
 #include "MoveCommand.h"
-#include "KillObjectCommand.h"
 #include "KillEnemyCommand.h"
 #include "JoystickMoveCommand.h"                            
 #include "RectColliderComponent.h"
@@ -55,7 +54,6 @@ void LevelFactory::LoadMainMenu()
 	Twengine::ServiceLocator::get_sound_system().RequestStopAllSound();
 	Twengine::ServiceLocator::get_sound_system().RequestLoadMusic("StartScreen/StartScreenMusic.wav", make_sdbm_hash("StartScreenMusic"));
 	Twengine::ServiceLocator::get_sound_system().RequestPlayMusic(make_sdbm_hash("StartScreenMusic"), 0.1f);
-
 
 	auto menuGraphicsObj = std::make_unique<Twengine::GameObject>();
 	menuGraphicsObj->GetTransform()->SetLocalPosition(0.f, 50.f);
@@ -173,7 +171,6 @@ void LevelFactory::LoadPersistentScene()
 	case GameMode::Coop:
 	{
 		///// PLAYER 2 /////////////////////////////////////////////////////////////////////////
-
 		auto secondDigdugLivesText = std::make_unique<Twengine::GameObject>();
 		auto* secondDigDugLivesDisplayComp = secondDigdugLivesText->AddComponent<DisplayLivesComponent>();
 		secondDigdugLivesText->GetTransform()->SetLocalPosition(grid->GetPositionFromIndex(grid->GetRows() - 1, grid->GetColumns() - 3));
@@ -186,10 +183,11 @@ void LevelFactory::LoadPersistentScene()
 
 		secondDigDug->AddComponent<DigDugComponent>();
 		SetupControllerCommands(secondDigDug.get(), 0);
-		///// PLAYER 2 /////////////////////////////////////////////////////////////////////////
 
 		scene.Add(std::move(secondDigDug));
 		scene.Add(std::move(secondDigdugLivesText));
+		///// PLAYER 2 /////////////////////////////////////////////////////////////////////////
+
 	}
 	break;
 	case GameMode::Versus:
@@ -211,7 +209,6 @@ void LevelFactory::LoadPersistentScene()
 	}
 	break;
 	}
-
 }
 
 void LevelFactory::LoadLevel1()
@@ -411,7 +408,6 @@ void LevelFactory::CreateAndAddRock(Twengine::Scene& scene, int row, int column,
 	std::unique_ptr<Twengine::GameObject> rock = std::make_unique<Twengine::GameObject>();
 	Twengine::TextureRenderComponent* texture = rock->AddComponent<Twengine::TextureRenderComponent>();
 	texture->SetTexture("Level/Rock.png");
-	auto pos = gridComponent->GetPositionFromIndex(row, column);
 	rock->AddComponent<RockComponent>();
 	rock->AddComponent<Twengine::RectColliderComponent>();
 	rock->AddComponent<Twengine::AnimationComponent>();
