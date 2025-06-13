@@ -1,18 +1,43 @@
-# Minigin
+# Engine Design
 
-Minigin is a very small project using [SDL2](https://www.libsdl.org/) and [glm](https://github.com/g-truc/glm) for 2D c++ game projects. It is in no way a game engine, only a barebone start project where everything sdl related has been set up. It contains glm for vector math, to aleviate the need to write custom vector and matrix classes.
+In the section below, I'll briefly cover which design choices and patterns I use and where they've been applied.
 
-[![Build Status](https://github.com/avadae/minigin/actions/workflows/msbuild.yml/badge.svg)](https://github.com/avadae/msbuild/actions)
-[![GitHub Release](https://img.shields.io/github/v/release/avadae/minigin?logo=github&sort=semver)](https://github.com/avadae/minigin/releases/latest)
+## Component
 
-# Goal
+Every game object in my game contains a list of components. This helps a lot with separating and re-using logic whenever needed and allows for tons of flexibility. For example my different types of enemies all have an EnemyMovementComponent. Which makes it so this code no longer needs to be duplicated, nor do we need a base enemy class. We can just make a component per enemy type and define the behavior there, shared behavior can then go into a different component that both enemies use.
 
-Minigin can/may be used as a start project for the exam assignment in the course [Programming 4](https://youtu.be/j96Oh6vzhmg) at DAE. In that assignment students need to recreate a popular 80's arcade game with a game engine they need to program themselves. During the course we discuss several game programming patterns, using the book '[Game Programming Patterns](https://gameprogrammingpatterns.com/)' by [Robert Nystrom](https://github.com/munificent) as reading material. 
+## Game Loop and Update Method
 
-# Disclaimer
+These two patterns are fundamental to how the engine runs and go hand-in-hand. It makes it so that game objects can change values, draw things, etc. The game loop also has a FixedUpdate and a LateUpdate. FixedUpdate is useful for stuff like physics, whereas LateUpdate can be useful for things like a camera, or deleting objects that are marked for destruction.
 
-Minigin is, despite perhaps the suggestion in its name, **not** a game engine. It is just a very simple sdl2 ready project with some of the scaffolding in place to get started. None of the patterns discussed in the course are used yet (except singleton which use we challenge during the course). It is up to the students to implement their own vision for their engine, apply patterns as they see fit, create their game as efficient as possible.
+## Command
 
-# Use
+Commands make it incredibly easy to handle user input, for example I use commands on the main menu to cycle through the buttons Additionally using the Command pattern makes it so you have to add very little code to add the same functionality for keyboard and controller. There's no rewriting of logic, we only have to bind the command to some form of input. My engine supports both keyboard & any XINPUT compatible controller.
 
-Either download the latest release of this project and compile/run in visual studio or, since students need to have their work on github too, they can use this repository as a template (see the "Use this template" button at the top right corner). There is no point in forking this project.
+## Observer
+
+The observer pattern helps in making it easy for things to react when a certain thing occurs. For example, when an enemy dies, it notifies the ScoreComponent, which will then in turn check the needed conditions (using this enemy) and grant an appropriate amount of score.
+
+## State
+
+The state patterns removes the need to check a ton of booleans to determine what state an object is in. Instead, we just have a current active state, this way, we know what state we're in, and can just drop any of those extra checks. I use this pattern for my player, the rocks in the level, and for both enemies.
+
+## Singleton
+
+The singleton pattern makes it so that an object only has 1 instance, and there's a global point of access to it. I use this pattern to have a GameManager. The GameManager can control the game, and also provides a point of access via which for example an event can be sent for the score to be increased.
+
+## Service Locator
+
+A service locator provides a global point of access to a so-called service, without actually coupling users to the concrete class that implements it, unlike a Singleton. This can also be used to easily swap out services. I use this pattern for my sound system, you can easily swap out the sound system with a NullSoundSystem, which will work perfectly, but not play any sounds. You can use this in case you want to, for example, test without sounds.
+
+## Dirty Flag
+
+The dirty flag pattern makes it possible to put off unnecessary (expensive) work until the result is needed. I use this in my engine for the TransformComponent. It makes it so the calculating of the world position (expensive) only gets done when the world position gets requested.
+
+## Scenegraph
+
+The scenegraph makes it so that an object can be parented to other objects, so that they can have a local position relative to their parent. As a result, you can for example move relative to your parent, or you could rotate around your parent, while they move.
+
+## Persistent Scene
+
+I have a persistent scene, similar to Unity's DontDestroyOnLoad scene. It's a scene that's always active and runs alongside the current scene. I use this to, for example, go to the next level, while keeping the player objects & commands alive.
