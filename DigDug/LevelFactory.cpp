@@ -96,6 +96,10 @@ void LevelFactory::LoadMainMenu()
 	Twengine::InputManager::GetInstance().BindCommandToInput<ButtonSwitchCommand>(SDLK_UP, Twengine::InteractionStates::down, menuObject.get(), -1)->SetDirection(-1);
 	Twengine::InputManager::GetInstance().BindCommandToInput<ButtonPressCommand>(SDLK_SPACE, Twengine::InteractionStates::down, menuObject.get(), -1);
 
+	Twengine::InputManager::GetInstance().BindCommandToInput<ButtonSwitchCommand>(0x0002, Twengine::InteractionStates::down, menuObject.get(), 0)->SetDirection(1);
+	Twengine::InputManager::GetInstance().BindCommandToInput<ButtonSwitchCommand>(0x0001, Twengine::InteractionStates::down, menuObject.get(), 0)->SetDirection(-1);
+	Twengine::InputManager::GetInstance().BindCommandToInput<ButtonPressCommand>(0x1000, Twengine::InteractionStates::down, menuObject.get(), 0);
+
 	auto highScoreDisplayerObj = std::make_unique<Twengine::GameObject>();
 	highScoreDisplayerObj->AddComponent<HighScoresDisplayComponent>();
 	scene.Add(std::move(highScoreDisplayerObj));
@@ -161,7 +165,7 @@ void LevelFactory::LoadPersistentScene()
 
 	Twengine::InputManager::GetInstance().SetCommandMap(make_sdbm_hash("Game"));
 	SetupKeyboardCommands(digdug.get());
-	//SetupControllerCommands(digdug.get(), 0);
+	SetupControllerCommands(digdug.get(), 0);
 	scene.Add(std::move(digdug));
 	///// PLAYER 1 /////////////////////////////////////////////////////////////////////////
 
@@ -182,7 +186,7 @@ void LevelFactory::LoadPersistentScene()
 		secondDigDugHealth->GetObjectDiedEvent()->AddObserver(secondDigDugLivesDisplayComp);
 
 		secondDigDug->AddComponent<DigDugComponent>();
-		SetupControllerCommands(secondDigDug.get(), 0);
+		SetupControllerCommands(secondDigDug.get(), 1);
 
 		scene.Add(std::move(secondDigDug));
 		scene.Add(std::move(secondDigdugLivesText));
@@ -274,11 +278,18 @@ void LevelFactory::LoadHighScoreScene()
 	auto soundMuteObj = std::make_unique<Twengine::GameObject>();
 	Twengine::InputManager::GetInstance().BindCommandToInput<SoundMuteCommand>(SDLK_F2, Twengine::InteractionStates::up, soundMuteObj.get(), -1);
 	scene.Add(std::move(soundMuteObj));
+
+	Twengine::InputManager::GetInstance().BindCommandToInput<ScoreCharCycleCommand>(0x0002, Twengine::InteractionStates::down, scoreSaveObj.get(), 0)->SetDirection(1);
+	Twengine::InputManager::GetInstance().BindCommandToInput<ScoreCharCycleCommand>(0x0001, Twengine::InteractionStates::down, scoreSaveObj.get(), 0)->SetDirection(-1);
+	Twengine::InputManager::GetInstance().BindCommandToInput<ScoreLetterSwitchCommand>(0x0008, Twengine::InteractionStates::down, scoreSaveObj.get(), 0)->SetDirection(1);
+	Twengine::InputManager::GetInstance().BindCommandToInput<ScoreLetterSwitchCommand>(0x0004, Twengine::InteractionStates::down, scoreSaveObj.get(), 0)->SetDirection(-1);
+	Twengine::InputManager::GetInstance().BindCommandToInput<ScoreConfirmSaveCommand>(0x1000, Twengine::InteractionStates::up, scoreSaveObj.get(), 0);
+
 	Twengine::InputManager::GetInstance().BindCommandToInput<ScoreCharCycleCommand>(SDLK_DOWN, Twengine::InteractionStates::down, scoreSaveObj.get(), -1)->SetDirection(1);
 	Twengine::InputManager::GetInstance().BindCommandToInput<ScoreCharCycleCommand>(SDLK_UP, Twengine::InteractionStates::down, scoreSaveObj.get(), -1)->SetDirection(-1);
 	Twengine::InputManager::GetInstance().BindCommandToInput<ScoreLetterSwitchCommand>(SDLK_RIGHT, Twengine::InteractionStates::down, scoreSaveObj.get(), -1)->SetDirection(1);
 	Twengine::InputManager::GetInstance().BindCommandToInput<ScoreLetterSwitchCommand>(SDLK_LEFT, Twengine::InteractionStates::down, scoreSaveObj.get(), -1)->SetDirection(-1);
-	Twengine::InputManager::GetInstance().BindCommandToInput<ScoreConfirmSaveCommand>(SDLK_SPACE, Twengine::InteractionStates::up, scoreSaveObj.get(), -1);
+	Twengine::InputManager::GetInstance().BindCommandToInput<ScoreConfirmSaveCommand>(SDLK_KP_ENTER, Twengine::InteractionStates::up, scoreSaveObj.get(), -1);
 	scene.Add(std::move(scoreSaveObj));
 
 	auto highScoreDisplayerObj = std::make_unique<Twengine::GameObject>();

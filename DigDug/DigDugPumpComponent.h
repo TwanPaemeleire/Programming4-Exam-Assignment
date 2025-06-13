@@ -50,12 +50,12 @@ private:
 
 	glm::vec2 m_TextureSize{};
 	float m_ExposedAmount{};
-	const float m_PumpShootSpeed{80.f};
+	const float m_PumpShootSpeed{300.f};
 	bool m_IsReturning{ false };
 	bool m_PumpButtonIsPressed{ false };
 	bool m_IsStuckInEnemy{false};
 
-	const float m_PumpDelay{ 1.0f };
+	const float m_PumpDelay{ 0.5f };
 	const int m_DirtLeeway{ 5 };
 	float m_PumpDelayCounter{};
 	glm::vec2 m_DrawPosition{};

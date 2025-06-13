@@ -67,8 +67,8 @@ void FygarFireComponent::Update()
 
 void FygarFireComponent::RenderUI()
 {
-	auto pos = m_Transform->GetWorldPosition();
-	Twengine::Renderer::GetInstance().DrawPoint(pos.x, pos.y, SDL_Color(0, 255, 255), 5);
+	//auto pos = m_Transform->GetWorldPosition();
+	//Twengine::Renderer::GetInstance().DrawPoint(pos.x, pos.y, SDL_Color(0, 255, 255), 5);
 }
 
 void FygarFireComponent::AdjustHitBox(float newWidth)
