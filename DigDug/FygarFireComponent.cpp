@@ -56,7 +56,7 @@ void FygarFireComponent::Update()
 	{
 		m_CurrentFrameIndex = frameIndex;
 		float hitBoxWidth = m_FrameWidth * ((m_CurrentFrameIndex + 1) / 3.f); // Hitbox depends on frame index, it gets bigger as the animation progresses
-		if (IsGoingToHitWall(hitBoxWidth))
+		if (IsGoingToHitWall(hitBoxWidth + (m_FrameWidth / 3.f)))
 		{
 			GetOwner()->MarkForDestruction();
 			return;
