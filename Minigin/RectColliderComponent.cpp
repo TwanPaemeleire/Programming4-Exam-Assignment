@@ -30,6 +30,7 @@ Twengine::RectColliderComponent::~RectColliderComponent()
 
 void Twengine::RectColliderComponent::FixedUpdate()
 {
+	if (!m_SetPositionAutomatically) return;
 	m_HitBox->topLeft = GetOwner()->GetTransform()->GetWorldPosition();
 }
 

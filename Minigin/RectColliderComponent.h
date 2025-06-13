@@ -30,6 +30,7 @@ namespace Twengine
 		bool IsOverlapping(RectColliderComponent* other) const;
 		void Enable() { m_Enabled = true; }
 		void Disable() { m_Enabled = false; }
+		void DisableAutomaticPositionUpdate() { m_SetPositionAutomatically = false;	 }
 
 		bool IsEnabled() const { return m_Enabled; }
 		void ChangeHitBox(glm::vec2 topLeft, float width, float height);
@@ -45,5 +46,6 @@ namespace Twengine
 		std::unique_ptr<RectHitbox> m_HitBox;
 		std::unique_ptr<Twengine::Event> m_OnCollisionEvent;
 		bool m_Enabled{ true };
+		bool m_SetPositionAutomatically{true};
 	};
 }

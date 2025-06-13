@@ -23,6 +23,7 @@ void FygarFireComponent::Start()
 	m_FrameHeight = m_AnimationComponent->GetAnimationFrameHeight();
 
 	m_RectColliderComponent = GetOwner()->AddComponent<Twengine::RectColliderComponent>();
+	m_RectColliderComponent->DisableAutomaticPositionUpdate();
 	float hitBoxWidth = m_FrameWidth * ((m_CurrentFrameIndex + 1) / 3.f); // Hitbox depends on frame index, it gets bigger as the animation progresses
 	glm::vec2 hitBoxPos = m_Transform->GetWorldPosition();
 	if (!m_ShotToRight)
@@ -67,8 +68,8 @@ void FygarFireComponent::Update()
 
 void FygarFireComponent::RenderUI()
 {
-	//auto pos = m_Transform->GetWorldPosition();
-	//Twengine::Renderer::GetInstance().DrawPoint(pos.x, pos.y, SDL_Color(0, 255, 255), 5);
+	auto pos = m_RectColliderComponent->GetHitBox();
+	Twengine::Renderer::GetInstance().DrawPoint(pos->topLeft.x, pos->topLeft.y, SDL_Color(0, 255, 255), 5);
 }
 
 void FygarFireComponent::AdjustHitBox(float newWidth)
