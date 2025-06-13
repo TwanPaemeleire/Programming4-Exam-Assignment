@@ -4,11 +4,11 @@ https://github.com/TwanPaemeleire/Programming4-Exam-Assignment
 
 # Engine Design
 
-In the section below, I'll briefly cover which design choices and patterns I use and where they've been applied.
+In the section below, I'll briefly cover which design choices and patterns I use in my engine, and where they've been applied.
 
 ## Component
 
-Every game object in my game contains a list of components. This helps a lot with separating and re-using logic whenever needed and allows for tons of flexibility. For example my different types of enemies all have an EnemyMovementComponent. Which makes it so this code no longer needs to be duplicated, nor do we need a base enemy class. We can just make a component per enemy type and define the behavior there, shared behavior can then go into a different component that both enemies use.
+Every game object in my game contains a list of components, this list always contains a TransFormComponent, which is responsible for storing the position and the object's parent (more about this in the SceneGraph section). This helps a lot with separating and re-using logic whenever needed and allows for tons of flexibility. For example my different types of enemies all have an EnemyMovementComponent. Which makes it so this code no longer needs to be duplicated, nor do we need a base enemy class. We can just make a component per enemy type and define the behavior there, shared behavior can then go into a different component that both enemies use.
 
 ## Game Loop and Update Method
 
