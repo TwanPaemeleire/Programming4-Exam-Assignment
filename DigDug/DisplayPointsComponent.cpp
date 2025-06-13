@@ -18,6 +18,6 @@ void DisplayPointsComponent::Notify(const GameEvent& event, Twengine::GameObject
 {
 	if (event.id == make_sdbm_hash("ScoreChanged"))
 	{
-		m_TextComponent->SetText("Score: " + std::to_string(observedObject->GetComponent<ScoreComponent>()->GetScore()));
+		m_TextComponent->SetText("Score " + std::to_string(observedObject->GetComponent<ScoreComponent>()->GetScore()));
 	}
 }

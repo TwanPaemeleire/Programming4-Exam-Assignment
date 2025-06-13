@@ -132,11 +132,11 @@ void LevelFactory::LoadPersistentScene()
 	scene.Add(std::move(scoreFileObj));
 	///// LEVEL /////////////////////////////////////////////////////////////////////////
 
-	auto* smallFont = Twengine::ResourceManager::GetInstance().LoadFont("GameFont.otf", 8);
+	auto* font = Twengine::ResourceManager::GetInstance().LoadFont("GameFont.otf", 16);
 
 	///// SCORE /////////////////////////////////////////////////////////////////////////
 	auto digdugScoreText = std::make_unique<Twengine::GameObject>();
-	digdugScoreText->AddComponent<Twengine::TextComponent>()->SetFont(smallFont);
+	digdugScoreText->AddComponent<Twengine::TextComponent>()->SetFont(font);
 	auto* digdugPointsDisplayComp = digdugScoreText->AddComponent<DisplayPointsComponent>();
 	digdugScoreText->GetTransform()->SetLocalPosition(128, 5);
 

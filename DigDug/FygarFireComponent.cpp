@@ -68,8 +68,8 @@ void FygarFireComponent::Update()
 
 void FygarFireComponent::RenderUI()
 {
-	auto pos = m_RectColliderComponent->GetHitBox();
-	Twengine::Renderer::GetInstance().DrawPoint(pos->topLeft.x, pos->topLeft.y, SDL_Color(0, 255, 255), 5);
+	//auto pos = m_RectColliderComponent->GetHitBox();
+	//Twengine::Renderer::GetInstance().DrawPoint(pos->topLeft.x, pos->topLeft.y, SDL_Color(0, 255, 255), 5);
 }
 
 void FygarFireComponent::AdjustHitBox(float newWidth)
