@@ -16,7 +16,7 @@ These two patterns are fundamental to how the engine runs and go hand-in-hand. I
 
 ## Command
 
-Commands make it incredibly easy to handle user input, for example I use commands on the main menu to cycle through the buttons Additionally using the Command pattern makes it so you have to add very little code to add the same functionality for keyboard and controller. There's no rewriting of logic, we only have to bind the command to some form of input. My engine supports both keyboard & any XINPUT compatible controller.
+Commands make it incredibly easy to handle user input, for example I use commands on the main menu to cycle through the buttons. Additionally using the Command pattern makes it so you have to add very little code to add the same functionality for keyboard and controller. There's no rewriting of logic, we only have to bind the command to some form of input. My engine supports both keyboard & any XINPUT compatible controller.
 
 ## Observer
 
