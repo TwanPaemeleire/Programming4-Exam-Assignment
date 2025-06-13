@@ -42,8 +42,8 @@ void EnemyMovementComponent::Update()
 
 void EnemyMovementComponent::RenderUI()
 {
-	Twengine::Renderer::GetInstance().DrawPoint(m_IdleTarget.x, m_IdleTarget.y, SDL_Color(0, 0, 255, 255), 5);
-	Twengine::Renderer::GetInstance().DrawRectangle(m_NextNodeToPlayer.x, m_NextNodeToPlayer.y, 5.f, 5.f, SDL_Color(0, 255, 0, 255));
+	//Twengine::Renderer::GetInstance().DrawPoint(m_IdleTarget.x, m_IdleTarget.y, SDL_Color(0, 0, 255, 255), 5);
+	//Twengine::Renderer::GetInstance().DrawRectangle(m_NextNodeToPlayer.x, m_NextNodeToPlayer.y, 5.f, 5.f, SDL_Color(0, 255, 0, 255));
 }
 
 bool EnemyMovementComponent::MovementIfNoPathToPlayer()

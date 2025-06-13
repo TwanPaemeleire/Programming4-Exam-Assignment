@@ -35,8 +35,8 @@ void Twengine::RectColliderComponent::FixedUpdate()
 
 void Twengine::RectColliderComponent::Render() const
 {
-	const glm::vec2& topLeft = m_HitBox->topLeft;
-	Renderer::GetInstance().DrawRectangle(topLeft.x, topLeft.y, m_HitBox->width, m_HitBox->height, SDL_Color(0, 255, 0, 255));
+	//const glm::vec2& topLeft = m_HitBox->topLeft;
+	//Renderer::GetInstance().DrawRectangle(topLeft.x, topLeft.y, m_HitBox->width, m_HitBox->height, SDL_Color(0, 255, 0, 255));
 }
 
 bool Twengine::RectColliderComponent::IsOverlapping(RectColliderComponent* other) const

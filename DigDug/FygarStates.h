@@ -29,7 +29,6 @@ public:
 	virtual std::unique_ptr<FygarState> Update(Twengine::GameObject* stateOwner) = 0;
 	virtual std::unique_ptr<FygarState> LateUpdate(Twengine::GameObject*) { return nullptr; }
 	virtual std::unique_ptr<FygarState> GetNotifiedByOwner(const GameEvent&, Twengine::GameObject*, Twengine::GameObject*) { return nullptr; }
-	virtual void RenderDebugDrawing() const {};
 	virtual bool IsBeingPumped() const { return false; }
 };
 

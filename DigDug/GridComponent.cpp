@@ -13,14 +13,14 @@ GridComponent::GridComponent(Twengine::GameObject* owner)
 
 void GridComponent::Render() const
 {
-	for (int rowIndex{}; rowIndex < m_Rows; ++rowIndex)
-	{
-		for (int columnIndex{}; columnIndex < m_Columns; ++columnIndex)
-		{
-			glm::vec2 pos = m_Grid[rowIndex][columnIndex].topLeft;
-			Twengine::Renderer::GetInstance().DrawRectangle(pos.x, pos.y, m_CellSize, m_CellSize, SDL_Color(255, 0, 0, 255));
-		}
-	}
+	//for (int rowIndex{}; rowIndex < m_Rows; ++rowIndex)
+	//{
+	//	for (int columnIndex{}; columnIndex < m_Columns; ++columnIndex)
+	//	{
+	//		glm::vec2 pos = m_Grid[rowIndex][columnIndex].topLeft;
+	//		Twengine::Renderer::GetInstance().DrawRectangle(pos.x, pos.y, m_CellSize, m_CellSize, SDL_Color(255, 0, 0, 255));
+	//	}
+	//}
 }
 
 std::pair<int, int> GridComponent::GetIndexFromPosition(glm::vec2 pos) const

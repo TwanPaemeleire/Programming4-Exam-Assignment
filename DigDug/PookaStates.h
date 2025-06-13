@@ -26,7 +26,6 @@ public:
 	virtual void OnEnter(Twengine::GameObject*) {};
 	virtual void OnExit(Twengine::GameObject*) {};
 	virtual std::unique_ptr<PookaState> Update(Twengine::GameObject* stateOwner) = 0;
-	virtual void RenderDebugDrawing() const {};
 	virtual std::unique_ptr<PookaState> GetNotifiedByOwner(const GameEvent&, Twengine::GameObject*, Twengine::GameObject*) { return nullptr; }
 	virtual bool IsBeingPumped() const { return false; }
 };

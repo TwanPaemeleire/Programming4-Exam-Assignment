@@ -100,7 +100,7 @@ void PlayerMoving::OnExit(Twengine::GameObject* stateOwner)
 
 void PlayerMoving::RenderDebugDrawing() const
 {
-	Twengine::Renderer::GetInstance().DrawPoint(m_TargetPosition.x, m_TargetPosition.y, SDL_Color(0, 0, 255), 5);
+	//Twengine::Renderer::GetInstance().DrawPoint(m_TargetPosition.x, m_TargetPosition.y, SDL_Color(0, 0, 255), 5);
 }
 
 std::unique_ptr<PlayerState> PlayerMoving::SetXDirection(Twengine::GameObject*, float x, float yToSet)
