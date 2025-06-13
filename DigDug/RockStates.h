@@ -88,7 +88,7 @@ public:
 	virtual std::unique_ptr<RockState> Update(Twengine::GameObject* stateOwner) override;
 
 private:
-	Twengine::AnimationComponent* m_AnimationComponent;
+	Twengine::AnimationComponent* m_AnimationComponent{};
 };
 
 

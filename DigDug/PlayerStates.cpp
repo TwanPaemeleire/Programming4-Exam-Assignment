@@ -407,7 +407,7 @@ void PlayerPumpingState::SetPositionAndDirectionOfPump(Twengine::GameObject* sta
 	}
 
 	if (flippedHorizontal) m_DigDugPumpComponent->FlipHorizontally();
-	if (vertical) m_DigDugPumpComponent->ShotVertically();
+	if (vertical) m_DigDugPumpComponent->ShootVertically();
 	pumpObject->GetTransform()->SetLocalPosition(posToSet);
 }
 
@@ -444,7 +444,7 @@ void PlayerRockDraggingState::OnEnter(Twengine::GameObject* stateOwner)
 	m_AnimationComponent->PlayAnimation(make_sdbm_hash("DigDugCrushed"), 0.f, false);
 	stateOwner->SetParent(m_RockComponent->GetOwner(), true);
 	m_AmountUnderRockToCheck = m_AnimationComponent->GetAnimationFrameHeight();
-	stateOwner->GetComponent<Twengine::RectColliderComponent>()->SetEnabled(false);
+	stateOwner->GetComponent<Twengine::RectColliderComponent>()->Disable();
 }
 
 std::unique_ptr<PlayerState> PlayerRockDraggingState::Update(Twengine::GameObject* stateOwner)
@@ -453,7 +453,7 @@ std::unique_ptr<PlayerState> PlayerRockDraggingState::Update(Twengine::GameObjec
 	posToCheck.y += m_AmountUnderRockToCheck;
 	if (!GameManager::GetInstance().GetGround()->PositionIsDugOut(posToCheck))
 	{
-		stateOwner->GetComponent<Twengine::RectColliderComponent>()->SetEnabled(true);
+		stateOwner->GetComponent<Twengine::RectColliderComponent>()->Enable();
 		m_EnemyCrushedEvent->NotifyObservers(GameEvent(make_sdbm_hash("OnEnemyCrushed")), stateOwner);
 		return std::make_unique<PlayerDeathState>();
 	}

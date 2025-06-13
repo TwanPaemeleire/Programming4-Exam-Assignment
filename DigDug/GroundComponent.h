@@ -26,7 +26,7 @@ public:
 	bool PositionIsDugOut(const glm::vec2& pos);
 
 	glm::vec2 GetCellTargetToGetCloserToPlayer(const glm::vec2& enemyPos) const;
-	bool CanMoveBetween(const glm::vec2& startPos, const glm::vec2& targetPos, int dirtLeeway = 0) const; // Dirt leeway will be used for pump & fygar fire
+	bool CanMoveBetween(const glm::vec2& startPos, const glm::vec2& targetPos, int dirtLeeway = 0) const;
 	bool EnemyCanReachPlayer(const glm::vec2& enemyPos) const;
 
 	void Reset();

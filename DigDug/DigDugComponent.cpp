@@ -34,7 +34,7 @@ void DigDugComponent::Start()
 	m_AnimationComponent->PlayAnimation(make_sdbm_hash("DigDugIdle"));
 
 	const glm::vec2 pos = GetOwner()->GetTransform()->GetWorldPosition();
-	m_RectColliderComponent->SetHitBox(pos, m_AnimationComponent->GetAnimationFrameWidth(), m_AnimationComponent->GetAnimationFrameHeight());
+	m_RectColliderComponent->ChangeHitBox(pos, m_AnimationComponent->GetAnimationFrameWidth(), m_AnimationComponent->GetAnimationFrameHeight());
 	Twengine::ServiceLocator::get_sound_system().RequestLoadSound("DigDug/DigDugDeath.wav", make_sdbm_hash("DigDugDeath"));
 	m_CurrentState = std::make_unique<PlayerMoving>();
 	m_CurrentState->OnEnter(GetOwner());
@@ -71,7 +71,7 @@ void DigDugComponent::Reset()
 	m_Transform->SetLocalPosition(GameManager::GetInstance().GetGrid()->GetPositionFromIndex(9, 5));
 	const glm::vec2 pos = GetOwner()->GetTransform()->GetWorldPosition();
 	m_AnimationComponent->PlayAnimation(make_sdbm_hash("DigDugIdle"));
-	m_RectColliderComponent->SetHitBox(pos, m_AnimationComponent->GetAnimationFrameWidth(), m_AnimationComponent->GetAnimationFrameHeight());
+	m_RectColliderComponent->ChangeHitBox(pos, m_AnimationComponent->GetAnimationFrameWidth(), m_AnimationComponent->GetAnimationFrameHeight());
 	
 	m_PlayerMovingData->direction = {0.f, 0.f};
 	m_PlayerMovingData->lastNonNullDirection = {};

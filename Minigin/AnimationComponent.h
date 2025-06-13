@@ -37,7 +37,7 @@ namespace Twengine
 		void PlayAnimation(AnimationId id, float frameDelay = 0.2f, bool playAutomatically = true);
 		void GoToNextFrame();
 		void GoToPreviousFrame();
-		bool IsPlayingAnimation(AnimationId id);
+		bool IsPlayingAnimation(AnimationId id) const;
 
 		float GetAnimationFrameWidth() const { return m_FrameWidth; }
 		float GetAnimationFrameHeight() const { return m_FrameHeight; }

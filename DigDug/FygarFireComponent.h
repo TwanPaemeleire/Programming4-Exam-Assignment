@@ -20,7 +20,7 @@ public:
 	virtual void Start() override;
 	virtual void Update() override;
 	virtual void RenderUI() override;
-	void ShotToRight() { m_ShotToRight = true; }
+	void ShootToRight() { m_ShotToRight = true; }
 
 private:
 	void AdjustHitBox(float newWidth);

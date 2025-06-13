@@ -23,7 +23,7 @@ void RockIdleState::OnEnter(Twengine::GameObject* stateOwner)
 
 	m_PlayerRectColliderComponents.emplace_back(playerTransforms[0]->GetOwner()->GetComponent<Twengine::RectColliderComponent>());
 	if (GameManager::GetInstance().CurrentGameMode() == GameMode::Coop) m_PlayerRectColliderComponents.emplace_back(playerTransforms[1]->GetOwner()->GetComponent<Twengine::RectColliderComponent>());
-	stateOwner->GetComponent<Twengine::RectColliderComponent>()->SetEnabled(false);
+	stateOwner->GetComponent<Twengine::RectColliderComponent>()->Disable();
 }
 
 std::unique_ptr<RockState> RockIdleState::Update(Twengine::GameObject*)
@@ -71,7 +71,7 @@ void RockFallingState::OnEnter(Twengine::GameObject* stateOwner)
 	glm::vec2 bottomCenter = stateOwner->GetTransform()->GetLocalPosition();
 	bottomCenter += m_Size / 2.f;
 	m_StartCellIndex = GameManager::GetInstance().GetGrid()->GetIndexFromPosition(bottomCenter);
-	stateOwner->GetComponent<Twengine::RectColliderComponent>()->SetEnabled(true);
+	stateOwner->GetComponent<Twengine::RectColliderComponent>()->Enable();
 }
 
 std::unique_ptr<RockState> RockFallingState::Update(Twengine::GameObject* stateOwner)

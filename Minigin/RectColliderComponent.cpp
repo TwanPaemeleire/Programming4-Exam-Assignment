@@ -50,7 +50,7 @@ bool Twengine::RectColliderComponent::IsOverlapping(RectColliderComponent* other
 			myTopLeft.y + m_HitBox->height > otherTopLeft.y);	   // My bottom is below other's top
 }
 
-void Twengine::RectColliderComponent::SetHitBox(glm::vec2 topLeft, float width, float height)
+void Twengine::RectColliderComponent::ChangeHitBox(glm::vec2 topLeft, float width, float height)
 {
 	m_HitBox->topLeft = topLeft;
 	m_HitBox->width = width;
@@ -64,12 +64,12 @@ void Twengine::RectColliderComponent::ProcessCollisions()
 	for (size_t firstIndex = 0; firstIndex < s_Colliders.size(); ++firstIndex)
 	{
 		RectColliderComponent* first = s_Colliders[firstIndex];
-		if (!first->GetEnabled()) continue;
+		if (!first->IsEnabled()) continue;
 
 		for (size_t secondIndex = firstIndex + 1; secondIndex < s_Colliders.size(); ++secondIndex)
 		{
 			RectColliderComponent* second = s_Colliders[secondIndex];
-			if (!second->GetEnabled() || second == first) continue;
+			if (!second->IsEnabled() || second == first) continue;
 
 			if (first->IsOverlapping(second))
 			{
@@ -97,11 +97,11 @@ void Twengine::RectColliderComponent::ProcessCollisions()
 			RectColliderComponent* first = lastFramePair.first;
 			RectColliderComponent* second = lastFramePair.second;
 
-			if (first->GetEnabled())
+			if (first->IsEnabled())
 			{
 				first->m_OnCollisionEvent->NotifyObservers(GameEvent(make_sdbm_hash("OnCollisionExit")), second->GetOwner());
 			}
-			if (second->GetEnabled())
+			if (second->IsEnabled())
 			{
 				second->m_OnCollisionEvent->NotifyObservers(GameEvent(make_sdbm_hash("OnCollisionExit")), first->GetOwner());
 			}

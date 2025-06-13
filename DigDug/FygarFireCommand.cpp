@@ -25,7 +25,7 @@ void FygarFireCommand::Execute()
 
 	if (playerColumn >= fygarColumn) // Should shoot the fire to the right
 	{
-		fireComponent->ShotToRight();
+		fireComponent->ShootToRight();
 	}
 
 	Twengine::SceneManager::GetInstance().GetCurrentScene().Add(std::move(fire));

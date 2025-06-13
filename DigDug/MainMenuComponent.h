@@ -23,10 +23,11 @@ public:
 	MainMenuComponent& operator=(const MainMenuComponent& other) = delete;
 	MainMenuComponent& operator=(MainMenuComponent&& other) = delete;
 
-	void AddButton(const std::string& text, GameMode gameMode, Twengine::Font* font);
 	void ButtonPressed();
 	void ButtonSwitched(int dir);
+
 private:
+	void AddButton(const std::string& text, GameMode gameMode, Twengine::Font* font);
 	std::vector<std::pair<Twengine::TextComponent*, GameMode>> m_Buttons{};
 
 	const glm::vec2 m_ButtonBasePos{150.f, 250.f};

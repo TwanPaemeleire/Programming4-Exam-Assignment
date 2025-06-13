@@ -28,9 +28,11 @@ namespace Twengine
 		virtual void Render() const override;
 
 		bool IsOverlapping(RectColliderComponent* other) const;
-		void SetEnabled(bool enabled) { m_Enabled = enabled; }
-		bool GetEnabled() const { return m_Enabled; }
-		void SetHitBox(glm::vec2 topLeft, float width, float height);
+		void Enable() { m_Enabled = true; }
+		void Disable() { m_Enabled = false; }
+
+		bool IsEnabled() const { return m_Enabled; }
+		void ChangeHitBox(glm::vec2 topLeft, float width, float height);
 		RectHitbox* GetHitBox() const { return m_HitBox.get(); }
 
 		Event* GetOnCollisionEvent() const { return m_OnCollisionEvent.get(); }

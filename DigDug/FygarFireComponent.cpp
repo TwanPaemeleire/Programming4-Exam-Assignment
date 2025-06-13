@@ -41,7 +41,7 @@ void FygarFireComponent::Start()
 		m_Transform->SetLocalPosition(posOnRight);
 		hitBoxPos.x += GetOwner()->GetParent()->GetComponent<Twengine::AnimationComponent>()->GetAnimationFrameWidth();
 	}
-	m_RectColliderComponent->SetHitBox(hitBoxPos, hitBoxWidth, m_FrameHeight);
+	m_RectColliderComponent->ChangeHitBox(hitBoxPos, hitBoxWidth, m_FrameHeight);
 }
 
 void FygarFireComponent::Update()
@@ -75,13 +75,13 @@ void FygarFireComponent::AdjustHitBox(float newWidth)
 {
 	if (m_ShotToRight)
 	{
-		m_RectColliderComponent->SetHitBox(m_Transform->GetWorldPosition(), newWidth, m_FrameHeight);
+		m_RectColliderComponent->ChangeHitBox(m_Transform->GetWorldPosition(), newWidth, m_FrameHeight);
 	}
 	else
 	{
 		glm::vec2 newPos =	m_RectColliderComponent->GetHitBox()->topLeft;
 		newPos.x -= (newWidth - m_RectColliderComponent->GetHitBox()->width);
-		m_RectColliderComponent->SetHitBox(newPos, newWidth, m_FrameHeight);
+		m_RectColliderComponent->ChangeHitBox(newPos, newWidth, m_FrameHeight);
 	}
 }
 

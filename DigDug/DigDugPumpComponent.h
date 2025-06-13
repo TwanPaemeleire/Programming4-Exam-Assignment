@@ -32,7 +32,7 @@ public:
 	void Retract();
 	bool IsStuckInEnemy() const { return m_IsStuckInEnemy; }
 	void FlipHorizontally() { m_HorizontallyFlipped = true; }
-	void ShotVertically() { m_ShotVertically = true; }
+	void ShootVertically() { m_ShotVertically = true; }
 
 	Twengine::Event* GetOnPumpRetractedEvent() const { return m_OnPumpRetractedEvent.get(); }
 	Twengine::Event* GetOnPumpEvent() const { return m_OnPumpEvent.get(); }

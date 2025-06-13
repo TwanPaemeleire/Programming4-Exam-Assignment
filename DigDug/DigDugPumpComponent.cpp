@@ -34,7 +34,7 @@ void DigDugPumpComponent::Start()
 	m_TextureSize = glm::vec2(m_PumpTexture->GetSize());
 	m_ExposedAmountToCheck = (m_ShotVertically) ? m_TextureSize.y : m_TextureSize.x;
 	m_RectColliderComponent = GetOwner()->AddComponent<Twengine::RectColliderComponent>();
-	m_RectColliderComponent->SetHitBox(m_Transform->GetWorldPosition(), 0.f, 0.f);
+	m_RectColliderComponent->ChangeHitBox(m_Transform->GetWorldPosition(), 0.f, 0.f);
 	m_RectColliderComponent->GetOnCollisionEvent()->AddObserver(this);
 	m_GroundComponent = GameManager::GetInstance().GetGround();
 	Twengine::ServiceLocator::get_sound_system().RequestPlaySound(make_sdbm_hash("DigDugShot"), 0.05f);
@@ -155,12 +155,12 @@ void DigDugPumpComponent::SetHitBoxBasedOnDirection()
 	if (!m_ShotVertically)
 	{
 		if(m_HorizontallyFlipped) worldPos.x -= m_ExposedAmount;
-		m_RectColliderComponent->SetHitBox(worldPos, m_ExposedAmount, m_TextureSize.y);
+		m_RectColliderComponent->ChangeHitBox(worldPos, m_ExposedAmount, m_TextureSize.y);
 	}
 	else
 	{
 		if(m_HorizontallyFlipped) worldPos.y -= m_ExposedAmount;
-		m_RectColliderComponent->SetHitBox(worldPos, m_TextureSize.x, m_ExposedAmount);
+		m_RectColliderComponent->ChangeHitBox(worldPos, m_TextureSize.x, m_ExposedAmount);
 	}
 }
 

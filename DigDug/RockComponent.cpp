@@ -27,7 +27,7 @@ void RockComponent::Start()
 	Twengine::ServiceLocator::get_sound_system().RequestLoadSound("Level/RockBroken.wav", make_sdbm_hash("RockBroken"));
 	Twengine::TextureRenderComponent* textureRenderComponent = GetOwner()->GetComponent<Twengine::TextureRenderComponent>();
 	const glm::ivec2 size = textureRenderComponent->GetTexture()->GetSize();
-	GetOwner()->GetComponent<Twengine::RectColliderComponent>()->SetHitBox(m_Transform->GetWorldPosition(), static_cast<float>(size.x), static_cast<float>(size.y));
+	GetOwner()->GetComponent<Twengine::RectColliderComponent>()->ChangeHitBox(m_Transform->GetWorldPosition(), static_cast<float>(size.x), static_cast<float>(size.y));
 	m_Size = textureRenderComponent->GetTexture()->GetSize();
 
 	m_CurrentState = std::make_unique<RockIdleState>();

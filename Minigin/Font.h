@@ -8,7 +8,6 @@ namespace Twengine
 	class Font final
 	{
 	public:
-		_TTF_Font* GetFont() const;
 		explicit Font(const std::string& fullPath, unsigned int size);
 		~Font();
 
@@ -16,6 +15,8 @@ namespace Twengine
 		Font(Font&&) = delete;
 		Font& operator= (const Font&) = delete;
 		Font& operator= (const Font&&) = delete;
+
+		_TTF_Font* GetFont() const;
 	private:
 		_TTF_Font* m_Font;
 	};
