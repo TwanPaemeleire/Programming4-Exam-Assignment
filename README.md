@@ -1,3 +1,7 @@
+# Link to source control depot
+
+https://github.com/TwanPaemeleire/Programming4-Exam-Assignment
+
 # Engine Design
 
 In the section below, I'll briefly cover which design choices and patterns I use and where they've been applied.
